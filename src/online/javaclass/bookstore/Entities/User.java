@@ -1,3 +1,5 @@
+package online.javaclass.bookstore.Entities;
+
 import java.math.BigDecimal;
 import java.util.Objects;
 
@@ -103,7 +105,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "User { id = " + id + " | " +
+        return "online.javaclass.bookstore.Entities.User { id = " + id + " | " +
                 "firstname = " + firstName + " | " +
                 "lastname = " + lastName + " | " +
                 "email = " + email + " | " +
