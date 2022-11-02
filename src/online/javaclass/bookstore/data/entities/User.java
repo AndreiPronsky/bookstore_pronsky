@@ -1,4 +1,4 @@
-package online.javaclass.bookstore.Entities;
+package online.javaclass.bookstore.data.entities;
 
 import java.math.BigDecimal;
 import java.util.Objects;

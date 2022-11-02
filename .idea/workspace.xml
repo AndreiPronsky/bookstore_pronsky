@@ -4,15 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8d1d18b0-97d0-4816-b26d-f47873f54c98" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/postgresql_42_5_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/UserInfo/UserTableInfo.java" afterDir="false" />
+    <list default="true" id="8d1d18b0-97d0-4816-b26d-f47873f54c98" name="Changes" comment="Refactored according to tasks">
+      <change afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/connection/DataBaseManager.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/connection/ProxyConnection.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/dao/UserDao.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bookstore_pronsky.iml" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_pronsky.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/Entities/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/UserDataAccess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/UserDao/UserDataAccess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/online/javaclass/bookstore/Entities/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/entities/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/online/javaclass/bookstore/UserDao/UserDataAccess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/dao/daoImpl/UserDaoImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/online/javaclass/bookstore/UserInfo/UserTableInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/database/UserTableInfo.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,6 +25,7 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
@@ -109,12 +110,21 @@
       <option name="project" value="LOCAL" />
       <updated>1666614312763</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Refactored methods. Demo project structure">
+      <created>1667323774512</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1667323774512</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initial commit" />
     <MESSAGE value="Hometask completed" />
-    <option name="LAST_COMMIT_MESSAGE" value="Hometask completed" />
+    <MESSAGE value="Refactored methods. Demo project structure" />
+    <MESSAGE value="Refactored according to tasks" />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactored according to tasks" />
   </component>
 </project>
