@@ -9,7 +9,9 @@ public interface UserDao {
 
     void update(User user);
 
-    User findById(Long id);
+    User findUserById(Long id);
+    User findUserByEmail(String email);
+    List<User> findUsersByLastName(String lastname);
 
     List<User> findAll();
 

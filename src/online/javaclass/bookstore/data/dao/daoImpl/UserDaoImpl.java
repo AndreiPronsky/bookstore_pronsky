@@ -27,6 +27,7 @@ public class UserDaoImpl implements UserDao {
         this.dataBaseManager = dataBaseManager;
     }
 
+    @Override
     public void create(User user) {
         Connection connection = dataBaseManager.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(CREATE_USER, Statement.RETURN_GENERATED_KEYS)) {
@@ -36,16 +37,17 @@ public class UserDaoImpl implements UserDao {
             statement.setString(4, user.getPassword());
             statement.setInt(5, user.getRole());
             statement.executeUpdate();
-            ResultSet resultSet = statement.getGeneratedKeys();
-            if (resultSet.next()) {
-                user.setId(resultSet.getLong("user_id"));
-                System.out.println("Created : " + findById(resultSet.getLong("user_id")));
+            ResultSet result = statement.getGeneratedKeys();
+            if (result.next()) {
+                user.setId(result.getLong("user_id"));
+                System.out.println("Created : " + findUserById(result.getLong("user_id")));
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Creation failed!");
+            throw new RuntimeException("Creation failed! " + e.getMessage());
         }
     }
 
+    @Override
     public void update(User user) {
         Connection connection = dataBaseManager.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(UPDATE_USER, ResultSet.TYPE_SCROLL_SENSITIVE,
@@ -63,12 +65,13 @@ public class UserDaoImpl implements UserDao {
                 result.updateRow();
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Update failed!");
+            throw new RuntimeException("Update failed! " + e.getMessage());
         }
-        System.out.println("Valid state : " + findById(user.getId()));
+        System.out.println("Valid state : " + findUserById(user.getId()));
     }
 
-    public User findById(Long id) {
+    @Override
+    public User findUserById(Long id) {
         Connection connection = dataBaseManager.getConnection();
         User user = new User();
         try (PreparedStatement statement = connection.prepareStatement(FIND_USER_BY_ID)) {
@@ -77,10 +80,11 @@ public class UserDaoImpl implements UserDao {
             setParameters(user, result);
             return user;
         } catch (SQLException e) {
-            throw new RuntimeException("No such user found!");
+            throw new RuntimeException("No such user found! " + e.getMessage());
         }
     }
 
+    @Override
     public User findUserByEmail(String email) {
         Connection connection = dataBaseManager.getConnection();
         User user = new User();
@@ -90,10 +94,11 @@ public class UserDaoImpl implements UserDao {
             setParameters(user, result);
             return user;
         } catch (SQLException e) {
-            throw new RuntimeException("No such user found!");
+            throw new RuntimeException("No such user found! " + e.getMessage());
         }
     }
 
+    @Override
     public List<User> findUsersByLastName(String lastName) {
         Connection connection = dataBaseManager.getConnection();
         List<User> users = new ArrayList<>();
@@ -102,15 +107,16 @@ public class UserDaoImpl implements UserDao {
             ResultSet result = statement.executeQuery();
             while (result.next()) {
                 long id = result.getLong("user_id");
-                User user = findById(id);
+                User user = findUserById(id);
                 users.add(user);
             }
             return users;
         } catch (SQLException e) {
-            throw new RuntimeException();
+            throw new RuntimeException(e.getMessage());
         }
     }
 
+    @Override
     public List<User> findAll() {
         Connection connection = dataBaseManager.getConnection();
         List<User> users = new ArrayList<>();
@@ -118,12 +124,12 @@ public class UserDaoImpl implements UserDao {
             ResultSet result = statement.executeQuery();
             while (result.next()) {
                 long id = result.getLong("user_id");
-                User user = findById(id);
+                User user = findUserById(id);
                 users.add(user);
             }
             return users;
         } catch (SQLException e) {
-            throw new RuntimeException();
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -140,7 +146,7 @@ public class UserDaoImpl implements UserDao {
                 return false;
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Unable to delete!");
+            throw new RuntimeException("Unable to delete! " + e.getMessage());
         }
     }
 
@@ -151,7 +157,7 @@ public class UserDaoImpl implements UserDao {
             result.next();
             return result.getLong("count(*)");
         } catch (SQLException e) {
-            throw new RuntimeException();
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -167,7 +173,7 @@ public class UserDaoImpl implements UserDao {
                 user.setRating(result.getBigDecimal("rating"));
             }
         } catch (SQLException e) {
-            throw new RuntimeException();
+            throw new RuntimeException(e.getMessage());
         }
     }
 }
