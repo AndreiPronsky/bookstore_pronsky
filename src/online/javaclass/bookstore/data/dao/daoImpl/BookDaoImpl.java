@@ -70,6 +70,7 @@ public class BookDaoImpl implements BookDao {
         } catch (SQLException e) {
             throw new RuntimeException("Update failed! " + e.getMessage());
         }
+        System.out.println("Valid state : " + findBookById(book.getId()));
     }
 
     @Override

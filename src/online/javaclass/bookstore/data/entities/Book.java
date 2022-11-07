@@ -116,10 +116,11 @@ public class Book {
     public String toString() {
         return "online.javaclass.bookstore.Entities.Book { id = " + id + " | " +
                 "title = " + title + " | " +
-                "lastname = " + author + " | " +
-                "email = " + cover + " | " +
-                "password = " + pages + " | " +
-                "role = " + price + " | " +
-                " rating = " + rating + " }";
+                "author = " + author + " | " +
+                "isbn = " + isbn + " | " +
+                "cover = " + cover + " | " +
+                "pages = " + pages + " | " +
+                "price = " + price + " | " +
+                "rating = " + rating + " }";
     }
 }
