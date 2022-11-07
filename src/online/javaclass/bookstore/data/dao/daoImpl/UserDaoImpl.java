@@ -17,7 +17,9 @@ public class UserDaoImpl implements UserDao {
     public static final String CREATE_USER = "INSERT INTO users (firstname, lastname, email, user_password, user_role) VALUES (?, ?, ?, ?, ?)";
     public static final String UPDATE_USER = "SELECT user_id, firstname, lastname, email, user_password, user_role FROM users WHERE user_id = ?";
     public static final String FIND_USER_BY_ID = "SELECT user_id, firstname, lastname, email, user_password, user_role, rating FROM users WHERE user_id = ?";
+    public static final String FIND_USER_BY_EMAIL = "SELECT user_id, firstname, lastname, email, user_password, user_role, rating FROM users WHERE email = ?";
     public static final String FIND_ALL = "SELECT user_id, firstname, lastname, email, user_password, user_role, rating FROM users";
+    public static final String FIND_USERS_BY_LASTNAME = "SELECT user_id, firstname, lastname, email, user_password, user_role, rating FROM users WHERE lastname = ?";
     public static final String DELETE_BY_ID = "DELETE FROM users WHERE user_id = ?";
     private final DataBaseManager dataBaseManager;
 
@@ -37,7 +39,7 @@ public class UserDaoImpl implements UserDao {
             ResultSet resultSet = statement.getGeneratedKeys();
             if (resultSet.next()) {
                 user.setId(resultSet.getLong("user_id"));
-                System.out.println("Created : " + find(resultSet.getLong("user_id")));
+                System.out.println("Created : " + findById(resultSet.getLong("user_id")));
             }
         } catch (SQLException e) {
             throw new RuntimeException("Creation failed!");
@@ -63,27 +65,49 @@ public class UserDaoImpl implements UserDao {
         } catch (SQLException e) {
             throw new RuntimeException("Update failed!");
         }
-        System.out.println("Valid state : " + find(user.getId()));
+        System.out.println("Valid state : " + findById(user.getId()));
     }
 
-    public User find(Long id) {
+    public User findById(Long id) {
         Connection connection = dataBaseManager.getConnection();
         User user = new User();
         try (PreparedStatement statement = connection.prepareStatement(FIND_USER_BY_ID)) {
             statement.setLong(1, id);
             ResultSet result = statement.executeQuery();
-            while (result.next()) {
-                user.setId(result.getLong("user_id"));
-                user.setFirstName(result.getString("firstname"));
-                user.setLastName(result.getString("lastname"));
-                user.setEmail(result.getString("email"));
-                user.setPassword(result.getString("user_password"));
-                user.setRole(result.getInt("user_role"));
-                user.setRating(result.getBigDecimal("rating"));
-            }
+            setParameters(user, result);
             return user;
         } catch (SQLException e) {
             throw new RuntimeException("No such user found!");
+        }
+    }
+
+    public User findUserByEmail(String email) {
+        Connection connection = dataBaseManager.getConnection();
+        User user = new User();
+        try (PreparedStatement statement = connection.prepareStatement(FIND_USER_BY_EMAIL)) {
+            statement.setString(1, email);
+            ResultSet result = statement.executeQuery();
+            setParameters(user, result);
+            return user;
+        } catch (SQLException e) {
+            throw new RuntimeException("No such user found!");
+        }
+    }
+
+    public List<User> findUsersByLastName(String lastName) {
+        Connection connection = dataBaseManager.getConnection();
+        List<User> users = new ArrayList<>();
+        try (PreparedStatement statement = connection.prepareStatement(FIND_USERS_BY_LASTNAME)) {
+            statement.setString(1, lastName);
+            ResultSet result = statement.executeQuery();
+            while (result.next()) {
+                long id = result.getLong("user_id");
+                User user = findById(id);
+                users.add(user);
+            }
+            return users;
+        } catch (SQLException e) {
+            throw new RuntimeException();
         }
     }
 
@@ -94,7 +118,7 @@ public class UserDaoImpl implements UserDao {
             ResultSet result = statement.executeQuery();
             while (result.next()) {
                 long id = result.getLong("user_id");
-                User user = find(id);
+                User user = findById(id);
                 users.add(user);
             }
             return users;
@@ -117,6 +141,33 @@ public class UserDaoImpl implements UserDao {
             }
         } catch (SQLException e) {
             throw new RuntimeException("Unable to delete!");
+        }
+    }
+
+    public Long count() {
+        Connection connection = dataBaseManager.getConnection();
+        try (Statement statement = connection.createStatement()) {
+            ResultSet result = statement.executeQuery("SELECT count(*) FROM users");
+            result.next();
+            return result.getLong("count(*)");
+        } catch (SQLException e) {
+            throw new RuntimeException();
+        }
+    }
+
+    private void setParameters(User user, ResultSet result) {
+        try {
+            while (result.next()) {
+                user.setId(result.getLong("user_id"));
+                user.setFirstName(result.getString("firstname"));
+                user.setLastName(result.getString("lastname"));
+                user.setEmail(result.getString("email"));
+                user.setPassword(result.getString("user_password"));
+                user.setRole(result.getInt("user_role"));
+                user.setRating(result.getBigDecimal("rating"));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException();
         }
     }
 }

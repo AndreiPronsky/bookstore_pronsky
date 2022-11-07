@@ -5,14 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8d1d18b0-97d0-4816-b26d-f47873f54c98" name="Changes" comment="Refactored according to tasks">
-      <change afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/connection/DataBaseManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/connection/ProxyConnection.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/dao/UserDao.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/service/UserDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/service/UserService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/service/UserServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/online/javaclass/bookstore/Entities/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/entities/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/online/javaclass/bookstore/UserDao/UserDataAccess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/dao/daoImpl/UserDaoImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/online/javaclass/bookstore/UserInfo/UserTableInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/database/UserTableInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/dao/UserDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/dao/UserDao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/dao/daoImpl/UserDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/dao/daoImpl/UserDaoImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -117,7 +115,14 @@
       <option name="project" value="LOCAL" />
       <updated>1667323774512</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Refactored according to tasks">
+      <created>1667386995848</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1667386995848</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">

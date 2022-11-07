@@ -9,7 +9,7 @@ public interface UserDao {
 
     void update(User user);
 
-    User find(Long id);
+    User findById(Long id);
 
     List<User> findAll();
 
