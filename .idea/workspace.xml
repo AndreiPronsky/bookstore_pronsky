@@ -1,45 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="AutoImportSettings">
-    <option name="autoReloadType" value="SELECTIVE" />
-  </component>
   <component name="ChangeListManager">
-    <list default="true" id="8d1d18b0-97d0-4816-b26d-f47873f54c98" name="Changes" comment="Refactored according to tasks">
-      <change afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/connection/DataBaseManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/connection/ProxyConnection.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/dao/UserDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/online/javaclass/bookstore/Entities/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/entities/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/online/javaclass/bookstore/UserDao/UserDataAccess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/dao/daoImpl/UserDaoImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/online/javaclass/bookstore/UserInfo/UserTableInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/database/UserTableInfo.java" afterDir="false" />
-    </list>
+    <list default="true" id="8d1d18b0-97d0-4816-b26d-f47873f54c98" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
-  </component>
-  <component name="CodeStyleSettingsInfer">
-    <option name="done" value="true" />
-  </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Interface" />
-        <option value="Class" />
-      </list>
-    </option>
-  </component>
-  <component name="Git.Settings">
-    <option name="RECENT_BRANCH_BY_REPOSITORY">
-      <map>
-        <entry key="$PROJECT_DIR$" value="master" />
-      </map>
-    </option>
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-  </component>
-  <component name="MarkdownSettingsMigration">
-    <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectCodeStyleSettingsMigration">
     <option name="version" value="2" />
@@ -55,38 +21,9 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "last_opened_file_path": "C:/Repository/bookstore/bookstore_pronsky/postgresql-42.5.0.jar",
-    "project.structure.last.edited": "Libraries",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.2"
+    "RunOnceActivity.ShowReadmeOnStart": "true"
   }
 }]]></component>
-  <component name="RecentsManager">
-    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
-      <recent name="com.pao" />
-    </key>
-  </component>
-  <component name="RunManager" selected="Application.Main">
-    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="Main" />
-      <module name="bookstore_pronsky" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="postgresql-42.5.0.jar" type="JarApplication" temporary="true">
-      <option name="JAR_PATH" value="$PROJECT_DIR$/postgresql-42.5.0.jar" />
-      <method v="2" />
-    </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Application.Main" />
-        <item itemvalue="JAR Application.postgresql-42.5.0.jar" />
-      </list>
-    </recent_temporary>
-  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -96,35 +33,6 @@
       <option name="presentableId" value="Default" />
       <updated>1666613677693</updated>
     </task>
-    <task id="LOCAL-00001" summary="Initial commit">
-      <created>1666613968129</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1666613968129</updated>
-    </task>
-    <task id="LOCAL-00002" summary="Hometask completed">
-      <created>1666614312763</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1666614312763</updated>
-    </task>
-    <task id="LOCAL-00003" summary="Refactored methods. Demo project structure">
-      <created>1667323774512</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1667323774512</updated>
-    </task>
-    <option name="localTasksCounter" value="4" />
     <servers />
-  </component>
-  <component name="VcsManagerConfiguration">
-    <MESSAGE value="Initial commit" />
-    <MESSAGE value="Hometask completed" />
-    <MESSAGE value="Refactored methods. Demo project structure" />
-    <MESSAGE value="Refactored according to tasks" />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactored according to tasks" />
   </component>
 </project>
