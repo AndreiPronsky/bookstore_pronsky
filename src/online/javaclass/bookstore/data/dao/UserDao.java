@@ -10,7 +10,9 @@ public interface UserDao {
     void update(User user);
 
     User findUserById(Long id);
+
     User findUserByEmail(String email);
+
     List<User> findUsersByLastName(String lastname);
 
     List<User> findAll();

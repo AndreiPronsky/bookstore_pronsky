@@ -4,9 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8d1d18b0-97d0-4816-b26d-f47873f54c98" name="Changes" comment="">
+    <list default="true" id="8d1d18b0-97d0-4816-b26d-f47873f54c98" name="Changes" comment="Book.toString adjusted">
+      <change afterPath="$PROJECT_DIR$/sql/insertBooks.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sql/insertUsers.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dbnavigator.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dbnavigator.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/dao/BookDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/dao/BookDao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/dao/UserDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/dao/UserDao.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/dao/daoImpl/BookDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/dao/daoImpl/BookDaoImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/dao/daoImpl/UserDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/dao/daoImpl/UserDaoImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/entities/Book.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/entities/Book.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/entities/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/entities/User.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,6 +63,11 @@
     "project.structure.last.edited": "Libraries",
     "project.structure.proportion": "0.0",
     "project.structure.side.proportion": "0.2"
+  },
+  "keyToStringList": {
+    "com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File": [
+      "POSTGRES-SQL"
+    ]
   }
 }]]></component>
   <component name="RecentsManager">
@@ -132,7 +145,14 @@
       <option name="project" value="LOCAL" />
       <updated>1667816155422</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Book.toString adjusted">
+      <created>1667816677881</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1667816677881</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -141,6 +161,7 @@
     <MESSAGE value="Refactored methods. Demo project structure" />
     <MESSAGE value="Refactored according to tasks" />
     <MESSAGE value="Book, BookDao, BookDaoImpl added" />
-    <option name="LAST_COMMIT_MESSAGE" value="Book, BookDao, BookDaoImpl added" />
+    <MESSAGE value="Book.toString adjusted" />
+    <option name="LAST_COMMIT_MESSAGE" value="Book.toString adjusted" />
   </component>
 </project>

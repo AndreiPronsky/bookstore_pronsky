@@ -27,7 +27,6 @@ public class UserDaoImpl implements UserDao {
         this.dataBaseManager = dataBaseManager;
     }
 
-    @Override
     public void create(User user) {
         Connection connection = dataBaseManager.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(CREATE_USER, Statement.RETURN_GENERATED_KEYS)) {
@@ -47,7 +46,6 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
-    @Override
     public void update(User user) {
         Connection connection = dataBaseManager.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(UPDATE_USER, ResultSet.TYPE_SCROLL_SENSITIVE,
@@ -70,7 +68,6 @@ public class UserDaoImpl implements UserDao {
         System.out.println("Valid state : " + findUserById(user.getId()));
     }
 
-    @Override
     public User findUserById(Long id) {
         Connection connection = dataBaseManager.getConnection();
         User user = new User();
@@ -84,7 +81,6 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
-    @Override
     public User findUserByEmail(String email) {
         Connection connection = dataBaseManager.getConnection();
         User user = new User();
@@ -98,7 +94,6 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
-    @Override
     public List<User> findUsersByLastName(String lastName) {
         Connection connection = dataBaseManager.getConnection();
         List<User> users = new ArrayList<>();
@@ -116,7 +111,6 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
-    @Override
     public List<User> findAll() {
         Connection connection = dataBaseManager.getConnection();
         List<User> users = new ArrayList<>();
@@ -155,7 +149,7 @@ public class UserDaoImpl implements UserDao {
         try (Statement statement = connection.createStatement()) {
             ResultSet result = statement.executeQuery("SELECT count(*) FROM users");
             result.next();
-            return result.getLong("count(*)");
+            return result.getLong("count");
         } catch (SQLException e) {
             throw new RuntimeException(e.getMessage());
         }

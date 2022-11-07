@@ -16,8 +16,7 @@ public class User {
 
     }
 
-    public User(long id, String firstName, String lastName, String email, String password, int role, BigDecimal rating) {
-        this.id = id;
+    public User(String firstName, String lastName, String email, String password, int role, BigDecimal rating) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;

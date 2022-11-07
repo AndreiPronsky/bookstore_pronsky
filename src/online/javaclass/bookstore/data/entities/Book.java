@@ -13,18 +13,11 @@ public class Book {
     private BigDecimal price;
     private BigDecimal rating;
 
-    private enum Cover {
-        Soft,
-        Hard,
-        DustJacket
-    }
-
     public Book() {
 
     }
 
-    public Book(Long id, String title, String author, String isbn, String cover, int pages, BigDecimal price, BigDecimal rating) {
-        this.id = id;
+    public Book(String title, String author, String isbn, String cover, int pages, BigDecimal price, BigDecimal rating) {
         this.title = title;
         this.author = author;
         this.isbn = isbn;

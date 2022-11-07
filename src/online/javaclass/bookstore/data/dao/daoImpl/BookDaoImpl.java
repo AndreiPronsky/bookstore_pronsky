@@ -29,7 +29,7 @@ public class BookDaoImpl implements BookDao {
         this.dataBaseManager = dataBaseManager;
     }
 
-    @Override
+
     public void create(Book book) {
         Connection connection = dataBaseManager.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(CREATE_BOOK, Statement.RETURN_GENERATED_KEYS)) {
@@ -51,7 +51,6 @@ public class BookDaoImpl implements BookDao {
         }
     }
 
-    @Override
     public void update(Book book) {
         Connection connection = dataBaseManager.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(UPDATE_BOOK, ResultSet.TYPE_SCROLL_SENSITIVE,
@@ -73,7 +72,6 @@ public class BookDaoImpl implements BookDao {
         System.out.println("Valid state : " + findBookById(book.getId()));
     }
 
-    @Override
     public Book findBookById(Long id) {
         Connection connection = dataBaseManager.getConnection();
         Book book = new Book();
@@ -87,7 +85,6 @@ public class BookDaoImpl implements BookDao {
         }
     }
 
-    @Override
     public Book findBookByIsbn(String isbn) {
         Connection connection = dataBaseManager.getConnection();
         Book book = new Book();
@@ -101,7 +98,6 @@ public class BookDaoImpl implements BookDao {
         }
     }
 
-    @Override
     public List<Book> findAll() {
         Connection connection = dataBaseManager.getConnection();
         List<Book> books = new ArrayList<>();
@@ -118,7 +114,6 @@ public class BookDaoImpl implements BookDao {
         }
     }
 
-    @Override
     public boolean deleteById(Long id) {
         Connection connection = dataBaseManager.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(DELETE_BY_ID)) {
