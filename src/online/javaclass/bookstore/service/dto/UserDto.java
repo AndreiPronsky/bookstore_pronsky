@@ -1,9 +1,9 @@
-package online.javaclass.bookstore.data.entities;
+package online.javaclass.bookstore.service.dto;
 
 import java.math.BigDecimal;
 import java.util.Objects;
 
-public class User {
+public class UserDto {
     private Long id;
     private String firstName;
     private String lastName;
@@ -12,11 +12,11 @@ public class User {
     private Integer role;
     private BigDecimal rating;
 
-    public User() {
+    public UserDto() {
 
     }
 
-    public User(String firstName, String lastName, String email, String password, int role, BigDecimal rating) {
+    public UserDto(String firstName, String lastName, String email, String password, int role, BigDecimal rating) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -25,7 +25,7 @@ public class User {
         this.rating = rating;
     }
 
-    public User(String firstName, String lastName, String email, String password, int role) {
+    public UserDto(String firstName, String lastName, String email, String password, int role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -97,14 +97,14 @@ public class User {
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (!(obj instanceof User user)) return false;
-        return Objects.equals(id, user.id) && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName)
-                && Objects.equals(email, user.email);
+        if (!(obj instanceof UserDto userDto)) return false;
+        return Objects.equals(id, userDto.id) && Objects.equals(firstName, userDto.firstName) && Objects.equals(lastName, userDto.lastName)
+                && Objects.equals(email, userDto.email);
     }
 
     @Override
     public String toString() {
-        return "online.javaclass.bookstore.data.entities.User { id = " + id + " | " +
+        return "online.javaclass.bookstore.service.dto.UserDto { id = " + id + " | " +
                 "firstname = " + firstName + " | " +
                 "lastname = " + lastName + " | " +
                 "email = " + email + " | " +

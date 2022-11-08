@@ -5,15 +5,15 @@ import online.javaclass.bookstore.data.entities.Book;
 import java.util.List;
 
 public interface BookDao {
-    void create(Book book);
+    Book create(Book book);
 
-    void update(Book book);
+    Book update(Book book);
 
-    Book findBookById(Long id);
+    Book findById(Long id);
 
-    Book findBookByIsbn(String isbn);
+    Book findByIsbn(String isbn);
 
-    List<Book> findBooksByAuthor(String author);
+    List<Book> findByAuthor(String author);
 
     List<Book> findAll();
 

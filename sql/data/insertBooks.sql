@@ -1,14 +1,3 @@
-CREATE TABLE books (
-book_id BIGSERIAL PRIMARY KEY,
-title VARCHAR(128) NOT NULL,
-author VARCHAR(128) NOT NULL,
-isbn VARCHAR(128) UNIQUE NOT NULL,
-cover VARCHAR(128),
-pages INTEGER,
-price NUMERIC NOT NULL,
-rating NUMERIC
-);
-
 INSERT INTO books (title, author, isbn, cover, pages, price)
 VALUES ('Revolution for workers and peasants', 'Karl Heinrich Marx', '2-1234-5678-1', 'soft', 1200, 34.25),
         ('Lets plant together', 'Yurkovskaya Tatyana', '2-4343-7678-2', 'hard', 300, 15.34),

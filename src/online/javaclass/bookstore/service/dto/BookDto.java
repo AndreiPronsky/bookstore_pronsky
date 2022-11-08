@@ -1,9 +1,9 @@
-package online.javaclass.bookstore.data.entities;
+package online.javaclass.bookstore.service.dto;
 
 import java.math.BigDecimal;
 import java.util.Objects;
 
-public class Book {
+public class BookDto {
     private Long id;
     private String title;
     private String author;
@@ -13,11 +13,11 @@ public class Book {
     private BigDecimal price;
     private BigDecimal rating;
 
-    public Book() {
+    public BookDto() {
 
     }
 
-    public Book(String title, String author, String isbn, String cover, int pages, BigDecimal price, BigDecimal rating) {
+    public BookDto(String title, String author, String isbn, String cover, int pages, BigDecimal price, BigDecimal rating) {
         this.title = title;
         this.author = author;
         this.isbn = isbn;
@@ -100,14 +100,14 @@ public class Book {
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (!(obj instanceof Book book)) return false;
-        return Objects.equals(id, book.id) && Objects.equals(title, book.title) && Objects.equals(author, book.author)
-                && Objects.equals(isbn, book.isbn) && Objects.equals(price, book.price);
+        if (!(obj instanceof BookDto bookDto)) return false;
+        return Objects.equals(id, bookDto.id) && Objects.equals(title, bookDto.title) && Objects.equals(author, bookDto.author)
+                && Objects.equals(isbn, bookDto.isbn) && Objects.equals(price, bookDto.price);
     }
 
     @Override
     public String toString() {
-        return "online.javaclass.bookstore.data.entities.Book { id = " + id + " | " +
+        return "online.javaclass.bookstore.service.dto.BookDto { id = " + id + " | " +
                 "title = " + title + " | " +
                 "author = " + author + " | " +
                 "isbn = " + isbn + " | " +

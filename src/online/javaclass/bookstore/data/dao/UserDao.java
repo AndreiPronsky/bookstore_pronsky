@@ -5,17 +5,19 @@ import online.javaclass.bookstore.data.entities.User;
 import java.util.List;
 
 public interface UserDao {
-    void create(User user);
+    User create(User user);
 
-    void update(User user);
+    User update(User user);
 
-    User findUserById(Long id);
+    User findById(Long id);
 
-    User findUserByEmail(String email);
+    User findByEmail(String email);
 
-    List<User> findUsersByLastName(String lastname);
+    List<User> findByLastName(String lastname);
 
     List<User> findAll();
 
     boolean deleteById(Long id);
+
+    Long count();
 }
