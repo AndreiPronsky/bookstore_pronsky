@@ -11,16 +11,20 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class BookDaoImpl implements BookDao {
 
-    public static final String CREATE_BOOK = "INSERT INTO books (title, author, isbn, cover, pages, price, rating) VALUES (?, ?, ?, ?, ?, ?, ?)";
-    public static final String UPDATE_BOOK = "UPDATE books SET ? = ? WHERE book_id = ?";
-    public static final String FIND_BOOK_BY_ID = "SELECT book_id, title, author, isbn, cover, pages, price, rating FROM books WHERE book_id = ?";
-    public static final String FIND_BOOK_BY_ISBN = "SELECT book_id, title, author, isbn, cover, pages, price, rating FROM books WHERE isbn = ?";
+    public static final String CREATE_BOOK = "INSERT INTO books (title, author, isbn, cover, pages, price, rating)" +
+            " VALUES (?, ?, ?, ?, ?, ?, ?)";
+    public static final String UPDATE_BOOK = "UPDATE books SET book_id = ?, title = ?, author = ?, isbn = ?," +
+            " cover = ?, pages = ?, price = ?, rating = ? WHERE book_id = ?";
+    public static final String FIND_BOOK_BY_ID = "SELECT book_id, title, author, isbn, cover, pages, price," +
+            " rating FROM books WHERE book_id = ?";
+    public static final String FIND_BOOK_BY_ISBN = "SELECT book_id, title, author, isbn, cover, pages, price," +
+            " rating FROM books WHERE isbn = ?";
     public static final String FIND_ALL = "SELECT book_id, title, author, isbn, cover, pages, price, rating FROM books";
-    public static final String FIND_BOOKS_BY_AUTHOR = "SELECT book_id, title, author, isbn, cover, pages, price, rating FROM books WHERE author = ?";
+    public static final String FIND_BOOKS_BY_AUTHOR = "SELECT book_id, title, author, isbn, cover, pages, price," +
+            " rating FROM books WHERE author = ?";
     public static final String DELETE_BY_ID = "DELETE FROM books WHERE book_id = ?";
 
     private final DataBaseManager dataBaseManager;
@@ -46,17 +50,10 @@ public class BookDaoImpl implements BookDao {
         }
     }
 
-
-
     public Book update(Book book) {
         Connection connection = dataBaseManager.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement(UPDATE_BOOK);
-             Scanner scanner = new Scanner(System.in)) {
-            System.out.print("Enter column label you want to modify: ");
-            String column = scanner.next();
-            System.out.print("Enter new value: ");
-            String newValue = scanner.next();
-            prepareStatementForUpdate(book, statement, column, newValue);
+        try (PreparedStatement statement = connection.prepareStatement(UPDATE_BOOK)) {
+            prepareStatementForUpdate(book, statement);
             statement.executeUpdate();
             System.out.println("Valid state : " + findById(book.getId()));
             return findById(book.getId());
@@ -64,7 +61,6 @@ public class BookDaoImpl implements BookDao {
             throw new RuntimeException("Update failed! " + e.getMessage());
         }
     }
-
 
     public Book findById(Long id) {
         Connection connection = dataBaseManager.getConnection();
@@ -158,6 +154,7 @@ public class BookDaoImpl implements BookDao {
             throw new RuntimeException(e.getMessage());
         }
     }
+
     private void prepareStatementForCreate(Book book, PreparedStatement statement) throws SQLException {
         statement.setString(1, book.getTitle());
         statement.setString(2, book.getAuthor());
@@ -167,9 +164,15 @@ public class BookDaoImpl implements BookDao {
         statement.setBigDecimal(6, book.getPrice());
         statement.setBigDecimal(7, book.getRating());
     }
-    private void prepareStatementForUpdate(Book book, PreparedStatement statement, String column, String newValue) throws SQLException {
-        statement.setString(1, column);
-        statement.setString(2, newValue);
-        statement.setLong(3, book.getId());
+
+    private void prepareStatementForUpdate(Book book, PreparedStatement statement) throws SQLException {
+        statement.setString(1, book.getTitle());
+        statement.setString(2, book.getAuthor());
+        statement.setString(3, book.getIsbn());
+        statement.setString(4, book.getCover());
+        statement.setInt(5, book.getPages());
+        statement.setBigDecimal(6, book.getPrice());
+        statement.setBigDecimal(7, book.getRating());
+        statement.setLong(8, book.getId());
     }
 }

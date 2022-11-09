@@ -87,6 +87,7 @@ public class UserController {
         Long id = Long.parseLong(data[0]);
         UserDto user = userService.getById(id);
         userService.update(user);
+        response.println("UPDATED USER WITH ID : " + id);
     }
 
     private void delete(String request, PrintStream response) {

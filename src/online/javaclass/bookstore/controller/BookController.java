@@ -90,6 +90,7 @@ public class BookController {
         Long id = Long.parseLong(data[0]);
         BookDto book = bookService.getById(id);
         bookService.update(book);
+        response.println("UPDATED BOOK WITH ID : " + id);
     }
 
     private void delete(String request, PrintStream response) {

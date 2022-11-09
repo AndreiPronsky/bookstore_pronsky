@@ -21,7 +21,6 @@ public class BookServiceImpl implements BookService {
         Book book = toEntity(bookDto);
         Book created = bookDao.create(book);
         return toDto(created);
-
     }
 
     @Override

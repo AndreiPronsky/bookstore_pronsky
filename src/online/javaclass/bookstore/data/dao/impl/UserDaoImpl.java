@@ -11,11 +11,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class UserDaoImpl implements UserDao {
-    public static final String CREATE_USER = "INSERT INTO users (firstname, lastname, email, user_password, user_role) VALUES (?, ?, ?, ?, ?)";
-    public static final String UPDATE_USER = "UPDATE users SET ? = ? WHERE user_id = ?";
+    public static final String CREATE_USER = "INSERT INTO users (firstname, lastname, email, user_password, user_role, rating) VALUES (?, ?, ?, ?, ?, ?)";
+    public static final String UPDATE_USER = "UPDATE users SET firstname = ?, lastname = ?, email = ?, user_password = ?, user_role = ?, rating = ? WHERE user_id = ?";
     public static final String FIND_USER_BY_ID = "SELECT user_id, firstname, lastname, email, user_password, user_role, rating FROM users WHERE user_id = ?";
     public static final String FIND_USER_BY_EMAIL = "SELECT user_id, firstname, lastname, email, user_password, user_role, rating FROM users WHERE email = ?";
     public static final String FIND_ALL = "SELECT user_id, firstname, lastname, email, user_password, user_role, rating FROM users";
@@ -44,16 +43,10 @@ public class UserDaoImpl implements UserDao {
     }
 
 
-
     public User update(User user) {
         Connection connection = dataBaseManager.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement(UPDATE_USER);
-             Scanner scanner = new Scanner(System.in)) {
-            System.out.print("Enter column label you want to modify: ");
-            String column = scanner.next();
-            System.out.print("Enter new value: ");
-            String newValue = scanner.next();
-            prepareStatementForUpdate(user, statement, column, newValue);
+        try (PreparedStatement statement = connection.prepareStatement(UPDATE_USER)) {
+            prepareStatementForUpdate(user, statement);
             int affectedRows = statement.executeUpdate();
             if (affectedRows > 0) {
                 System.out.println("Valid state : " + findById(user.getId()));
@@ -167,16 +160,23 @@ public class UserDaoImpl implements UserDao {
             throw new RuntimeException(e.getMessage());
         }
     }
+
     private void prepareStatementForCreate(User user, PreparedStatement statement) throws SQLException {
         statement.setString(1, user.getFirstName());
         statement.setString(2, user.getLastName());
         statement.setString(3, user.getEmail());
         statement.setString(4, user.getPassword());
         statement.setInt(5, user.getRole());
+        statement.setBigDecimal(6, user.getRating());
     }
-    private void prepareStatementForUpdate(User user, PreparedStatement statement, String column, String newValue) throws SQLException {
-        statement.setString(1, column);
-        statement.setString(2, newValue);
-        statement.setLong(3, user.getId());
+
+    private void prepareStatementForUpdate(User user, PreparedStatement statement) throws SQLException {
+        statement.setString(1, user.getFirstName());
+        statement.setString(2, user.getLastName());
+        statement.setString(3, user.getEmail());
+        statement.setString(4, user.getPassword());
+        statement.setInt(5, user.getRole());
+        statement.setBigDecimal(6, user.getRating());
+        statement.setLong(7, user.getId());
     }
 }

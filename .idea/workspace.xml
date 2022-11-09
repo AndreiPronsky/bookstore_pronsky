@@ -4,26 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8d1d18b0-97d0-4816-b26d-f47873f54c98" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/controller/BookController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/controller/UserController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/service/BookService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/service/dto/BookDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/service/dto/UserDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/service/exceptions/AppException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/service/impl/BookServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/service/impl/UserServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dbnavigator.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dbnavigator.xml" afterDir="false" />
+    <list default="true" id="8d1d18b0-97d0-4816-b26d-f47873f54c98" name="Changes" comment="Refactored update methods">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/dao/BookDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/dao/BookDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/dao/UserDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/dao/UserDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/dao/daoImpl/BookDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/dao/impl/BookDaoImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/dao/daoImpl/UserDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/dao/impl/UserDaoImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/entities/Book.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/entities/Book.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/entities/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/entities/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/online/javaclass/bookstore/service/UserDto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/online/javaclass/bookstore/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/online/javaclass/bookstore/service/UserServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sql/data/insertBooks.sql" beforeDir="false" afterPath="$PROJECT_DIR$/sql/data/insertBooks.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/online/javaclass/bookstore/controller/BookController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/controller/BookController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/online/javaclass/bookstore/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/dao/impl/BookDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/dao/impl/BookDaoImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/dao/impl/UserDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/dao/impl/UserDaoImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/online/javaclass/bookstore/service/impl/BookServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/service/impl/BookServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,7 +32,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="module1_jdbc_intro" />
+        <entry key="$PROJECT_DIR$" value="module2_service" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -81,6 +69,8 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Repository\bookstore\bookstore_pronsky\sql\data" />
+      <recent name="C:\Repository\bookstore\bookstore_pronsky\sql\schema" />
       <recent name="C:\Repository\bookstore\bookstore_pronsky\sql" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
@@ -171,7 +161,14 @@
       <option name="project" value="LOCAL" />
       <updated>1667839354667</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Added Service &amp; Controller&#10;Refactored sql files structure">
+      <created>1667927172049</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1667927172049</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -182,6 +179,7 @@
     <MESSAGE value="Book, BookDao, BookDaoImpl added" />
     <MESSAGE value="Book.toString adjusted" />
     <MESSAGE value="Added scripts" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added scripts" />
+    <MESSAGE value="Added Service &amp; Controller&#10;Refactored sql files structure" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added Service &amp; Controller&#10;Refactored sql files structure" />
   </component>
 </project>
