@@ -1,6 +1,7 @@
 package online.javaclass.bookstore.controller.impl;
 
 import online.javaclass.bookstore.controller.Controller;
+import online.javaclass.bookstore.data.entities.Role;
 import online.javaclass.bookstore.service.UserService;
 import online.javaclass.bookstore.service.dto.UserDto;
 
@@ -58,7 +59,7 @@ public class UserControllerImpl implements Controller {
         String lastName = data[1];
         String email = data[2];
         String password = data[3];
-        int role = Integer.parseInt(data[4]);
+        Role role = Role.valueOf(data[4]);
         BigDecimal rating = BigDecimal.valueOf(Double.parseDouble(data[5]));
         UserDto user = new UserDto(firstName, lastName, email, password, role, rating);
         userService.create(user);

@@ -4,14 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8d1d18b0-97d0-4816-b26d-f47873f54c98" name="Changes" comment="Refactored update methods">
+    <list default="true" id="8d1d18b0-97d0-4816-b26d-f47873f54c98" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/entities/Role.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sql/data/insertBooks.sql" beforeDir="false" afterPath="$PROJECT_DIR$/sql/data/insertBooks.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/online/javaclass/bookstore/controller/BookController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/controller/BookController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/online/javaclass/bookstore/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/online/javaclass/bookstore/controller/impl/UserControllerImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/controller/impl/UserControllerImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/dao/impl/BookDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/dao/impl/BookDaoImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/dao/impl/UserDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/dao/impl/UserDaoImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/online/javaclass/bookstore/service/impl/BookServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/service/impl/BookServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/entities/Book.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/entities/Book.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/entities/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/entities/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/online/javaclass/bookstore/service/dto/BookDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/service/dto/BookDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/online/javaclass/bookstore/service/dto/UserDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/service/dto/UserDto.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,8 +26,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Interface" />
         <option value="Class" />
+        <option value="Interface" />
+        <option value="Enum" />
       </list>
     </option>
   </component>
@@ -72,6 +75,9 @@
       <recent name="C:\Repository\bookstore\bookstore_pronsky\sql\data" />
       <recent name="C:\Repository\bookstore\bookstore_pronsky\sql\schema" />
       <recent name="C:\Repository\bookstore\bookstore_pronsky\sql" />
+    </key>
+    <key name="ExtractSuperBase.RECENT_KEYS">
+      <recent name="online.javaclass.bookstore.controller" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="com.pao" />
@@ -168,7 +174,21 @@
       <option name="project" value="LOCAL" />
       <updated>1667927172049</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Refactored update methods">
+      <created>1667974753362</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1667974753362</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Refactored update methods">
+      <created>1667975449792</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1667975449792</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -180,6 +200,7 @@
     <MESSAGE value="Book.toString adjusted" />
     <MESSAGE value="Added scripts" />
     <MESSAGE value="Added Service &amp; Controller&#10;Refactored sql files structure" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added Service &amp; Controller&#10;Refactored sql files structure" />
+    <MESSAGE value="Refactored update methods" />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactored update methods" />
   </component>
 </project>

@@ -8,7 +8,7 @@ public class Book {
     private String title;
     private String author;
     private String isbn;
-    private String cover;
+    private Cover cover;
     private int pages;
     private BigDecimal price;
     private BigDecimal rating;
@@ -17,7 +17,7 @@ public class Book {
 
     }
 
-    public Book(String title, String author, String isbn, String cover, int pages, BigDecimal price, BigDecimal rating) {
+    public Book(String title, String author, String isbn, Cover cover, int pages, BigDecimal price, BigDecimal rating) {
         this.title = title;
         this.author = author;
         this.isbn = isbn;
@@ -51,11 +51,11 @@ public class Book {
         this.author = author;
     }
 
-    public String getCover() {
+    public Cover getCover() {
         return cover;
     }
 
-    public void setCover(String cover) {
+    public void setCover(Cover cover) {
         this.cover = cover;
     }
 

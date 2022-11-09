@@ -9,14 +9,14 @@ public class User {
     private String lastName;
     private String email;
     private String password;
-    private Integer role;
+    private Role role;
     private BigDecimal rating;
 
     public User() {
 
     }
 
-    public User(String firstName, String lastName, String email, String password, int role, BigDecimal rating) {
+    public User(String firstName, String lastName, String email, String password, Role role, BigDecimal rating) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -25,7 +25,7 @@ public class User {
         this.rating = rating;
     }
 
-    public User(String firstName, String lastName, String email, String password, int role) {
+    public User(String firstName, String lastName, String email, String password, Role role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -73,11 +73,11 @@ public class User {
         this.password = password;
     }
 
-    public Integer getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(Integer role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 

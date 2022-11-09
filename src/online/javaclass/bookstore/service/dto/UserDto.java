@@ -1,5 +1,7 @@
 package online.javaclass.bookstore.service.dto;
 
+import online.javaclass.bookstore.data.entities.Role;
+
 import java.math.BigDecimal;
 import java.util.Objects;
 
@@ -9,14 +11,14 @@ public class UserDto {
     private String lastName;
     private String email;
     private String password;
-    private Integer role;
+    private Role role;
     private BigDecimal rating;
 
     public UserDto() {
 
     }
 
-    public UserDto(String firstName, String lastName, String email, String password, int role, BigDecimal rating) {
+    public UserDto(String firstName, String lastName, String email, String password, Role role, BigDecimal rating) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -25,7 +27,7 @@ public class UserDto {
         this.rating = rating;
     }
 
-    public UserDto(String firstName, String lastName, String email, String password, int role) {
+    public UserDto(String firstName, String lastName, String email, String password, Role role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -73,11 +75,11 @@ public class UserDto {
         this.password = password;
     }
 
-    public Integer getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(Integer role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 

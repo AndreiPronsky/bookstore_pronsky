@@ -3,6 +3,7 @@ package online.javaclass.bookstore.data.dao.impl;
 import online.javaclass.bookstore.data.connection.DataBaseManager;
 import online.javaclass.bookstore.data.dao.BookDao;
 import online.javaclass.bookstore.data.entities.Book;
+import online.javaclass.bookstore.data.entities.Cover;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -145,7 +146,7 @@ public class BookDaoImpl implements BookDao {
                 book.setTitle(result.getString("title"));
                 book.setAuthor(result.getString("author"));
                 book.setIsbn(result.getString("isbn"));
-                book.setCover(result.getString("cover"));
+                book.setCover(Cover.valueOf(result.getString("cover")));
                 book.setPages(result.getInt("pages"));
                 book.setPrice(result.getBigDecimal("price"));
                 book.setRating(result.getBigDecimal("rating"));
@@ -159,7 +160,7 @@ public class BookDaoImpl implements BookDao {
         statement.setString(1, book.getTitle());
         statement.setString(2, book.getAuthor());
         statement.setString(3, book.getIsbn());
-        statement.setString(4, book.getCover());
+        statement.setString(4, book.getCover().toString());
         statement.setInt(5, book.getPages());
         statement.setBigDecimal(6, book.getPrice());
         statement.setBigDecimal(7, book.getRating());
@@ -169,7 +170,7 @@ public class BookDaoImpl implements BookDao {
         statement.setString(1, book.getTitle());
         statement.setString(2, book.getAuthor());
         statement.setString(3, book.getIsbn());
-        statement.setString(4, book.getCover());
+        statement.setString(4, book.getCover().toString());
         statement.setInt(5, book.getPages());
         statement.setBigDecimal(6, book.getPrice());
         statement.setBigDecimal(7, book.getRating());

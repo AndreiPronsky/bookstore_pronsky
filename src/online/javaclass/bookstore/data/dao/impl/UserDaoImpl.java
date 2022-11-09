@@ -2,6 +2,7 @@ package online.javaclass.bookstore.data.dao.impl;
 
 import online.javaclass.bookstore.data.connection.DataBaseManager;
 import online.javaclass.bookstore.data.dao.UserDao;
+import online.javaclass.bookstore.data.entities.Role;
 import online.javaclass.bookstore.data.entities.User;
 
 import java.sql.Connection;
@@ -153,7 +154,7 @@ public class UserDaoImpl implements UserDao {
                 user.setLastName(result.getString("lastname"));
                 user.setEmail(result.getString("email"));
                 user.setPassword(result.getString("user_password"));
-                user.setRole(result.getInt("user_role"));
+                user.setRole(Role.valueOf(result.getString("user_role")));
                 user.setRating(result.getBigDecimal("rating"));
             }
         } catch (SQLException e) {
@@ -166,7 +167,7 @@ public class UserDaoImpl implements UserDao {
         statement.setString(2, user.getLastName());
         statement.setString(3, user.getEmail());
         statement.setString(4, user.getPassword());
-        statement.setInt(5, user.getRole());
+        statement.setInt(5, user.getRole().ordinal());
         statement.setBigDecimal(6, user.getRating());
     }
 
@@ -175,7 +176,7 @@ public class UserDaoImpl implements UserDao {
         statement.setString(2, user.getLastName());
         statement.setString(3, user.getEmail());
         statement.setString(4, user.getPassword());
-        statement.setInt(5, user.getRole());
+        statement.setInt(5, user.getRole().ordinal());
         statement.setBigDecimal(6, user.getRating());
         statement.setLong(7, user.getId());
     }
