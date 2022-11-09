@@ -4,6 +4,10 @@ import online.javaclass.bookstore.data.connection.DataBaseManager;
 import online.javaclass.bookstore.data.dao.BookDao;
 import online.javaclass.bookstore.data.entities.Book;
 import online.javaclass.bookstore.data.entities.Cover;
+import online.javaclass.bookstore.service.exceptions.UnableToCreateException;
+import online.javaclass.bookstore.service.exceptions.UnableToDeleteException;
+import online.javaclass.bookstore.service.exceptions.UnableToFindException;
+import online.javaclass.bookstore.service.exceptions.UnableToUpdateException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -47,7 +51,7 @@ public class BookDaoImpl implements BookDao {
             }
             return findById(result.getLong("book_id"));
         } catch (SQLException e) {
-            throw new RuntimeException("Creation failed! " + e.getMessage());
+            throw new UnableToCreateException("Creation failed! " + e.getMessage());
         }
     }
 
@@ -59,7 +63,7 @@ public class BookDaoImpl implements BookDao {
             System.out.println("Valid state : " + findById(book.getId()));
             return findById(book.getId());
         } catch (SQLException e) {
-            throw new RuntimeException("Update failed! " + e.getMessage());
+            throw new UnableToUpdateException("Update failed! " + e.getMessage());
         }
     }
 
@@ -72,7 +76,7 @@ public class BookDaoImpl implements BookDao {
             setParameters(book, result);
             return book;
         } catch (SQLException e) {
-            throw new RuntimeException("No such book found! " + e.getMessage());
+            throw new UnableToFindException("No such book found! " + e.getMessage());
         }
     }
 
@@ -85,7 +89,7 @@ public class BookDaoImpl implements BookDao {
             setParameters(book, result);
             return book;
         } catch (SQLException e) {
-            throw new RuntimeException("No such book found! " + e.getMessage());
+            throw new UnableToFindException("No such book found! " + e.getMessage());
         }
     }
 
@@ -118,7 +122,7 @@ public class BookDaoImpl implements BookDao {
                 return false;
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Unable to delete! " + e.getMessage());
+            throw new UnableToDeleteException("Unable to delete! " + e.getMessage());
         }
     }
 
@@ -132,6 +136,9 @@ public class BookDaoImpl implements BookDao {
                 long id = result.getLong("book_id");
                 Book book = findById(id);
                 books.add(book);
+            }
+            if (books.isEmpty()) {
+                throw new UnableToFindException("No books by " + author + " found");
             }
             return books;
         } catch (SQLException e) {

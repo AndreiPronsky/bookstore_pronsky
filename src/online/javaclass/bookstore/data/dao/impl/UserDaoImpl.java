@@ -4,6 +4,10 @@ import online.javaclass.bookstore.data.connection.DataBaseManager;
 import online.javaclass.bookstore.data.dao.UserDao;
 import online.javaclass.bookstore.data.entities.Role;
 import online.javaclass.bookstore.data.entities.User;
+import online.javaclass.bookstore.service.exceptions.UnableToCreateException;
+import online.javaclass.bookstore.service.exceptions.UnableToDeleteException;
+import online.javaclass.bookstore.service.exceptions.UnableToFindException;
+import online.javaclass.bookstore.service.exceptions.UnableToUpdateException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -39,7 +43,7 @@ public class UserDaoImpl implements UserDao {
             }
             return findById(result.getLong("user_id"));
         } catch (SQLException e) {
-            throw new RuntimeException("Creation failed! " + e.getMessage());
+            throw new UnableToCreateException("Creation failed! " + e.getMessage());
         }
     }
 
@@ -54,7 +58,7 @@ public class UserDaoImpl implements UserDao {
             }
             return findById(user.getId());
         } catch (SQLException e) {
-            throw new RuntimeException("Update failed! " + e.getMessage());
+            throw new UnableToUpdateException("Update failed! " + e.getMessage());
         }
     }
 
@@ -68,7 +72,7 @@ public class UserDaoImpl implements UserDao {
             setParameters(user, result);
             return user;
         } catch (SQLException e) {
-            throw new RuntimeException("No such user found! " + e.getMessage());
+            throw new UnableToFindException("No such user found! " + e.getMessage());
         }
     }
 
@@ -81,7 +85,7 @@ public class UserDaoImpl implements UserDao {
             setParameters(user, result);
             return user;
         } catch (SQLException e) {
-            throw new RuntimeException("No such user found! " + e.getMessage());
+            throw new UnableToFindException("No such user found! " + e.getMessage());
         }
     }
 
@@ -95,6 +99,9 @@ public class UserDaoImpl implements UserDao {
                 long id = result.getLong("user_id");
                 User user = findById(id);
                 users.add(user);
+            }
+            if (users.isEmpty()) {
+                throw new UnableToFindException("No users with lastname " + lastName + " found");
             }
             return users;
         } catch (SQLException e) {
@@ -131,7 +138,7 @@ public class UserDaoImpl implements UserDao {
                 return false;
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Unable to delete! " + e.getMessage());
+            throw new UnableToDeleteException("Unable to delete! " + e.getMessage());
         }
     }
 

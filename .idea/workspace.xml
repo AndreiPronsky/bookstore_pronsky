@@ -5,15 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8d1d18b0-97d0-4816-b26d-f47873f54c98" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/entities/Role.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/online/javaclass/bookstore/controller/impl/UserControllerImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/controller/impl/UserControllerImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/service/exceptions/UnableToCreateException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/service/exceptions/UnableToDeleteException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/service/exceptions/UnableToFindException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/service/exceptions/UnableToUpdateException.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/dao/impl/BookDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/dao/impl/BookDaoImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/dao/impl/UserDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/dao/impl/UserDaoImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/entities/Book.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/entities/Book.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/entities/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/data/entities/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/online/javaclass/bookstore/service/dto/BookDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/service/dto/BookDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/online/javaclass/bookstore/service/dto/UserDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/online/javaclass/bookstore/service/dto/UserDto.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,9 +23,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="Interface" />
         <option value="Enum" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -188,7 +185,21 @@
       <option name="project" value="LOCAL" />
       <updated>1667975449792</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Added enums for Role &amp; Cover. Not sure if such enum usage is correct">
+      <created>1667984112561</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1667984112561</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Added enums for Role &amp; Cover. Not sure if such enum usage is correct">
+      <created>1667984249519</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1667984249519</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -201,6 +212,7 @@
     <MESSAGE value="Added scripts" />
     <MESSAGE value="Added Service &amp; Controller&#10;Refactored sql files structure" />
     <MESSAGE value="Refactored update methods" />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactored update methods" />
+    <MESSAGE value="Added enums for Role &amp; Cover. Not sure if such enum usage is correct" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added enums for Role &amp; Cover. Not sure if such enum usage is correct" />
   </component>
 </project>
