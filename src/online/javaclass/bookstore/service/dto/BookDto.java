@@ -19,6 +19,17 @@ public class BookDto {
 
     }
 
+    public BookDto(Long id, String title, String author, String isbn, Cover cover, int pages, BigDecimal price, BigDecimal rating) {
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.isbn = isbn;
+        this.cover = cover;
+        this.pages = pages;
+        this.price = price;
+        this.rating = rating;
+    }
+
     public BookDto(String title, String author, String isbn, Cover cover, int pages, BigDecimal price, BigDecimal rating) {
         this.title = title;
         this.author = author;

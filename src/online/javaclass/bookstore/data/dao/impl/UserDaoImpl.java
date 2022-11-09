@@ -39,7 +39,6 @@ public class UserDaoImpl implements UserDao {
             ResultSet result = statement.getGeneratedKeys();
             if (result.next()) {
                 user.setId(result.getLong("user_id"));
-                System.out.println("Created : " + findById(result.getLong("user_id")));
             }
             return findById(result.getLong("user_id"));
         } catch (SQLException e) {
@@ -131,7 +130,6 @@ public class UserDaoImpl implements UserDao {
             statement.setLong(1, id);
             int affectedRows = statement.executeUpdate();
             if (affectedRows == 1) {
-                System.out.println("Deleted user with id : " + id);
                 return true;
             } else {
                 System.out.println("No such user found!");
@@ -161,11 +159,19 @@ public class UserDaoImpl implements UserDao {
                 user.setLastName(result.getString("lastname"));
                 user.setEmail(result.getString("email"));
                 user.setPassword(result.getString("user_password"));
-                user.setRole(Role.valueOf(result.getString("user_role")));
+                verifyAndSetRole(user, result.getString("user_role"));
                 user.setRating(result.getBigDecimal("rating"));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    private void verifyAndSetRole(User user, String role) {
+        switch (role) {
+            case "admin" -> user.setRole(Role.ADMIN);
+            case "manager" -> user.setRole(Role.MANAGER);
+            case "user" -> user.setRole(Role.USER);
         }
     }
 
@@ -174,7 +180,7 @@ public class UserDaoImpl implements UserDao {
         statement.setString(2, user.getLastName());
         statement.setString(3, user.getEmail());
         statement.setString(4, user.getPassword());
-        statement.setInt(5, user.getRole().ordinal());
+        statement.setString(5, user.getRole().getTitle());
         statement.setBigDecimal(6, user.getRating());
     }
 
@@ -183,7 +189,7 @@ public class UserDaoImpl implements UserDao {
         statement.setString(2, user.getLastName());
         statement.setString(3, user.getEmail());
         statement.setString(4, user.getPassword());
-        statement.setInt(5, user.getRole().ordinal());
+        statement.setString(5, user.getRole().getTitle());
         statement.setBigDecimal(6, user.getRating());
         statement.setLong(7, user.getId());
     }

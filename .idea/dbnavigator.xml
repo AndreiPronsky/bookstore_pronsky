@@ -45,7 +45,7 @@
     <retain-sticky-names value="false" />
   </component>
   <component name="DBNavigator.Project.FileConnectionMappingManager">
-    <mapping file-url="file://$PROJECT_DIR$/sql/schema/createTableUsers.sql" connection-id="virtual-postgres-connection" session-id="" current-schema="" />
+    <mapping file-url="file://$PROJECT_DIR$/sql/schema/createTableUsers.sql" connection-id="5dcffa5a-e3ef-4b7f-b9ed-1d80c572b242" session-id="MAIN" current-schema="public" />
     <mapping file-url="file://$PROJECT_DIR$/sql/data/insertUsers.sql" connection-id="5dcffa5a-e3ef-4b7f-b9ed-1d80c572b242" session-id="MAIN" current-schema="public" />
     <mapping file-url="file://$PROJECT_DIR$/sql/schema/createTableBooks.sql" connection-id="virtual-postgres-connection" session-id="" current-schema="" />
   </component>

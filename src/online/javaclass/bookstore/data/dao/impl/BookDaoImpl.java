@@ -4,6 +4,8 @@ import online.javaclass.bookstore.data.connection.DataBaseManager;
 import online.javaclass.bookstore.data.dao.BookDao;
 import online.javaclass.bookstore.data.entities.Book;
 import online.javaclass.bookstore.data.entities.Cover;
+import online.javaclass.bookstore.data.entities.Role;
+import online.javaclass.bookstore.data.entities.User;
 import online.javaclass.bookstore.service.exceptions.UnableToCreateException;
 import online.javaclass.bookstore.service.exceptions.UnableToDeleteException;
 import online.javaclass.bookstore.service.exceptions.UnableToFindException;
@@ -21,7 +23,7 @@ public class BookDaoImpl implements BookDao {
 
     public static final String CREATE_BOOK = "INSERT INTO books (title, author, isbn, cover, pages, price, rating)" +
             " VALUES (?, ?, ?, ?, ?, ?, ?)";
-    public static final String UPDATE_BOOK = "UPDATE books SET book_id = ?, title = ?, author = ?, isbn = ?," +
+    public static final String UPDATE_BOOK = "UPDATE books SET title = ?, author = ?, isbn = ?," +
             " cover = ?, pages = ?, price = ?, rating = ? WHERE book_id = ?";
     public static final String FIND_BOOK_BY_ID = "SELECT book_id, title, author, isbn, cover, pages, price," +
             " rating FROM books WHERE book_id = ?";
@@ -47,7 +49,6 @@ public class BookDaoImpl implements BookDao {
             ResultSet result = statement.getGeneratedKeys();
             if (result.next()) {
                 book.setId(result.getLong("book_id"));
-                System.out.println("Created : " + findById(result.getLong("book_id")));
             }
             return findById(result.getLong("book_id"));
         } catch (SQLException e) {
@@ -153,7 +154,7 @@ public class BookDaoImpl implements BookDao {
                 book.setTitle(result.getString("title"));
                 book.setAuthor(result.getString("author"));
                 book.setIsbn(result.getString("isbn"));
-                book.setCover(Cover.valueOf(result.getString("cover")));
+                verifyAndSetCover(book, result.getString("cover"));
                 book.setPages(result.getInt("pages"));
                 book.setPrice(result.getBigDecimal("price"));
                 book.setRating(result.getBigDecimal("rating"));
@@ -182,5 +183,13 @@ public class BookDaoImpl implements BookDao {
         statement.setBigDecimal(6, book.getPrice());
         statement.setBigDecimal(7, book.getRating());
         statement.setLong(8, book.getId());
+    }
+
+    private void verifyAndSetCover(Book book, String cover) {
+        switch (cover) {
+            case "hard" -> book.setCover(Cover.HARD);
+            case "soft" -> book.setCover(Cover.SOFT);
+            case "special" -> book.setCover(Cover.SPECIAL);
+        }
     }
 }

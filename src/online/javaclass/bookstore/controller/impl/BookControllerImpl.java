@@ -1,6 +1,8 @@
 package online.javaclass.bookstore.controller.impl;
 
 import online.javaclass.bookstore.controller.Controller;
+import online.javaclass.bookstore.data.entities.Cover;
+import online.javaclass.bookstore.data.entities.Role;
 import online.javaclass.bookstore.service.BookService;
 import online.javaclass.bookstore.service.dto.BookDto;
 
@@ -53,12 +55,11 @@ public class BookControllerImpl implements Controller {
     }
 
     private void create(String request, PrintStream response) {
-        String bookData = request.substring(7);
-        String[] data = bookData.split(", ");
+        String[] data = request.substring(7).split(", ");
         String title = data[0];
         String author = data[1];
         String isbn = data[2];
-        String cover = data[3];
+        Cover cover = getCoverFromRequest(data[3]);
         int pages = Integer.parseInt(data[4]);
         BigDecimal price = BigDecimal.valueOf(Double.parseDouble(data[5]));
         BigDecimal rating = BigDecimal.valueOf(Double.parseDouble(data[6]));
@@ -88,7 +89,14 @@ public class BookControllerImpl implements Controller {
     private void update(String request, PrintStream response) {
         String[] data = request.substring(7).split(", ");
         Long id = Long.parseLong(data[0]);
-        BookDto book = bookService.getById(id);
+        String title = data[1];
+        String author = data[2];
+        String isbn = data[3];
+        Cover cover = getCoverFromRequest(data[4]);
+        int pages = Integer.parseInt(data[5]);
+        BigDecimal price = BigDecimal.valueOf(Double.parseDouble(data[6]));
+        BigDecimal rating = BigDecimal.valueOf(Double.parseDouble(data[7]));
+        BookDto book = new BookDto(id, title, author, isbn, cover, pages, price, rating);
         bookService.update(book);
         response.println("UPDATED BOOK WITH ID : " + id);
     }
@@ -97,5 +105,15 @@ public class BookControllerImpl implements Controller {
         Long id = Long.parseLong(request.split(" ")[1]);
         bookService.deleteById(id);
         response.println("DELETED BOOK WITH ID : " + id);
+    }
+
+    private Cover getCoverFromRequest(String verifyCover) {
+        Cover cover = null;
+        switch (verifyCover) {
+            case "hard" -> cover = Cover.HARD;
+            case "soft" -> cover = Cover.SOFT;
+            case "special" -> cover = Cover.SPECIAL;
+        }
+        return cover;
     }
 }

@@ -18,7 +18,8 @@ public class UserDto {
 
     }
 
-    public UserDto(String firstName, String lastName, String email, String password, Role role, BigDecimal rating) {
+    public UserDto(Long id, String firstName, String lastName, String email, String password, Role role, BigDecimal rating) {
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -27,12 +28,13 @@ public class UserDto {
         this.rating = rating;
     }
 
-    public UserDto(String firstName, String lastName, String email, String password, Role role) {
+    public UserDto(String firstName, String lastName, String email, String password, Role role, BigDecimal rating) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.role = role;
+        this.rating = rating;
     }
 
     public Long getId() {

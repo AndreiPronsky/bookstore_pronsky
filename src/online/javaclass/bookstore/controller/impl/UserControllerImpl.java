@@ -53,19 +53,20 @@ public class UserControllerImpl implements Controller {
     }
 
     private void create(String request, PrintStream response) {
-        String userData = request.substring(7);
-        String[] data = userData.split(", ");
+        String[] data = request.substring(7).split(", ");
         String firstName = data[0];
         String lastName = data[1];
         String email = data[2];
         String password = data[3];
-        Role role = Role.valueOf(data[4]);
+        Role role = getRoleFromRequest(data[4]);
         BigDecimal rating = BigDecimal.valueOf(Double.parseDouble(data[5]));
         UserDto user = new UserDto(firstName, lastName, email, password, role, rating);
         userService.create(user);
         response.println("CREATED USER : ");
         response.println(user);
     }
+
+
 
     private void getByEmail(String request, PrintStream response) {
         String email = request.substring(4);
@@ -87,7 +88,13 @@ public class UserControllerImpl implements Controller {
     private void update(String request, PrintStream response) {
         String[] data = request.substring(7).split(", ");
         Long id = Long.parseLong(data[0]);
-        UserDto user = userService.getById(id);
+        String firstName = data[1];
+        String lastName = data[2];
+        String email = data[3];
+        String password = data[4];
+        Role role = getRoleFromRequest(data[5]);
+        BigDecimal rating = BigDecimal.valueOf(Double.parseDouble(data[6]));
+        UserDto user = new UserDto(id, firstName, lastName, email, password, role, rating);
         userService.update(user);
         response.println("UPDATED USER WITH ID : " + id);
     }
@@ -96,5 +103,14 @@ public class UserControllerImpl implements Controller {
         Long id = Long.parseLong(request.split(" ")[1]);
         userService.deleteById(id);
         response.println("DELETED USER WITH ID : " + id);
+    }
+    private Role getRoleFromRequest(String verifyRole) {
+        Role role = null;
+        switch (verifyRole) {
+            case "admin" -> role = Role.ADMIN;
+            case "manager" -> role = Role.MANAGER;
+            case "user" -> role = Role.USER;
+        }
+        return role;
     }
 }
