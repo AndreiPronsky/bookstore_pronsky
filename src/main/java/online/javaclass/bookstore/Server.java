@@ -30,13 +30,10 @@ public class Server {
             Controller bookController = new BookControllerImpl(bookService);
 
         Scanner scanner = new Scanner(System.in);
-        System.out.println("""
-                USER HELP :\s
-                get {id} / {all} / {lastname} / {email}\s
-                create {firstName, lastName, email, password, role, rating} DELIMITER ', '!\s
-                update {id, firstName, lastName, email, password, role, rating} DELIMITER ', '!\s
-                delete {id}\s
-                exit""");
+//        System.out.println("USER HELP : \nget {id} / {all} / {lastname} / {email} " +
+//                "\ncreate {firstName, lastName, email, password, role, rating} DELIMITER ', '! " +
+//                "\nupdate {id, firstName, lastName, email, password, role, rating} DELIMITER ', '! " +
+//                "\ndelete {id} \nexit");
 
         System.out.println("""
                 BOOK HELP :\s

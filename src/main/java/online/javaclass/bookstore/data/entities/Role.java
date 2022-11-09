@@ -15,7 +15,6 @@ public enum Role {
         return title;
     }
 
-
     @Override
     public String toString() {
         return title;
