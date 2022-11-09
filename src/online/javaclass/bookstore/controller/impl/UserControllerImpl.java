@@ -1,5 +1,6 @@
-package online.javaclass.bookstore.controller;
+package online.javaclass.bookstore.controller.impl;
 
+import online.javaclass.bookstore.controller.Controller;
 import online.javaclass.bookstore.service.UserService;
 import online.javaclass.bookstore.service.dto.UserDto;
 
@@ -7,10 +8,10 @@ import java.io.PrintStream;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class UserController {
+public class UserControllerImpl implements Controller {
     private final UserService userService;
 
-    public UserController(UserService userService) {
+    public UserControllerImpl(UserService userService) {
         this.userService = userService;
     }
 

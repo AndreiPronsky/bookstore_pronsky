@@ -1,17 +1,17 @@
-package online.javaclass.bookstore.controller;
+package online.javaclass.bookstore.controller.impl;
 
+import online.javaclass.bookstore.controller.Controller;
 import online.javaclass.bookstore.service.BookService;
 import online.javaclass.bookstore.service.dto.BookDto;
-import online.javaclass.bookstore.service.dto.UserDto;
 
 import java.io.PrintStream;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class BookController {
+public class BookControllerImpl implements Controller {
     private final BookService bookService;
 
-    public BookController(BookService bookService) {
+    public BookControllerImpl(BookService bookService) {
         this.bookService = bookService;
     }
 
