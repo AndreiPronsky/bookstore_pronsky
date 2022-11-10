@@ -106,7 +106,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "online.javaclass.bookstore.data.entities.User { id = " + id + " | " +
+        return "User { id = " + id + " | " +
                 "firstname = " + firstName + " | " +
                 "lastname = " + lastName + " | " +
                 "email = " + email + " | " +

@@ -107,7 +107,7 @@ public class Book {
 
     @Override
     public String toString() {
-        return "online.javaclass.bookstore.data.entities.Book { id = " + id + " | " +
+        return "Book { id = " + id + " | " +
                 "title = " + title + " | " +
                 "author = " + author + " | " +
                 "isbn = " + isbn + " | " +

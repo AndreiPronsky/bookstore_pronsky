@@ -5,12 +5,15 @@ import online.javaclass.bookstore.data.entities.Book;
 import online.javaclass.bookstore.service.BookService;
 import online.javaclass.bookstore.service.dto.BookDto;
 import online.javaclass.bookstore.service.exceptions.AppException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 
 public class BookServiceImpl implements BookService {
 
     private final BookDao bookDao;
+    static Logger logger = LogManager.getLogger();
 
     public BookServiceImpl(BookDao bookDao) {
         this.bookDao = bookDao;
@@ -18,6 +21,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDto create(BookDto bookDto) {
+        logger.debug("create book");
         Book book = toEntity(bookDto);
         Book created = bookDao.create(book);
         return toDto(created);
@@ -25,6 +29,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDto update(BookDto bookDto) {
+        logger.debug("update book");
         Book book = toEntity(bookDto);
         Book updated = bookDao.update(book);
         return toDto(updated);
@@ -32,6 +37,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDto getById(Long id) {
+        logger.debug("get book by id");
         Book book = bookDao.findById(id);
         if (book == null) throw new AppException("Unable to find book with id : " + id);
         return toDto(book);
@@ -39,6 +45,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDto getByIsbn(String isbn) {
+        logger.debug("get book by isbn");
         Book book = bookDao.findByIsbn(isbn);
         if (book == null) throw new AppException("Unable to find book with isbn : " + isbn);
         return toDto(book);
@@ -46,15 +53,16 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<BookDto> getByAuthor(String author) {
+        logger.debug("get books by author");
         List<BookDto> bookDtos = bookDao.findByAuthor(author).stream()
                 .map(this::toDto)
                 .toList();
-        if (bookDtos.isEmpty()) throw new AppException("Unable to find books by author : " + author);
         return bookDtos;
     }
 
     @Override
     public List<BookDto> getAll() {
+        logger.debug("get all books");
         return bookDao.findAll().stream()
                 .map(this::toDto)
                 .toList();
@@ -62,6 +70,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void deleteById(Long id) {
+        logger.debug("delete book by id");
         boolean deleted = bookDao.deleteById(id);
         if (!deleted) throw new AppException("Unable to delete book with id : " + id);
     }

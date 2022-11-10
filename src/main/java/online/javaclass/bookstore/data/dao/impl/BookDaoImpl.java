@@ -10,6 +10,9 @@ import online.javaclass.bookstore.service.exceptions.UnableToCreateException;
 import online.javaclass.bookstore.service.exceptions.UnableToDeleteException;
 import online.javaclass.bookstore.service.exceptions.UnableToFindException;
 import online.javaclass.bookstore.service.exceptions.UnableToUpdateException;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -36,6 +39,8 @@ public class BookDaoImpl implements BookDao {
 
     private final DataBaseManager dataBaseManager;
 
+    static Logger logger = LogManager.getLogger();
+
     public BookDaoImpl(DataBaseManager dataBaseManager) {
         this.dataBaseManager = dataBaseManager;
     }
@@ -46,12 +51,14 @@ public class BookDaoImpl implements BookDao {
         try (PreparedStatement statement = connection.prepareStatement(CREATE_BOOK, Statement.RETURN_GENERATED_KEYS)) {
             prepareStatementForCreate(book, statement);
             statement.executeUpdate();
+            logger.debug("DB query completed");
             ResultSet result = statement.getGeneratedKeys();
             if (result.next()) {
                 book.setId(result.getLong("book_id"));
             }
             return findById(result.getLong("book_id"));
         } catch (SQLException e) {
+            logger.log(Level.ERROR, "creation failed", e);
             throw new UnableToCreateException("Creation failed! " + e.getMessage());
         }
     }
@@ -61,9 +68,11 @@ public class BookDaoImpl implements BookDao {
         try (PreparedStatement statement = connection.prepareStatement(UPDATE_BOOK)) {
             prepareStatementForUpdate(book, statement);
             statement.executeUpdate();
+            logger.debug("DB query completed");
             System.out.println("Valid state : " + findById(book.getId()));
             return findById(book.getId());
         } catch (SQLException e) {
+            logger.log(Level.ERROR, "update failed", e);
             throw new UnableToUpdateException("Update failed! " + e.getMessage());
         }
     }
@@ -74,9 +83,11 @@ public class BookDaoImpl implements BookDao {
         try (PreparedStatement statement = connection.prepareStatement(FIND_BOOK_BY_ID)) {
             statement.setLong(1, id);
             ResultSet result = statement.executeQuery();
-            setParameters(book, result);
+            logger.debug("DB query completed");
+                setParameters(book, result);
             return book;
         } catch (SQLException e) {
+            logger.log(Level.ERROR, "unable to find a book with id " + id, e);
             throw new UnableToFindException("No such book found! " + e.getMessage());
         }
     }
@@ -87,43 +98,12 @@ public class BookDaoImpl implements BookDao {
         try (PreparedStatement statement = connection.prepareStatement(FIND_BOOK_BY_ISBN)) {
             statement.setString(1, isbn);
             ResultSet result = statement.executeQuery();
+            logger.debug("DB query completed");
             setParameters(book, result);
             return book;
         } catch (SQLException e) {
+            logger.log(Level.ERROR, "unable to find a book with isbn " + isbn, e);
             throw new UnableToFindException("No such book found! " + e.getMessage());
-        }
-    }
-
-    public List<Book> findAll() {
-        Connection connection = dataBaseManager.getConnection();
-        List<Book> books = new ArrayList<>();
-        try (PreparedStatement statement = connection.prepareStatement(FIND_ALL)) {
-            ResultSet result = statement.executeQuery();
-            while (result.next()) {
-                long id = result.getLong("book_id");
-                Book book = findById(id);
-                books.add(book);
-            }
-            return books;
-        } catch (SQLException e) {
-            throw new RuntimeException(e.getMessage());
-        }
-    }
-
-    public boolean deleteById(Long id) {
-        Connection connection = dataBaseManager.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement(DELETE_BY_ID)) {
-            statement.setLong(1, id);
-            int affectedRows = statement.executeUpdate();
-            if (affectedRows == 1) {
-                System.out.println("Deleted book with id : " + id);
-                return true;
-            } else {
-                System.out.println("No such book found!");
-                return false;
-            }
-        } catch (SQLException e) {
-            throw new UnableToDeleteException("Unable to delete! " + e.getMessage());
         }
     }
 
@@ -133,17 +113,56 @@ public class BookDaoImpl implements BookDao {
         try (PreparedStatement statement = connection.prepareStatement(FIND_BOOKS_BY_AUTHOR)) {
             statement.setString(1, author);
             ResultSet result = statement.executeQuery();
+            logger.debug("DB query completed");
             while (result.next()) {
                 long id = result.getLong("book_id");
                 Book book = findById(id);
                 books.add(book);
             }
             if (books.isEmpty()) {
-                throw new UnableToFindException("No books by " + author + " found");
+                System.out.println("No books by " + author + "found");
             }
             return books;
         } catch (SQLException e) {
+            logger.log(Level.ERROR, "no books by " + author + " found");
             throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    public List<Book> findAll() {
+        Connection connection = dataBaseManager.getConnection();
+        List<Book> books = new ArrayList<>();
+        try (PreparedStatement statement = connection.prepareStatement(FIND_ALL)) {
+            ResultSet result = statement.executeQuery();
+            logger.debug("DB query completed");
+            while (result.next()) {
+                long id = result.getLong("book_id");
+                Book book = findById(id);
+                books.add(book);
+            }
+            return books;
+        } catch (SQLException e) {
+            logger.log(Level.ERROR, "no books found, please check if DB table is empty", e);
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    public boolean deleteById(Long id) {
+        Connection connection = dataBaseManager.getConnection();
+        try (PreparedStatement statement = connection.prepareStatement(DELETE_BY_ID)) {
+            statement.setLong(1, id);
+            int affectedRows = statement.executeUpdate();
+            logger.debug("DB query completed");
+            if (affectedRows == 1) {
+                System.out.println("Deleted book with id : " + id);
+                return true;
+            } else {
+                System.out.println("No such book found!");
+                return false;
+            }
+        } catch (SQLException e) {
+            logger.log(Level.ERROR, "unable to delete", e);
+            throw new UnableToDeleteException("Unable to delete! " + e.getMessage());
         }
     }
 
@@ -160,6 +179,7 @@ public class BookDaoImpl implements BookDao {
                 book.setRating(result.getBigDecimal("rating"));
             }
         } catch (SQLException e) {
+            logger.log(Level.ERROR, "unable to set parameters", e);
             throw new RuntimeException(e.getMessage());
         }
     }

@@ -8,6 +8,9 @@ import online.javaclass.bookstore.service.exceptions.UnableToCreateException;
 import online.javaclass.bookstore.service.exceptions.UnableToDeleteException;
 import online.javaclass.bookstore.service.exceptions.UnableToFindException;
 import online.javaclass.bookstore.service.exceptions.UnableToUpdateException;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -27,6 +30,8 @@ public class UserDaoImpl implements UserDao {
     public static final String DELETE_BY_ID = "DELETE FROM users WHERE user_id = ?";
     private final DataBaseManager dataBaseManager;
 
+    static Logger logger = LogManager.getLogger();
+
     public UserDaoImpl(DataBaseManager dataBaseManager) {
         this.dataBaseManager = dataBaseManager;
     }
@@ -36,12 +41,14 @@ public class UserDaoImpl implements UserDao {
         try (PreparedStatement statement = connection.prepareStatement(CREATE_USER, Statement.RETURN_GENERATED_KEYS)) {
             prepareStatementForCreate(user, statement);
             statement.executeUpdate();
+            logger.debug("DB query completed");
             ResultSet result = statement.getGeneratedKeys();
             if (result.next()) {
                 user.setId(result.getLong("user_id"));
             }
             return findById(result.getLong("user_id"));
         } catch (SQLException e) {
+            logger.log(Level.ERROR, "creation failed failed", e);
             throw new UnableToCreateException("Creation failed! " + e.getMessage());
         }
     }
@@ -52,11 +59,13 @@ public class UserDaoImpl implements UserDao {
         try (PreparedStatement statement = connection.prepareStatement(UPDATE_USER)) {
             prepareStatementForUpdate(user, statement);
             int affectedRows = statement.executeUpdate();
+            logger.debug("DB query completed");
             if (affectedRows > 0) {
                 System.out.println("Valid state : " + findById(user.getId()));
             }
             return findById(user.getId());
         } catch (SQLException e) {
+            logger.log(Level.ERROR, "update failed", e);
             throw new UnableToUpdateException("Update failed! " + e.getMessage());
         }
     }
@@ -68,9 +77,11 @@ public class UserDaoImpl implements UserDao {
         try (PreparedStatement statement = connection.prepareStatement(FIND_USER_BY_ID)) {
             statement.setLong(1, id);
             ResultSet result = statement.executeQuery();
+            logger.debug("DB query completed");
             setParameters(user, result);
             return user;
         } catch (SQLException e) {
+            logger.log(Level.ERROR, "unable to find user with id " + id, e);
             throw new UnableToFindException("No such user found! " + e.getMessage());
         }
     }
@@ -81,9 +92,11 @@ public class UserDaoImpl implements UserDao {
         try (PreparedStatement statement = connection.prepareStatement(FIND_USER_BY_EMAIL)) {
             statement.setString(1, email);
             ResultSet result = statement.executeQuery();
+            logger.debug("DB query completed");
             setParameters(user, result);
             return user;
         } catch (SQLException e) {
+            logger.log(Level.ERROR, "unable to find user with email " + email, e);
             throw new UnableToFindException("No such user found! " + e.getMessage());
         }
     }
@@ -94,16 +107,18 @@ public class UserDaoImpl implements UserDao {
         try (PreparedStatement statement = connection.prepareStatement(FIND_USERS_BY_LASTNAME)) {
             statement.setString(1, lastName);
             ResultSet result = statement.executeQuery();
+            logger.debug("DB query completed");
             while (result.next()) {
                 long id = result.getLong("user_id");
                 User user = findById(id);
                 users.add(user);
             }
             if (users.isEmpty()) {
-                throw new UnableToFindException("No users with lastname " + lastName + " found");
+                System.out.println("No users with lastname " + lastName + " found");
             }
             return users;
         } catch (SQLException e) {
+            logger.log(Level.ERROR, "unable to find users with lastname " + lastName, e);
             throw new RuntimeException(e.getMessage());
         }
     }
@@ -113,6 +128,7 @@ public class UserDaoImpl implements UserDao {
         List<User> users = new ArrayList<>();
         try (PreparedStatement statement = connection.prepareStatement(FIND_ALL)) {
             ResultSet result = statement.executeQuery();
+            logger.debug("DB query completed");
             while (result.next()) {
                 long id = result.getLong("user_id");
                 User user = findById(id);
@@ -120,6 +136,7 @@ public class UserDaoImpl implements UserDao {
             }
             return users;
         } catch (SQLException e) {
+            logger.log(Level.ERROR, "no users found, please check if DB table is empty", e);
             throw new RuntimeException(e.getMessage());
         }
     }
@@ -129,6 +146,7 @@ public class UserDaoImpl implements UserDao {
         try (PreparedStatement statement = connection.prepareStatement(DELETE_BY_ID)) {
             statement.setLong(1, id);
             int affectedRows = statement.executeUpdate();
+            logger.debug("DB query completed");
             if (affectedRows == 1) {
                 return true;
             } else {
@@ -136,6 +154,7 @@ public class UserDaoImpl implements UserDao {
                 return false;
             }
         } catch (SQLException e) {
+            logger.log(Level.ERROR, "unable to delete", e);
             throw new UnableToDeleteException("Unable to delete! " + e.getMessage());
         }
     }
@@ -144,9 +163,11 @@ public class UserDaoImpl implements UserDao {
         Connection connection = dataBaseManager.getConnection();
         try (Statement statement = connection.createStatement()) {
             ResultSet result = statement.executeQuery("SELECT count(*) FROM users");
+            logger.debug("DB query completed");
             result.next();
             return result.getLong("count");
         } catch (SQLException e) {
+            logger.log(Level.ERROR, "count failed", e);
             throw new RuntimeException(e.getMessage());
         }
     }
@@ -163,6 +184,7 @@ public class UserDaoImpl implements UserDao {
                 user.setRating(result.getBigDecimal("rating"));
             }
         } catch (SQLException e) {
+            logger.log(Level.ERROR, "unable to set parameters", e);
             throw new RuntimeException(e.getMessage());
         }
     }

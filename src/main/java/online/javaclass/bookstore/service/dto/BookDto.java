@@ -120,7 +120,7 @@ public class BookDto {
 
     @Override
     public String toString() {
-        return "online.javaclass.bookstore.service.dto.BookDto { id = " + id + " | " +
+        return "Book { id = " + id + " | " +
                 "title = " + title + " | " +
                 "author = " + author + " | " +
                 "isbn = " + isbn + " | " +

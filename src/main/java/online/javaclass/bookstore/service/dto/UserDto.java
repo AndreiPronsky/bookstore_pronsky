@@ -108,7 +108,7 @@ public class UserDto {
 
     @Override
     public String toString() {
-        return "online.javaclass.bookstore.service.dto.UserDto { id = " + id + " | " +
+        return "User { id = " + id + " | " +
                 "firstname = " + firstName + " | " +
                 "lastname = " + lastName + " | " +
                 "email = " + email + " | " +

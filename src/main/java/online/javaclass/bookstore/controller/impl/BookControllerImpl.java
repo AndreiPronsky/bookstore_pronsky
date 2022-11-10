@@ -2,7 +2,6 @@ package online.javaclass.bookstore.controller.impl;
 
 import online.javaclass.bookstore.controller.Controller;
 import online.javaclass.bookstore.data.entities.Cover;
-import online.javaclass.bookstore.data.entities.Role;
 import online.javaclass.bookstore.service.BookService;
 import online.javaclass.bookstore.service.dto.BookDto;
 
@@ -79,7 +78,7 @@ public class BookControllerImpl implements Controller {
     private void getByAuthor(String request, PrintStream response) {
         String author = request.substring(4);
         List<BookDto> books = bookService.getByAuthor(author);
-        response.println("BOOK WRITTEN BY " + "\"" + author + "\"" + " :");
+        response.println("BOOK(S) WRITTEN BY " + "\"" + author + "\"" + " :");
         for (BookDto book : books) {
             response.println(book);
         }
