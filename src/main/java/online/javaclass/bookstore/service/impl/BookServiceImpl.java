@@ -5,6 +5,7 @@ import online.javaclass.bookstore.data.entities.Book;
 import online.javaclass.bookstore.service.BookService;
 import online.javaclass.bookstore.service.dto.BookDto;
 import online.javaclass.bookstore.service.exceptions.AppException;
+import online.javaclass.bookstore.service.exceptions.UnableToFindException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -72,7 +73,7 @@ public class BookServiceImpl implements BookService {
     public void deleteById(Long id) {
         logger.debug("delete book by id");
         boolean deleted = bookDao.deleteById(id);
-        if (!deleted) throw new AppException("Unable to delete book with id : " + id);
+        if (!deleted) System.out.println("Unable to delete book with id : " + id);
     }
 
     private Book toEntity(BookDto bookDto) {
@@ -89,15 +90,20 @@ public class BookServiceImpl implements BookService {
     }
 
     private BookDto toDto(Book book) {
-        BookDto bookDto = new BookDto();
-        bookDto.setId(book.getId());
-        bookDto.setTitle(book.getTitle());
-        bookDto.setAuthor(book.getAuthor());
-        bookDto.setIsbn(book.getIsbn());
-        bookDto.setCover(book.getCover());
-        bookDto.setPages(book.getPages());
-        bookDto.setPrice(book.getPrice());
-        bookDto.setRating(book.getRating());
-        return bookDto;
+        if (book.getId() == null) {
+            System.out.println("Invalid id value!");
+            return null;
+        } else {
+            BookDto bookDto = new BookDto();
+            bookDto.setId(book.getId());
+            bookDto.setTitle(book.getTitle());
+            bookDto.setAuthor(book.getAuthor());
+            bookDto.setIsbn(book.getIsbn());
+            bookDto.setCover(book.getCover());
+            bookDto.setPages(book.getPages());
+            bookDto.setPrice(book.getPrice());
+            bookDto.setRating(book.getRating());
+            return bookDto;
+        }
     }
 }

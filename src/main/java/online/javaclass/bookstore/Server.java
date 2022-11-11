@@ -38,19 +38,19 @@ public class Server {
                 delete {id}\s
                 exit""");
 
-        System.out.println("""
-                BOOK HELP :\s
-                get {id} / {all} / {author} / {isbn}\s
-                create {title, author, isbn, cover, pages, price, rating} DELIMITER ', '!\s
-                update {id, title, author, isbn, cover, pages, price, rating} DELIMITER ', '!\s
-                delete {id}\s
-                exit""");
+//        System.out.println("""
+//                BOOK HELP :\s
+//                get {id} / {all} / {author} / {isbn}\s
+//                create {title, author, isbn, cover, pages, price, rating} DELIMITER ', '!\s
+//                update {id, title, author, isbn, cover, pages, price, rating} DELIMITER ', '!\s
+//                delete {id}\s
+//                exit""");
         while (true) {
             String input = scanner.nextLine();
             if (input.equals("exit")) {
                 break;
             }
-            bookController.process(input, System.out);
+//            bookController.process(input, System.out);
             userController.process(input, System.out);
         }
     }

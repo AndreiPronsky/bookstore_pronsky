@@ -120,7 +120,7 @@ public class BookDaoImpl implements BookDao {
                 books.add(book);
             }
             if (books.isEmpty()) {
-                System.out.println("No books by " + author + "found");
+                System.out.println("No books by " + author +  " found");
             }
             return books;
         } catch (SQLException e) {

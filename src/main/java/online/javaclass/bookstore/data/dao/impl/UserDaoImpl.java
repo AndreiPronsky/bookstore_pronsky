@@ -113,9 +113,6 @@ public class UserDaoImpl implements UserDao {
                 User user = findById(id);
                 users.add(user);
             }
-            if (users.isEmpty()) {
-                System.out.println("No users with lastname " + lastName + " found");
-            }
             return users;
         } catch (SQLException e) {
             logger.log(Level.ERROR, "unable to find users with lastname " + lastName, e);

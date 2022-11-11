@@ -23,7 +23,7 @@ public class UserControllerImpl implements Controller {
             create(request, response);
         } else if (request.startsWith("update ")) {
             update(request, response);
-        } else if (request.startsWith("delete ")) {
+        } else if (request.matches("^delete \\d+$")) {
             delete(request, response);
         } else if (request.matches("^get \\d+$")) {
             getById(request, response);

@@ -18,13 +18,13 @@ public class BookControllerImpl implements Controller {
 
     public void process(String request, PrintStream response) {
 
-        if (request.startsWith("get all")) {
+        if (request.equals("get all")) {
             getAll(response);
         } else if (request.startsWith("create ")) {
             create(request, response);
         } else if (request.startsWith("update ")) {
             update(request, response);
-        } else if (request.startsWith("delete ")) {
+        } else if (request.matches("^delete \\d+$")) {
             delete(request, response);
         } else if (request.matches("^get \\d+$")) {
             getById(request, response);
@@ -85,6 +85,7 @@ public class BookControllerImpl implements Controller {
         response.println("END OF LIST");
     }
 
+
     private void update(String request, PrintStream response) {
         String[] data = request.substring(7).split(", ");
         Long id = Long.parseLong(data[0]);
@@ -99,6 +100,7 @@ public class BookControllerImpl implements Controller {
         bookService.update(book);
         response.println("UPDATED BOOK WITH ID : " + id);
     }
+
 
     private void delete(String request, PrintStream response) {
         Long id = Long.parseLong(request.split(" ")[1]);

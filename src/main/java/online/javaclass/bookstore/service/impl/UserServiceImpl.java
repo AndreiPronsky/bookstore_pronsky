@@ -57,7 +57,9 @@ public class UserServiceImpl implements UserService {
         List<UserDto> userDtos = userDao.findByLastName(lastname).stream()
                 .map(this::toDto)
                 .toList();
-        if (userDtos.isEmpty()) throw new AppException("Unable to find users with lastname : " + lastname);
+        if (userDtos.isEmpty()) {
+            System.out.println("Unable to find users with lastname : " + lastname);
+        }
         return userDtos;
     }
 
@@ -83,15 +85,20 @@ public class UserServiceImpl implements UserService {
     }
 
     private UserDto toDto(User user) {
-        UserDto userDto = new UserDto();
-        userDto.setId(user.getId());
-        userDto.setFirstName(user.getFirstName());
-        userDto.setLastName(user.getLastName());
-        userDto.setEmail(user.getEmail());
-        userDto.setPassword(user.getPassword());
-        userDto.setRole(user.getRole());
-        userDto.setRating(user.getRating());
-        return userDto;
+        if (user.getId() == null) {
+            System.out.println("Invalid id value!");
+            return null;
+        } else {
+            UserDto userDto = new UserDto();
+            userDto.setId(user.getId());
+            userDto.setFirstName(user.getFirstName());
+            userDto.setLastName(user.getLastName());
+            userDto.setEmail(user.getEmail());
+            userDto.setPassword(user.getPassword());
+            userDto.setRole(user.getRole());
+            userDto.setRating(user.getRating());
+            return userDto;
+        }
     }
 
     private User toEntity(UserDto userDto) {
