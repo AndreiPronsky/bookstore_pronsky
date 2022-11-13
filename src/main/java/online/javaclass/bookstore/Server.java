@@ -1,6 +1,7 @@
 package online.javaclass.bookstore;
 
-import online.javaclass.bookstore.controller.Controller;
+import online.javaclass.bookstore.controller.BookController;
+import online.javaclass.bookstore.controller.UserController;
 import online.javaclass.bookstore.controller.impl.BookControllerImpl;
 import online.javaclass.bookstore.controller.impl.UserControllerImpl;
 import online.javaclass.bookstore.data.connection.DataBaseManager;
@@ -24,10 +25,10 @@ public class Server {
         DataBaseManager dataBaseManager = new DataBaseManager(URL, USER, PASSWORD);
         UserDao userDao = new UserDaoImpl(dataBaseManager);
         UserService userService = new UserServiceImpl(userDao);
-            Controller userController = new UserControllerImpl(userService);
+            UserController userController = new UserControllerImpl(userService);
         BookDao bookDao = new BookDaoImpl(dataBaseManager);
         BookService bookService = new BookServiceImpl(bookDao);
-            Controller bookController = new BookControllerImpl(bookService);
+            BookController bookController = new BookControllerImpl(bookService);
 
         Scanner scanner = new Scanner(System.in);
         System.out.println("""
@@ -50,8 +51,8 @@ public class Server {
             if (input.equals("exit")) {
                 break;
             }
-//            bookController.process(input, System.out);
-            userController.process(input, System.out);
+           bookController.process(input, System.out);
+ //           userController.process(input, System.out);
         }
     }
 }

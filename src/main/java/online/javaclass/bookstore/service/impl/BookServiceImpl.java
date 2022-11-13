@@ -5,7 +5,6 @@ import online.javaclass.bookstore.data.entities.Book;
 import online.javaclass.bookstore.service.BookService;
 import online.javaclass.bookstore.service.dto.BookDto;
 import online.javaclass.bookstore.service.exceptions.AppException;
-import online.javaclass.bookstore.service.exceptions.UnableToFindException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -55,10 +54,9 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<BookDto> getByAuthor(String author) {
         logger.debug("get books by author");
-        List<BookDto> bookDtos = bookDao.findByAuthor(author).stream()
+        return bookDao.findByAuthor(author).stream()
                 .map(this::toDto)
                 .toList();
-        return bookDtos;
     }
 
     @Override

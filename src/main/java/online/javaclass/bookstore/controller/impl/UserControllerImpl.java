@@ -1,6 +1,6 @@
 package online.javaclass.bookstore.controller.impl;
 
-import online.javaclass.bookstore.controller.Controller;
+import online.javaclass.bookstore.controller.UserController;
 import online.javaclass.bookstore.data.entities.Role;
 import online.javaclass.bookstore.service.UserService;
 import online.javaclass.bookstore.service.dto.UserDto;
@@ -9,7 +9,7 @@ import java.io.PrintStream;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class UserControllerImpl implements Controller {
+public class UserControllerImpl implements UserController {
     private final UserService userService;
 
     public UserControllerImpl(UserService userService) {
@@ -36,14 +36,14 @@ public class UserControllerImpl implements Controller {
         }
     }
 
-    private void getById(String request, PrintStream response) {
+    public void getById(String request, PrintStream response) {
         Long id = Long.parseLong(request.split(" ")[1]);
         UserDto user = userService.getById(id);
         response.println("USER : ");
         response.println(user);
     }
 
-    private void getAll(PrintStream response) {
+    public void getAll(PrintStream response) {
         List<UserDto> users = userService.getAll();
         response.println("ALL USERS : ");
         for (UserDto user : users) {
@@ -52,7 +52,7 @@ public class UserControllerImpl implements Controller {
         response.println("END OF LIST");
     }
 
-    private void create(String request, PrintStream response) {
+    public void create(String request, PrintStream response) {
         String[] data = request.substring(7).split(", ");
         String firstName = data[0];
         String lastName = data[1];
@@ -68,14 +68,14 @@ public class UserControllerImpl implements Controller {
 
 
 
-    private void getByEmail(String request, PrintStream response) {
+    public void getByEmail(String request, PrintStream response) {
         String email = request.substring(4);
         UserDto user = userService.getByEmail(email);
         response.println("USER : ");
         response.println(user);
     }
 
-    private void getByLastName(String request, PrintStream response) {
+    public void getByLastName(String request, PrintStream response) {
         String lastName = request.substring(4);
         List<UserDto> users = userService.getByLastName(lastName);
         response.println("USERS WITH LASTNAME " + "\"" + lastName + "\"" + " :");
@@ -85,7 +85,7 @@ public class UserControllerImpl implements Controller {
         response.println("END OF LIST");
     }
 
-    private void update(String request, PrintStream response) {
+    public void update(String request, PrintStream response) {
         String[] data = request.substring(7).split(", ");
         Long id = Long.parseLong(data[0]);
         String firstName = data[1];
@@ -99,12 +99,12 @@ public class UserControllerImpl implements Controller {
         response.println("UPDATED USER WITH ID : " + id);
     }
 
-    private void delete(String request, PrintStream response) {
+    public void delete(String request, PrintStream response) {
         Long id = Long.parseLong(request.split(" ")[1]);
         userService.deleteById(id);
         response.println("DELETED USER WITH ID : " + id);
     }
-    private Role getRoleFromRequest(String verifyRole) {
+    public Role getRoleFromRequest(String verifyRole) {
         Role role = null;
         switch (verifyRole) {
             case "admin" -> role = Role.ADMIN;
