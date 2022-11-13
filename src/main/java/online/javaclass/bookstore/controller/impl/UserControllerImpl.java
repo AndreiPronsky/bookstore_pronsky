@@ -67,7 +67,6 @@ public class UserControllerImpl implements UserController {
     }
 
 
-
     public void getByEmail(String request, PrintStream response) {
         String email = request.substring(4);
         UserDto user = userService.getByEmail(email);
@@ -104,6 +103,7 @@ public class UserControllerImpl implements UserController {
         userService.deleteById(id);
         response.println("DELETED USER WITH ID : " + id);
     }
+
     public Role getRoleFromRequest(String verifyRole) {
         Role role = null;
         switch (verifyRole) {

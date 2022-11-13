@@ -24,7 +24,7 @@ public class BookServerDemo {
         BookDao bookDao = new BookDaoImpl(dataBaseManager);
         BookService bookService = new BookServiceImpl(bookDao);
         BookController bookController = new BookControllerImpl(bookService);
-        try (ServerSocket server = new ServerSocket(8181)){
+        try (ServerSocket server = new ServerSocket(8181)) {
             while (true) {
                 try (Socket socket = server.accept()) {
                     InputStream input = socket.getInputStream();
@@ -52,7 +52,7 @@ public class BookServerDemo {
         char previous = 0;
         StringBuilder requestContent = new StringBuilder();
         while ((read = input.read()) != -1) {
-            char current = (char)read;
+            char current = (char) read;
             requestContent.append(current);
             if (current == '\r' && previous == '\n') {
                 break;

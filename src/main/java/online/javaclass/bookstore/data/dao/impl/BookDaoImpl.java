@@ -4,8 +4,6 @@ import online.javaclass.bookstore.data.connection.DataBaseManager;
 import online.javaclass.bookstore.data.dao.BookDao;
 import online.javaclass.bookstore.data.entities.Book;
 import online.javaclass.bookstore.data.entities.Cover;
-import online.javaclass.bookstore.data.entities.Role;
-import online.javaclass.bookstore.data.entities.User;
 import online.javaclass.bookstore.service.exceptions.UnableToCreateException;
 import online.javaclass.bookstore.service.exceptions.UnableToDeleteException;
 import online.javaclass.bookstore.service.exceptions.UnableToFindException;
@@ -84,7 +82,7 @@ public class BookDaoImpl implements BookDao {
             statement.setLong(1, id);
             ResultSet result = statement.executeQuery();
             logger.debug("DB query completed");
-                setParameters(book, result);
+            setParameters(book, result);
             return book;
         } catch (SQLException e) {
             logger.log(Level.ERROR, "unable to find a book with id " + id, e);
@@ -120,7 +118,7 @@ public class BookDaoImpl implements BookDao {
                 books.add(book);
             }
             if (books.isEmpty()) {
-                System.out.println("No books by " + author +  " found");
+                System.out.println("No books by " + author + " found");
             }
             return books;
         } catch (SQLException e) {
