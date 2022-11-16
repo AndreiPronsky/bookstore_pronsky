@@ -1,0 +1,244 @@
+14:52:52 [main] DEBUG javaclass.bookstore.service.impl.BookServiceImpl getById - get book by id
+14:52:52 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+14:52:52 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+14:54:12 [main] DEBUG javaclass.bookstore.service.impl.BookServiceImpl getByAuthor - get books by author
+14:54:12 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+14:54:12 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findByAuthor - DB query completed
+14:54:12 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+14:54:12 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+14:57:09 [main] DEBUG javaclass.bookstore.service.impl.UserServiceImpl getById - get user by id
+14:57:09 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+14:57:09 [main] DEBUG bookstore.data.dao.impl.UserDaoImpl findById - DB query completed
+14:57:17 [main] DEBUG javaclass.bookstore.service.impl.UserServiceImpl getById - get user by id
+14:57:17 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+14:57:17 [main] DEBUG bookstore.data.dao.impl.UserDaoImpl findById - DB query completed
+14:57:35 [main] DEBUG javaclass.bookstore.service.impl.UserServiceImpl getByLastName - get user(s) by lastname
+14:57:35 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+14:57:35 [main] DEBUG bookstore.data.dao.impl.UserDaoImpl findByLastName - DB query completed
+14:57:35 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+14:57:35 [main] DEBUG bookstore.data.dao.impl.UserDaoImpl findById - DB query completed
+14:57:52 [main] DEBUG javaclass.bookstore.service.impl.UserServiceImpl getByEmail - get user by email
+14:57:52 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+14:57:52 [main] DEBUG bookstore.data.dao.impl.UserDaoImpl findByEmail - DB query completed
+15:00:27 [main] DEBUG javaclass.bookstore.service.impl.UserServiceImpl update - update user
+15:00:27 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+15:00:27 [main] DEBUG bookstore.data.dao.impl.UserDaoImpl update - DB query completed
+15:00:27 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+15:00:27 [main] DEBUG bookstore.data.dao.impl.UserDaoImpl findById - DB query completed
+15:00:27 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+15:00:27 [main] DEBUG bookstore.data.dao.impl.UserDaoImpl findById - DB query completed
+15:00:41 [main] DEBUG javaclass.bookstore.service.impl.UserServiceImpl getById - get user by id
+15:00:41 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+15:00:41 [main] DEBUG bookstore.data.dao.impl.UserDaoImpl findById - DB query completed
+11:14:23 [main] DEBUG javaclass.bookstore.service.impl.BookServiceImpl getById - get book by id
+11:14:23 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:14:23 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+11:22:05 [main] DEBUG javaclass.bookstore.service.impl.BookServiceImpl getById - get book by id
+11:22:05 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:22:05 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+11:22:19 [main] DEBUG javaclass.bookstore.service.impl.BookServiceImpl getByIsbn - get book by isbn
+11:22:19 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:22:19 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findByIsbn - DB query completed
+11:25:00 [main] DEBUG javaclass.bookstore.service.impl.BookServiceImpl getById - get book by id
+11:25:00 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:25:00 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+11:33:35 [main] DEBUG javaclass.bookstore.service.impl.BookServiceImpl getById - get book by id
+11:33:35 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:33:35 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+11:34:02 [main] DEBUG javaclass.bookstore.service.impl.BookServiceImpl getAll - get all books
+11:34:02 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:34:02 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findAll - DB query completed
+11:34:02 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:34:02 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+11:34:02 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:34:02 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+11:34:02 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:34:02 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+11:34:02 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:34:02 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+11:34:02 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:34:02 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+11:34:02 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:34:02 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+11:34:02 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:34:02 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+11:34:02 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:34:02 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+11:34:02 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:34:02 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+11:34:02 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:34:02 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+11:34:02 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:34:02 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+11:34:02 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:34:02 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+11:34:02 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:34:02 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+11:34:02 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:34:02 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+11:34:02 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:34:02 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+11:34:02 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:34:02 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+11:34:02 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:34:02 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+11:34:02 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:34:02 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+11:34:02 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:34:02 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+11:34:02 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:34:02 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+11:34:38 [main] DEBUG javaclass.bookstore.service.impl.BookServiceImpl getByAuthor - get books by author
+11:34:38 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:34:38 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findByAuthor - DB query completed
+11:34:38 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:34:38 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+11:34:49 [main] DEBUG javaclass.bookstore.service.impl.BookServiceImpl getByAuthor - get books by author
+11:34:49 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:34:49 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findByAuthor - DB query completed
+11:37:56 [main] DEBUG javaclass.bookstore.service.impl.BookServiceImpl deleteById - delete book by id
+11:37:56 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:37:56 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl deleteById - DB query completed
+11:39:01 [main] DEBUG javaclass.bookstore.service.impl.BookServiceImpl deleteById - delete book by id
+11:39:01 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:39:01 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl deleteById - DB query completed
+11:49:09 [main] DEBUG javaclass.bookstore.service.impl.UserServiceImpl getById - get user by id
+11:49:09 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:49:09 [main] DEBUG bookstore.data.dao.impl.UserDaoImpl findById - DB query completed
+11:53:14 [main] DEBUG javaclass.bookstore.service.impl.UserServiceImpl getById - get user by id
+11:53:14 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:53:14 [main] DEBUG bookstore.data.dao.impl.UserDaoImpl findById - DB query completed
+11:54:26 [main] DEBUG javaclass.bookstore.service.impl.UserServiceImpl getById - get user by id
+11:54:26 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:54:26 [main] DEBUG bookstore.data.dao.impl.UserDaoImpl findById - DB query completed
+11:55:24 [main] DEBUG javaclass.bookstore.service.impl.UserServiceImpl getById - get user by id
+11:55:24 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:55:24 [main] DEBUG bookstore.data.dao.impl.UserDaoImpl findById - DB query completed
+11:55:32 [main] DEBUG javaclass.bookstore.service.impl.UserServiceImpl getByLastName - get user(s) by lastname
+11:55:32 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:55:32 [main] DEBUG bookstore.data.dao.impl.UserDaoImpl findByLastName - DB query completed
+11:55:32 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:55:32 [main] DEBUG bookstore.data.dao.impl.UserDaoImpl findById - DB query completed
+11:56:57 [main] DEBUG javaclass.bookstore.service.impl.UserServiceImpl getAll - get all users
+11:56:57 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:56:57 [main] DEBUG bookstore.data.dao.impl.UserDaoImpl findAll - DB query completed
+11:56:57 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:56:57 [main] DEBUG bookstore.data.dao.impl.UserDaoImpl findById - DB query completed
+11:56:57 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:56:57 [main] DEBUG bookstore.data.dao.impl.UserDaoImpl findById - DB query completed
+11:56:57 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:56:57 [main] DEBUG bookstore.data.dao.impl.UserDaoImpl findById - DB query completed
+11:56:57 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:56:57 [main] DEBUG bookstore.data.dao.impl.UserDaoImpl findById - DB query completed
+11:56:57 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:56:57 [main] DEBUG bookstore.data.dao.impl.UserDaoImpl findById - DB query completed
+11:56:57 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:56:57 [main] DEBUG bookstore.data.dao.impl.UserDaoImpl findById - DB query completed
+11:56:57 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:56:57 [main] DEBUG bookstore.data.dao.impl.UserDaoImpl findById - DB query completed
+11:56:57 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:56:57 [main] DEBUG bookstore.data.dao.impl.UserDaoImpl findById - DB query completed
+11:56:57 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:56:57 [main] DEBUG bookstore.data.dao.impl.UserDaoImpl findById - DB query completed
+11:56:57 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:56:57 [main] DEBUG bookstore.data.dao.impl.UserDaoImpl findById - DB query completed
+11:56:57 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:56:57 [main] DEBUG bookstore.data.dao.impl.UserDaoImpl findById - DB query completed
+11:56:57 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:56:57 [main] DEBUG bookstore.data.dao.impl.UserDaoImpl findById - DB query completed
+11:57:04 [main] DEBUG javaclass.bookstore.service.impl.UserServiceImpl getByLastName - get user(s) by lastname
+11:57:04 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:57:04 [main] DEBUG bookstore.data.dao.impl.UserDaoImpl findByLastName - DB query completed
+11:58:11 [main] DEBUG javaclass.bookstore.service.impl.UserServiceImpl getByLastName - get user(s) by lastname
+11:58:11 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:58:11 [main] DEBUG bookstore.data.dao.impl.UserDaoImpl findByLastName - DB query completed
+11:59:15 [main] DEBUG javaclass.bookstore.service.impl.UserServiceImpl getByLastName - get user(s) by lastname
+11:59:15 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+11:59:15 [main] DEBUG bookstore.data.dao.impl.UserDaoImpl findByLastName - DB query completed
+10:00:44 [main] DEBUG javaclass.bookstore.service.impl.BookServiceImpl getAll - get all books
+10:00:44 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+10:00:44 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findAll - DB query completed
+10:00:44 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+10:00:44 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+10:00:44 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+10:00:44 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+10:00:44 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+10:00:44 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+10:00:44 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+10:00:44 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+10:00:44 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+10:00:44 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+10:00:44 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+10:00:44 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+10:00:44 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+10:00:44 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+10:00:44 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+10:00:44 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+10:00:44 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+10:00:44 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+10:00:44 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+10:00:44 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+10:00:44 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+10:00:44 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+10:00:44 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+10:00:44 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+10:00:44 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+10:00:44 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+10:00:44 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+10:00:44 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+10:00:44 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+10:00:44 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+10:00:44 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+10:00:44 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+10:00:44 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+10:00:44 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+10:00:44 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+10:00:44 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+10:00:44 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+10:00:44 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+10:00:44 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+10:00:44 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+12:24:50 [main] DEBUG javaclass.bookstore.service.impl.BookServiceImpl getById - get book by id
+12:24:50 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+12:24:50 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+12:25:10 [main] DEBUG javaclass.bookstore.service.impl.BookServiceImpl getById - get book by id
+12:25:10 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+12:25:10 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+12:25:22 [main] DEBUG javaclass.bookstore.service.impl.BookServiceImpl getById - get book by id
+12:25:22 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+12:25:22 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+12:33:37 [main] DEBUG javaclass.bookstore.service.impl.BookServiceImpl getByIsbn - get book by isbn
+12:33:37 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+12:33:37 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findByIsbn - DB query completed
+12:34:05 [main] DEBUG javaclass.bookstore.service.impl.BookServiceImpl getByAuthor - get books by author
+12:34:05 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+12:34:05 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findByAuthor - DB query completed
+12:35:01 [main] DEBUG javaclass.bookstore.service.impl.BookServiceImpl getByAuthor - get books by author
+12:35:01 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+12:35:01 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findByAuthor - DB query completed
+12:36:02 [main] DEBUG javaclass.bookstore.service.impl.BookServiceImpl getByAuthor - get books by author
+12:36:02 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+12:36:02 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findByAuthor - DB query completed
+12:36:02 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+12:36:02 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+12:37:36 [main] DEBUG javaclass.bookstore.service.impl.BookServiceImpl getByAuthor - get books by author
+12:37:36 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+12:37:36 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findByAuthor - DB query completed
+12:37:36 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+12:37:36 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+12:38:59 [main] DEBUG javaclass.bookstore.service.impl.BookServiceImpl getById - get book by id
+12:38:59 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+12:38:59 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+12:39:13 [main] DEBUG javaclass.bookstore.service.impl.BookServiceImpl getByAuthor - get books by author
+12:39:13 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+12:39:13 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findByAuthor - DB query completed
+12:39:13 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+12:39:13 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+13:31:52 [main] DEBUG javaclass.bookstore.service.impl.BookServiceImpl getByAuthor - get books by author
+13:31:52 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+13:31:52 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findByAuthor - DB query completed
+13:31:52 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+13:31:52 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
+13:34:06 [main] DEBUG javaclass.bookstore.service.impl.BookServiceImpl getById - get book by id
+13:34:06 [main] INFO  javaclass.bookstore.data.connection.DataBaseManager getConnection - connection established
+13:34:06 [main] DEBUG bookstore.data.dao.impl.BookDaoImpl findById - DB query completed
