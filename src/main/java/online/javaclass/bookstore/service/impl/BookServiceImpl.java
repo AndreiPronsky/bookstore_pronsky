@@ -87,15 +87,15 @@ public class BookServiceImpl implements BookService {
     }
 
     private BookDto toDto(Book book) {
-            BookDto bookDto = new BookDto();
-            bookDto.setId(book.getId());
-            bookDto.setTitle(book.getTitle());
-            bookDto.setAuthor(book.getAuthor());
-            bookDto.setIsbn(book.getIsbn());
-            bookDto.setCover(book.getCover());
-            bookDto.setPages(book.getPages());
-            bookDto.setPrice(book.getPrice());
-            bookDto.setRating(book.getRating());
-            return bookDto;
+        BookDto bookDto = new BookDto();
+        bookDto.setId(book.getId());
+        bookDto.setTitle(book.getTitle());
+        bookDto.setAuthor(book.getAuthor());
+        bookDto.setIsbn(book.getIsbn());
+        bookDto.setCover(book.getCover());
+        bookDto.setPages(book.getPages());
+        bookDto.setPrice(book.getPrice());
+        bookDto.setRating(book.getRating());
+        return bookDto;
     }
 }

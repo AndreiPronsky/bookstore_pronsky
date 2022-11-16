@@ -11,6 +11,7 @@ import java.util.Properties;
 
 public class ConnectionProperties {
     private static final Logger log = LogManager.getLogger();
+
     public static Map<String, String> getConnectionProperties(String path) {
         Properties prop = new Properties();
         Map<String, String> properties = new HashMap<>();

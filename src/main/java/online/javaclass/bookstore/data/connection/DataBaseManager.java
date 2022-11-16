@@ -23,7 +23,8 @@ public class DataBaseManager implements AutoCloseable {
         log.info("connection established");
         return connection;
     }
-@Override
+
+    @Override
     public void close() {
         try {
             connection.reallyClose();

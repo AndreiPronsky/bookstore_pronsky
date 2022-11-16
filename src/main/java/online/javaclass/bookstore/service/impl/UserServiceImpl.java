@@ -84,15 +84,15 @@ public class UserServiceImpl implements UserService {
     }
 
     private UserDto toDto(User user) {
-            UserDto userDto = new UserDto();
-            userDto.setId(user.getId());
-            userDto.setFirstName(user.getFirstName());
-            userDto.setLastName(user.getLastName());
-            userDto.setEmail(user.getEmail());
-            userDto.setPassword(user.getPassword());
-            userDto.setRole(user.getRole());
-            userDto.setRating(user.getRating());
-            return userDto;
+        UserDto userDto = new UserDto();
+        userDto.setId(user.getId());
+        userDto.setFirstName(user.getFirstName());
+        userDto.setLastName(user.getLastName());
+        userDto.setEmail(user.getEmail());
+        userDto.setPassword(user.getPassword());
+        userDto.setRole(user.getRole());
+        userDto.setRating(user.getRating());
+        return userDto;
     }
 
     private User toEntity(UserDto userDto) {
