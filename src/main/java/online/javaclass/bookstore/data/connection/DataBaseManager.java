@@ -7,28 +7,28 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class DataBaseManager {
-    private final ProxyConnection connection;
-    static Logger logger = LogManager.getLogger();
+public class DataBaseManager implements AutoCloseable {
+    private ProxyConnection connection;
+    private static final Logger log = LogManager.getLogger();
 
     public DataBaseManager(String url, String user, String password) {
         try {
             this.connection = new ProxyConnection(DriverManager.getConnection(url, user, password));
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            log.error(e.getMessage());
         }
     }
 
     public Connection getConnection() {
-        logger.info("connection established");
+        log.info("connection established");
         return connection;
     }
-
+@Override
     public void close() {
         try {
             connection.reallyClose();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            log.error(e.getMessage());
         }
     }
 }

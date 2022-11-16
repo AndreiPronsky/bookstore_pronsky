@@ -18,24 +18,28 @@ import java.util.Map;
 
 public class BookServerDemo {
 
+    private static final String PATH_TO_PROPS = "src/main/resources/connection-config.properties";
+    public static final int PORT = 8181;
+
     public static void main(String[] args) {
-        String pathToProps = "src/main/resources/connectionConfig.properties";
-        DataBaseManager dataBaseManager = getDataBaseManager(pathToProps);
-        BookDao bookDao = new BookDaoImpl(dataBaseManager);
-        BookService bookService = new BookServiceImpl(bookDao);
-        BookController bookController = new BookControllerImpl(bookService);
-        try (ServerSocket server = new ServerSocket(8181)) {
-            while (true) {
-                try (Socket socket = server.accept()) {
-                    InputStream input = socket.getInputStream();
-                    String content = getRequestContent(input);
-                    System.out.println(content);
-                    PrintStream output = new PrintStream(socket.getOutputStream());
-                    bookController.process(content, output);
+
+        try (DataBaseManager dataBaseManager = getDataBaseManager(PATH_TO_PROPS)) {
+            BookDao bookDao = new BookDaoImpl(dataBaseManager);
+            BookService bookService = new BookServiceImpl(bookDao);
+            BookController bookController = new BookControllerImpl(bookService);
+            try (ServerSocket server = new ServerSocket(PORT)) {
+                while (true) {
+                    try (Socket socket = server.accept()) {
+                        InputStream input = socket.getInputStream();
+                        String content = getRequestContent(input);
+                        System.out.println(content);
+                        PrintStream output = new PrintStream(socket.getOutputStream());
+                        bookController.process(content, output);
+                    }
                 }
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
             }
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
         }
     }
 

@@ -9,22 +9,12 @@ public class Book {
     private String author;
     private String isbn;
     private Cover cover;
-    private int pages;
+    private Integer pages;
     private BigDecimal price;
     private BigDecimal rating;
 
     public Book() {
 
-    }
-
-    public Book(String title, String author, String isbn, Cover cover, int pages, BigDecimal price, BigDecimal rating) {
-        this.title = title;
-        this.author = author;
-        this.isbn = isbn;
-        this.cover = cover;
-        this.pages = pages;
-        this.price = price;
-        this.rating = rating;
     }
 
     public Long getId() {
@@ -99,21 +89,13 @@ public class Book {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof Book book)) return false;
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof Book book)) {
+            return false;
+        }
         return Objects.equals(id, book.id) && Objects.equals(title, book.title) && Objects.equals(author, book.author)
                 && Objects.equals(isbn, book.isbn) && Objects.equals(price, book.price);
-    }
-
-    @Override
-    public String toString() {
-        return "Book { id = " + id + " | " +
-                "title = " + title + " | " +
-                "author = " + author + " | " +
-                "isbn = " + isbn + " | " +
-                "cover = " + cover + " | " +
-                "pages = " + pages + " | " +
-                "price = " + price + " | " +
-                "rating = " + rating + " }";
     }
 }

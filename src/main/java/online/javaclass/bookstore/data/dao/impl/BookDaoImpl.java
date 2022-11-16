@@ -8,7 +8,6 @@ import online.javaclass.bookstore.service.exceptions.UnableToCreateException;
 import online.javaclass.bookstore.service.exceptions.UnableToDeleteException;
 import online.javaclass.bookstore.service.exceptions.UnableToFindException;
 import online.javaclass.bookstore.service.exceptions.UnableToUpdateException;
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,163 +21,152 @@ import java.util.List;
 
 public class BookDaoImpl implements BookDao {
 
-    public static final String CREATE_BOOK = "INSERT INTO books (title, author, isbn, cover, pages, price, rating)" +
+    private static final String CREATE_BOOK = "INSERT INTO books (title, author, isbn, cover, pages, price, rating)" +
             " VALUES (?, ?, ?, ?, ?, ?, ?)";
-    public static final String UPDATE_BOOK = "UPDATE books SET title = ?, author = ?, isbn = ?," +
+    private static final String UPDATE_BOOK = "UPDATE books SET title = ?, author = ?, isbn = ?," +
             " cover = ?, pages = ?, price = ?, rating = ? WHERE book_id = ?";
-    public static final String FIND_BOOK_BY_ID = "SELECT book_id, title, author, isbn, cover, pages, price," +
+    private static final String FIND_BOOK_BY_ID = "SELECT book_id, title, author, isbn, cover, pages, price," +
             " rating FROM books WHERE book_id = ?";
-    public static final String FIND_BOOK_BY_ISBN = "SELECT book_id, title, author, isbn, cover, pages, price," +
+    private static final String FIND_BOOK_BY_ISBN = "SELECT book_id, title, author, isbn, cover, pages, price," +
             " rating FROM books WHERE isbn = ?";
-    public static final String FIND_ALL = "SELECT book_id, title, author, isbn, cover, pages, price, rating FROM books";
-    public static final String FIND_BOOKS_BY_AUTHOR = "SELECT book_id, title, author, isbn, cover, pages, price," +
+    private static final String FIND_ALL = "SELECT book_id, title, author, isbn, cover, pages, price, rating FROM books";
+    private static final String FIND_BOOKS_BY_AUTHOR = "SELECT book_id, title, author, isbn, cover, pages, price," +
             " rating FROM books WHERE author = ?";
-    public static final String DELETE_BY_ID = "DELETE FROM books WHERE book_id = ?";
+    private static final String DELETE_BY_ID = "DELETE FROM books WHERE book_id = ?";
+    private static final String COL_BOOK_ID = "book_id";
+    private static final String COL_TITLE = "title";
+    private static final String COL_AUTHOR = "author";
+    private static final String COL_ISBN = "isbn";
+    private static final String COL_COVER = "cover";
+    private static final String COL_PAGES = "pages";
+    private static final String COL_PRICE = "price";
+    private static final String COL_RATING = "rating";
 
     private final DataBaseManager dataBaseManager;
 
-    static Logger logger = LogManager.getLogger();
+    private static final Logger log = LogManager.getLogger();
 
     public BookDaoImpl(DataBaseManager dataBaseManager) {
         this.dataBaseManager = dataBaseManager;
     }
 
-
     public Book create(Book book) {
-        Connection connection = dataBaseManager.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement(CREATE_BOOK, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection connection = dataBaseManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(CREATE_BOOK, Statement.RETURN_GENERATED_KEYS)) {
             prepareStatementForCreate(book, statement);
             statement.executeUpdate();
-            logger.debug("DB query completed");
+            log.debug("DB query completed");
             ResultSet result = statement.getGeneratedKeys();
             if (result.next()) {
-                book.setId(result.getLong("book_id"));
+                book.setId(result.getLong(COL_BOOK_ID));
             }
-            return findById(result.getLong("book_id"));
+            return findById(result.getLong(COL_BOOK_ID));
         } catch (SQLException e) {
-            logger.log(Level.ERROR, "creation failed", e);
-            throw new UnableToCreateException("Creation failed! " + e.getMessage());
+            throw new UnableToCreateException("Creation failed! " + book, e);
         }
     }
 
     public Book update(Book book) {
-        Connection connection = dataBaseManager.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement(UPDATE_BOOK)) {
+        try (Connection connection = dataBaseManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(UPDATE_BOOK)) {
             prepareStatementForUpdate(book, statement);
             statement.executeUpdate();
-            logger.debug("DB query completed");
-            System.out.println("Valid state : " + findById(book.getId()));
+            log.debug("DB query completed");
             return findById(book.getId());
         } catch (SQLException e) {
-            logger.log(Level.ERROR, "update failed", e);
-            throw new UnableToUpdateException("Update failed! " + e.getMessage());
+            throw new UnableToUpdateException("Update failed! " + book, e);
         }
     }
 
     public Book findById(Long id) {
-        Connection connection = dataBaseManager.getConnection();
         Book book = new Book();
-        try (PreparedStatement statement = connection.prepareStatement(FIND_BOOK_BY_ID)) {
+        try (Connection connection = dataBaseManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(FIND_BOOK_BY_ID)) {
             statement.setLong(1, id);
             ResultSet result = statement.executeQuery();
-            logger.debug("DB query completed");
+            log.debug("DB query completed");
             setParameters(book, result);
             return book;
         } catch (SQLException e) {
-            logger.log(Level.ERROR, "unable to find a book with id " + id, e);
-            throw new UnableToFindException("No such book found! " + e.getMessage());
+            throw new UnableToFindException("No such book found! " + book, e);
         }
     }
 
     public Book findByIsbn(String isbn) {
-        Connection connection = dataBaseManager.getConnection();
         Book book = new Book();
-        try (PreparedStatement statement = connection.prepareStatement(FIND_BOOK_BY_ISBN)) {
+        try (Connection connection = dataBaseManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(FIND_BOOK_BY_ISBN)) {
             statement.setString(1, isbn);
             ResultSet result = statement.executeQuery();
-            logger.debug("DB query completed");
+            log.debug("DB query completed");
             setParameters(book, result);
             return book;
         } catch (SQLException e) {
-            logger.log(Level.ERROR, "unable to find a book with isbn " + isbn, e);
-            throw new UnableToFindException("No such book found! " + e.getMessage());
+            throw new UnableToFindException("No such book found! " + book, e);
         }
     }
 
     public List<Book> findByAuthor(String author) {
-        Connection connection = dataBaseManager.getConnection();
         List<Book> books = new ArrayList<>();
-        try (PreparedStatement statement = connection.prepareStatement(FIND_BOOKS_BY_AUTHOR)) {
+        try (Connection connection = dataBaseManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(FIND_BOOKS_BY_AUTHOR)) {
             statement.setString(1, author);
             ResultSet result = statement.executeQuery();
-            logger.debug("DB query completed");
+            log.debug("DB query completed");
             while (result.next()) {
-                long id = result.getLong("book_id");
+                long id = result.getLong(COL_BOOK_ID);
                 Book book = findById(id);
                 books.add(book);
             }
-            if (books.isEmpty()) {
-                System.out.println("No books by " + author + " found");
-            }
             return books;
         } catch (SQLException e) {
-            logger.log(Level.ERROR, "no books by " + author + " found");
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException("No books by " + author + " found", e);
         }
     }
 
     public List<Book> findAll() {
-        Connection connection = dataBaseManager.getConnection();
         List<Book> books = new ArrayList<>();
-        try (PreparedStatement statement = connection.prepareStatement(FIND_ALL)) {
+        try (Connection connection = dataBaseManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(FIND_ALL)) {
             ResultSet result = statement.executeQuery();
-            logger.debug("DB query completed");
+            log.debug("DB query completed");
             while (result.next()) {
-                long id = result.getLong("book_id");
+                long id = result.getLong(COL_BOOK_ID);
                 Book book = findById(id);
                 books.add(book);
             }
             return books;
         } catch (SQLException e) {
-            logger.log(Level.ERROR, "no books found, please check if DB table is empty", e);
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException("No books found", e);
         }
     }
 
     public boolean deleteById(Long id) {
-        Connection connection = dataBaseManager.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement(DELETE_BY_ID)) {
+        try (Connection connection = dataBaseManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(DELETE_BY_ID)) {
             statement.setLong(1, id);
             int affectedRows = statement.executeUpdate();
-            logger.debug("DB query completed");
-            if (affectedRows == 1) {
-                System.out.println("Deleted book with id : " + id);
-                return true;
-            } else {
-                System.out.println("No such book found!");
-                return false;
-            }
+            log.debug("DB query completed");
+            return affectedRows == 1;
         } catch (SQLException e) {
-            logger.log(Level.ERROR, "unable to delete", e);
-            throw new UnableToDeleteException("Unable to delete! " + e.getMessage());
+            throw new UnableToDeleteException("Unable to delete book with id " + id, e);
         }
     }
 
     private void setParameters(Book book, ResultSet result) {
         try {
             while (result.next()) {
-                book.setId(result.getLong("book_id"));
-                book.setTitle(result.getString("title"));
-                book.setAuthor(result.getString("author"));
-                book.setIsbn(result.getString("isbn"));
-                verifyAndSetCover(book, result.getString("cover"));
-                book.setPages(result.getInt("pages"));
-                book.setPrice(result.getBigDecimal("price"));
-                book.setRating(result.getBigDecimal("rating"));
+                book.setId(result.getLong(COL_BOOK_ID));
+                book.setTitle(result.getString(COL_TITLE));
+                book.setAuthor(result.getString(COL_AUTHOR));
+                book.setIsbn(result.getString(COL_ISBN));
+                verifyAndSetCover(book, result.getString(COL_COVER));
+                book.setPages(result.getInt(COL_PAGES));
+                book.setPrice(result.getBigDecimal(COL_PRICE));
+                book.setRating(result.getBigDecimal(COL_RATING));
             }
         } catch (SQLException e) {
-            logger.log(Level.ERROR, "unable to set parameters", e);
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException("unable to set parameters" + book, e);
         }
     }
 

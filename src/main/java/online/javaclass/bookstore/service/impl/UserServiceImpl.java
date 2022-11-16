@@ -2,7 +2,6 @@ package online.javaclass.bookstore.service.impl;
 
 import online.javaclass.bookstore.data.dao.UserDao;
 import online.javaclass.bookstore.data.entities.User;
-import online.javaclass.bookstore.service.exceptions.AppException;
 import online.javaclass.bookstore.service.dto.UserDto;
 import online.javaclass.bookstore.service.UserService;
 import org.apache.logging.log4j.LogManager;
@@ -13,7 +12,7 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserDao userDao;
-    static Logger logger = LogManager.getLogger();
+    private static final Logger log = LogManager.getLogger();
 
     public UserServiceImpl(UserDao userDao) {
         this.userDao = userDao;
@@ -21,7 +20,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto create(UserDto userDto) {
-        logger.debug("create user");
+        log.debug("create user");
         User user = toEntity(userDto);
         User created = userDao.create(user);
         return toDto(created);
@@ -29,7 +28,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto update(UserDto userDto) {
-        logger.debug("update user");
+        log.debug("update user");
         User user = toEntity(userDto);
         User updated = userDao.update(user);
         return toDto(updated);
@@ -37,35 +36,33 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getById(Long id) {
-        logger.debug("get user by id");
+        log.debug("get user by id");
         User user = userDao.findById(id);
-        if (user == null) throw new AppException("Unable to find user with id : " + id);
         return toDto(user);
     }
 
     @Override
     public UserDto getByEmail(String email) {
-        logger.debug("get user by email");
+        log.debug("get user by email");
         User user = userDao.findByEmail(email);
-        if (user == null) throw new AppException("Unable to find user with email : " + email);
         return toDto(user);
     }
 
     @Override
     public List<UserDto> getByLastName(String lastname) {
-        logger.debug("get user(s) by lastname");
+        log.debug("get user(s) by lastname");
         List<UserDto> userDtos = userDao.findByLastName(lastname).stream()
                 .map(this::toDto)
                 .toList();
         if (userDtos.isEmpty()) {
-            System.out.println("Unable to find users with lastname : " + lastname);
+            log.error("Unable to find users with lastname : " + lastname);
         }
         return userDtos;
     }
 
     @Override
     public List<UserDto> getAll() {
-        logger.debug("get all users");
+        log.debug("get all users");
         return userDao.findAll().stream()
                 .map(this::toDto)
                 .toList();
@@ -73,22 +70,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteById(Long id) {
-        logger.debug("delete user by id");
+        log.debug("delete user by id");
         boolean deleted = userDao.deleteById(id);
-        if (!deleted) throw new AppException("Unable to delete user with id : " + id);
+        if (!deleted) {
+            log.error("Unable to delete user with id : " + id);
+        }
     }
 
     @Override
     public Long count() {
-        logger.debug("count users");
+        log.debug("count users");
         return userDao.count();
     }
 
     private UserDto toDto(User user) {
-        if (user.getId() == null) {
-            System.out.println("Invalid id value!");
-            return null;
-        } else {
             UserDto userDto = new UserDto();
             userDto.setId(user.getId());
             userDto.setFirstName(user.getFirstName());
@@ -98,7 +93,6 @@ public class UserServiceImpl implements UserService {
             userDto.setRole(user.getRole());
             userDto.setRating(user.getRating());
             return userDto;
-        }
     }
 
     private User toEntity(UserDto userDto) {

@@ -16,25 +16,6 @@ public class User {
 
     }
 
-    public User(Long id, String firstName, String lastName, String email, String password, Role role, BigDecimal rating) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.password = password;
-        this.role = role;
-        this.rating = rating;
-    }
-
-    public User(String firstName, String lastName, String email, String password, Role role, BigDecimal rating) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.password = password;
-        this.role = role;
-        this.rating = rating;
-    }
-
     public Long getId() {
         return id;
     }
@@ -98,20 +79,13 @@ public class User {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof User user)) return false;
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof User user)) {
+            return false;
+        }
         return Objects.equals(id, user.id) && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName)
                 && Objects.equals(email, user.email);
-    }
-
-    @Override
-    public String toString() {
-        return "User { id = " + id + " | " +
-                "firstname = " + firstName + " | " +
-                "lastname = " + lastName + " | " +
-                "email = " + email + " | " +
-                "password = " + password + " | " +
-                "role = " + role + " | " +
-                " rating = " + rating + " }";
     }
 }

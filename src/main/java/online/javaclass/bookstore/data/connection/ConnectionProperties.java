@@ -1,5 +1,8 @@
 package online.javaclass.bookstore.data.connection;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
@@ -7,6 +10,7 @@ import java.util.Map;
 import java.util.Properties;
 
 public class ConnectionProperties {
+    private static final Logger log = LogManager.getLogger();
     public static Map<String, String> getConnectionProperties(String path) {
         Properties prop = new Properties();
         Map<String, String> properties = new HashMap<>();
@@ -20,7 +24,8 @@ public class ConnectionProperties {
             properties.put("PASSWORD", password);
             return properties;
         } catch (IOException e) {
-            throw new RuntimeException("unable to extract connection properties");
+            log.error("unable to extract connection properties");
         }
+        return properties;
     }
 }

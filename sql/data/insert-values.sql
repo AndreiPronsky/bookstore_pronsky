@@ -1,5 +1,17 @@
+INSERT INTO users (firstname, lastname, email, user_password, user_role)
+VALUES ('Vladimir', 'Ulyanov', 'bolshevik1870@mail.ussr', 'RSDRP4ever', 'user'),
+        ('Bob', 'Marley', 'reggaeKing45@ja.maica', 'SunIsShining', 'user'),
+        ('Tom', 'Marvolo Riddle', 'avadakedavra@hogwarts.uk', 'iAmLordVoldemort', 'user'),
+        ('Adolph', 'Hitler', 'adolph89@reich.de', 'meinKampf', 'user'),
+        ('Arnold', 'Schwarzenegger', 'steelMuscles@gym.com', 'IllBeBack', 'user'),
+        ('Tim', 'Burton', 'tim_burton@mail.com', 'Frankenweenie', 'user'),
+        ('Angelina', 'Jolie', 'angelina@hollywood.ru', 'HelpChildrenWorlwide', 'user'),
+        ('Brad', 'Pitt', 'loveAngelina@ex-wife.com', 'ISecretlyStillLoveJennifer', 'user'),
+        ('Marilyn', 'Monroe', 'normaBaker@yandex.by', 'pupidupu', 'user'),
+        ('Marilyn', 'Manson', 'wannaBeSomebody@gmail.ru', 'sweetDreams69', 'user');
+
 INSERT INTO books (title, author, isbn, cover, pages, price)
-VALUES ('Revolution for workers and peasants', 'Karl Heinrich Marx', '2-1234-5678-1', 'soft', 1200, 34.25),
+    VALUES ('Revolution for workers and peasants', 'Karl Heinrich Marx', '2-1234-5678-1', 'soft', 1200, 34.25),
         ('Lets plant together', 'Yurkovskaya Tatyana', '2-4343-7678-2', 'hard', 300, 15.34),
         ('Best spells to kill a teenager', 'Amayak Akopyan', '3-0666-8990-3', 'special', 432, 28.67),
         ('Storm of Winter Palace for dummies', 'Francesco Rastrelli', '4-8765-5678-1','soft' , 34, 15.15),
@@ -19,5 +31,3 @@ VALUES ('Revolution for workers and peasants', 'Karl Heinrich Marx', '2-1234-567
         ('Rib amputation', 'Adam Godson', '0-0000-0001-1', 'special', 468, 54.33),
         ('Satan bible', 'Anton Szandor LaVey', '0-0666-0666-0', 'hard', '666', 66.60),
         ('Reggae as a way of life', 'Jah', '3-3321-3321-9', 'soft', 79, 18.99);
-
-SELECT * FROM books;

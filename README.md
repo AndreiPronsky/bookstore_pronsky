@@ -1,7 +1,8 @@
-<h1>Bookstore_Pronsky</h1>
+# Bookstore_Pronsky
+
 This is a student project for javaclass.online.
 
-<h3>Project task.</h3>
+### Project task.
 The task is to build a web application for a bookstore using new skills according to the course program.
 - Basics of working with databases.
 - SQL query language. Work with databases in Java. JDBC.  
