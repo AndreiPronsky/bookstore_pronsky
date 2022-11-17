@@ -38,7 +38,7 @@ public class BookServiceImpl implements BookService {
     public BookDto getById(Long id) {
         log.debug("get book by id");
         Book book = bookDao.findById(id);
-        return toDto(book);
+            return toDto(book);
     }
 
     @Override

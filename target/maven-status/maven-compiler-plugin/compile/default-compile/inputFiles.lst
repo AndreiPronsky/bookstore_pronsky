@@ -20,8 +20,8 @@ C:\Repository\bookstore\bookstore_pronsky\src\main\java\online\javaclass\booksto
 C:\Repository\bookstore\bookstore_pronsky\src\main\java\online\javaclass\bookstore\data\dao\impl\BookDaoImpl.java
 C:\Repository\bookstore\bookstore_pronsky\src\main\java\online\javaclass\bookstore\service\UserService.java
 C:\Repository\bookstore\bookstore_pronsky\src\main\java\online\javaclass\bookstore\BookServerDemo.java
+C:\Repository\bookstore\bookstore_pronsky\src\main\java\online\javaclass\bookstore\data\connection\ConnectionPool.java
 C:\Repository\bookstore\bookstore_pronsky\src\main\java\online\javaclass\bookstore\data\entities\Role.java
-C:\Repository\bookstore\bookstore_pronsky\src\main\java\online\javaclass\bookstore\Server.java
 C:\Repository\bookstore\bookstore_pronsky\src\main\java\online\javaclass\bookstore\service\BookService.java
 C:\Repository\bookstore\bookstore_pronsky\src\main\java\online\javaclass\bookstore\controller\impl\BookControllerImpl.java
 C:\Repository\bookstore\bookstore_pronsky\src\main\java\online\javaclass\bookstore\data\connection\DataBaseManager.java

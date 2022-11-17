@@ -78,7 +78,7 @@ public class BookDaoImpl implements BookDao {
         }
     }
 
-    public Book findById(Long id) {
+    public Book findById(Long id){
         Book book = new Book();
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_BOOK_BY_ID)) {

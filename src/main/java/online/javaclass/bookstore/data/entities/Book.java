@@ -49,7 +49,7 @@ public class Book {
         this.cover = cover;
     }
 
-    public int getPages() {
+    public Integer getPages() {
         return pages;
     }
 
