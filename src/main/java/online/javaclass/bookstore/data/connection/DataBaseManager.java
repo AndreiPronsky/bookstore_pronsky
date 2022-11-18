@@ -9,11 +9,11 @@ import java.sql.Connection;
 import java.util.Properties;
 
 public class DataBaseManager implements AutoCloseable {
-    private final ConnectionPool pool;
-    final String PATH_TO_PROPS = "/connection-config.properties";
-    final String url;
-    final String user;
-    final String password;
+    private ConnectionPool pool;
+    private static final String PATH_TO_PROPS = "/connection-config.properties";
+    private final String url;
+    private final String user;
+    private final String password;
     private static final Logger log = LogManager.getLogger();
 
     public DataBaseManager() {
@@ -21,7 +21,7 @@ public class DataBaseManager implements AutoCloseable {
         try (InputStream input = this.getClass().getResourceAsStream(PATH_TO_PROPS)) {
             properties.load(input);
         } catch (IOException e) {
-            log.error("unable to extract connection properties");
+            log.error("unable to extract connection properties", e);
         }
 
         url = properties.getProperty("db.url");
@@ -31,6 +31,10 @@ public class DataBaseManager implements AutoCloseable {
     }
 
     public Connection getConnection() {
+        if (pool == null) {
+            pool = new ConnectionPool(url, user, password);
+            log.info("Connection pool created");
+        }
         log.info("connection established");
         return pool.getConnection();
     }
@@ -38,7 +42,9 @@ public class DataBaseManager implements AutoCloseable {
     @Override
     public void close() {
         try {
-            pool.destroyPool();
+            if (pool != null) {
+                pool.destroyPool();
+            }
         } catch (Exception e) {
             log.error(e.getMessage());
         }
