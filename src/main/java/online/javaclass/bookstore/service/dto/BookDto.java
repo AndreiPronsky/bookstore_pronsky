@@ -11,7 +11,7 @@ public class BookDto {
     private String author;
     private String isbn;
     private Cover cover;
-    private int pages;
+    private Integer pages;
     private BigDecimal price;
     private BigDecimal rating;
 
@@ -51,11 +51,11 @@ public class BookDto {
         this.cover = cover;
     }
 
-    public int getPages() {
+    public Integer getPages() {
         return pages;
     }
 
-    public void setPages(int pages) {
+    public void setPages(Integer pages) {
         this.pages = pages;
     }
 

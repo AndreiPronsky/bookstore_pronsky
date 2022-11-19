@@ -19,24 +19,39 @@ public class BookControllerImpl extends HttpServlet {
     private final BookService bookService = new BookServiceImpl(new BookDaoImpl(manager));
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        Long id = processId(req);
-        BookDto book = bookService.getById(id);
-        renderHTML(resp, book);
-
+        try {
+            Long id = processId(req);
+            BookDto book = bookService.getById(id);
+            renderHTML(resp, book);
+        } catch (Exception e) {
+            if (e instanceof NumberFormatException) {
+                resp.sendError(400);
+            } else if (e instanceof NullPointerException) {
+                resp.sendError(404);
+            }
+        }
     }
 
     private void renderHTML(HttpServletResponse resp, BookDto book) throws IOException {
         PrintWriter writer = resp.getWriter();
         writer.println("<html>");
+        printContent(book, writer);
+        writer.println("</html>");
+    }
+
+    private void printContent(BookDto book, PrintWriter writer) {
         writer.println("<h1>Book :</h1>");
         writer.println("<h2> Author : " + book.getAuthor() + "</h2>");
         writer.println("<h2> Title : " + book.getTitle() + "</h2>");
         writer.println("<p> Price : " + book.getPrice() + "</p>");
-        writer.println("</html>");
     }
 
     private Long processId(HttpServletRequest req) {
-        String rawId = req.getParameter("id");
-        return Long.parseLong(rawId);
+        try {
+            String rawId = req.getParameter("id");
+            return Long.parseLong(rawId);
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException();
+        }
     }
 }
