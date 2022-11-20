@@ -19,7 +19,7 @@ public class CommandFactory {
     private final Map<String, Command> map;
 
     private CommandFactory() {
-        DataBaseManager manager = new DataBaseManager();
+        DataBaseManager manager = DataBaseManager.INSTANCE;
         BookService bookService = new BookServiceImpl(new BookDaoImpl(manager));
         UserService userService = new UserServiceImpl(new UserDaoImpl(manager));
         map = new HashMap<>();

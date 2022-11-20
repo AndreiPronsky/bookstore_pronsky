@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.util.Properties;
 
 public class DataBaseManager implements AutoCloseable {
+    public static final DataBaseManager INSTANCE = new DataBaseManager();
     private ConnectionPool pool;
     private static final String PATH_TO_PROPS = "/connection-config.properties";
     private final String url;
@@ -16,7 +17,7 @@ public class DataBaseManager implements AutoCloseable {
     private final String password;
     private static final Logger log = LogManager.getLogger();
 
-    public DataBaseManager() {
+    private DataBaseManager() {
         Properties properties = new Properties();
         try (InputStream input = this.getClass().getResourceAsStream(PATH_TO_PROPS)) {
             properties.load(input);
@@ -44,6 +45,7 @@ public class DataBaseManager implements AutoCloseable {
         try {
             if (pool != null) {
                 pool.destroyPool();
+                pool=null;
             }
         } catch (Exception e) {
             log.error(e.getMessage());

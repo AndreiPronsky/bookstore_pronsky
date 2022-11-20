@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import online.javaclass.bookstore.controller.command.Command;
 import online.javaclass.bookstore.controller.command.CommandFactory;
+import online.javaclass.bookstore.data.connection.DataBaseManager;
 import online.javaclass.bookstore.service.exceptions.AppException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -39,12 +40,13 @@ public class FrontController extends HttpServlet {
     }
 
     @Override
-    public void init() throws ServletException {
+    public void init() {
         log.info("FRONT CONTROLLER INITIALISED");
     }
 
     @Override
     public void destroy() {
+        DataBaseManager.INSTANCE.close();
         log.info("FRONT CONTROLLER DESTROYED");
     }
 }
