@@ -1,4 +1,4 @@
-package online.javaclass.bookstore.controller;
+package online.javaclass.bookstore.controller.command;
 
 import jakarta.servlet.http.HttpServletRequest;
 

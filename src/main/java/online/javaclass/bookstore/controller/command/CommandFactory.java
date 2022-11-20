@@ -1,5 +1,6 @@
-package online.javaclass.bookstore.controller;
+package online.javaclass.bookstore.controller.command;
 
+import online.javaclass.bookstore.controller.command.impl.*;
 import online.javaclass.bookstore.data.connection.DataBaseManager;
 import online.javaclass.bookstore.data.dao.impl.BookDaoImpl;
 import online.javaclass.bookstore.data.dao.impl.UserDaoImpl;
@@ -11,13 +12,13 @@ import online.javaclass.bookstore.service.impl.UserServiceImpl;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ControllerFactory {
+public class CommandFactory {
 
-    public static final ControllerFactory INSTANCE = new ControllerFactory();
+    public static final CommandFactory INSTANCE = new CommandFactory();
 
     private final Map<String, Command> map;
 
-    private ControllerFactory() {
+    private CommandFactory() {
         DataBaseManager manager = new DataBaseManager();
         BookService bookService = new BookServiceImpl(new BookDaoImpl(manager));
         UserService userService = new UserServiceImpl(new UserDaoImpl(manager));
@@ -26,9 +27,10 @@ public class ControllerFactory {
         map.put("books", new BooksCommand(bookService));
         map.put("user", new UserCommand(userService));
         map.put("users", new UsersCommand(userService));
+        map.put("error", new ErrorCommand());
     }
 
-    public Command getController(String command) {
+    public Command getCommand(String command) {
         return map.get(command);
     }
 }

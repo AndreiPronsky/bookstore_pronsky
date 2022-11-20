@@ -1,6 +1,7 @@
-package online.javaclass.bookstore.controller;
+package online.javaclass.bookstore.controller.command.impl;
 
 import jakarta.servlet.http.HttpServletRequest;
+import online.javaclass.bookstore.controller.command.Command;
 import online.javaclass.bookstore.service.UserService;
 import online.javaclass.bookstore.service.dto.UserDto;
 import org.apache.logging.log4j.LogManager;

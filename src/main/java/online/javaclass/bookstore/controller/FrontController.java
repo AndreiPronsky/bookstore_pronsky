@@ -5,6 +5,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import online.javaclass.bookstore.controller.command.Command;
+import online.javaclass.bookstore.controller.command.CommandFactory;
+import online.javaclass.bookstore.service.exceptions.AppException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,9 +20,22 @@ public class FrontController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String commandParameter = req.getParameter("command");
-        Command command = ControllerFactory.INSTANCE.getController(commandParameter);
-        String page = command.execute(req);
+        Command command = CommandFactory.INSTANCE.getCommand(commandParameter);
+        String page;
+        try {
+            page = command.execute(req);
+        } catch (AppException e) {
+            page = processError(req, e);
+        }
         req.getRequestDispatcher(page).forward(req, resp);
+    }
+
+    private String processError(HttpServletRequest req, AppException e) {
+        String page;
+        page = CommandFactory.INSTANCE.getCommand("error").execute(req);
+        String message = e.getMessage();
+        req.setAttribute("message", message);
+        return page;
     }
 
     @Override
