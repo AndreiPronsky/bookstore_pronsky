@@ -12,26 +12,27 @@ import online.javaclass.bookstore.service.dto.UserDto;
 import online.javaclass.bookstore.service.impl.UserServiceImpl;
 
 import java.io.IOException;
+import java.util.List;
 
-@WebServlet("/user")
-public class UserControllerImpl extends HttpServlet {
+@WebServlet("/users")
+public class UsersControllerImpl extends HttpServlet {
     private final DataBaseManager manager = new DataBaseManager();
     private final UserService userService = new UserServiceImpl(new UserDaoImpl(manager));
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-            Long id = processId(req);
-            UserDto user = userService.getById(id);
-            req.setAttribute("user", user);
-            req.getRequestDispatcher("jsp/user.jsp").forward(req, resp);
+        List<UserDto> users;
+        String rawLastName = req.getParameter("lastname");
+        if (rawLastName == null) {
+            users = userService.getAll();
+        } else {
+            String lastName = reformatLastName(rawLastName);
+            users = userService.getByLastName(lastName);
+        }
+        req.setAttribute("users", users);
+        req.getRequestDispatcher("jsp/users.jsp").forward(req, resp);
     }
 
-    private Long processId(HttpServletRequest req) {
-        try {
-            String rawId = req.getParameter("id");
-            return Long.parseLong(rawId);
-        } catch (NumberFormatException e) {
-            throw new NumberFormatException();
-        }
+    private String reformatLastName(String rawLastName) {
+        return rawLastName.replace("%20", " ");
     }
 }

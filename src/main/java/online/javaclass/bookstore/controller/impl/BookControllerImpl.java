@@ -1,5 +1,6 @@
 package online.javaclass.bookstore.controller.impl;
 
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,39 +12,17 @@ import online.javaclass.bookstore.service.dto.BookDto;
 import online.javaclass.bookstore.service.impl.BookServiceImpl;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 @WebServlet("/book")
 public class BookControllerImpl extends HttpServlet {
     private final DataBaseManager manager = new DataBaseManager();
     private final BookService bookService = new BookServiceImpl(new BookDaoImpl(manager));
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        try {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
             Long id = processId(req);
             BookDto book = bookService.getById(id);
-            renderHTML(resp, book);
-        } catch (Exception e) {
-            if (e instanceof NumberFormatException) {
-                resp.sendError(400);
-            } else if (e instanceof NullPointerException) {
-                resp.sendError(404);
-            }
-        }
-    }
-
-    private void renderHTML(HttpServletResponse resp, BookDto book) throws IOException {
-        PrintWriter writer = resp.getWriter();
-        writer.println("<html>");
-        printContent(book, writer);
-        writer.println("</html>");
-    }
-
-    private void printContent(BookDto book, PrintWriter writer) {
-        writer.println("<h1>Book :</h1>");
-        writer.println("<h2> Author : " + book.getAuthor() + "</h2>");
-        writer.println("<h2> Title : " + book.getTitle() + "</h2>");
-        writer.println("<p> Price : " + book.getPrice() + "</p>");
+            req.setAttribute("book", book);
+            req.getRequestDispatcher("jsp/book.jsp").forward(req, resp);
     }
 
     private Long processId(HttpServletRequest req) {

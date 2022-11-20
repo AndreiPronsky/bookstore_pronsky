@@ -93,7 +93,7 @@ public class BookDto {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof BookDto bookDto)) return false;
-        return Objects.equals(id, bookDto.id) && Objects.equals(title, bookDto.title) && Objects.equals(author, bookDto.author)
+        return Objects.equals(title, bookDto.title) && Objects.equals(author, bookDto.author)
                 && Objects.equals(isbn, bookDto.isbn) && Objects.equals(price, bookDto.price);
     }
 }

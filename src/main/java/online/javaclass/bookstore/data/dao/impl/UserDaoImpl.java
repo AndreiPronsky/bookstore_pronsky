@@ -8,15 +8,10 @@ import online.javaclass.bookstore.service.exceptions.UnableToCreateException;
 import online.javaclass.bookstore.service.exceptions.UnableToDeleteException;
 import online.javaclass.bookstore.service.exceptions.UnableToFindException;
 import online.javaclass.bookstore.service.exceptions.UnableToUpdateException;
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,8 +78,8 @@ public class UserDaoImpl implements UserDao {
              PreparedStatement statement = connection.prepareStatement(FIND_USER_BY_ID)) {
             statement.setLong(1, id);
             ResultSet result = statement.executeQuery();
-            log.debug("DB query completed");
             setParameters(user, result);
+            log.debug("DB query completed");
             return user;
         } catch (SQLException e) {
             throw new UnableToFindException("Unable to find user with id " + id, e);

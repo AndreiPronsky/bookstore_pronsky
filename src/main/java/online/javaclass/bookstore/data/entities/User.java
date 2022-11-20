@@ -85,7 +85,7 @@ public class User {
         if (!(obj instanceof User user)) {
             return false;
         }
-        return Objects.equals(id, user.id) && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName)
+        return Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName)
                 && Objects.equals(email, user.email);
     }
 }
