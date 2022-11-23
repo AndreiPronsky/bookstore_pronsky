@@ -1,9 +1,9 @@
 package online.javaclass.bookstore.data.entities;
 
 public enum Cover {
-    SOFT("soft"),
-    HARD("hard"),
-    SPECIAL("special");
+    SOFT("SOFT"),
+    HARD("HARD"),
+    SPECIAL("SPECIAL");
 
     private final String title;
 

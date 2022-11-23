@@ -1,18 +1,17 @@
 package online.javaclass.bookstore.service.impl;
 
+import lombok.extern.log4j.Log4j2;
 import online.javaclass.bookstore.data.dao.UserDao;
 import online.javaclass.bookstore.data.entities.User;
 import online.javaclass.bookstore.service.dto.UserDto;
 import online.javaclass.bookstore.service.UserService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 
+@Log4j2
 public class UserServiceImpl implements UserService {
 
     private final UserDao userDao;
-    private static final Logger log = LogManager.getLogger();
 
     public UserServiceImpl(UserDao userDao) {
         this.userDao = userDao;

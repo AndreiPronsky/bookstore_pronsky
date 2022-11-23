@@ -1,15 +1,15 @@
 package online.javaclass.bookstore.data.dao.impl;
 
+import lombok.extern.log4j.Log4j2;
 import online.javaclass.bookstore.data.connection.DataBaseManager;
 import online.javaclass.bookstore.data.dao.BookDao;
 import online.javaclass.bookstore.data.entities.Book;
 import online.javaclass.bookstore.data.entities.Cover;
+import online.javaclass.bookstore.data.entities.Genre;
 import online.javaclass.bookstore.service.exceptions.UnableToCreateException;
 import online.javaclass.bookstore.service.exceptions.UnableToDeleteException;
 import online.javaclass.bookstore.service.exceptions.UnableToFindException;
 import online.javaclass.bookstore.service.exceptions.UnableToUpdateException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,33 +18,33 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-
+@Log4j2
 public class BookDaoImpl implements BookDao {
 
-    private static final String CREATE_BOOK = "INSERT INTO books (title, author, isbn, cover, pages, price, rating)" +
-            " VALUES (?, ?, ?, ?, ?, ?, ?)";
-    private static final String UPDATE_BOOK = "UPDATE books SET title = ?, author = ?, isbn = ?," +
+    private static final String CREATE_BOOK = "INSERT INTO books (title, author, isbn, genre, cover, pages, price, rating) " +
+            "VALUES (?, ?, ?, (SELECT id FROM genres WHERE genre_name = ?), ?, ?, ?)";
+    private static final String UPDATE_BOOK = "UPDATE books SET title = ?, author = ?, isbn = ?, genre = ?," +
             " cover = ?, pages = ?, price = ?, rating = ? WHERE book_id = ?";
-    private static final String FIND_BOOK_BY_ID = "SELECT book_id, title, author, isbn, cover, pages, price," +
-            " rating FROM books WHERE book_id = ?";
-    private static final String FIND_BOOK_BY_ISBN = "SELECT book_id, title, author, isbn, cover, pages, price," +
-            " rating FROM books WHERE isbn = ?";
-    private static final String FIND_ALL = "SELECT book_id, title, author, isbn, cover, pages, price, rating FROM books";
-    private static final String FIND_BOOKS_BY_AUTHOR = "SELECT book_id, title, author, isbn, cover, pages, price," +
-            " rating FROM books WHERE author = ?";
+    private static final String FIND_BOOK_BY_ID = "SELECT book_id, title, author, isbn, genre_name, cover, pages, price," +
+            " rating FROM books JOIN genres ON books.genre = genres.id WHERE book_id = ?";
+    private static final String FIND_BOOK_BY_ISBN = "SELECT book_id, title, author, isbn, genre, cover, pages, price," +
+            " rating FROM books JOIN genres ON books.genre = genres.id WHERE isbn = ?";
+    private static final String FIND_ALL = "SELECT book_id, title, author, isbn, genre, cover, pages, price, rating " +
+            "FROM books JOIN genres ON books.genre = genres.id";
+    private static final String FIND_BOOKS_BY_AUTHOR = "SELECT book_id, title, author, isbn, genre, cover, pages, price," +
+            " rating FROM books JOIN genres ON books.genre = genres.id WHERE author = ?";
     private static final String DELETE_BY_ID = "DELETE FROM books WHERE book_id = ?";
     private static final String COL_BOOK_ID = "book_id";
     private static final String COL_TITLE = "title";
     private static final String COL_AUTHOR = "author";
     private static final String COL_ISBN = "isbn";
+    private static final String COL_GENRE = "genre";
     private static final String COL_COVER = "cover";
     private static final String COL_PAGES = "pages";
     private static final String COL_PRICE = "price";
     private static final String COL_RATING = "rating";
 
     private final DataBaseManager dataBaseManager;
-
-    private static final Logger log = LogManager.getLogger();
 
     public BookDaoImpl(DataBaseManager dataBaseManager) {
         this.dataBaseManager = dataBaseManager;
@@ -160,7 +160,8 @@ public class BookDaoImpl implements BookDao {
                 book.setTitle(result.getString(COL_TITLE));
                 book.setAuthor(result.getString(COL_AUTHOR));
                 book.setIsbn(result.getString(COL_ISBN));
-                verifyAndSetCover(book, result.getString(COL_COVER));
+                book.setGenre(Genre.valueOf(result.getString(COL_GENRE)));
+                book.setCover(Cover.valueOf(result.getString(COL_COVER)));
                 book.setPages(result.getInt(COL_PAGES));
                 book.setPrice(result.getBigDecimal(COL_PRICE));
                 book.setRating(result.getBigDecimal(COL_RATING));
@@ -174,28 +175,22 @@ public class BookDaoImpl implements BookDao {
         statement.setString(1, book.getTitle());
         statement.setString(2, book.getAuthor());
         statement.setString(3, book.getIsbn());
-        statement.setString(4, book.getCover().toString());
-        statement.setInt(5, book.getPages());
-        statement.setBigDecimal(6, book.getPrice());
-        statement.setBigDecimal(7, book.getRating());
+        statement.setInt(4, book.getGenre().ordinal());
+        statement.setInt(5, book.getCover().ordinal());
+        statement.setInt(6, book.getPages());
+        statement.setBigDecimal(7, book.getPrice());
+        statement.setBigDecimal(8, book.getRating());
     }
 
     private void prepareStatementForUpdate(Book book, PreparedStatement statement) throws SQLException {
         statement.setString(1, book.getTitle());
         statement.setString(2, book.getAuthor());
         statement.setString(3, book.getIsbn());
-        statement.setString(4, book.getCover().toString());
-        statement.setInt(5, book.getPages());
-        statement.setBigDecimal(6, book.getPrice());
-        statement.setBigDecimal(7, book.getRating());
-        statement.setLong(8, book.getId());
-    }
-
-    private void verifyAndSetCover(Book book, String cover) {
-        switch (cover) {
-            case "hard" -> book.setCover(Cover.HARD);
-            case "soft" -> book.setCover(Cover.SOFT);
-            case "special" -> book.setCover(Cover.SPECIAL);
-        }
+        statement.setInt(4, book.getGenre().ordinal());
+        statement.setInt(5, book.getCover().ordinal());
+        statement.setInt(6, book.getPages());
+        statement.setBigDecimal(7, book.getPrice());
+        statement.setBigDecimal(8, book.getRating());
+        statement.setLong(9, book.getId());
     }
 }

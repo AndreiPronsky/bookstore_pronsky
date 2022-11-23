@@ -1,7 +1,6 @@
 package online.javaclass.bookstore.data.connection;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,8 +8,8 @@ import java.sql.SQLException;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
 
+@Log4j2
 public class ConnectionPool {
-    private static final Logger log = LogManager.getLogger();
     public static final int POOL_SIZE = 16;
     private final BlockingDeque<ProxyConnection> freeConnections;
 
@@ -40,7 +39,7 @@ public class ConnectionPool {
     }
 
     public void releaseConnection(Connection connection) {
-        if (connection instanceof ProxyConnection proxy ) {
+        if (connection instanceof ProxyConnection proxy) {
             freeConnections.offer(proxy);
         } else {
             log.warn("Not proxy connection returned");

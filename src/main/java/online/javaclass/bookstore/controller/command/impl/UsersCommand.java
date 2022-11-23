@@ -1,21 +1,21 @@
 package online.javaclass.bookstore.controller.command.impl;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.log4j.Log4j2;
 import online.javaclass.bookstore.controller.command.Command;
 import online.javaclass.bookstore.service.UserService;
 import online.javaclass.bookstore.service.dto.UserDto;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 
+@Log4j2
 public class UsersCommand implements Command {
-    private static final Logger log = LogManager.getLogger();
     private final UserService userService;
 
     public UsersCommand(UserService userService) {
         this.userService = userService;
     }
+
     @Override
     public String execute(HttpServletRequest req) {
         List<UserDto> users;

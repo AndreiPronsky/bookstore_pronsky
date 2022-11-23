@@ -1,5 +1,6 @@
 package online.javaclass.bookstore.data.dao.impl;
 
+import lombok.extern.log4j.Log4j2;
 import online.javaclass.bookstore.data.connection.DataBaseManager;
 import online.javaclass.bookstore.data.dao.UserDao;
 import online.javaclass.bookstore.data.entities.Role;
@@ -8,13 +9,12 @@ import online.javaclass.bookstore.service.exceptions.UnableToCreateException;
 import online.javaclass.bookstore.service.exceptions.UnableToDeleteException;
 import online.javaclass.bookstore.service.exceptions.UnableToFindException;
 import online.javaclass.bookstore.service.exceptions.UnableToUpdateException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Log4j2
 public class UserDaoImpl implements UserDao {
     public static final String CREATE_USER = "INSERT INTO users (firstname, lastname, email, user_password, user_role, rating) VALUES (?, ?, ?, ?, ?, ?)";
     public static final String UPDATE_USER = "UPDATE users SET firstname = ?, lastname = ?, email = ?, user_password = ?, user_role = ?, rating = ? WHERE user_id = ?";
@@ -31,8 +31,6 @@ public class UserDaoImpl implements UserDao {
     public static final String COL_USER_ROLE = "user_role";
     public static final String COL_RATING = "rating";
     private final DataBaseManager dataBaseManager;
-
-    private static final Logger log = LogManager.getLogger();
 
     public UserDaoImpl(DataBaseManager dataBaseManager) {
         this.dataBaseManager = dataBaseManager;
