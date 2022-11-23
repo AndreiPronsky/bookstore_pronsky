@@ -49,11 +49,11 @@ public class Book {
         this.cover = cover;
     }
 
-    public int getPages() {
+    public Integer getPages() {
         return pages;
     }
 
-    public void setPages(int pages) {
+    public void setPages(Integer pages) {
         this.pages = pages;
     }
 
@@ -95,7 +95,7 @@ public class Book {
         if (!(obj instanceof Book book)) {
             return false;
         }
-        return Objects.equals(id, book.id) && Objects.equals(title, book.title) && Objects.equals(author, book.author)
+        return  Objects.equals(title, book.title) && Objects.equals(author, book.author)
                 && Objects.equals(isbn, book.isbn) && Objects.equals(price, book.price);
     }
 }

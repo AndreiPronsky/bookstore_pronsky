@@ -78,14 +78,14 @@ public class BookDaoImpl implements BookDao {
         }
     }
 
-    public Book findById(Long id) {
+    public Book findById(Long id){
         Book book = new Book();
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_BOOK_BY_ID)) {
             statement.setLong(1, id);
             ResultSet result = statement.executeQuery();
-            log.debug("DB query completed");
             setParameters(book, result);
+            log.debug("DB query completed");
             return book;
         } catch (SQLException e) {
             throw new UnableToFindException("No such book found! " + book, e);
