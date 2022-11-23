@@ -1,18 +1,17 @@
 package online.javaclass.bookstore.service.impl;
 
+import lombok.extern.log4j.Log4j2;
 import online.javaclass.bookstore.data.dao.BookDao;
 import online.javaclass.bookstore.data.entities.Book;
 import online.javaclass.bookstore.service.BookService;
 import online.javaclass.bookstore.service.dto.BookDto;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 
+@Log4j2
 public class BookServiceImpl implements BookService {
 
     private final BookDao bookDao;
-    private static final Logger log = LogManager.getLogger();
 
     public BookServiceImpl(BookDao bookDao) {
         this.bookDao = bookDao;
@@ -79,6 +78,7 @@ public class BookServiceImpl implements BookService {
         book.setTitle(bookDto.getTitle());
         book.setAuthor(bookDto.getAuthor());
         book.setIsbn(bookDto.getIsbn());
+        book.setGenre(bookDto.getGenre());
         book.setCover(bookDto.getCover());
         book.setPages(bookDto.getPages());
         book.setPrice(bookDto.getPrice());
@@ -92,6 +92,7 @@ public class BookServiceImpl implements BookService {
         bookDto.setTitle(book.getTitle());
         bookDto.setAuthor(book.getAuthor());
         bookDto.setIsbn(book.getIsbn());
+        bookDto.setGenre(book.getGenre());
         bookDto.setCover(book.getCover());
         bookDto.setPages(book.getPages());
         bookDto.setPrice(book.getPrice());

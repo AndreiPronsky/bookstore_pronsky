@@ -18,6 +18,7 @@
             <th>Id</th>
             <th>Author</th>
             <th>Title</th>
+            <th>Genre</th>
             <th>Price</th>
         </tr>
         </thead>
@@ -26,7 +27,8 @@
             <tr>
                 <td>${book.id}</td>
                 <td>${book.author}</td>
-                <td><a href="book?id=${book.id}">${book.title}</a></td>
+                <td><a href="/command=book&id=${book.id}">${book.title}</a></td>
+                <td>${book.genre}</td>
                 <td>${book.price}</td>
             </tr>
         </c:forEach>

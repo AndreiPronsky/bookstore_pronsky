@@ -1,5 +1,6 @@
 package online.javaclass.bookstore.data.dao.impl;
 
+import lombok.extern.log4j.Log4j2;
 import online.javaclass.bookstore.data.connection.DataBaseManager;
 import online.javaclass.bookstore.data.dao.UserDao;
 import online.javaclass.bookstore.data.entities.Role;
@@ -8,13 +9,12 @@ import online.javaclass.bookstore.service.exceptions.UnableToCreateException;
 import online.javaclass.bookstore.service.exceptions.UnableToDeleteException;
 import online.javaclass.bookstore.service.exceptions.UnableToFindException;
 import online.javaclass.bookstore.service.exceptions.UnableToUpdateException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Log4j2
 public class UserDaoImpl implements UserDao {
     public static final String CREATE_USER = "INSERT INTO users (firstname, lastname, email, user_password, user_role, rating) VALUES (?, ?, ?, ?, ?, ?)";
     public static final String UPDATE_USER = "UPDATE users SET firstname = ?, lastname = ?, email = ?, user_password = ?, user_role = ?, rating = ? WHERE user_id = ?";
@@ -31,8 +31,6 @@ public class UserDaoImpl implements UserDao {
     public static final String COL_USER_ROLE = "user_role";
     public static final String COL_RATING = "rating";
     private final DataBaseManager dataBaseManager;
-
-    private static final Logger log = LogManager.getLogger();
 
     public UserDaoImpl(DataBaseManager dataBaseManager) {
         this.dataBaseManager = dataBaseManager;
@@ -172,19 +170,11 @@ public class UserDaoImpl implements UserDao {
                 user.setLastName(result.getString(COL_LASTNAME));
                 user.setEmail(result.getString(COL_EMAIL));
                 user.setPassword(result.getString(COL_USER_PASSWORD));
-                verifyAndSetRole(user, result.getString(COL_USER_ROLE));
+                user.setRole(Role.values()[result.getInt(COL_USER_ROLE)-1]);
                 user.setRating(result.getBigDecimal(COL_RATING));
             }
         } catch (SQLException e) {
             throw new RuntimeException("Unable to set parameters to user " + user, e);
-        }
-    }
-
-    private void verifyAndSetRole(User user, String role) {
-        switch (role) {
-            case "admin" -> user.setRole(Role.ADMIN);
-            case "manager" -> user.setRole(Role.MANAGER);
-            case "user" -> user.setRole(Role.USER);
         }
     }
 
@@ -193,7 +183,7 @@ public class UserDaoImpl implements UserDao {
         statement.setString(2, user.getLastName());
         statement.setString(3, user.getEmail());
         statement.setString(4, user.getPassword());
-        statement.setString(5, user.getRole().getTitle());
+        statement.setInt(5, user.getRole().ordinal());
         statement.setBigDecimal(6, user.getRating());
     }
 
@@ -202,7 +192,7 @@ public class UserDaoImpl implements UserDao {
         statement.setString(2, user.getLastName());
         statement.setString(3, user.getEmail());
         statement.setString(4, user.getPassword());
-        statement.setString(5, user.getRole().getTitle());
+        statement.setInt(5, user.getRole().ordinal());
         statement.setBigDecimal(6, user.getRating());
         statement.setLong(7, user.getId());
     }

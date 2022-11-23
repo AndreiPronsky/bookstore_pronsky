@@ -1,14 +1,13 @@
 package online.javaclass.bookstore.controller.command.impl;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.log4j.Log4j2;
 import online.javaclass.bookstore.controller.command.Command;
 import online.javaclass.bookstore.service.UserService;
 import online.javaclass.bookstore.service.dto.UserDto;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
+@Log4j2
 public class UserCommand implements Command {
-    private static final Logger log = LogManager.getLogger();
     private final UserService userService;
 
     public UserCommand(UserService userService) {
@@ -17,10 +16,10 @@ public class UserCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest req) {
-            Long id = processId(req);
-            UserDto user = userService.getById(id);
-            req.setAttribute("user", user);
-            return "jsp/user.jsp";
+        Long id = processId(req);
+        UserDto user = userService.getById(id);
+        req.setAttribute("user", user);
+        return "jsp/user.jsp";
     }
 
     private Long processId(HttpServletRequest req) {
