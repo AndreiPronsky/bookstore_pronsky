@@ -24,6 +24,7 @@ public class FrontController extends HttpServlet {
         String page;
         try {
             page = command.execute(req);
+
         } catch (AppException e) {
             page = processError(req, e);
         }

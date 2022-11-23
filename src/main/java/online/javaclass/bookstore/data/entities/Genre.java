@@ -15,5 +15,5 @@ public enum Genre {
     RELIGION,
     MEDICINE,
     ENGINEERING,
-    ART;
+    ART
 }

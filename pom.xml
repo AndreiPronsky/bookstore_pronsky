@@ -16,12 +16,15 @@
                 <version>3.10.1</version>
                 <configuration>
                     <annotationProcessorPaths>
-                        <groupId>org.projectlombok</groupId>
-                        <artifactId>lombok</artifactId>
-                        <version>1.18.24</version>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>1.18.24</version>
+                        </path>
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
@@ -33,7 +36,6 @@
             </plugin>
         </plugins>
     </build>
-
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
@@ -82,8 +84,5 @@
             <version>1.18.24</version>
             <scope>provided</scope>
         </dependency>
-
-
     </dependencies>
-
 </project>

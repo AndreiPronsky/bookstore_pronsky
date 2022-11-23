@@ -3,9 +3,7 @@ package online.javaclass.bookstore.data.dao.impl;
 import lombok.extern.log4j.Log4j2;
 import online.javaclass.bookstore.data.connection.DataBaseManager;
 import online.javaclass.bookstore.data.dao.BookDao;
-import online.javaclass.bookstore.data.entities.Book;
-import online.javaclass.bookstore.data.entities.Cover;
-import online.javaclass.bookstore.data.entities.Genre;
+import online.javaclass.bookstore.data.entities.*;
 import online.javaclass.bookstore.service.exceptions.UnableToCreateException;
 import online.javaclass.bookstore.service.exceptions.UnableToDeleteException;
 import online.javaclass.bookstore.service.exceptions.UnableToFindException;
@@ -25,7 +23,7 @@ public class BookDaoImpl implements BookDao {
             "VALUES (?, ?, ?, (SELECT id FROM genres WHERE genre_name = ?), ?, ?, ?)";
     private static final String UPDATE_BOOK = "UPDATE books SET title = ?, author = ?, isbn = ?, genre = ?," +
             " cover = ?, pages = ?, price = ?, rating = ? WHERE book_id = ?";
-    private static final String FIND_BOOK_BY_ID = "SELECT book_id, title, author, isbn, genre_name, cover, pages, price," +
+    private static final String FIND_BOOK_BY_ID = "SELECT book_id, title, author, isbn, genre, cover, pages, price," +
             " rating FROM books JOIN genres ON books.genre = genres.id WHERE book_id = ?";
     private static final String FIND_BOOK_BY_ISBN = "SELECT book_id, title, author, isbn, genre, cover, pages, price," +
             " rating FROM books JOIN genres ON books.genre = genres.id WHERE isbn = ?";
@@ -78,7 +76,7 @@ public class BookDaoImpl implements BookDao {
         }
     }
 
-    public Book findById(Long id){
+    public Book findById(Long id) {
         Book book = new Book();
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_BOOK_BY_ID)) {
@@ -160,8 +158,8 @@ public class BookDaoImpl implements BookDao {
                 book.setTitle(result.getString(COL_TITLE));
                 book.setAuthor(result.getString(COL_AUTHOR));
                 book.setIsbn(result.getString(COL_ISBN));
-                book.setGenre(Genre.valueOf(result.getString(COL_GENRE)));
-                book.setCover(Cover.valueOf(result.getString(COL_COVER)));
+                book.setGenre(Genre.values()[result.getInt(COL_GENRE)-1]);
+                book.setCover(Cover.values()[result.getInt(COL_COVER)-1]);
                 book.setPages(result.getInt(COL_PAGES));
                 book.setPrice(result.getBigDecimal(COL_PRICE));
                 book.setRating(result.getBigDecimal(COL_RATING));

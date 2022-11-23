@@ -78,6 +78,7 @@ public class BookServiceImpl implements BookService {
         book.setTitle(bookDto.getTitle());
         book.setAuthor(bookDto.getAuthor());
         book.setIsbn(bookDto.getIsbn());
+        book.setGenre(bookDto.getGenre());
         book.setCover(bookDto.getCover());
         book.setPages(bookDto.getPages());
         book.setPrice(bookDto.getPrice());
@@ -91,6 +92,7 @@ public class BookServiceImpl implements BookService {
         bookDto.setTitle(book.getTitle());
         bookDto.setAuthor(book.getAuthor());
         bookDto.setIsbn(book.getIsbn());
+        bookDto.setGenre(book.getGenre());
         bookDto.setCover(book.getCover());
         bookDto.setPages(book.getPages());
         bookDto.setPrice(book.getPrice());

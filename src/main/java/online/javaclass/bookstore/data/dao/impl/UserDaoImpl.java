@@ -170,19 +170,11 @@ public class UserDaoImpl implements UserDao {
                 user.setLastName(result.getString(COL_LASTNAME));
                 user.setEmail(result.getString(COL_EMAIL));
                 user.setPassword(result.getString(COL_USER_PASSWORD));
-                verifyAndSetRole(user, result.getString(COL_USER_ROLE));
+                user.setRole(Role.values()[result.getInt(COL_USER_ROLE)-1]);
                 user.setRating(result.getBigDecimal(COL_RATING));
             }
         } catch (SQLException e) {
             throw new RuntimeException("Unable to set parameters to user " + user, e);
-        }
-    }
-
-    private void verifyAndSetRole(User user, String role) {
-        switch (role) {
-            case "admin" -> user.setRole(Role.ADMIN);
-            case "manager" -> user.setRole(Role.MANAGER);
-            case "user" -> user.setRole(Role.USER);
         }
     }
 
@@ -191,7 +183,7 @@ public class UserDaoImpl implements UserDao {
         statement.setString(2, user.getLastName());
         statement.setString(3, user.getEmail());
         statement.setString(4, user.getPassword());
-        statement.setString(5, user.getRole().getTitle());
+        statement.setInt(5, user.getRole().ordinal());
         statement.setBigDecimal(6, user.getRating());
     }
 
@@ -200,7 +192,7 @@ public class UserDaoImpl implements UserDao {
         statement.setString(2, user.getLastName());
         statement.setString(3, user.getEmail());
         statement.setString(4, user.getPassword());
-        statement.setString(5, user.getRole().getTitle());
+        statement.setInt(5, user.getRole().ordinal());
         statement.setBigDecimal(6, user.getRating());
         statement.setLong(7, user.getId());
     }
