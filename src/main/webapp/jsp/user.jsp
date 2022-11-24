@@ -16,6 +16,8 @@
   <p>${requestScope.user.lastName}</p>
   <h3>Email :</h3>
   <p>${requestScope.user.email}</p>
+  <h3> Role :</h3>
+  <p>${requestScope.user.role}</p>
 </article>
 <footer></footer>
 </body>

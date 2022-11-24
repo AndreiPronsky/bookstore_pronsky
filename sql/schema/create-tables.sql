@@ -1,16 +1,16 @@
 CREATE TABLE roles (
-                       id BIGSERIAL PRIMARY KEY,
-                       role_name VARCHAR(32)
+                       roles_id BIGSERIAL PRIMARY KEY,
+                       role_name VARCHAR(32) NOT NULL UNIQUE
 );
 
 CREATE TABLE covers (
-                        id BIGSERIAL PRIMARY KEY,
-                        cover_name VARCHAR(32)
+                        covers_id BIGSERIAL PRIMARY KEY,
+                        cover_name VARCHAR(32) NOT NULL UNIQUE
 );
 
 CREATE TABLE genres (
-                        id BIGSERIAL PRIMARY KEY,
-                        genre_name VARCHAR(32)
+                        genres_id BIGSERIAL PRIMARY KEY,
+                        genre_name VARCHAR(32) NOT NULL UNIQUE
 );
 
 CREATE TABLE users (
@@ -34,3 +34,6 @@ CREATE TABLE books (
                        price NUMERIC(5, 2) NOT NULL,
                        rating NUMERIC(3, 2)
 );
+
+
+SELECT * FROM roles;
