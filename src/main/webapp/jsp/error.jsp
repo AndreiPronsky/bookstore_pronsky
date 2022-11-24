@@ -4,6 +4,7 @@
     <title>Error page</title>
 </head>
 <body>
+<jsp:include page="navbar.jsp"/>
 <h1>Error!!!</h1>
 <p>${requestScope.message}</p>
 </body>

@@ -6,6 +6,7 @@
     <title>Bookstore-pronsky</title>
 </head>
 <body>
+<jsp:include page="navbar.jsp"/>
 <header></header>
 <c:if test="${requestScope.books.isEmpty()}">
     <h2>No books found!</h2>
@@ -27,7 +28,7 @@
             <tr>
                 <td>${book.id}</td>
                 <td>${book.author}</td>
-                <td><a href="/command=book&id=${book.id}">${book.title}</a></td>
+                <td><a href="controller?command=book&id=${book.id}">${book.title}</a></td>
                 <td>${book.genre}</td>
                 <td>${book.price}</td>
             </tr>

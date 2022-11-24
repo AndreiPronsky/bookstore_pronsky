@@ -6,6 +6,7 @@
   <title>Bookstore-pronsky</title>
 </head>
 <body>
+<jsp:include page="navbar.jsp"/>
 <header></header>
 <c:if test="${requestScope.users.isEmpty()}">
   <h2>No users found!</h2>

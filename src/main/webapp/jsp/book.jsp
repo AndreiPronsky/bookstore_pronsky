@@ -5,8 +5,8 @@
         <title>Bookstore-pronsky</title>
     </head>
     <body>
+    <jsp:include page="navbar.jsp"/>
         <header></header>
-        <nav></nav>
         <article>
          <h1>Book</h1>
          <h3>Id :</h3>
