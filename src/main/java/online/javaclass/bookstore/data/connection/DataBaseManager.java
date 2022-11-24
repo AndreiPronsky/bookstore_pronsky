@@ -20,6 +20,7 @@ public class DataBaseManager implements AutoCloseable {
         Properties properties = new Properties();
         try (InputStream input = this.getClass().getResourceAsStream(PATH_TO_PROPS)) {
             properties.load(input);
+            log.debug("Properties extracted");
         } catch (IOException e) {
             log.error("unable to extract connection properties", e);
         }
@@ -28,14 +29,15 @@ public class DataBaseManager implements AutoCloseable {
         user = properties.getProperty("db.user");
         password = properties.getProperty("db.password");
         pool = new ConnectionPool(url, user, password);
+        log.debug("Properties are set, pool created");
     }
 
     public Connection getConnection() {
         if (pool == null) {
             pool = new ConnectionPool(url, user, password);
-            log.info("Connection pool created");
+            log.debug("Connection pool created");
         }
-        log.info("connection established");
+        log.debug("connection established");
         return pool.getConnection();
     }
 
@@ -45,6 +47,7 @@ public class DataBaseManager implements AutoCloseable {
             if (pool != null) {
                 pool.destroyPool();
                 pool = null;
+                log.debug("Pool destroyed");
             }
         } catch (Exception e) {
             log.error(e.getMessage());

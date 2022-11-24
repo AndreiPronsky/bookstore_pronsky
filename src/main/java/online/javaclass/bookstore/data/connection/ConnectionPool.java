@@ -38,6 +38,7 @@ public class ConnectionPool {
         try {
            connection = freeConnections.take();
             givenAwayConnections.offer(connection);
+            log.debug("Connection offered");
         } catch (InterruptedException e) {
             log.error(e.getMessage(), e);
             throw new RuntimeException(e);
@@ -49,6 +50,7 @@ public class ConnectionPool {
         if (connection instanceof ProxyConnection) {
             givenAwayConnections.remove(connection);
             freeConnections.offer((ProxyConnection) connection);
+            log.debug("Connection released");
         }
         else {
             log.error("Not proxy connection returned!!!");

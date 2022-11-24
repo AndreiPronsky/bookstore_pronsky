@@ -19,15 +19,20 @@ public class UsersCommand implements Command {
     @Override
     public String execute(HttpServletRequest req) {
         List<UserDto> users;
-        String rawLastName = req.getParameter("lastname");
-        if (rawLastName == null) {
-            users = userService.getAll();
-        } else {
-            String lastName = reformatLastName(rawLastName);
-            users = userService.getByLastName(lastName);
+        try {
+            String rawLastName = req.getParameter("lastname");
+            if (rawLastName == null) {
+                users = userService.getAll();
+            } else {
+                String lastName = reformatLastName(rawLastName);
+                users = userService.getByLastName(lastName);
+            }
+            req.setAttribute("users", users);
+            return "jsp/users.jsp";
+        } catch (Exception e) {
+            log.error(e.getClass() + " " + e.getMessage());
+            return "jsp/error.jsp";
         }
-        req.setAttribute("users", users);
-        return "jsp/users.jsp";
     }
 
     private String reformatLastName(String rawLastName) {

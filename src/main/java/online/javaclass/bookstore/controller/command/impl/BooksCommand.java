@@ -19,15 +19,20 @@ public class BooksCommand implements Command {
     @Override
     public String execute(HttpServletRequest req) {
         List<BookDto> books;
-        String rawAuthor = req.getParameter("author");
-        if (rawAuthor == null) {
-            books = bookService.getAll();
-        } else {
-            String author = reformatAuthor(rawAuthor);
-            books = bookService.getByAuthor(author);
+        try {
+            String rawAuthor = req.getParameter("author");
+            if (rawAuthor == null) {
+                books = bookService.getAll();
+            } else {
+                String author = reformatAuthor(rawAuthor);
+                books = bookService.getByAuthor(author);
+            }
+            req.setAttribute("books", books);
+            return "jsp/books.jsp";
+        } catch (Exception e) {
+            log.error(e.getClass() + " " + e.getMessage());
+            return "jsp/error.jsp";
         }
-        req.setAttribute("books", books);
-        return "jsp/books.jsp";
     }
 
     private String reformatAuthor(String rawAuthor) {

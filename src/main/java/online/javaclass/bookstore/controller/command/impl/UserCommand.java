@@ -16,10 +16,15 @@ public class UserCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest req) {
-        Long id = processId(req);
-        UserDto user = userService.getById(id);
-        req.setAttribute("user", user);
-        return "jsp/user.jsp";
+        try {
+            Long id = processId(req);
+            UserDto user = userService.getById(id);
+            req.setAttribute("user", user);
+            return "jsp/user.jsp";
+        } catch (Exception e) {
+            log.error(e.getClass() + " " + e.getMessage());
+            return "jsp/error.jsp";
+        }
     }
 
     private Long processId(HttpServletRequest req) {
@@ -27,7 +32,7 @@ public class UserCommand implements Command {
             String rawId = req.getParameter("id");
             return Long.parseLong(rawId);
         } catch (NumberFormatException e) {
-            throw new NumberFormatException();
+            throw new NumberFormatException(e.getMessage());
         }
     }
 }

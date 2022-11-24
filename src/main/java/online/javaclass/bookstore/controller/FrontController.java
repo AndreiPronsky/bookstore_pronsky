@@ -21,13 +21,16 @@ public class FrontController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String commandParameter = req.getParameter("command");
         Command command = CommandFactory.INSTANCE.getCommand(commandParameter);
+        log.debug("Got command from factory");
         String page;
         try {
             page = command.execute(req);
+            log.debug("Command executed");
         } catch (AppException e) {
             page = processError(req, e);
         }
         req.getRequestDispatcher(page).forward(req, resp);
+        log.debug("Forwarded");
     }
 
     private String processError(HttpServletRequest req, AppException e) {
