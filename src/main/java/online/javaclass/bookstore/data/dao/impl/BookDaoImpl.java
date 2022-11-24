@@ -67,6 +67,8 @@ public class BookDaoImpl implements BookDao {
             if (result.next()) {
                 book.setId(result.getLong(COL_BOOK_ID));
             }
+            connection.close();
+            log.debug("Connection released");
             return findById(result.getLong(COL_BOOK_ID));
         } catch (SQLException e) {
             throw new UnableToCreateException("Creation failed! " + book, e);
@@ -79,6 +81,8 @@ public class BookDaoImpl implements BookDao {
             prepareStatementForUpdate(book, statement);
             statement.executeUpdate();
             log.debug("DB query completed");
+            connection.close();
+            log.debug("Connection released");
             return findById(book.getId());
         } catch (SQLException e) {
             throw new UnableToUpdateException("Update failed! " + book, e);
@@ -93,6 +97,8 @@ public class BookDaoImpl implements BookDao {
             ResultSet result = statement.executeQuery();
             setParameters(book, result);
             log.debug("DB query completed");
+            connection.close();
+            log.debug("Connection released");
             return book;
         } catch (SQLException e) {
             throw new UnableToFindException("No such book found! " + book, e);
@@ -107,6 +113,8 @@ public class BookDaoImpl implements BookDao {
             ResultSet result = statement.executeQuery();
             log.debug("DB query completed");
             setParameters(book, result);
+            connection.close();
+            log.debug("Connection released");
             return book;
         } catch (SQLException e) {
             throw new UnableToFindException("No such book found! " + book, e);
@@ -125,6 +133,8 @@ public class BookDaoImpl implements BookDao {
                 Book book = findById(id);
                 books.add(book);
             }
+            connection.close();
+            log.debug("Connection released");
             return books;
         } catch (SQLException e) {
             throw new RuntimeException("No books by " + author + " found", e);
@@ -142,6 +152,8 @@ public class BookDaoImpl implements BookDao {
                 Book book = findById(id);
                 books.add(book);
             }
+            connection.close();
+            log.debug("Connection released");
             return books;
         } catch (SQLException e) {
             throw new RuntimeException("No books found", e);
@@ -154,6 +166,8 @@ public class BookDaoImpl implements BookDao {
             statement.setLong(1, id);
             int affectedRows = statement.executeUpdate();
             log.debug("DB query completed");
+            connection.close();
+            log.debug("Connection released");
             return affectedRows == 1;
         } catch (SQLException e) {
             throw new UnableToDeleteException("Unable to delete book with id " + id, e);
