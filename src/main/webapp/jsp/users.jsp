@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Bookstore-pronsky</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <jsp:include page="navbar.jsp"/>
@@ -20,6 +21,7 @@
       <th>Firstname</th>
       <th>Lastname</th>
       <th>Email</th>
+      <th>Role</th>
     </tr>
     </thead>
     <tbody>

@@ -1,0 +1,60 @@
+a {
+    color:#556B2F;
+}
+
+a:hover {
+    font-size: 18px;
+}
+
+caption {
+    font-size: 20px;
+    color: antiquewhite;
+}
+
+.navbar {
+    display: flex;
+    flex-direction: row;
+}
+
+.navbar li {
+    background-color: antiquewhite;
+    border: 2px solid peru;
+    border-radius: 5px;
+    color: peru;
+    margin: 5px 5px 5px 20px;
+    padding: 2px;
+}
+
+th {
+    border: 2px solid antiquewhite;
+    color: antiquewhite;
+    margin: 5px;
+}
+
+td {
+    border: 1px solid antiquewhite;
+    color: antiquewhite;
+    padding: 2px 5px;
+}
+
+#searchbar {
+    background-color: antiquewhite;
+    color: #8B4513;
+    padding: 5px;
+    margin: 5px;
+    border: 3px solid #8B4513;
+    border-radius: 5px;
+    opacity: 0.5;
+}
+
+#searchbar:hover {
+    opacity: 1;
+}
+
+body {
+    background-image: url("images/bgimage.jpg");
+}
+
+h1 {
+    color: antiquewhite;
+}
