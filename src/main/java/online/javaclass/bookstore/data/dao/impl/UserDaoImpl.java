@@ -53,8 +53,6 @@ public class UserDaoImpl implements UserDao {
             if (result.next()) {
                 user.setId(result.getLong(COL_USER_ID));
             }
-            connection.close();
-            log.debug("Connection released");
             return findById(result.getLong(COL_USER_ID));
         } catch (SQLException e) {
             throw new UnableToCreateException("Creation failed! " + user, e);
@@ -71,8 +69,6 @@ public class UserDaoImpl implements UserDao {
             if (affectedRows > 0) {
                 System.out.println("Valid state : " + findById(user.getId()));
             }
-            connection.close();
-            log.debug("Connection released");
             return findById(user.getId());
         } catch (SQLException e) {
             throw new UnableToUpdateException("Update failed! " + user, e);
@@ -88,8 +84,6 @@ public class UserDaoImpl implements UserDao {
             ResultSet result = statement.executeQuery();
             setParameters(user, result);
             log.debug("DB query completed");
-            connection.close();
-            log.debug("Connection released");
             return user;
         } catch (SQLException e) {
             throw new UnableToFindException("Unable to find user with id " + id, e);
@@ -104,8 +98,6 @@ public class UserDaoImpl implements UserDao {
             ResultSet result = statement.executeQuery();
             log.debug("DB query completed");
             setParameters(user, result);
-            connection.close();
-            log.debug("Connection released");
             return user;
         } catch (SQLException e) {
             throw new UnableToFindException("Unable to find user with email " + email, e);
@@ -124,8 +116,6 @@ public class UserDaoImpl implements UserDao {
                 User user = findById(id);
                 users.add(user);
             }
-            connection.close();
-            log.debug("Connection released");
             return users;
         } catch (SQLException e) {
             throw new RuntimeException("Unable to find users with lastname " + lastName, e);
@@ -143,8 +133,6 @@ public class UserDaoImpl implements UserDao {
                 User user = findById(id);
                 users.add(user);
             }
-            connection.close();
-            log.debug("Connection released");
             return users;
         } catch (SQLException e) {
             throw new RuntimeException("No users found", e);
@@ -157,8 +145,6 @@ public class UserDaoImpl implements UserDao {
             statement.setLong(1, id);
             int affectedRows = statement.executeUpdate();
             log.debug("DB query completed");
-            connection.close();
-            log.debug("Connection released");
             return affectedRows ==1;
         } catch (SQLException e) {
             throw new UnableToDeleteException("Unable to delete user with id " + id, e);
@@ -171,8 +157,6 @@ public class UserDaoImpl implements UserDao {
             ResultSet result = statement.executeQuery("SELECT count(*) FROM users");
             log.debug("DB query completed");
             result.next();
-            connection.close();
-            log.debug("Connection released");
             return result.getLong("count");
         } catch (SQLException e) {
             throw new RuntimeException("Count failed!", e);

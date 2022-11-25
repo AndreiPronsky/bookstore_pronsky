@@ -82,14 +82,14 @@ p {
 input {
     color: #8B4513;
     background-color: antiquewhite;
-    border: 2px #8B4513;
+    border: solid 2px #8B4513;
+    margin: 2px;
 }
 
 label {
     color: #8B4513;
     background-color: antiquewhite;
-    border: 2px #8B4513;
-    margin: 10px;
+    margin: 2px;
 }
 
 .wrapper {
@@ -97,28 +97,34 @@ label {
     opacity: 50%;
     background-color: antiquewhite;
     list-style-type: none;
-    padding: 0;
+    margin: 5px;
     border-radius: 3px;
 }
 .form-row {
     display: flex;
     justify-content: flex-end;
-    padding: .5em;
+    padding: 5px;
+    margin: 5px;
 }
 .form-row > label {
-    padding: .5em 1em .5em 0;
-    flex: 1;
+    padding: 5px;
+    flex: 2;
 }
 .form-row > input {
-    flex: 2;
-    border: 2px #8B4513;
+    flex: 1;
+    border: solid 2px #8B4513;
+    margin: 5px;
+    padding: 5px;
+    display: block;
+    float: left;
 }
 .form-row > input,
 .form-row > button {
-    padding: .5em;
+    padding: 5px;
+    margin: 5px;
 }
 .form-row > button {
     background: antiquewhite;
     color: #8B4513;
-    border: 0;
+    border: solid 2px antiquewhite;
 }
