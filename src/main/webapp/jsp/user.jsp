@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>Bookstore-pronsky</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <jsp:include page="navbar.jsp"/>

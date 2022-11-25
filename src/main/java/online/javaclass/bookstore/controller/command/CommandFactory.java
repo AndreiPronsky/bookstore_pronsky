@@ -28,6 +28,8 @@ public class CommandFactory {
         map.put("user", new UserCommand(userService));
         map.put("users", new UsersCommand(userService));
         map.put("error", new ErrorCommand());
+        map.put("add_book_form", new AddBookFormCommand());
+        map.put("add_book", new AddBookCommand(bookService));
     }
 
     public Command getCommand(String command) {

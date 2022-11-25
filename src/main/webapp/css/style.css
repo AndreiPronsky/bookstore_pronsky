@@ -1,5 +1,5 @@
 a {
-    color:#556B2F;
+    color:#A0522D;
 }
 
 a:hover {
@@ -7,13 +7,15 @@ a:hover {
 }
 
 caption {
-    font-size: 20px;
+    font-size: 22px;
     color: antiquewhite;
+    box-shadow: 10px 10px 50px antiquewhite;
 }
 
 .navbar {
     display: flex;
     flex-direction: row;
+    box-shadow: 10px 10px 50px antiquewhite;
 }
 
 .navbar li {
@@ -22,7 +24,14 @@ caption {
     border-radius: 5px;
     color: peru;
     margin: 5px 5px 5px 20px;
-    padding: 2px;
+    padding: 4px;
+    opacity: 0.5;
+}
+
+table {
+    width: 70%;
+    margin-left: 15%;
+    margin-right: 15%;
 }
 
 th {
@@ -52,9 +61,64 @@ td {
 }
 
 body {
-    background-image: url("images/bgimage.jpg");
+    background-image: url("images/bookstore.jpg");
 }
 
 h1 {
     color: antiquewhite;
+    margin-top: 30px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+h3 {
+    color: antiquewhite;
+}
+
+p {
+    color: antiquewhite;
+}
+
+input {
+    color: #8B4513;
+    background-color: antiquewhite;
+    border: 2px #8B4513;
+}
+
+label {
+    color: #8B4513;
+    background-color: antiquewhite;
+    border: 2px #8B4513;
+    margin: 10px;
+}
+
+.wrapper {
+    width: 30%;
+    opacity: 50%;
+    background-color: antiquewhite;
+    list-style-type: none;
+    padding: 0;
+    border-radius: 3px;
+}
+.form-row {
+    display: flex;
+    justify-content: flex-end;
+    padding: .5em;
+}
+.form-row > label {
+    padding: .5em 1em .5em 0;
+    flex: 1;
+}
+.form-row > input {
+    flex: 2;
+    border: 2px #8B4513;
+}
+.form-row > input,
+.form-row > button {
+    padding: .5em;
+}
+.form-row > button {
+    background: antiquewhite;
+    color: #8B4513;
+    border: 0;
 }

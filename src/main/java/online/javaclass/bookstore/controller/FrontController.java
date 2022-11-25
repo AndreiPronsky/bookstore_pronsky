@@ -19,6 +19,15 @@ public class FrontController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        process(req, resp);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        process(req, resp);
+    }
+
+    private void process(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String commandParameter = req.getParameter("command");
         Command command = CommandFactory.INSTANCE.getCommand(commandParameter);
         log.debug("Got command from factory");

@@ -69,6 +69,7 @@ public class BookDaoImpl implements BookDao {
             if (result.next()) {
                 book.setId(result.getLong(COL_BOOK_ID));
             }
+            log.debug("Created book with id" + result.getLong(COL_BOOK_ID));
             connection.close();
             log.debug("Connection released");
             return findById(result.getLong(COL_BOOK_ID));

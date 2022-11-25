@@ -35,5 +35,4 @@ CREATE TABLE books (
                        rating NUMERIC(3, 2)
 );
 
-
-SELECT * FROM roles;
+SELECT * FROM books;
