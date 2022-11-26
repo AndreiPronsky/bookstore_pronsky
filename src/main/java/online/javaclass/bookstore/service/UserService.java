@@ -4,7 +4,7 @@ import online.javaclass.bookstore.service.dto.UserDto;
 
 import java.util.List;
 
-public interface UserService {
+public interface UserService extends AbstractService {
     UserDto create(UserDto userDto);
 
     UserDto update(UserDto userDto);

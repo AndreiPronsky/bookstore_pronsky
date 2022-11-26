@@ -1,12 +1,55 @@
 INSERT INTO roles (role_name)
-VALUES ('USER'), ('ADMIN'), ('MANAGER');
+VALUES ('USER'),
+       ('ADMIN'),
+       ('MANAGER');
 
 INSERT INTO covers (cover_name)
-VALUES ('SOFT'), ('HARD'), ('SPECIAL');
+VALUES ('SOFT'),
+       ('HARD'),
+       ('SPECIAL');
 
 INSERT INTO genres (genre_name)
-VALUES ('FICTION'), ('MYSTERY'), ('THRILLER'), ('HORROR'), ('HISTORICAL'), ('ROMANCE'), ('WESTERN'), ('FLORISTICS'),
-       ('SCIENCE FICTION'), ('DYSTOPIAN'), ('REALISM'), ('RELIGION'), ('MEDICINE'), ('ENGINEERING'), ('ART');
+VALUES ('FICTION'),
+       ('MYSTERY'),
+       ('THRILLER'),
+       ('HORROR'),
+       ('HISTORICAL'),
+       ('ROMANCE'),
+       ('WESTERN'),
+       ('FLORISTICS'),
+       ('SCIENCE FICTION'),
+       ('DYSTOPIAN'),
+       ('REALISM'),
+       ('RELIGION'),
+       ('MEDICINE'),
+       ('ENGINEERING'),
+       ('ART');
+
+INSERT INTO order_status (status_name)
+VALUES ('OPEN'),
+       ('CONFIRMED'),
+       ('COMPLETED'),
+       ('CANCELLED');
+
+INSERT INTO payment_method (payment_method_name)
+VALUES ('CASH'),
+       ('CARD'),
+       ('BANK_TRANSFER'),
+       ('CASH_TO_COURIER'),
+       ('CARD_TO_COURIER');
+
+INSERT INTO payment_status (payment_status_name)
+VALUES ('UNPAID'),
+       ('FAILED'),
+       ('PAID'),
+       ('REFUNDED');
+
+INSERT INTO delivery_type (delivery_type_name)
+VALUES ('COURIER'),
+       ('BIKE'),
+       ('CAR'),
+       ('MAIL'),
+       ('SELF_PICKUP');
 
 INSERT INTO users (firstname, lastname, email, user_password, role_id)
 VALUES ('Vladimir', 'Ulyanov', 'bolshevik1870@mail.ussr', 'RSDRP4ever',
@@ -45,7 +88,7 @@ VALUES ('Revolution for workers and peasants', 'Karl Heinrich Marx', '2-1234-567
         (SELECT covers_id FROM covers WHERE cover_name = 'HARD'), 34, 15.15),
        ('Professional Genocide', 'Lucius Marcius Censorinus', '5-2323-4534-8',
         (SELECT genres_id FROM genres WHERE genre_name = 'HISTORICAL'),
-        (SELECT covers_id FROM covers WHERE cover_name = 'HARD'),476, 45.44),
+        (SELECT covers_id FROM covers WHERE cover_name = 'HARD'), 476, 45.44),
        ('Selfportrait for beginners', 'Vincent van Gogh', '2-2222-4567-3',
         (SELECT genres_id FROM genres WHERE genre_name = 'ART'),
         (SELECT covers_id FROM covers WHERE cover_name = 'SOFT'), 566, 66.23),
@@ -91,3 +134,15 @@ VALUES ('Revolution for workers and peasants', 'Karl Heinrich Marx', '2-1234-567
        ('Reggae as a way of life', 'Jah', '3-3321-3321-9',
         (SELECT genres_id FROM genres WHERE genre_name = 'RELIGION'),
         (SELECT covers_id FROM covers WHERE cover_name = 'HARD'), 79, 18.99);
+
+INSERT INTO orders (user_id, order_status, order_payment_method, order_payment_status, order_delivery_type)
+VALUES (1, 2, 1, 3, 5),
+       (2, 3, 4, 3, 2),
+       (3, 1, 4, 1, 4),
+       (4, 4, 5, 2, 2),
+       (5, 3, 2, 3, 5),
+       (6, 3, 3, 3, 1),
+       (7, 3, 2, 3, 3),
+       (8, 4, 5, 1, 5),
+       (9, 4, 1, 1, 5),
+       (10, 2, 2, 3, 4);
