@@ -1,10 +1,18 @@
 package online.javaclass.bookstore.controller.command;
 
 import online.javaclass.bookstore.controller.command.impl.*;
+import online.javaclass.bookstore.data.dao.BookDao;
+import online.javaclass.bookstore.data.dao.UserDao;
+import online.javaclass.bookstore.data.dao.impl.UserDaoImpl;
+import online.javaclass.bookstore.data.repository.BookRepository;
+import online.javaclass.bookstore.data.EntityDtoMapperData;
+import online.javaclass.bookstore.data.repository.UserRepository;
+import online.javaclass.bookstore.data.repository.impl.UserRepositoryImpl;
 import online.javaclass.bookstore.data.connection.DataBaseManager;
 import online.javaclass.bookstore.data.dao.impl.BookDaoImpl;
-import online.javaclass.bookstore.data.dao.impl.UserDaoImpl;
+import online.javaclass.bookstore.data.repository.impl.BookRepositoryImpl;
 import online.javaclass.bookstore.service.BookService;
+import online.javaclass.bookstore.service.EntityDtoMapperService;
 import online.javaclass.bookstore.service.UserService;
 import online.javaclass.bookstore.service.impl.BookServiceImpl;
 import online.javaclass.bookstore.service.impl.UserServiceImpl;
@@ -20,8 +28,15 @@ public class CommandFactory {
 
     private CommandFactory() {
         DataBaseManager manager = DataBaseManager.INSTANCE;
-        BookService bookService = new BookServiceImpl(new BookDaoImpl(manager));
-        UserService userService = new UserServiceImpl(new UserDaoImpl(manager));
+        BookDao bookDao = new BookDaoImpl(manager);
+        EntityDtoMapperData dataMapper = new EntityDtoMapperData();
+        EntityDtoMapperService serviceMapper = new EntityDtoMapperService();
+        BookRepository bookRepository = new BookRepositoryImpl(bookDao, dataMapper);
+        BookService bookService = new BookServiceImpl(bookRepository, serviceMapper);
+        UserDao userDao = new UserDaoImpl(manager);
+        UserRepository userRepository = new UserRepositoryImpl(userDao, dataMapper);
+        UserService userService = new UserServiceImpl(userRepository, serviceMapper);
+
         map = new HashMap<>();
         map.put("book", new BookCommand(bookService));
         map.put("books", new BooksCommand(bookService));
@@ -30,6 +45,12 @@ public class CommandFactory {
         map.put("error", new ErrorCommand());
         map.put("add_book_form", new AddBookFormCommand());
         map.put("add_book", new AddBookCommand(bookService));
+        map.put("edit_book_form", new EditBookFormCommand(bookService));
+        map.put("edit_book", new EditBookCommand(bookService));
+        map.put("add_user_form", new AddUserFormCommand());
+        map.put("add_user", new AddUserCommand(userService));
+        map.put("edit_user_form", new EditUserFormCommand(userService));
+        map.put("edit_user", new EditUserCommand(userService));
     }
 
     public Command getCommand(String command) {

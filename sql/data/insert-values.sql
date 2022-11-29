@@ -135,7 +135,7 @@ VALUES ('Revolution for workers and peasants', 'Karl Heinrich Marx', '2-1234-567
         (SELECT genres_id FROM genres WHERE genre_name = 'RELIGION'),
         (SELECT covers_id FROM covers WHERE cover_name = 'HARD'), 79, 18.99);
 
-INSERT INTO orders (user_id, order_status, order_payment_method, order_payment_status, order_delivery_type)
+INSERT INTO orders (user_id, status, payment_method, payment_status, delivery_type)
 VALUES (1, 2, 1, 3, 5),
        (2, 3, 4, 3, 2),
        (3, 1, 4, 1, 4),

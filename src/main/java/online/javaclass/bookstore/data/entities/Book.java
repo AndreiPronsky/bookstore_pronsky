@@ -16,4 +16,27 @@ public class Book {
     private BigDecimal price;
     private BigDecimal rating;
 
+    public enum Cover {
+        SOFT,
+        HARD,
+        SPECIAL
+    }
+
+    public enum Genre {
+        FICTION,
+        MYSTERY,
+        THRILLER,
+        HORROR,
+        HISTORICAL,
+        ROMANCE,
+        WESTERN,
+        FLORISTICS,
+        SCIENCE_FICTION,
+        DYSTOPIAN,
+        REALISM,
+        RELIGION,
+        MEDICINE,
+        ENGINEERING,
+        ART
+    }
 }

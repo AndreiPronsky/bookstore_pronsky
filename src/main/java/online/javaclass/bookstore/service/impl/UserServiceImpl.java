@@ -1,57 +1,56 @@
 package online.javaclass.bookstore.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import online.javaclass.bookstore.data.dao.UserDao;
+import online.javaclass.bookstore.data.repository.UserRepository;
+import online.javaclass.bookstore.service.EntityDtoMapperService;
 import online.javaclass.bookstore.data.entities.User;
 import online.javaclass.bookstore.service.dto.UserDto;
 import online.javaclass.bookstore.service.UserService;
 
 import java.util.List;
-
+@RequiredArgsConstructor
 @Log4j2
 public class UserServiceImpl implements UserService {
 
-    private final UserDao userDao;
-
-    public UserServiceImpl(UserDao userDao) {
-        this.userDao = userDao;
-    }
+    private final UserRepository userRepo;
+    private final EntityDtoMapperService mapper;
 
     @Override
     public UserDto create(UserDto userDto) {
         log.debug("create user");
-        User user = toEntity(userDto);
-        User created = userDao.create(user);
-        return toDto(created);
+        User user = mapper.toEntity(userDto);
+        User created = userRepo.create(user);
+        return mapper.toDto(created);
     }
 
     @Override
     public UserDto update(UserDto userDto) {
         log.debug("update user");
-        User user = toEntity(userDto);
-        User updated = userDao.update(user);
-        return toDto(updated);
+        User user = mapper.toEntity(userDto);
+        User updated = userRepo.update(user);
+        return mapper.toDto(updated);
     }
 
     @Override
     public UserDto getById(Long id) {
         log.debug("get user by id");
-        User user = userDao.findById(id);
-        return toDto(user);
+        User user = userRepo.findById(id);
+        return mapper.toDto(user);
     }
 
     @Override
     public UserDto getByEmail(String email) {
         log.debug("get user by email");
-        User user = userDao.findByEmail(email);
-        return toDto(user);
+        User user = userRepo.findByEmail(email);
+        return mapper.toDto(user);
     }
 
     @Override
     public List<UserDto> getByLastName(String lastname) {
         log.debug("get user(s) by lastname");
-        List<UserDto> userDtos = userDao.findByLastName(lastname).stream()
-                .map(this::toDto)
+        List<UserDto> userDtos = userRepo.findByLastName(lastname).stream()
+                .map(mapper::toDto)
                 .toList();
         if (userDtos.isEmpty()) {
             log.error("Unable to find users with lastname : " + lastname);
@@ -62,15 +61,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDto> getAll() {
         log.debug("get all users");
-        return userDao.findAll().stream()
-                .map(this::toDto)
+        return userRepo.findAll().stream()
+                .map(mapper::toDto)
                 .toList();
     }
 
     @Override
     public void deleteById(Long id) {
         log.debug("delete user by id");
-        boolean deleted = userDao.deleteById(id);
+        boolean deleted = userRepo.deleteById(id);
         if (!deleted) {
             log.error("Unable to delete user with id : " + id);
         }
@@ -79,30 +78,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public Long count() {
         log.debug("count users");
-        return userDao.count();
-    }
-
-    private UserDto toDto(User user) {
-        UserDto userDto = new UserDto();
-        userDto.setId(user.getId());
-        userDto.setFirstName(user.getFirstName());
-        userDto.setLastName(user.getLastName());
-        userDto.setEmail(user.getEmail());
-        userDto.setPassword(user.getPassword());
-        userDto.setRole(user.getRole());
-        userDto.setRating(user.getRating());
-        return userDto;
-    }
-
-    private User toEntity(UserDto userDto) {
-        User user = new User();
-        user.setId(userDto.getId());
-        user.setFirstName(userDto.getFirstName());
-        user.setLastName(userDto.getLastName());
-        user.setEmail(userDto.getEmail());
-        user.setPassword(userDto.getPassword());
-        user.setRole(userDto.getRole());
-        user.setRating(userDto.getRating());
-        return user;
+        return userRepo.count();
     }
 }

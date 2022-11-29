@@ -15,4 +15,10 @@ public class User {
     private String password;
     private Role role;
     private BigDecimal rating;
+
+    public enum Role {
+        USER,
+        ADMIN,
+        MANAGER
+    }
 }
