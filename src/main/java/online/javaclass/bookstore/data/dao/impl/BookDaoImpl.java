@@ -20,8 +20,8 @@ import java.util.List;
 public class BookDaoImpl implements BookDao {
 
     private static final String CREATE_BOOK = "INSERT INTO books (title, author, isbn, genre, cover, pages, price, rating) " +
-            "VALUES (?, ?, ?, (SELECT genres_id FROM genres WHERE genres_id = ?), " +
-            "(SELECT covers_id FROM covers WHERE covers_id = ?), ?, ?, ?)";
+            "VALUES (?, ?, ?, (SELECT genre_id FROM genres WHERE genre_id = ?), " +
+            "(SELECT covers FROM covers WHERE covers_id = ?), ?, ?, ?)";
     private static final String UPDATE_BOOK = "UPDATE books SET title = ?, author = ?, isbn = ?, genre = ?," +
             " cover = ?, pages = ?, price = ?, rating = ? WHERE book_id = ?";
     private static final String FIND_BOOK_BY_ID = "SELECT book_id, title, author, isbn, genre, " +
@@ -169,7 +169,7 @@ public class BookDaoImpl implements BookDao {
                 book.setTitle(result.getString(COL_TITLE));
                 book.setAuthor(result.getString(COL_AUTHOR));
                 book.setIsbn(result.getString(COL_ISBN));
-                book.setGenre(BookDto.Genre.valueOf(result.getString(COL_GENRE)));
+                book.setGenre(BookDto.Genre.values()[(result.getInt(COL_GENRE))-1]);
                 book.setCover(BookDto.Cover.valueOf(result.getString(COL_COVER)));
                 book.setPages(result.getInt(COL_PAGES));
                 book.setPrice(result.getBigDecimal(COL_PRICE));

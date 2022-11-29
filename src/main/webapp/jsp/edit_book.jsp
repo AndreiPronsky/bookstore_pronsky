@@ -7,7 +7,7 @@
 <body>
 <jsp:include page="navbar.jsp"/>
 <h1>Edit book</h1>
-<form action="controller?command=edit_book" method="post">
+<form action="controller?command=edit_book&id=5" method="post">
     <ul class="wrapper">
         <li class="form-row">
             <label>Id<input type="hidden" name="id" value="${requestScope.book.id}"></label>

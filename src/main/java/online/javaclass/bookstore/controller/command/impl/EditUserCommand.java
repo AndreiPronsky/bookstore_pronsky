@@ -16,7 +16,7 @@ public class EditUserCommand implements Command {
     @Override
     public String execute(HttpServletRequest req) {
         UserDto user = new UserDto();
-        user.setId(Long.parseLong(req.getParameter("id")));
+        user.setId(Long.parseLong(req.getParameter("user_id")));
         user.setFirstName(req.getParameter("firstname"));
         user.setLastName(req.getParameter("lastname"));
         user.setEmail(req.getParameter("email"));
