@@ -1,0 +1,130 @@
+a {
+    color:#A0522D;
+}
+
+a:hover {
+    font-size: 18px;
+}
+
+caption {
+    font-size: 22px;
+    color: antiquewhite;
+    box-shadow: 10px 10px 50px antiquewhite;
+}
+
+.navbar {
+    display: flex;
+    flex-direction: row;
+    box-shadow: 10px 10px 50px antiquewhite;
+}
+
+.navbar li {
+    background-color: antiquewhite;
+    border: 2px solid peru;
+    border-radius: 5px;
+    color: peru;
+    margin: 5px 5px 5px 20px;
+    padding: 4px;
+    opacity: 0.5;
+}
+
+table {
+    width: 70%;
+    margin-left: 15%;
+    margin-right: 15%;
+}
+
+th {
+    border: 2px solid antiquewhite;
+    color: antiquewhite;
+    margin: 5px;
+}
+
+td {
+    border: 1px solid antiquewhite;
+    color: antiquewhite;
+    padding: 2px 5px;
+}
+
+#searchbar {
+    background-color: antiquewhite;
+    color: #8B4513;
+    padding: 5px;
+    margin: 5px;
+    border: 3px solid #8B4513;
+    border-radius: 5px;
+    opacity: 0.5;
+}
+
+#searchbar:hover {
+    opacity: 1;
+}
+
+body {
+    background-image: url("images/bookstore.jpg");
+}
+
+h1 {
+    color: antiquewhite;
+    margin-top: 30px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+h3 {
+    color: antiquewhite;
+}
+
+p {
+    color: antiquewhite;
+}
+
+input {
+    color: #8B4513;
+    background-color: antiquewhite;
+    border: solid 2px #8B4513;
+    margin: 2px;
+}
+
+label {
+    color: #8B4513;
+    background-color: antiquewhite;
+    margin: 2px;
+}
+
+.wrapper {
+    width: 30%;
+    opacity: 50%;
+    background-color: antiquewhite;
+    list-style-type: none;
+    margin: 5px;
+    border-radius: 3px;
+}
+.form-row {
+    display: flex;
+    justify-content: flex-end;
+    padding: 5px;
+    margin: 5px;
+}
+.form-row > label {
+    padding: 5px;
+    flex: 2;
+}
+.form-row > input {
+    flex: 1;
+    border: solid 2px #8B4513;
+    margin: 5px;
+    padding: 5px;
+    display: block;
+    float: left;
+}
+.form-row > input,
+.form-row > button {
+    padding: 5px;
+    margin: 5px;
+}
+.form-row > button {
+    background: antiquewhite;
+    color: #8B4513;
+    border: solid 2px antiquewhite;
+}

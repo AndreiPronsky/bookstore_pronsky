@@ -4,8 +4,10 @@
 <head>
   <meta charset="UTF-8">
   <title>Bookstore-pronsky</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+<jsp:include page="navbar.jsp"/>
 <header></header>
 <c:if test="${requestScope.users.isEmpty()}">
   <h2>No users found!</h2>
@@ -19,6 +21,7 @@
       <th>Firstname</th>
       <th>Lastname</th>
       <th>Email</th>
+      <th>Role</th>
     </tr>
     </thead>
     <tbody>
@@ -28,6 +31,7 @@
         <td>${user.firstName}</td>
         <td>${user.lastName}</td>
         <td>${user.email}</td>
+        <td>${user.role}</td>
       </tr>
     </c:forEach>
     </tbody>

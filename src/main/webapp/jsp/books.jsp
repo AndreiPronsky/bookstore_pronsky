@@ -4,8 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Bookstore-pronsky</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+<jsp:include page="navbar.jsp"/>
 <header></header>
 <c:if test="${requestScope.books.isEmpty()}">
     <h2>No books found!</h2>
@@ -18,6 +20,7 @@
             <th>Id</th>
             <th>Author</th>
             <th>Title</th>
+            <th>Genre</th>
             <th>Price</th>
         </tr>
         </thead>
@@ -26,7 +29,8 @@
             <tr>
                 <td>${book.id}</td>
                 <td>${book.author}</td>
-                <td><a href="book?id=${book.id}">${book.title}</a></td>
+                <td><a href="controller?command=book&id=${book.id}">${book.title}</a></td>
+                <td>${book.genre}</td>
                 <td>${book.price}</td>
             </tr>
         </c:forEach>

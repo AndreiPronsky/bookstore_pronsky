@@ -1,25 +1,30 @@
 package online.javaclass.bookstore.controller.command.impl;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.log4j.Log4j2;
 import online.javaclass.bookstore.controller.command.Command;
 import online.javaclass.bookstore.service.BookService;
 import online.javaclass.bookstore.service.dto.BookDto;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
+@Log4j2
 public class BookCommand implements Command {
-    private static final Logger log = LogManager.getLogger();
     private final BookService bookService;
 
     public BookCommand(BookService bookService) {
         this.bookService = bookService;
     }
+
     @Override
     public String execute(HttpServletRequest req) {
+        try {
             Long id = processId(req);
             BookDto book = bookService.getById(id);
             req.setAttribute("book", book);
             return "jsp/book.jsp";
+        } catch (Exception e) {
+            log.error(e.getClass() + " " + e.getMessage());
+            return "jsp/error.jsp";
+        }
     }
 
     private Long processId(HttpServletRequest req) {
@@ -27,7 +32,7 @@ public class BookCommand implements Command {
             String rawId = req.getParameter("id");
             return Long.parseLong(rawId);
         } catch (NumberFormatException e) {
-            throw new NumberFormatException();
+            throw new NumberFormatException(e.getMessage());
         }
     }
 }

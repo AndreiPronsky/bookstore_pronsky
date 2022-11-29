@@ -1,23 +1,12 @@
 package online.javaclass.bookstore.data.dao;
 
+import online.javaclass.bookstore.data.dto.UserDto;
 import online.javaclass.bookstore.data.entities.User;
 
 import java.util.List;
 
-public interface UserDao {
-    User create(User user);
-
-    User update(User user);
-
-    User findById(Long id);
-
-    User findByEmail(String email);
-
-    List<User> findByLastName(String lastname);
-
-    List<User> findAll();
-
-    boolean deleteById(Long id);
-
+public interface UserDao extends AbstractDao<Long, UserDto>{
+    UserDto findByEmail(String email);
+    List<UserDto> findByLastName(String lastname);
     Long count();
 }

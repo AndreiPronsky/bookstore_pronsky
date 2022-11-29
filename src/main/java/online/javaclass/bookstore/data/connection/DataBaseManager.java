@@ -1,13 +1,13 @@
 package online.javaclass.bookstore.data.connection;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.util.Properties;
 
+@Log4j2
 public class DataBaseManager implements AutoCloseable {
     public static final DataBaseManager INSTANCE = new DataBaseManager();
     private ConnectionPool pool;
@@ -15,12 +15,12 @@ public class DataBaseManager implements AutoCloseable {
     private final String url;
     private final String user;
     private final String password;
-    private static final Logger log = LogManager.getLogger();
 
     private DataBaseManager() {
         Properties properties = new Properties();
         try (InputStream input = this.getClass().getResourceAsStream(PATH_TO_PROPS)) {
             properties.load(input);
+            log.debug("Properties extracted");
         } catch (IOException e) {
             log.error("unable to extract connection properties", e);
         }
@@ -29,14 +29,15 @@ public class DataBaseManager implements AutoCloseable {
         user = properties.getProperty("db.user");
         password = properties.getProperty("db.password");
         pool = new ConnectionPool(url, user, password);
+        log.debug("Properties are set, pool created");
     }
 
     public Connection getConnection() {
         if (pool == null) {
             pool = new ConnectionPool(url, user, password);
-            log.info("Connection pool created");
+            log.debug("Connection pool created");
         }
-        log.info("connection established");
+        log.debug("connection established");
         return pool.getConnection();
     }
 
@@ -45,7 +46,8 @@ public class DataBaseManager implements AutoCloseable {
         try {
             if (pool != null) {
                 pool.destroyPool();
-                pool=null;
+                pool = null;
+                log.debug("Pool destroyed");
             }
         } catch (Exception e) {
             log.error(e.getMessage());
