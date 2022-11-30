@@ -17,7 +17,7 @@ public class EntityDtoMapperData {
         user.setLastName(userDto.getLastName());
         user.setEmail(userDto.getEmail());
         user.setPassword(userDto.getPassword());
-        user.setRole(User.Role.valueOf(userDto.getRole().toString()));
+        user.setRole(User.Role.values()[(userDto.getRole().ordinal())-1]);
         user.setRating(userDto.getRating());
         return user;
     }
@@ -68,7 +68,7 @@ public class EntityDtoMapperData {
         userDto.setLastName(user.getLastName());
         userDto.setEmail(user.getEmail());
         userDto.setPassword(user.getPassword());
-        userDto.setRole(UserDto.Role.valueOf(user.getRole().toString()));
+        userDto.setRole(UserDto.Role.values()[(user.getRole().ordinal())]);
         userDto.setRating(user.getRating());
         return userDto;
     }

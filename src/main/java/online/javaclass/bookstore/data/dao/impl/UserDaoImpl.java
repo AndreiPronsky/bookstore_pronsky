@@ -3,6 +3,7 @@ package online.javaclass.bookstore.data.dao.impl;
 import lombok.extern.log4j.Log4j2;
 import online.javaclass.bookstore.data.connection.DataBaseManager;
 import online.javaclass.bookstore.data.dao.UserDao;
+import online.javaclass.bookstore.data.dto.BookDto;
 import online.javaclass.bookstore.data.dto.UserDto;
 import online.javaclass.bookstore.service.exceptions.UnableToCreateException;
 import online.javaclass.bookstore.service.exceptions.UnableToDeleteException;
@@ -16,7 +17,7 @@ import java.util.List;
 @Log4j2
 public class UserDaoImpl implements UserDao {
     public static final String CREATE_USER = "INSERT INTO users (firstname, lastname, email, user_password, role_id, " +
-            "rating) VALUES (?, ?, ?, ?, (SELECT roles_id FROM roles WHERE role_name = ?), ?)";
+            "rating) VALUES (?, ?, ?, ?, (SELECT roles.roles_id FROM roles WHERE roles_id = ?), ?)";
     public static final String UPDATE_USER = "UPDATE users SET firstname = ?, lastname = ?, email = ?, " +
             "user_password = ?, role_id = ?, rating = ? WHERE user_id = ?";
     public static final String FIND_USER_BY_ID = "SELECT user_id, firstname, lastname, email, user_password, " +
@@ -42,7 +43,6 @@ public class UserDaoImpl implements UserDao {
     }
 
     public UserDto create(UserDto user) {
-
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(CREATE_USER, Statement.RETURN_GENERATED_KEYS)) {
             prepareStatementForCreate(user, statement);
@@ -78,9 +78,7 @@ public class UserDaoImpl implements UserDao {
             statement.setLong(1, id);
             ResultSet result = statement.executeQuery();
             log.debug("DB query completed");
-            if (result.next()) {
                 setParameters(user, result);
-            }
             return user;
         } catch (SQLException e) {
             throw new UnableToFindException("Unable to find user with id " + id, e);
@@ -161,15 +159,15 @@ public class UserDaoImpl implements UserDao {
     }
 
     private void setParameters(UserDto user, ResultSet result) throws SQLException {
-            while (result.next()) {
-                user.setId(result.getLong(COL_USER_ID));
-                user.setFirstName(result.getString(COL_FIRSTNAME));
-                user.setLastName(result.getString(COL_LASTNAME));
-                user.setEmail(result.getString(COL_EMAIL));
-                user.setPassword(result.getString(COL_USER_PASSWORD));
-                user.setRole(UserDto.Role.valueOf(result.getString(COL_USER_ROLE)));
-                user.setRating(result.getBigDecimal(COL_RATING));
-            }
+        while (result.next()) {
+            user.setId(result.getLong(COL_USER_ID));
+            user.setFirstName(result.getString(COL_FIRSTNAME));
+            user.setLastName(result.getString(COL_LASTNAME));
+            user.setEmail(result.getString(COL_EMAIL));
+            user.setPassword(result.getString(COL_USER_PASSWORD));
+            user.setRole(UserDto.Role.values()[(result.getInt(COL_USER_ROLE))-1]);
+            user.setRating(result.getBigDecimal(COL_RATING));
+        }
     }
 
     private void prepareStatementForCreate(UserDto user, PreparedStatement statement) throws SQLException {
@@ -177,7 +175,7 @@ public class UserDaoImpl implements UserDao {
         statement.setString(2, user.getLastName());
         statement.setString(3, user.getEmail());
         statement.setString(4, user.getPassword());
-        statement.setInt(5, user.getRole().ordinal());
+        statement.setInt(5, user.getRole().ordinal()+1);
         statement.setBigDecimal(6, user.getRating());
     }
 

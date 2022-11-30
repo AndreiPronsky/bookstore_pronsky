@@ -21,7 +21,7 @@ public class AddUserCommand implements Command {
         user.setLastName(req.getParameter("lastname"));
         user.setEmail(req.getParameter("email"));
         user.setPassword(req.getParameter("password"));
-        user.setRole(UserDto.Role.values()[Integer.parseInt(req.getParameter("role"))-1]);
+        user.setRole(UserDto.Role.values()[(Integer.parseInt(req.getParameter("role")))-1]);
         user.setRating(BigDecimal.valueOf(Double.parseDouble(req.getParameter("rating"))));
         UserDto newUser = userService.create(user);
         req.setAttribute("user", newUser);
