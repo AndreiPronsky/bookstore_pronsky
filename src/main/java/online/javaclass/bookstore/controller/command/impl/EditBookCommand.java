@@ -18,7 +18,7 @@ public class EditBookCommand implements Command {
     @Override
     public String execute(HttpServletRequest req) {
         BookDto book = new BookDto();
-        book.setId(Long.parseLong(req.getParameter("book_id")));
+        book.setId(Long.parseLong(req.getParameter("id")));
         book.setTitle(req.getParameter("title"));
         book.setAuthor(req.getParameter("author"));
         book.setIsbn(req.getParameter("isbn"));

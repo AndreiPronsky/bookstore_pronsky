@@ -39,8 +39,8 @@ public class EntityDtoMapperData {
         book.setTitle(bookDto.getTitle());
         book.setAuthor(bookDto.getAuthor());
         book.setIsbn(bookDto.getIsbn());
-        book.setGenre(Book.Genre.values()[(bookDto.getGenre().ordinal())-1]);
-        book.setCover(Book.Cover.values()[(bookDto.getCover().ordinal())-1]);
+        book.setGenre(Book.Genre.values()[(bookDto.getGenre().ordinal())]);
+        book.setCover(Book.Cover.values()[(bookDto.getCover().ordinal())]);
         book.setPages(bookDto.getPages());
         book.setPrice(bookDto.getPrice());
         book.setRating(bookDto.getRating());

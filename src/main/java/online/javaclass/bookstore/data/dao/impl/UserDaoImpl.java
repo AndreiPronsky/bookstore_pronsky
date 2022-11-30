@@ -3,7 +3,6 @@ package online.javaclass.bookstore.data.dao.impl;
 import lombok.extern.log4j.Log4j2;
 import online.javaclass.bookstore.data.connection.DataBaseManager;
 import online.javaclass.bookstore.data.dao.UserDao;
-import online.javaclass.bookstore.data.dto.BookDto;
 import online.javaclass.bookstore.data.dto.UserDto;
 import online.javaclass.bookstore.service.exceptions.UnableToCreateException;
 import online.javaclass.bookstore.service.exceptions.UnableToDeleteException;

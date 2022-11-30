@@ -83,7 +83,7 @@ public class BookDaoImpl implements BookDao {
             log.debug("DB query completed");
             return findById(book.getId());
         } catch (SQLException e) {
-            throw new UnableToUpdateException("Update failed! " + book, e);
+            throw new UnableToUpdateException("Update failed! " + book +  " " +e.getMessage());
         }
     }
 
