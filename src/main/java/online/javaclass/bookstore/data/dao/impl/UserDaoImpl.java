@@ -62,13 +62,13 @@ public class UserDaoImpl implements UserDao {
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(UPDATE_USER)) {
             prepareStatementForUpdate(user, statement);
+            statement.executeUpdate();
             log.debug("DB query completed");
             return findById(user.getId());
         } catch (SQLException e) {
-            throw new UnableToUpdateException("Update failed! " + user, e);
+            throw new UnableToUpdateException("Update failed! " + user + " " + e.getMessage());
         }
     }
-
 
     public UserDto findById(Long id) {
         UserDto user = new UserDto();
@@ -76,8 +76,8 @@ public class UserDaoImpl implements UserDao {
              PreparedStatement statement = connection.prepareStatement(FIND_USER_BY_ID)) {
             statement.setLong(1, id);
             ResultSet result = statement.executeQuery();
-            log.debug("DB query completed");
                 setParameters(user, result);
+                log.debug("DB query completed");
             return user;
         } catch (SQLException e) {
             throw new UnableToFindException("Unable to find user with id " + id, e);
@@ -164,7 +164,7 @@ public class UserDaoImpl implements UserDao {
             user.setLastName(result.getString(COL_LASTNAME));
             user.setEmail(result.getString(COL_EMAIL));
             user.setPassword(result.getString(COL_USER_PASSWORD));
-            user.setRole(UserDto.Role.values()[(result.getInt(COL_USER_ROLE))-1]);
+            user.setRole(UserDto.Role.values()[(result.getInt(COL_USER_ROLE))]);
             user.setRating(result.getBigDecimal(COL_RATING));
         }
     }
@@ -183,7 +183,7 @@ public class UserDaoImpl implements UserDao {
         statement.setString(2, user.getLastName());
         statement.setString(3, user.getEmail());
         statement.setString(4, user.getPassword());
-        statement.setInt(5, user.getRole().ordinal());
+        statement.setInt(5, user.getRole().ordinal()+1);
         statement.setBigDecimal(6, user.getRating());
         statement.setLong(7, user.getId());
     }

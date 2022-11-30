@@ -66,7 +66,7 @@ public class EntityDtoMapperService {
         userDto.setLastName(user.getLastName());
         userDto.setEmail(user.getEmail());
         userDto.setPassword(user.getPassword());
-        userDto.setRole(UserDto.Role.values()[(user.getRole().ordinal())]);
+        userDto.setRole(UserDto.Role.values()[(user.getRole().ordinal())-1]);
         userDto.setRating(user.getRating());
         return userDto;
     }
