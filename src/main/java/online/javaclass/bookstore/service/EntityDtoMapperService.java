@@ -37,8 +37,8 @@ public class EntityDtoMapperService {
         book.setTitle(bookDto.getTitle());
         book.setAuthor(bookDto.getAuthor());
         book.setIsbn(bookDto.getIsbn());
-        book.setGenre(Book.Genre.values()[(bookDto.getGenre().ordinal())-1]);
-        book.setCover(Book.Cover.values()[(bookDto.getCover().ordinal())-1]);
+        book.setGenre(Book.Genre.values()[(bookDto.getGenre().ordinal())]);
+        book.setCover(Book.Cover.values()[(bookDto.getCover().ordinal())]);
         book.setPages(bookDto.getPages());
         book.setPrice(bookDto.getPrice());
         book.setRating(bookDto.getRating());
@@ -51,8 +51,8 @@ public class EntityDtoMapperService {
         bookDto.setTitle(book.getTitle());
         bookDto.setAuthor(book.getAuthor());
         bookDto.setIsbn(book.getIsbn());
-        bookDto.setGenre(BookDto.Genre.values()[(book.getGenre().ordinal())-1]);
-        bookDto.setCover(BookDto.Cover.values()[(book.getCover().ordinal())-1]);
+        bookDto.setGenre(BookDto.Genre.values()[(book.getGenre().ordinal())]);
+        bookDto.setCover(BookDto.Cover.values()[(book.getCover().ordinal())]);
         bookDto.setPages(book.getPages());
         bookDto.setPrice(book.getPrice());
         bookDto.setRating(book.getRating());
