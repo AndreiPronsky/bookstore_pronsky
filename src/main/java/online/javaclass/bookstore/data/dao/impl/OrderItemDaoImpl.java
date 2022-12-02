@@ -77,7 +77,7 @@ public class OrderItemDaoImpl implements OrderItemDao {
             addItemsToList(orderItems, statement);
             return orderItems;
         } catch (SQLException e) {
-            throw new RuntimeException("No books found", e);
+            throw new RuntimeException("No items found", e);
         }
     }
 

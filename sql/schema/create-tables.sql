@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS books
     book_id BIGSERIAL PRIMARY KEY,
     title   VARCHAR(128)        NOT NULL,
     author  VARCHAR(128)        NOT NULL,
-    isbn    VARCHAR(128)        NOT NULL,
+    isbn    VARCHAR(128) UNIQUE NOT NULL,
     genre   SMALLINT REFERENCES genres,
     cover   SMALLINT REFERENCES covers,
     pages   INTEGER,
