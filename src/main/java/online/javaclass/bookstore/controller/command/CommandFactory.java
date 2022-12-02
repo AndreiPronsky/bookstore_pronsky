@@ -29,11 +29,11 @@ public class CommandFactory {
     private CommandFactory() {
         DataBaseManager manager = DataBaseManager.INSTANCE;
         BookDao bookDao = new BookDaoImpl(manager);
-        EntityDtoMapperData dataMapper = new EntityDtoMapperData();
+        UserDao userDao = new UserDaoImpl(manager);
+        EntityDtoMapperData dataMapper = new EntityDtoMapperData(userDao);
         EntityDtoMapperService serviceMapper = new EntityDtoMapperService();
         BookRepository bookRepository = new BookRepositoryImpl(bookDao, dataMapper);
         BookService bookService = new BookServiceImpl(bookRepository, serviceMapper);
-        UserDao userDao = new UserDaoImpl(manager);
         UserRepository userRepository = new UserRepositoryImpl(userDao, dataMapper);
         UserService userService = new UserServiceImpl(userRepository, serviceMapper);
 

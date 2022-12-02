@@ -14,6 +14,7 @@ import java.util.List;
 public class BookRepositoryImpl implements BookRepository {
     private final BookDao bookDao;
     private final EntityDtoMapperData mapper;
+
     @Override
     public Book findById(Long id) {
         BookDto bookDto = bookDao.findById(id);

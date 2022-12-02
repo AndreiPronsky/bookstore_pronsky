@@ -16,6 +16,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
 @Log4j2
 public class BookDaoImpl implements BookDao {
 
@@ -83,7 +84,7 @@ public class BookDaoImpl implements BookDao {
             log.debug("DB query completed");
             return findById(book.getId());
         } catch (SQLException e) {
-            throw new UnableToUpdateException("Update failed! " + book +  " " +e.getMessage());
+            throw new UnableToUpdateException("Update failed! " + book + " " + e.getMessage());
         }
     }
 
@@ -93,7 +94,7 @@ public class BookDaoImpl implements BookDao {
              PreparedStatement statement = connection.prepareStatement(FIND_BOOK_BY_ID)) {
             statement.setLong(1, id);
             ResultSet result = statement.executeQuery();
-                setParameters(book, result);
+            setParameters(book, result);
             log.debug("DB query completed");
             return book;
         } catch (SQLException e) {
@@ -163,25 +164,25 @@ public class BookDaoImpl implements BookDao {
     }
 
     private void setParameters(BookDto book, ResultSet result) throws SQLException {
-            while (result.next()) {
-                book.setId(result.getLong(COL_BOOK_ID));
-                book.setTitle(result.getString(COL_TITLE));
-                book.setAuthor(result.getString(COL_AUTHOR));
-                book.setIsbn(result.getString(COL_ISBN));
-                book.setGenre(BookDto.Genre.values()[(result.getInt(COL_GENRE))-1]);
-                book.setCover(BookDto.Cover.values()[(result.getInt(COL_COVER))-1]);
-                book.setPages(result.getInt(COL_PAGES));
-                book.setPrice(result.getBigDecimal(COL_PRICE));
-                book.setRating(result.getBigDecimal(COL_RATING));
-            }
+        while (result.next()) {
+            book.setId(result.getLong(COL_BOOK_ID));
+            book.setTitle(result.getString(COL_TITLE));
+            book.setAuthor(result.getString(COL_AUTHOR));
+            book.setIsbn(result.getString(COL_ISBN));
+            book.setGenre(BookDto.Genre.values()[(result.getInt(COL_GENRE)) - 1]);
+            book.setCover(BookDto.Cover.values()[(result.getInt(COL_COVER)) - 1]);
+            book.setPages(result.getInt(COL_PAGES));
+            book.setPrice(result.getBigDecimal(COL_PRICE));
+            book.setRating(result.getBigDecimal(COL_RATING));
+        }
     }
 
     private void prepareStatementForCreate(BookDto book, PreparedStatement statement) throws SQLException {
         statement.setString(1, book.getTitle());
         statement.setString(2, book.getAuthor());
         statement.setString(3, book.getIsbn());
-        statement.setInt(4, book.getGenre().ordinal()+1);
-        statement.setInt(5, book.getCover().ordinal()+1);
+        statement.setInt(4, book.getGenre().ordinal() + 1);
+        statement.setInt(5, book.getCover().ordinal() + 1);
         statement.setInt(6, book.getPages());
         statement.setBigDecimal(7, book.getPrice());
         statement.setBigDecimal(8, book.getRating());
@@ -191,8 +192,8 @@ public class BookDaoImpl implements BookDao {
         statement.setString(1, book.getTitle());
         statement.setString(2, book.getAuthor());
         statement.setString(3, book.getIsbn());
-        statement.setInt(4, book.getGenre().ordinal()+1);
-        statement.setInt(5, book.getCover().ordinal()+1);
+        statement.setInt(4, book.getGenre().ordinal() + 1);
+        statement.setInt(5, book.getCover().ordinal() + 1);
         statement.setInt(6, book.getPages());
         statement.setBigDecimal(7, book.getPrice());
         statement.setBigDecimal(8, book.getRating());

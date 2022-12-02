@@ -46,8 +46,7 @@ public class OrderDaoImpl implements OrderDao {
             if (result.next()) {
                 setParameters(order, result);
             }
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         return null;

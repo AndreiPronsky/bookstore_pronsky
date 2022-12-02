@@ -20,16 +20,44 @@ public class EntityDtoMapperService {
         return user;
     }
 
+    public UserDto toDto(User user) {
+        UserDto userDto = new UserDto();
+        userDto.setId(user.getId());
+        userDto.setFirstName(user.getFirstName());
+        userDto.setLastName(user.getLastName());
+        userDto.setEmail(user.getEmail());
+        userDto.setPassword(user.getPassword());
+        userDto.setRole(UserDto.Role.values()[(user.getRole().ordinal()) - 1]);
+        userDto.setRating(user.getRating());
+        return userDto;
+    }
+
     public Order toEntity(OrderDto orderDto) {
         Order order = new Order();
         order.setId(orderDto.getId());
+        order.setUser(orderDto.getUser());
         order.setOrderStatus(Order.OrderStatus.valueOf(orderDto.getOrderStatus().toString()));
         order.setPaymentMethod(Order.PaymentMethod.valueOf(orderDto.getPaymentMethod().toString()));
         order.setPaymentStatus(Order.PaymentStatus.valueOf(orderDto.getPaymentStatus().toString()));
         order.setDeliveryType(Order.DeliveryType.valueOf(orderDto.getDeliveryType().toString()));
+        order.setItems(orderDto.getItems());
         order.setCost(orderDto.getCost());
         return order;
     }
+
+    public OrderDto toDto(Order order) {
+        OrderDto orderDto = new OrderDto();
+        orderDto.setId(order.getId());
+        orderDto.setUser(order.getUser());
+        orderDto.setOrderStatus(OrderDto.OrderStatus.valueOf(order.getOrderStatus().toString()));
+        orderDto.setPaymentMethod(OrderDto.PaymentMethod.valueOf(order.getPaymentMethod().toString()));
+        orderDto.setPaymentStatus(OrderDto.PaymentStatus.valueOf(order.getPaymentStatus().toString()));
+        orderDto.setDeliveryType(OrderDto.DeliveryType.valueOf(order.getDeliveryType().toString()));
+        orderDto.setItems(order.getItems());
+        orderDto.setCost(order.getCost());
+        return orderDto;
+    }
+
 
     public Book toEntity(BookDto bookDto) {
         Book book = new Book();
@@ -59,15 +87,5 @@ public class EntityDtoMapperService {
         return bookDto;
     }
 
-    public UserDto toDto(User user) {
-        UserDto userDto = new UserDto();
-        userDto.setId(user.getId());
-        userDto.setFirstName(user.getFirstName());
-        userDto.setLastName(user.getLastName());
-        userDto.setEmail(user.getEmail());
-        userDto.setPassword(user.getPassword());
-        userDto.setRole(UserDto.Role.values()[(user.getRole().ordinal())-1]);
-        userDto.setRating(user.getRating());
-        return userDto;
-    }
+
 }

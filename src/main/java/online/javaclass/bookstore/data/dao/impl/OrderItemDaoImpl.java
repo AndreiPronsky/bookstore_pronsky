@@ -27,7 +27,7 @@ public class OrderItemDaoImpl implements OrderItemDao {
     private static final String UPDATE_ITEM = "UPDATE order_items SET order_id = ?, book_id = ?, quantity = ?, " +
             "price = ? WHERE item_id = ?";
     private static final String DELETE_ITEM_BY_ID = "DELETE FROM order_items WHERE item_id = ?";
-    
+
 
     private static final String COL_ID = "item_id";
     private static final String COL_ORDER_ID = "order_id";
@@ -46,11 +46,16 @@ public class OrderItemDaoImpl implements OrderItemDao {
             addItemsToList(orderItems, statement);
             return orderItems;
         } catch (SQLException e) {
-            throw new RuntimeException("No order items with order id "+ orderId + " found", e);
+            throw new RuntimeException("No order items with order id " + orderId + " found", e);
         }
     }
 
-
+    @Override
+    public void deleteAllByOrderId(Long orderId) {
+        for (OrderItemDto item : findAllByOrderId(orderId)) {
+            deleteById(item.getId());
+        }
+    }
 
     @Override
     public OrderItemDto findById(Long id) {
@@ -135,25 +140,25 @@ public class OrderItemDaoImpl implements OrderItemDao {
         }
     }
 
-    private void setParameters (OrderItemDto item, ResultSet result) throws SQLException {
-            item.setId(result.getLong(COL_ID));
-            item.setOrderId(result.getLong(COL_ORDER_ID));
-            item.setBookId(result.getLong(COL_BOOK_ID));
-            item.setQuantity(result.getInt(COL_QUANTITY));
-            item.setPrice(result.getBigDecimal(COL_PRICE));
+    private void setParameters(OrderItemDto item, ResultSet result) throws SQLException {
+        item.setId(result.getLong(COL_ID));
+        item.setOrderId(result.getLong(COL_ORDER_ID));
+        item.setBookId(result.getLong(COL_BOOK_ID));
+        item.setQuantity(result.getInt(COL_QUANTITY));
+        item.setPrice(result.getBigDecimal(COL_PRICE));
     }
 
     private void prepareStatementForCreate(OrderItemDto item, PreparedStatement statement) throws SQLException {
         statement.setLong(1, item.getOrderId());
         statement.setLong(2, item.getBookId());
-        statement.setInt(3,item.getQuantity());
+        statement.setInt(3, item.getQuantity());
         statement.setBigDecimal(4, item.getPrice());
     }
 
     private void prepareStatementForUpdate(OrderItemDto item, PreparedStatement statement) throws SQLException {
         statement.setLong(1, item.getOrderId());
         statement.setLong(2, item.getBookId());
-        statement.setInt(3,item.getQuantity());
+        statement.setInt(3, item.getQuantity());
         statement.setBigDecimal(4, item.getPrice());
         statement.setLong(5, item.getId());
     }

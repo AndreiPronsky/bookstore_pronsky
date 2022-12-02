@@ -17,6 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EntityDtoMapperData {
     private final UserDao userDao;
+
     public User toEntity(UserDto userDto) {
         User user = new User();
         user.setId(userDto.getId());
@@ -96,7 +97,6 @@ public class EntityDtoMapperData {
     }
 
 
-
     public OrderItemDto toDto(OrderItem item) {
         OrderItemDto itemDto = new OrderItemDto();
         itemDto.setId(item.getId());
@@ -117,7 +117,7 @@ public class EntityDtoMapperData {
         return item;
     }
 
-    private BigDecimal calculateCost(OrderDto orderDto){
+    private BigDecimal calculateCost(OrderDto orderDto) {
         List<OrderItemDto> itemDtos = orderDto.getItems();
         BigDecimal totalCost = BigDecimal.ZERO;
         for (OrderItemDto item : itemDtos) {

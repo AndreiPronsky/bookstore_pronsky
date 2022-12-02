@@ -76,8 +76,8 @@ public class UserDaoImpl implements UserDao {
              PreparedStatement statement = connection.prepareStatement(FIND_USER_BY_ID)) {
             statement.setLong(1, id);
             ResultSet result = statement.executeQuery();
-                setParameters(user, result);
-                log.debug("DB query completed");
+            setParameters(user, result);
+            log.debug("DB query completed");
             return user;
         } catch (SQLException e) {
             throw new UnableToFindException("Unable to find user with id " + id, e);
@@ -174,7 +174,7 @@ public class UserDaoImpl implements UserDao {
         statement.setString(2, user.getLastName());
         statement.setString(3, user.getEmail());
         statement.setString(4, user.getPassword());
-        statement.setInt(5, user.getRole().ordinal()+1);
+        statement.setInt(5, user.getRole().ordinal() + 1);
         statement.setBigDecimal(6, user.getRating());
     }
 
@@ -183,7 +183,7 @@ public class UserDaoImpl implements UserDao {
         statement.setString(2, user.getLastName());
         statement.setString(3, user.getEmail());
         statement.setString(4, user.getPassword());
-        statement.setInt(5, user.getRole().ordinal()+1);
+        statement.setInt(5, user.getRole().ordinal() + 1);
         statement.setBigDecimal(6, user.getRating());
         statement.setLong(7, user.getId());
     }
