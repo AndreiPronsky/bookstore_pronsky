@@ -18,6 +18,15 @@ public class UserServiceImpl implements UserService {
     private final EntityDtoMapperService mapper;
 
     @Override
+    public UserDto login(String email, String password) {
+        User user = userRepo.findByEmail(email);
+        if (user == null || !user.getPassword().equals(password)) {
+            throw new RuntimeException("Wrong email or password!");
+        }
+        return mapper.toDto(user);
+    }
+
+    @Override
     public UserDto create(UserDto userDto) {
         log.debug("create user");
         User user = mapper.toEntity(userDto);

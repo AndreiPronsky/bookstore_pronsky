@@ -32,6 +32,10 @@
         <td>${user.lastName}</td>
         <td>${user.email}</td>
         <td>${user.role}</td>
+        <c:if test="${sessionScope.user.role.toString() == 'ADMIN'
+                || sessionScope.user.role.toString() == 'MANAGER'}">
+          <td><a href="controller?command=edit_user_form&id=${user.id}">Edit user</a></td>
+        </c:if>
       </tr>
     </c:forEach>
     </tbody>

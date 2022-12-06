@@ -35,7 +35,7 @@ public class EntityDtoMapperService {
     public Order toEntity(OrderDto orderDto) {
         Order order = new Order();
         order.setId(orderDto.getId());
-        order.setUser(orderDto.getUser());
+        order.setUser(toEntity(orderDto.getUser()));
         order.setOrderStatus(Order.OrderStatus.valueOf(orderDto.getOrderStatus().toString()));
         order.setPaymentMethod(Order.PaymentMethod.valueOf(orderDto.getPaymentMethod().toString()));
         order.setPaymentStatus(Order.PaymentStatus.valueOf(orderDto.getPaymentStatus().toString()));
@@ -48,7 +48,7 @@ public class EntityDtoMapperService {
     public OrderDto toDto(Order order) {
         OrderDto orderDto = new OrderDto();
         orderDto.setId(order.getId());
-        orderDto.setUser(order.getUser());
+        orderDto.setUser(toDto(order.getUser()));
         orderDto.setOrderStatus(OrderDto.OrderStatus.valueOf(order.getOrderStatus().toString()));
         orderDto.setPaymentMethod(OrderDto.PaymentMethod.valueOf(order.getPaymentMethod().toString()));
         orderDto.setPaymentStatus(OrderDto.PaymentStatus.valueOf(order.getPaymentStatus().toString()));
