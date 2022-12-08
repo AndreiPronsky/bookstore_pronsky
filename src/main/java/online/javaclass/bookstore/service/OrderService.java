@@ -1,5 +1,7 @@
 package online.javaclass.bookstore.service;
 
-public interface OrderService extends AbstractService {
+import online.javaclass.bookstore.service.dto.OrderDto;
+
+public interface OrderService extends AbstractService<Long, OrderDto> {
 
 }

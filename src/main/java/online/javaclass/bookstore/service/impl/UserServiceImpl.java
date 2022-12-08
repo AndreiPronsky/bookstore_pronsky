@@ -3,22 +3,35 @@ package online.javaclass.bookstore.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import online.javaclass.bookstore.data.repository.UserRepository;
+import online.javaclass.bookstore.service.DigestService;
 import online.javaclass.bookstore.service.EntityDtoMapperService;
 import online.javaclass.bookstore.data.entities.User;
 import online.javaclass.bookstore.service.dto.UserDto;
 import online.javaclass.bookstore.service.UserService;
 
 import java.util.List;
+
 @RequiredArgsConstructor
 @Log4j2
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepo;
     private final EntityDtoMapperService mapper;
+    DigestService digest = new DigestServiceImpl();
+
+    @Override
+    public UserDto login(String email, String password) {
+        User user = userRepo.findByEmail(email);
+        if (user == null || !user.getPassword().equals((digest.hashPassword(password)))) {
+            throw new RuntimeException("Wrong email or password!");
+        }
+        return mapper.toDto(user);
+    }
 
     @Override
     public UserDto create(UserDto userDto) {
         log.debug("create user");
+        userDto.setPassword(digest.hashPassword(userDto.getPassword()));
         User user = mapper.toEntity(userDto);
         User created = userRepo.create(user);
         return mapper.toDto(created);

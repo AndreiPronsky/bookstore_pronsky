@@ -13,14 +13,15 @@ import java.math.BigDecimal;
 @RequiredArgsConstructor
 public class AddBookCommand implements Command {
     private final BookService bookService;
+
     @Override
     public String execute(HttpServletRequest req) {
         BookDto book = new BookDto();
         book.setTitle(req.getParameter("title"));
         book.setAuthor(req.getParameter("author"));
         book.setIsbn(req.getParameter("isbn"));
-        book.setGenre(BookDto.Genre.values()[Integer.parseInt(req.getParameter("genre"))-1]);
-        book.setCover(BookDto.Cover.values()[Integer.parseInt(req.getParameter("cover"))-1]);
+        book.setGenre(BookDto.Genre.values()[(Integer.parseInt(req.getParameter("genre"))) - 1]);
+        book.setCover(BookDto.Cover.values()[(Integer.parseInt(req.getParameter("cover"))) - 1]);
         book.setPages(Integer.valueOf(req.getParameter("pages")));
         book.setRating(BigDecimal.valueOf(Double.parseDouble(req.getParameter("rating"))));
         book.setPrice(BigDecimal.valueOf(Double.parseDouble(req.getParameter("price"))));
