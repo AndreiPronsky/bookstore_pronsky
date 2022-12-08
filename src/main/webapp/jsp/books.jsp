@@ -35,7 +35,7 @@
                 <td><a href="controller?command=add_to_cart&id=${book.id}">Add to cart</a></td>
                 <c:if test="${sessionScope.user.role.toString() == 'ADMIN'
                 || sessionScope.user.role.toString() == 'MANAGER'}">
-                    <td><a href="controller?command=edit_book_form&id=${book.id}">Edit book</a></td>
+                <td><a href="controller?command=edit_book_form&id=${book.id}">Edit book</a></td>
                 </c:if>
             </tr>
         </c:forEach>
