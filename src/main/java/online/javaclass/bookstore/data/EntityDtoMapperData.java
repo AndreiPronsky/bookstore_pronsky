@@ -121,7 +121,7 @@ public class EntityDtoMapperData {
         List<OrderItemDto> itemDtos = orderDto.getItems();
         BigDecimal totalCost = BigDecimal.ZERO;
         for (OrderItemDto item : itemDtos) {
-            BigDecimal itemCost = item.getPrice().multiply(new BigDecimal(item.getQuantity()));
+            BigDecimal itemCost = item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity()));
             totalCost = totalCost.add(itemCost);
         }
         return totalCost;
