@@ -124,8 +124,8 @@ public class BookDaoImpl implements BookDao {
             ResultSet result = statement.executeQuery();
             log.debug("DB query completed");
             while (result.next()) {
-                long id = result.getLong(COL_BOOK_ID);
-                BookDto book = findById(id);
+                BookDto book = new BookDto();
+                setParameters(book, result);
                 books.add(book);
             }
             return books;
@@ -141,8 +141,8 @@ public class BookDaoImpl implements BookDao {
             ResultSet result = statement.executeQuery();
             log.debug("DB query completed");
             while (result.next()) {
-                long id = result.getLong(COL_BOOK_ID);
-                BookDto book = findById(id);
+                BookDto book = new BookDto();
+                setParameters(book, result);
                 books.add(book);
             }
             return books;
@@ -164,7 +164,6 @@ public class BookDaoImpl implements BookDao {
     }
 
     private void setParameters(BookDto book, ResultSet result) throws SQLException {
-        while (result.next()) {
             book.setId(result.getLong(COL_BOOK_ID));
             book.setTitle(result.getString(COL_TITLE));
             book.setAuthor(result.getString(COL_AUTHOR));
@@ -174,7 +173,6 @@ public class BookDaoImpl implements BookDao {
             book.setPages(result.getInt(COL_PAGES));
             book.setPrice(result.getBigDecimal(COL_PRICE));
             book.setRating(result.getBigDecimal(COL_RATING));
-        }
     }
 
     private void prepareStatementForCreate(BookDto book, PreparedStatement statement) throws SQLException {

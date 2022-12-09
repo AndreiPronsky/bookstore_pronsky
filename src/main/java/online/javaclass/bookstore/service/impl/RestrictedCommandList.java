@@ -31,4 +31,8 @@ public enum RestrictedCommandList {
     public boolean isAdminCommand(String command) {
         return getRole(command) == UserDto.Role.ADMIN;
     }
+
+    public boolean isManagerCommand(String command) {
+        return getRole(command) == UserDto.Role.MANAGER;
+    }
 }

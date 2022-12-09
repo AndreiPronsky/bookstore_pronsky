@@ -17,7 +17,6 @@
         <caption>Books</caption>
         <thead>
         <tr>
-            <th>Id</th>
             <th>Author</th>
             <th>Title</th>
             <th>Genre</th>
@@ -27,7 +26,6 @@
         <tbody>
         <c:forEach items="${requestScope.books}" var="book">
             <tr>
-                <td>${book.id}</td>
                 <td>${book.author}</td>
                 <td><a href="controller?command=book&id=${book.id}">${book.title}</a></td>
                 <td>${book.genre}</td>

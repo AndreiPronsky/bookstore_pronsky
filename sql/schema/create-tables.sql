@@ -86,3 +86,4 @@ CREATE TABLE IF NOT EXISTS order_items
 
 -- DROP TABLE orders;
 -- DROP TABLE order_items;
+-- DROP TABLE users CASCADE ;
