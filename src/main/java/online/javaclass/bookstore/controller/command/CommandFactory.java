@@ -66,8 +66,9 @@ public class CommandFactory {
         map.put("login", new LoginCommand(userService));
         map.put("login_form", new LoginFormCommand());
         map.put("logout", new LogoutCommand());
-        map.put("add_to_cart", new AddToCartCommand(bookService));
-        map.put("cart", new CartCommand(orderService, bookService));
+        map.put("add_to_cart", new AddToCartCommand());
+        map.put("cart", new ConfirmOrderCommand(orderService, bookService));
+        map.put("confirm_order", new ConfirmOrderCommand(orderService, bookService));
     }
 
     public Command getCommand(String command) {

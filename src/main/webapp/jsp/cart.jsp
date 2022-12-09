@@ -22,20 +22,20 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach items="${sessionScope.cart}" var="cartItem">
+        <c:forEach items="${requestScope.book_map}" var="cartItem">
             <tr>
-                <td>${cartItem.key}</td>
-                <td>Price</td>
+                <td>${cartItem.title}</td>
+                <td>${cartItem.price}</td>
                 <td>
                     <form >
-                <label>Quantity<input type="number" name="quantity" step="1" min="0" value="${cartItem.value}"></label>
+                <label>Quantity<input type="number" name="quantity" step="1" min="0" value="${sessionScope.cart.get(cartItem.id)}"></label>
                     </form>
                 </td>
             </tr>
         </c:forEach>
         </tbody>
     </table>
-    <input type="submit" name="createOrder">
+    <input type="submit" name="createOrder" value="Order">
     </form>
 </c:if>
 <footer></footer>

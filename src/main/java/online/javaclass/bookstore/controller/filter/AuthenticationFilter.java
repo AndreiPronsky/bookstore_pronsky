@@ -10,7 +10,6 @@ import jakarta.servlet.http.HttpSession;
 import online.javaclass.bookstore.service.impl.RestrictedCommandList;
 
 import java.io.IOException;
-
 @WebFilter("/controller")
 public class AuthenticationFilter extends HttpFilter {
     @Override
