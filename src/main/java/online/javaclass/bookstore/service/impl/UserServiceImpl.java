@@ -11,8 +11,9 @@ import online.javaclass.bookstore.service.UserService;
 
 import java.util.List;
 
-@RequiredArgsConstructor
+
 @Log4j2
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepo;

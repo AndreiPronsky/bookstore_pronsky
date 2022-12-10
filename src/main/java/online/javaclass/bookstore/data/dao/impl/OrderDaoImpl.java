@@ -16,15 +16,15 @@ import java.util.List;
 @Log4j2
 @RequiredArgsConstructor
 public class OrderDaoImpl implements OrderDao {
-    private static final String FIND_ORDER_BY_ID = "SELECT order_id, user_id, status, payment_method, " +
-            "payment_status, delivery_type, cost FROM orders WHERE order_id = ?";
-    private static final String FIND_ALL_ORDERS = "SELECT order_id, user_id, status, payment_method, payment_status, " +
-            "delivery_type, cost FROM orders";
+    private static final String FIND_ORDER_BY_ID = "SELECT o.order_id, o.user_id, o.status, o.payment_method, " +
+            "o.payment_status, o.delivery_type, o.cost FROM orders o WHERE order_id = ?";
+    private static final String FIND_ALL_ORDERS = "SELECT o.order_id, o.user_id, o.status, o.payment_method," +
+            " o.payment_status, o.delivery_type, o.cost FROM orders o";
     private static final String CREATE_ORDER = "INSERT INTO orders (user_id, status, payment_method, payment_status," +
-            "delivery_type, cost) VALUES (?, (SELECT status_id FROM order_status WHERE status_id = ?), " +
-            "(SELECT payment_method_id FROM payment_method WHERE payment_method_id = ?), " +
-            "(SELECT payment_status_id FROM payment_status WHERE payment_status_id = ?), " +
-            "(SELECT delivery_type_id FROM delivery_type WHERE delivery_type_id = ?), ?)";
+            "delivery_type, cost) VALUES (?, (SELECT os.status_id FROM order_status os WHERE status_id = ?), " +
+            "(SELECT pm.payment_method_id FROM payment_method pm WHERE payment_method_id = ?), " +
+            "(SELECT ps.payment_status_id FROM payment_status ps WHERE payment_status_id = ?), " +
+            "(SELECT dt.delivery_type_id FROM delivery_type dt WHERE delivery_type_id = ?), ?)";
     private static final String UPDATE_ORDER = "UPDATE orders SET user_id = ?, status = ?, payment_method = ?, " +
             "payment_status = ?, delivery_type = ?, cost = ? WHERE order_id = ?";
     private static final String DELETE_ORDER_BY_ID = "DELETE FROM orders WHERE order_id = ?";

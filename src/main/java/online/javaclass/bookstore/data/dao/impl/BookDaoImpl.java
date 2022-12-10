@@ -23,26 +23,26 @@ import java.util.List;
 public class BookDaoImpl implements BookDao {
 
     private static final String CREATE_BOOK = "INSERT INTO books (title, author, isbn, genre, cover, pages, price, rating) " +
-            "VALUES (?, ?, ?, (SELECT genres.genres_id FROM genres WHERE genres_id = ?), " +
-            "(SELECT covers.covers_id FROM covers WHERE covers_id = ?), ?, ?, ?)";
+            "VALUES (?, ?, ?, (SELECT g.genres_id FROM genres g WHERE genres_id = ?), " +
+            "(SELECT c.covers_id FROM covers c WHERE covers_id = ?), ?, ?, ?)";
     private static final String UPDATE_BOOK = "UPDATE books SET title = ?, author = ?, isbn = ?, genre = ?," +
             " cover = ?, pages = ?, price = ?, rating = ? WHERE book_id = ?";
-    private static final String FIND_BOOK_BY_ID = "SELECT book_id, title, author, isbn, genre, " +
-            "cover, pages, price, rating FROM books " +
+    private static final String FIND_BOOK_BY_ID = "SELECT b.book_id, b.title, b.author, b.isbn, b.genre, " +
+            "b.cover, b.pages, b.price, b.rating FROM books b" +
             "JOIN genres ON books.genre = genres.genres_id " +
             "JOIN covers on books.cover = covers.covers_id WHERE book_id = ?";
-    private static final String FIND_BOOK_BY_ISBN = "SELECT book_id, title, author, isbn, genre, " +
-            "cover, pages, price, rating FROM books " +
-            "JOIN genres ON books.genre = genres.genres_id " +
-            "JOIN covers on books.cover = covers.covers_id WHERE isbn = ?";
-    private static final String FIND_ALL_BOOKS = "SELECT book_id, title, author, isbn, genre, cover, " +
-            "pages, price, rating FROM books " +
-            "JOIN genres ON books.genre = genres.genres_id " +
-            "JOIN covers on books.cover = covers.covers_id";
-    private static final String FIND_BOOKS_BY_AUTHOR = "SELECT book_id, title, author, isbn, genre, " +
-            "cover, pages, price, rating FROM books " +
-            "JOIN genres ON books.genre = genres.genres_id " +
-            "JOIN covers on books.cover = covers.covers_id WHERE author = ?";
+    private static final String FIND_BOOK_BY_ISBN = "SELECT b.book_id, b.title, b.author, b.isbn, b.genre, " +
+            "b.cover, b.pages, b.price, b.rating FROM books b" +
+            "JOIN genres g ON b.genre = g.genres_id " +
+            "JOIN covers c ON b.cover = c.covers_id WHERE isbn = ?";
+    private static final String FIND_ALL_BOOKS = "SELECT b.book_id, b.title, b.author, b.isbn, b.genre, b.cover, " +
+            "b.pages, b.price, b.rating FROM books b " +
+            "JOIN genres g ON b.genre = g.genres_id " +
+            "JOIN covers c on b.cover = c.covers_id";
+    private static final String FIND_BOOKS_BY_AUTHOR = "SELECT b.book_id, b.title, b.author, b.isbn, b.genre, " +
+            "b.cover, b.pages, b.price, b.rating FROM books b" +
+            "JOIN genres g ON b.genre = g.genres_id " +
+            "JOIN covers c ON b.cover = c.covers_id WHERE author = ?";
     private static final String DELETE_BOOK_BY_ID = "DELETE FROM books WHERE book_id = ?";
 
     private static final String COUNT_BOOKS = "SELECT count(*) FROM books";

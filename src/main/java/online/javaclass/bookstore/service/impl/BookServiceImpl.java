@@ -14,13 +14,13 @@ import java.util.List;
 @Log4j2
 public class BookServiceImpl implements BookService {
 
+    private final BookRepository bookRepo;
+    private final EntityDtoMapperService mapper;
+
     @Override
     public Long count() {
         return bookRepo.count();
     }
-
-    private final BookRepository bookRepo;
-    private final EntityDtoMapperService mapper;
 
     @Override
     public BookDto create(BookDto bookDto) {
