@@ -53,13 +53,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto getByEmail(String email) {
-        log.debug("get user by email");
-        User user = userRepo.findByEmail(email);
-        return mapper.toDto(user);
-    }
-
-    @Override
     public List<UserDto> getByLastName(String lastname) {
         log.debug("get user(s) by lastname");
         List<UserDto> userDtos = userRepo.findByLastName(lastname).stream()

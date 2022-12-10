@@ -1,5 +1,6 @@
 package online.javaclass.bookstore.data.dao.impl;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import online.javaclass.bookstore.data.connection.DataBaseManager;
 import online.javaclass.bookstore.data.dao.BookDao;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Log4j2
+@RequiredArgsConstructor
 public class BookDaoImpl implements BookDao {
 
     private static final String CREATE_BOOK = "INSERT INTO books (title, author, isbn, genre, cover, pages, price, rating) " +
@@ -42,6 +44,8 @@ public class BookDaoImpl implements BookDao {
             "JOIN genres ON books.genre = genres.genres_id " +
             "JOIN covers on books.cover = covers.covers_id WHERE author = ?";
     private static final String DELETE_BOOK_BY_ID = "DELETE FROM books WHERE book_id = ?";
+
+    private static final String COUNT_BOOKS = "SELECT count(*) FROM books";
     private static final String COL_BOOK_ID = "book_id";
     private static final String COL_TITLE = "title";
     private static final String COL_AUTHOR = "author";
@@ -54,8 +58,16 @@ public class BookDaoImpl implements BookDao {
 
     private final DataBaseManager dataBaseManager;
 
-    public BookDaoImpl(DataBaseManager dataBaseManager) {
-        this.dataBaseManager = dataBaseManager;
+    public Long count() {
+        try (Connection connection = dataBaseManager.getConnection();
+             Statement statement = connection.createStatement()) {
+            ResultSet result = statement.executeQuery(COUNT_BOOKS);
+            log.debug("DB query completed");
+            result.next();
+            return result.getLong("count");
+        } catch (SQLException e) {
+            throw new RuntimeException("Count failed!", e);
+        }
     }
 
     public BookDto create(BookDto book) {

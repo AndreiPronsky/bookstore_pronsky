@@ -10,5 +10,4 @@ public interface UserRepository extends AbstractRepository<Long, User> {
 
     List<User> findByLastName(String lastName);
 
-    Long count();
 }

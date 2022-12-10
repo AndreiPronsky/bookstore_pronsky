@@ -28,6 +28,8 @@ public class OrderDaoImpl implements OrderDao {
     private static final String UPDATE_ORDER = "UPDATE orders SET user_id = ?, status = ?, payment_method = ?, " +
             "payment_status = ?, delivery_type = ?, cost = ? WHERE order_id = ?";
     private static final String DELETE_ORDER_BY_ID = "DELETE FROM orders WHERE order_id = ?";
+
+    private static final String COUNT_ORDERS = "SELECT count(*) FROM orders";
     private static final String COL_STATUS = "status";
     private static final String COL_PAYMENT_METHOD = "payment_method";
     private static final String COL_PAYMENT_STATUS = "payment_status";
@@ -50,6 +52,19 @@ public class OrderDaoImpl implements OrderDao {
             throw new RuntimeException(e);
         }
         return null;
+    }
+
+    @Override
+    public Long count() {
+        try (Connection connection = dataBaseManager.getConnection();
+             Statement statement = connection.createStatement()) {
+            ResultSet result = statement.executeQuery(COUNT_ORDERS);
+            log.debug("DB query completed");
+            result.next();
+            return result.getLong("count");
+        } catch (SQLException e) {
+            throw new RuntimeException("Count failed!", e);
+        }
     }
 
     @Override
@@ -139,8 +154,8 @@ public class OrderDaoImpl implements OrderDao {
         ResultSet result = statement.executeQuery();
         log.debug("DB query completed");
         while (result.next()) {
-            long id = result.getLong(COL_ID);
-            OrderDto order = findById(id);
+            OrderDto order = new OrderDto();
+            setParameters(order, result);
             orders.add(order);
         }
     }

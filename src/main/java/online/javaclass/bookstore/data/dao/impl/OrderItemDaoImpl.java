@@ -28,7 +28,6 @@ public class OrderItemDaoImpl implements OrderItemDao {
             "price = ? WHERE item_id = ?";
     private static final String DELETE_ITEM_BY_ID = "DELETE FROM order_items WHERE item_id = ?";
 
-
     private static final String COL_ID = "item_id";
     private static final String COL_ORDER_ID = "order_id";
     private static final String COL_BOOK_ID = "book_id";
@@ -134,8 +133,8 @@ public class OrderItemDaoImpl implements OrderItemDao {
         ResultSet result = statement.executeQuery();
         log.debug("DB query completed");
         while (result.next()) {
-            long id = result.getLong(COL_ID);
-            OrderItemDto itemDto = findById(id);
+            OrderItemDto itemDto = new OrderItemDto();
+            setParameters(itemDto, result);
             orderItems.add(itemDto);
         }
     }
