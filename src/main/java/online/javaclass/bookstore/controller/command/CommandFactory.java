@@ -19,7 +19,6 @@ import online.javaclass.bookstore.data.dao.impl.BookDaoImpl;
 import online.javaclass.bookstore.data.repository.impl.BookRepositoryImpl;
 import online.javaclass.bookstore.service.*;
 import online.javaclass.bookstore.service.impl.BookServiceImpl;
-import online.javaclass.bookstore.service.impl.DigestServiceImpl;
 import online.javaclass.bookstore.service.impl.OrderServiceImpl;
 import online.javaclass.bookstore.service.impl.UserServiceImpl;
 
@@ -64,9 +63,9 @@ public class CommandFactory {
         map.put("login", new LoginCommand(userService));
         map.put("login_form", new LoginFormCommand());
         map.put("logout", new LogoutCommand());
-        map.put("add_to_cart", new AddToCartCommand());
-        map.put("cart", new ConfirmOrderCommand(orderService, bookService));
-        map.put("confirm_order", new ConfirmOrderCommand(orderService, bookService));
+        map.put("add_to_cart", new AddToCartCommand(bookService));
+        map.put("cart", new CartCommand());
+        map.put("confirm_order", new ConfirmOrderCommand(orderService));
     }
 
     public Command getCommand(String command) {

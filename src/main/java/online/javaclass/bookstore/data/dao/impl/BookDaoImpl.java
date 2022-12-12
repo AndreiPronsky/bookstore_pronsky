@@ -28,9 +28,9 @@ public class BookDaoImpl implements BookDao {
     private static final String UPDATE_BOOK = "UPDATE books SET title = ?, author = ?, isbn = ?, genre = ?," +
             " cover = ?, pages = ?, price = ?, rating = ? WHERE book_id = ?";
     private static final String FIND_BOOK_BY_ID = "SELECT b.book_id, b.title, b.author, b.isbn, b.genre, " +
-            "b.cover, b.pages, b.price, b.rating FROM books b" +
-            "JOIN genres ON books.genre = genres.genres_id " +
-            "JOIN covers on books.cover = covers.covers_id WHERE book_id = ?";
+            "b.cover, b.pages, b.price, b.rating FROM books b " +
+            "JOIN genres ON b.genre = genres.genres_id " +
+            "JOIN covers on b.cover = covers.covers_id WHERE book_id = ?";
     private static final String FIND_BOOK_BY_ISBN = "SELECT b.book_id, b.title, b.author, b.isbn, b.genre, " +
             "b.cover, b.pages, b.price, b.rating FROM books b" +
             "JOIN genres g ON b.genre = g.genres_id " +
@@ -106,6 +106,7 @@ public class BookDaoImpl implements BookDao {
              PreparedStatement statement = connection.prepareStatement(FIND_BOOK_BY_ID)) {
             statement.setLong(1, id);
             ResultSet result = statement.executeQuery();
+            result.next();
             setParameters(book, result);
             log.debug("DB query completed");
             return book;

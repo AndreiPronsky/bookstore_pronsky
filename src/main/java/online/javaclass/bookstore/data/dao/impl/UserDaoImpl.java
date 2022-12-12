@@ -160,13 +160,15 @@ public class UserDaoImpl implements UserDao {
     }
 
     private void setParameters(UserDto user, ResultSet result) throws SQLException {
-        user.setId(result.getLong(COL_USER_ID));
-        user.setFirstName(result.getString(COL_FIRSTNAME));
-        user.setLastName(result.getString(COL_LASTNAME));
-        user.setEmail(result.getString(COL_EMAIL));
-        user.setPassword(result.getString(COL_USER_PASSWORD));
-        user.setRole(UserDto.Role.values()[(result.getInt(COL_USER_ROLE))]);
-        user.setRating(result.getBigDecimal(COL_RATING));
+        while (result.next()) {
+            user.setId(result.getLong(COL_USER_ID));
+            user.setFirstName(result.getString(COL_FIRSTNAME));
+            user.setLastName(result.getString(COL_LASTNAME));
+            user.setEmail(result.getString(COL_EMAIL));
+            user.setPassword(result.getString(COL_USER_PASSWORD));
+            user.setRole(UserDto.Role.values()[(result.getInt(COL_USER_ROLE))]);
+            user.setRating(result.getBigDecimal(COL_RATING));
+        }
     }
 
     private void prepareStatementForCreate(UserDto user, PreparedStatement statement) throws SQLException {

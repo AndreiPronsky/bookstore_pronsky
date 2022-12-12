@@ -4,11 +4,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import online.javaclass.bookstore.controller.command.Command;
-import online.javaclass.bookstore.data.entities.OrderItem;
-import online.javaclass.bookstore.service.BookService;
 import online.javaclass.bookstore.service.OrderService;
+import online.javaclass.bookstore.service.dto.CartItemDto;
 import online.javaclass.bookstore.service.dto.OrderDto;
-
+import online.javaclass.bookstore.service.dto.OrderItemDto;
 import online.javaclass.bookstore.service.dto.UserDto;
 
 import java.math.BigDecimal;
@@ -19,48 +18,44 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ConfirmOrderCommand implements Command {
     private final OrderService orderService;
-    private final BookService bookService;
     @Override
     public String execute(HttpServletRequest req) {
-        HttpSession session = req.getSession();
-        OrderDto invalidOrder = createOrderWithoutItems(session);
-        Map<Long, Integer> bookIdAndQuantityMap = (Map)session.getAttribute("cart");
-        List<OrderItem> orderItems = createItemList(invalidOrder.getId(), bookIdAndQuantityMap);
-        BigDecimal cost = BigDecimal.ZERO;
-        for (OrderItem item : orderItems) {
-            cost = cost.add(item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
+        HttpSession session = req.getSession(false);
+        OrderDto order = setOrderParameters(req, session);
+        List<OrderItemDto> items = extractOrderItems(session);
+        order.setItems(items);
+        OrderDto createdOrder = orderService.create(order);
+        for (OrderItemDto item : items) {
+            item.setOrderId(createdOrder.getId());
         }
-        updateOrderToValidState(invalidOrder, orderItems, cost);
-        session.setAttribute("cost", cost);
+        createdOrder.setItems(items);
+        orderService.update(createdOrder);
+        session.setAttribute("order_id", createdOrder.getId());
         return "jsp/successful_order.jsp";
     }
 
-    private void updateOrderToValidState(OrderDto invalidOrder, List<OrderItem> orderItems, BigDecimal cost) {
-        invalidOrder.setItems(orderItems);
-        invalidOrder.setCost(cost);
-        orderService.update(invalidOrder);
-    }
-
-    private List<OrderItem> createItemList(Long orderId, Map<Long, Integer> bookIdAndQuantityMap) {
-        List<OrderItem> orderItems = new ArrayList<>();
-        for (Map.Entry<Long, Integer> entry : bookIdAndQuantityMap.entrySet()) {
-            OrderItem item = new OrderItem();
-            item.setBookId(entry.getKey());
-            item.setPrice(bookService.getById(entry.getKey()).getPrice());
-            item.setQuantity(entry.getValue());
-            item.setOrderId(orderId);
-            orderItems.add(item);
-        }
-        return orderItems;
-    }
-
-    private OrderDto createOrderWithoutItems(HttpSession session) {
+    private static OrderDto setOrderParameters(HttpServletRequest req, HttpSession session) {
         OrderDto order = new OrderDto();
-        order.setUser((UserDto) session.getAttribute("user"));
+        UserDto user = (UserDto) session.getAttribute("user");
+        order.setDeliveryType(OrderDto.DeliveryType.valueOf(req.getParameter("delivery_type")));
         order.setOrderStatus(OrderDto.OrderStatus.OPEN);
-        order.setPaymentMethod(OrderDto.PaymentMethod.valueOf(session.getAttribute("paymentMethod").toString()));
+        order.setPaymentMethod(OrderDto.PaymentMethod.valueOf(req.getParameter("payment_method")));
         order.setPaymentStatus(OrderDto.PaymentStatus.UNPAID);
-        order.setDeliveryType(OrderDto.DeliveryType.valueOf(session.getAttribute("deliveryType").toString()));
-        return orderService.create(order);
+        order.setCost(BigDecimal.valueOf((Double) session.getAttribute("cost")));
+        order.setUser(user);
+        return order;
+    }
+
+    private List<OrderItemDto> extractOrderItems(HttpSession session) {
+        Map<Long, CartItemDto> cartItemDtoMap = (Map)session.getAttribute("cart");
+        List<OrderItemDto> items = new ArrayList<>();
+        for (Map.Entry<Long, CartItemDto> entry : cartItemDtoMap.entrySet()) {
+            OrderItemDto item = new OrderItemDto();
+            item.setPrice(entry.getValue().getPrice());
+            item.setQuantity(entry.getValue().getQuantity());
+            item.setBookId(entry.getValue().getId());
+            items.add(item);
+        }
+        return items;
     }
 }

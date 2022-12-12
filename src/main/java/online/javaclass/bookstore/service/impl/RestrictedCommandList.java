@@ -12,8 +12,6 @@ public enum RestrictedCommandList {
 
     RestrictedCommandList() {
         accessConfig.put("logout", UserDto.Role.USER);
-        accessConfig.put("cart", UserDto.Role.USER);
-        accessConfig.put("add_to_cart", UserDto.Role.USER);
         accessConfig.put("confirm_order", UserDto.Role.USER);
         accessConfig.put("add_book", UserDto.Role.MANAGER);
         accessConfig.put("add_book_form", UserDto.Role.MANAGER);

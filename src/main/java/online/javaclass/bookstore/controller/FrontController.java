@@ -9,7 +9,6 @@ import lombok.extern.log4j.Log4j2;
 import online.javaclass.bookstore.controller.command.Command;
 import online.javaclass.bookstore.controller.command.CommandFactory;
 import online.javaclass.bookstore.data.connection.DataBaseManager;
-import online.javaclass.bookstore.service.exceptions.AppException;
 
 import java.io.IOException;
 
@@ -35,14 +34,14 @@ public class FrontController extends HttpServlet {
         try {
             page = command.execute(req);
             log.debug("Command executed");
-        } catch (AppException e) {
+        } catch (Exception e) {
             page = processError(req, e);
         }
         req.getRequestDispatcher(page).forward(req, resp);
         log.debug("Forwarded");
     }
 
-    private String processError(HttpServletRequest req, AppException e) {
+    private String processError(HttpServletRequest req, Exception e) {
         String page;
         page = CommandFactory.INSTANCE.getCommand("error").execute(req);
         String message = e.getMessage();

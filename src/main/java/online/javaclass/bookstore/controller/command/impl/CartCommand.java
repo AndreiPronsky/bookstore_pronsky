@@ -4,23 +4,29 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import online.javaclass.bookstore.controller.command.Command;
-import online.javaclass.bookstore.service.BookService;
-import online.javaclass.bookstore.service.dto.BookDto;
+import online.javaclass.bookstore.service.dto.CartItemDto;
 
-import java.util.HashMap;
+import java.math.BigDecimal;
 import java.util.Map;
+
 @RequiredArgsConstructor
 public class CartCommand implements Command {
-    private final BookService bookService;
+
     @Override
     public String execute(HttpServletRequest req) {
         HttpSession session = req.getSession();
-        Map<Long, Integer> bookIdAndQuantityMap = (Map)session.getAttribute("cart");
-        Map<Long, BookDto> bookDtoMap = new HashMap<>();
-        for (Map.Entry<Long, Integer> entry : bookIdAndQuantityMap.entrySet()) {
-            bookDtoMap.put(entry.getKey(), bookService.getById(entry.getKey()));
+        if (session.getAttribute("cart") == null) {
+            return "jsp/cart.jsp";
         }
-        req.setAttribute("book_map", bookDtoMap);
-        return "jsp/cart.jsp";
+        Map<Long, CartItemDto> cartItemMap = (Map) session.getAttribute("cart");
+        BigDecimal cost = BigDecimal.ZERO;
+        for (Map.Entry<Long, CartItemDto> entry : cartItemMap.entrySet()) {
+            CartItemDto item = entry.getValue();
+            cost = cost.add(entry.getValue().getPrice().multiply(BigDecimal.valueOf(entry.getValue().getQuantity())));
+            cartItemMap.put(item.getId(), item);
+        }
+        session.setAttribute("cart", cartItemMap);
+        session.setAttribute("cost", cost);
+        return "jsp/confirm_order.jsp";
     }
 }
