@@ -21,9 +21,7 @@ public class CartCommand implements Command {
         Map<Long, CartItemDto> cartItemMap = (Map) session.getAttribute("cart");
         BigDecimal cost = BigDecimal.ZERO;
         for (Map.Entry<Long, CartItemDto> entry : cartItemMap.entrySet()) {
-            CartItemDto item = entry.getValue();
             cost = cost.add(entry.getValue().getPrice().multiply(BigDecimal.valueOf(entry.getValue().getQuantity())));
-            cartItemMap.put(item.getId(), item);
         }
         session.setAttribute("cart", cartItemMap);
         session.setAttribute("cost", cost);

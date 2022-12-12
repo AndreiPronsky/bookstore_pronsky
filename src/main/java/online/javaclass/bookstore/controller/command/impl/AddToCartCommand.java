@@ -25,18 +25,21 @@ public class AddToCartCommand implements Command {
             session.setAttribute("cart", cartItems);
         }
         BookDto book = bookService.getById(bookId);
-        CartItemDto item = new CartItemDto();
-        setParameters(item, book);
-        if (!cartItems.containsKey(bookId)) {
-            item.setQuantity(1);
-        } else {
+        CartItemDto item;
+        if (cartItems.containsKey(bookId)) {
+            item = cartItems.get(bookId);
             item.setQuantity(item.getQuantity() + 1);
+
+        } else {
+            item = new CartItemDto();
+            item.setQuantity(1);
+            setParameters(item, book);
+            cartItems.put(bookId, item);
         }
-        cartItems.put(bookId, item);
         return "jsp/books.jsp";
     }
 
-    private CartItemDto setParameters(CartItemDto item, BookDto book) {
+    private void setParameters(CartItemDto item, BookDto book) {
         item.setTitle(book.getTitle());
         item.setAuthor(book.getAuthor());
         item.setIsbn(book.getIsbn());
@@ -44,6 +47,6 @@ public class AddToCartCommand implements Command {
         item.setCover(book.getCover());
         item.setPages(book.getPages());
         item.setRating(book.getRating());
-        return item;
+        item.setPrice(book.getPrice());
     }
 }

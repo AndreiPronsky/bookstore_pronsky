@@ -30,7 +30,7 @@ public class OrderDaoImpl implements OrderDao {
     private static final String DELETE_ORDER_BY_ID = "DELETE FROM orders WHERE order_id = ?";
 
     private static final String COUNT_ORDERS = "SELECT count(*) FROM orders";
-    private static final String COL_STATUS = "status";
+    private static final String COL_STATUS = "order_status";
     private static final String COL_PAYMENT_METHOD = "payment_method";
     private static final String COL_PAYMENT_STATUS = "payment_status";
     private static final String COL_DELIVERY_TYPE = "delivery_type";
@@ -125,18 +125,18 @@ public class OrderDaoImpl implements OrderDao {
 
     private static void setParameters(OrderDto order, ResultSet result) throws SQLException {
         order.setUserId(result.getLong(COL_USER_ID));
-        order.setOrderStatus(OrderDto.OrderStatus.valueOf(result.getString(COL_STATUS)));
-        order.setPaymentMethod(OrderDto.PaymentMethod.valueOf(result.getString(COL_PAYMENT_METHOD)));
+        order.setOrderStatus(OrderDto.OrderStatus.values()[result.getInt(COL_STATUS)]);
+        order.setPaymentMethod(OrderDto.PaymentMethod.values()[result.getInt(COL_PAYMENT_METHOD)]);
         order.setPaymentStatus(OrderDto.PaymentStatus.valueOf(result.getString(COL_PAYMENT_STATUS)));
         order.setDeliveryType(OrderDto.DeliveryType.valueOf(result.getString(COL_DELIVERY_TYPE)));
     }
 
     private void prepareStatementForCreate(OrderDto order, PreparedStatement statement) throws SQLException {
         statement.setLong(1, order.getUserId());
-        statement.setInt(2, order.getOrderStatus().ordinal());
-        statement.setInt(3, order.getPaymentMethod().ordinal());
-        statement.setInt(4, order.getPaymentStatus().ordinal());
-        statement.setInt(5, order.getDeliveryType().ordinal());
+        statement.setInt(2, order.getOrderStatus().ordinal() + 1);
+        statement.setInt(3, order.getPaymentMethod().ordinal() + 1);
+        statement.setInt(4, order.getPaymentStatus().ordinal() + 1);
+        statement.setInt(5, order.getDeliveryType().ordinal() + 1);
         statement.setBigDecimal(6, order.getCost());
     }
 

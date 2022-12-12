@@ -41,7 +41,7 @@ public class ConfirmOrderCommand implements Command {
         order.setOrderStatus(OrderDto.OrderStatus.OPEN);
         order.setPaymentMethod(OrderDto.PaymentMethod.valueOf(req.getParameter("payment_method")));
         order.setPaymentStatus(OrderDto.PaymentStatus.UNPAID);
-        order.setCost(BigDecimal.valueOf((Double) session.getAttribute("cost")));
+        order.setCost(BigDecimal.valueOf(Double.parseDouble(session.getAttribute("cost").toString())));
         order.setUser(user);
         return order;
     }

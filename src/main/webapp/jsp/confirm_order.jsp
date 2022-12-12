@@ -33,22 +33,22 @@
   <label>Delivery type
     <select name="delivery_type" required="required" >
       <option value="">Select delivery type</option>
-      <option value="1">Courier</option>
-      <option value="2">Bike</option>
-      <option value="3">Car</option>
-      <option value="4">Mail</option>
-      <option value="5">Self pickup</option>
+      <option value="COURIER">Courier</option>
+      <option value="BIKE">Bike</option>
+      <option value="CAR">Car</option>
+      <option value="MAIL">Mail</option>
+      <option value="SELF_PICKUP">Self pickup</option>
     </select>
   </label>
   <br>
     <label>Payment method
     <select name="payment_method" required="required">
       <option value="">Select payment method</option>
-      <option value="1">Cash</option>
-      <option value="2">Card</option>
-      <option value="3">Bank transfer</option>
-      <option value="4">Cash to courier</option>
-      <option value="5">Card to courier</option>
+      <option value="CASH">Cash</option>
+      <option value="CARD">Card</option>
+      <option value="BANK_TRANSFER">Bank transfer</option>
+      <option value="CASH_TO_COURIER">Cash to courier</option>
+      <option value="CARD_TO_COURIER">Card to courier</option>
     </select>
   </label>
   <br>
