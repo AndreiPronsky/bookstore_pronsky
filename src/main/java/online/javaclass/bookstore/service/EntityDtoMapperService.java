@@ -29,7 +29,7 @@ public class EntityDtoMapperService {
         userDto.setLastName(user.getLastName());
         userDto.setEmail(user.getEmail());
         userDto.setPassword(user.getPassword());
-        userDto.setRole(UserDto.Role.values()[(user.getRole().ordinal()) - 1]);
+        userDto.setRole(UserDto.Role.valueOf(user.getRole().toString()));
         userDto.setRating(user.getRating());
         return userDto;
     }
@@ -81,8 +81,8 @@ public class EntityDtoMapperService {
         bookDto.setTitle(book.getTitle());
         bookDto.setAuthor(book.getAuthor());
         bookDto.setIsbn(book.getIsbn());
-        bookDto.setGenre(BookDto.Genre.values()[(book.getGenre().ordinal())]);
-        bookDto.setCover(BookDto.Cover.values()[(book.getCover().ordinal())]);
+        bookDto.setGenre(BookDto.Genre.valueOf(book.getGenre().toString()));
+        bookDto.setCover(BookDto.Cover.valueOf(book.getCover().toString()));
         bookDto.setPages(book.getPages());
         bookDto.setPrice(book.getPrice());
         bookDto.setRating(book.getRating());

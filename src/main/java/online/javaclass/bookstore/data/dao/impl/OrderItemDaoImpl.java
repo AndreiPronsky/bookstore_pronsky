@@ -28,26 +28,23 @@ public class OrderItemDaoImpl implements OrderItemDao {
     private static final String UPDATE_ITEM = "UPDATE order_items oi SET order_id = ?, book_id = ?, quantity = ?, " +
             "price = ? WHERE oi.id = ?";
     private static final String DELETE_ITEM_BY_ID = "DELETE FROM order_items WHERE id = ?";
-
     private static final String COL_ID = "id";
     private static final String COL_ORDER_ID = "order_id";
     private static final String COL_BOOK_ID = "book_id";
     private static final String COL_QUANTITY = "quantity";
     private static final String COL_PRICE = "price";
-
     private final DataBaseManager dataBaseManager;
 
     @Override
     public List<OrderItemDto> findAllByOrderId(Long orderId) {
-        List<OrderItemDto> orderItems = new ArrayList<>();
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_ITEMS_BY_ORDER_ID)) {
             statement.setLong(1, orderId);
-            addItemsToList(orderItems, statement);
-            return orderItems;
+            return createItemList(statement);
         } catch (SQLException e) {
-            throw new RuntimeException("No order items with order id " + orderId + " found", e);
+            log.error(e.getMessage() + e);
         }
+        throw new UnableToFindException("Unable to find items with order id " + orderId);
     }
 
     @Override
@@ -59,31 +56,25 @@ public class OrderItemDaoImpl implements OrderItemDao {
 
     @Override
     public OrderItemDto findById(Long id) {
-        OrderItemDto item = new OrderItemDto();
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_ITEM_BY_ID)) {
             statement.setLong(1, id);
-            ResultSet result = statement.executeQuery();
-            if (result.next()) {
-                setParameters(item, result);
-            }
-            log.debug("DB query completed");
-            return item;
+            return extractedFromStatement(statement);
         } catch (SQLException e) {
-            throw new UnableToFindException("No such item found! " + item, e);
+            log.error(e.getMessage() + e);
         }
+        throw new UnableToFindException("No order item with id " + id + " found");
     }
 
     @Override
     public List<OrderItemDto> findAll() {
-        List<OrderItemDto> orderItems = new ArrayList<>();
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_ALL)) {
-            addItemsToList(orderItems, statement);
-            return orderItems;
+            return createItemList(statement);
         } catch (SQLException e) {
-            throw new RuntimeException("No items found", e);
+            log.error(e.getMessage() + e);
         }
+        throw new UnableToFindException("No items found");
     }
 
     @Override
@@ -96,12 +87,13 @@ public class OrderItemDaoImpl implements OrderItemDao {
             ResultSet result = statement.getGeneratedKeys();
             if (result.next()) {
                 item.setId(result.getLong(COL_ID));
+                log.debug("Created item with id" + result.getLong(COL_ID));
+                return item;
             }
-            log.debug("Created item with id" + result.getLong(COL_ID));
-            return findById(result.getLong(COL_ID));
         } catch (Exception e) {
-            throw new UnableToCreateException("Creation failed! " + item, e);
+            log.error(e.getMessage() + e);
         }
+        throw new UnableToCreateException("Unable to create order item " + item);
     }
 
     @Override
@@ -111,10 +103,11 @@ public class OrderItemDaoImpl implements OrderItemDao {
             prepareStatementForUpdate(item, statement);
             statement.executeUpdate();
             log.debug("DB query completed");
-            return findById(item.getId());
+            return item;
         } catch (SQLException e) {
-            throw new UnableToUpdateException("Update failed! " + item, e);
+            log.error(e.getMessage() + e);
         }
+        throw new UnableToUpdateException("Update failed! " + item);
     }
 
     @Override
@@ -126,18 +119,31 @@ public class OrderItemDaoImpl implements OrderItemDao {
             log.debug("DB query completed");
             return affectedRows == 1;
         } catch (SQLException e) {
-            throw new UnableToDeleteException("Unable to delete item with id " + id, e);
+            log.error(e.getMessage() + e);
         }
+        throw new UnableToDeleteException("Unable to delete item with id " + id);
     }
 
-    private void addItemsToList(List<OrderItemDto> orderItems, PreparedStatement statement) throws SQLException {
+    private OrderItemDto extractedFromStatement(PreparedStatement statement) throws SQLException {
         ResultSet result = statement.executeQuery();
         log.debug("DB query completed");
+        OrderItemDto item = new OrderItemDto();
+        if (result.next()) {
+            setParameters(item, result);
+        }
+        return item;
+    }
+
+    private List<OrderItemDto> createItemList(PreparedStatement statement) throws SQLException {
+        ResultSet result = statement.executeQuery();
+        log.debug("DB query completed");
+        List<OrderItemDto> items = new ArrayList<>();
         while (result.next()) {
             OrderItemDto itemDto = new OrderItemDto();
             setParameters(itemDto, result);
-            orderItems.add(itemDto);
+            items.add(itemDto);
         }
+        return items;
     }
 
     private void setParameters(OrderItemDto item, ResultSet result) throws SQLException {

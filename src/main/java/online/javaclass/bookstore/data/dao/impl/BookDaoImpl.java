@@ -5,10 +5,7 @@ import lombok.extern.log4j.Log4j2;
 import online.javaclass.bookstore.data.connection.DataBaseManager;
 import online.javaclass.bookstore.data.dao.BookDao;
 import online.javaclass.bookstore.data.dto.BookDto;
-import online.javaclass.bookstore.service.exceptions.UnableToCreateException;
-import online.javaclass.bookstore.service.exceptions.UnableToDeleteException;
-import online.javaclass.bookstore.service.exceptions.UnableToFindException;
-import online.javaclass.bookstore.service.exceptions.UnableToUpdateException;
+import online.javaclass.bookstore.service.exceptions.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -29,8 +26,8 @@ public class BookDaoImpl implements BookDao {
             " cover_id = ?, pages = ?, price = ?, rating = ? WHERE book_id = ?";
     private static final String FIND_BOOK_BY_ID = "SELECT b.id, b.title, b.author, b.isbn, g.name AS genre, " +
             "c.name AS cover, b.pages, b.price, b.rating FROM books b " +
-            "JOIN genres g ON b.genre = g.id " +
-            "JOIN covers c on b.cover = c.id WHERE b.id = ?";
+            "JOIN genres g ON b.genre_id = g.id " +
+            "JOIN covers c on b.cover_id = c.id WHERE b.id = ?";
     private static final String FIND_BOOK_BY_ISBN = "SELECT b.id, b.title, b.author, b.isbn, g.name AS genre, " +
             "c.name AS cover, b.pages, b.price, b.rating FROM books b " +
             "JOIN genres g ON b.genre_id = g.id " +
@@ -46,7 +43,7 @@ public class BookDaoImpl implements BookDao {
     private static final String DELETE_BOOK_BY_ID = "DELETE FROM books WHERE id = ?";
 
     private static final String COUNT_BOOKS = "SELECT count(*) FROM books";
-    private static final String COL_BOOK_ID = "id";
+    private static final String COL_ID = "id";
     private static final String COL_TITLE = "title";
     private static final String COL_AUTHOR = "author";
     private static final String COL_ISBN = "isbn";
@@ -63,11 +60,15 @@ public class BookDaoImpl implements BookDao {
              Statement statement = connection.createStatement()) {
             ResultSet result = statement.executeQuery(COUNT_BOOKS);
             log.debug("DB query completed");
-            result.next();
-            return result.getLong("count");
+            Long count = null;
+            if (result.next()) {
+                count = result.getLong("count");
+            }
+            return count;
         } catch (SQLException e) {
-            throw new RuntimeException("Count failed!", e);
+            log.error(e.getMessage() + e);
         }
+        throw new AppException("Count failed!");
     }
 
     public BookDto create(BookDto book) {
@@ -78,14 +79,14 @@ public class BookDaoImpl implements BookDao {
             log.debug("DB query completed");
             ResultSet result = statement.getGeneratedKeys();
             if (result.next()) {
-                book.setId(result.getLong(COL_BOOK_ID));
+                log.debug("Created book with id" + result.getLong(COL_ID));
+                book.setId(result.getLong(COL_ID));
+                return book;
             }
-            log.debug("Created book with id" + result.getLong(COL_BOOK_ID));
-            return findById(result.getLong(COL_BOOK_ID));
-        } catch (Exception e) {
+        } catch (SQLException e) {
             log.error(e.getMessage(), e);
-            throw new UnableToCreateException("Creation failed! " + book, e);
         }
+        throw new UnableToCreateException("Unable to create book " + book);
     }
 
     public BookDto update(BookDto book) {
@@ -94,74 +95,54 @@ public class BookDaoImpl implements BookDao {
             prepareStatementForUpdate(book, statement);
             statement.executeUpdate();
             log.debug("DB query completed");
-            return findById(book.getId());
+            return book;
         } catch (SQLException e) {
-            throw new UnableToUpdateException("Update failed! " + book + " " + e.getMessage());
+            log.error(e.getMessage() + e);
         }
+        throw new UnableToUpdateException("Unable to update book " + book);
     }
 
     public BookDto findById(Long id) {
-        BookDto book = new BookDto();
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_BOOK_BY_ID)) {
             statement.setLong(1, id);
-            ResultSet result = statement.executeQuery();
-            result.next();
-            setParameters(book, result);
-            log.debug("DB query completed");
-            return book;
+            return extractedFromStatement(statement);
         } catch (SQLException e) {
-            throw new UnableToFindException("No such book found! " + book, e);
+            log.error(e.getMessage() + e);
         }
+        throw new UnableToFindException("Unable to find book with id " + id);
     }
 
     public BookDto findByIsbn(String isbn) {
-        BookDto book = new BookDto();
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_BOOK_BY_ISBN)) {
             statement.setString(1, isbn);
-            ResultSet result = statement.executeQuery();
-            log.debug("DB query completed");
-            setParameters(book, result);
-            return book;
+            return extractedFromStatement(statement);
         } catch (SQLException e) {
-            throw new UnableToFindException("No such book found! " + book, e);
+            log.error(e.getMessage() + e);
         }
+        throw new UnableToFindException("Unable to find book with isbn " + isbn);
     }
 
     public List<BookDto> findByAuthor(String author) {
-        List<BookDto> books = new ArrayList<>();
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_BOOKS_BY_AUTHOR)) {
             statement.setString(1, author);
-            ResultSet result = statement.executeQuery();
-            log.debug("DB query completed");
-            while (result.next()) {
-                BookDto book = new BookDto();
-                setParameters(book, result);
-                books.add(book);
-            }
-            return books;
+            return createBookList(statement);
         } catch (SQLException e) {
-            throw new RuntimeException("No books by " + author + " found", e);
+            log.error(e.getMessage() + e);
         }
+        throw new UnableToFindException("No books by " + author + " found");
     }
 
     public List<BookDto> findAll() {
-        List<BookDto> books = new ArrayList<>();
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_ALL_BOOKS)) {
-            ResultSet result = statement.executeQuery();
-            log.debug("DB query completed");
-            while (result.next()) {
-                BookDto book = new BookDto();
-                setParameters(book, result);
-                books.add(book);
-            }
-            return books;
+            return createBookList(statement);
         } catch (SQLException e) {
-            throw new RuntimeException("No books found", e);
+            log.error(e.getMessage() + e);
         }
+        throw new UnableToFindException("No books found!");
     }
 
     public boolean deleteById(Long id) {
@@ -172,20 +153,43 @@ public class BookDaoImpl implements BookDao {
             log.debug("DB query completed");
             return affectedRows == 1;
         } catch (SQLException e) {
-            throw new UnableToDeleteException("Unable to delete book with id " + id, e);
+            log.error(e.getMessage() + e);
         }
+        throw new UnableToDeleteException("Unable to delete book with id " + id);
+    }
+
+    private BookDto extractedFromStatement(PreparedStatement statement) throws SQLException {
+        ResultSet result = statement.executeQuery();
+        log.debug("DB query completed");
+        BookDto book = new BookDto();
+        if (result.next()) {
+            setParameters(book, result);
+        }
+        return book;
+    }
+
+    private List<BookDto> createBookList(PreparedStatement statement) throws SQLException {
+        ResultSet result = statement.executeQuery();
+        log.debug("DB query completed");
+        List<BookDto> books = new ArrayList<>();
+        while (result.next()) {
+            BookDto book = new BookDto();
+            setParameters(book, result);
+            books.add(book);
+        }
+        return books;
     }
 
     private void setParameters(BookDto book, ResultSet result) throws SQLException {
-            book.setId(result.getLong(COL_BOOK_ID));
-            book.setTitle(result.getString(COL_TITLE));
-            book.setAuthor(result.getString(COL_AUTHOR));
-            book.setIsbn(result.getString(COL_ISBN));
-            book.setGenre(BookDto.Genre.values()[(result.getInt(COL_GENRE)) - 1]);
-            book.setCover(BookDto.Cover.values()[(result.getInt(COL_COVER)) - 1]);
-            book.setPages(result.getInt(COL_PAGES));
-            book.setPrice(result.getBigDecimal(COL_PRICE));
-            book.setRating(result.getBigDecimal(COL_RATING));
+        book.setId(result.getLong(COL_ID));
+        book.setTitle(result.getString(COL_TITLE));
+        book.setAuthor(result.getString(COL_AUTHOR));
+        book.setIsbn(result.getString(COL_ISBN));
+        book.setGenre(BookDto.Genre.valueOf(result.getString(COL_GENRE)));
+        book.setCover(BookDto.Cover.valueOf(result.getString(COL_COVER)));
+        book.setPages(result.getInt(COL_PAGES));
+        book.setPrice(result.getBigDecimal(COL_PRICE));
+        book.setRating(result.getBigDecimal(COL_RATING));
     }
 
     private void prepareStatementForCreate(BookDto book, PreparedStatement statement) throws SQLException {
