@@ -16,26 +16,35 @@ import java.util.List;
 @Log4j2
 @RequiredArgsConstructor
 public class OrderDaoImpl implements OrderDao {
-    private static final String FIND_ORDER_BY_ID = "SELECT o.order_id, o.user_id, o.status, o.payment_method, " +
-            "o.payment_status, o.delivery_type, o.cost FROM orders o WHERE order_id = ?";
-    private static final String FIND_ALL_ORDERS = "SELECT o.order_id, o.user_id, o.status, o.payment_method," +
-            " o.payment_status, o.delivery_type, o.cost FROM orders o";
-    private static final String CREATE_ORDER = "INSERT INTO orders (user_id, status, payment_method, payment_status," +
-            "delivery_type, cost) VALUES (?, (SELECT os.status_id FROM order_status os WHERE status_id = ?), " +
-            "(SELECT pm.payment_method_id FROM payment_method pm WHERE payment_method_id = ?), " +
-            "(SELECT ps.payment_status_id FROM payment_status ps WHERE payment_status_id = ?), " +
-            "(SELECT dt.delivery_type_id FROM delivery_type dt WHERE delivery_type_id = ?), ?)";
-    private static final String UPDATE_ORDER = "UPDATE orders SET user_id = ?, status = ?, payment_method = ?, " +
-            "payment_status = ?, delivery_type = ?, cost = ? WHERE order_id = ?";
-    private static final String DELETE_ORDER_BY_ID = "DELETE FROM orders WHERE order_id = ?";
 
+    private static final String FIND_ORDER_BY_ID = "SELECT o.id, o.user_id, os.name AS order_status, " +
+            "pm.name AS payment_method, ps.name AS payment_status, dt.name AS delivery_type, o.cost FROM orders o " +
+            "JOIN order_status os on o.status_id = os.id " +
+            "JOIN delivery_type dt on dt.id = o.delivery_type_id " +
+            "JOIN payment_method pm on o.payment_method_id = pm.id " +
+            "JOIN payment_status ps on o.payment_status_id = ps.id WHERE o.id = ?";
+    private static final String FIND_ALL_ORDERS = "SELECT o.id, o.user_id, os.name AS order_status, " +
+            "pm.name AS payment_method, ps.name AS payment_status, dt.name AS delivery_type, o.cost FROM orders o " +
+            "JOIN order_status os on o.status_id = os.id " +
+            "JOIN delivery_type dt on dt.id = o.delivery_type_id " +
+            "JOIN payment_method pm on o.payment_method_id = pm.id " +
+            "JOIN payment_status ps on o.payment_status_id = ps.id ";
+    private static final String CREATE_ORDER = "INSERT INTO orders (user_id, status_id, payment_method_id, payment_status_id," +
+            "delivery_type_id, cost) VALUES (?, " +
+            "(SELECT os.id FROM order_status os WHERE os.name = ?), " +
+            "(SELECT pm.id FROM payment_method pm WHERE pm.name = ?), " +
+            "(SELECT ps.id FROM payment_status ps WHERE ps.name = ?), " +
+            "(SELECT dt.id FROM delivery_type dt WHERE dt.name = ?), ?)";
+    private static final String UPDATE_ORDER = "UPDATE orders o SET user_id = ?, status_id = ?, payment_method_id = ?, " +
+            "payment_status_id = ?, delivery_type_id = ?, cost = ? WHERE o.id = ?";
+    private static final String DELETE_ORDER_BY_ID = "DELETE FROM orders o WHERE o.id = ?";
     private static final String COUNT_ORDERS = "SELECT count(*) FROM orders";
     private static final String COL_STATUS = "order_status";
     private static final String COL_PAYMENT_METHOD = "payment_method";
     private static final String COL_PAYMENT_STATUS = "payment_status";
     private static final String COL_DELIVERY_TYPE = "delivery_type";
     private static final String COL_USER_ID = "user_id";
-    private static final String COL_ID = "order_id";
+    private static final String COL_ID = "id";
     private final DataBaseManager dataBaseManager;
 
     @Override

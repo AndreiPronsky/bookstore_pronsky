@@ -17,29 +17,30 @@ import java.util.List;
 @Log4j2
 @RequiredArgsConstructor
 public class UserDaoImpl implements UserDao {
-    private static final String CREATE_USER = "INSERT INTO users (firstname, lastname, email, user_password, role_id, " +
-            "rating) VALUES (?, ?, ?, ?, (SELECT roles.roles_id FROM roles WHERE roles_id = ?), ?)";
+    private static final String CREATE_USER = "INSERT INTO users (firstname, lastname, email, password, role_id, " +
+            "rating) VALUES (?, ?, ?, ?, (SELECT r.id FROM roles r WHERE r.id = ?), ?)";
     private static final String UPDATE_USER = "UPDATE users SET firstname = ?, lastname = ?, email = ?, " +
-            "user_password = ?, role_id = ?, rating = ? WHERE user_id = ?";
-    private static final String FIND_USER_BY_ID = "SELECT u.user_id, u.firstname, u.lastname, u.email, " +
-            "u.user_password, u.role_id, u.rating FROM users u JOIN roles r ON u.role_id = r.roles_id " +
-            "WHERE user_id = ?";
-    private static final String FIND_USER_BY_EMAIL = "SELECT u.user_id, u.firstname, u.lastname, u.email, " +
-            "u.user_password, u.role_id, u.rating FROM users u JOIN roles r ON u.role_id = r.roles_id " +
-            "WHERE email = ?";
-    private static final String FIND_ALL_USERS = "SELECT u.user_id, u.firstname, u.lastname, u.email, " +
-            "u.user_password, u.role_id, u.rating FROM users u JOIN roles r ON u.role_id = r.roles_id";
-    private static final String FIND_USERS_BY_LASTNAME = "SELECT u.user_id, u.firstname, u.lastname, u.email, " +
-            "u.user_password, u.role_id, u.rating FROM users u JOIN roles r ON u.role_id = r.roles_id " +
+            "password = ?, role_id = ?, rating = ? WHERE id = ?";
+    private static final String FIND_USER_BY_ID = "SELECT u.id, u.firstname, u.lastname, u.email, " +
+            "u.password, r.name AS role, u.rating FROM users u JOIN roles r ON u.role_id = r.id " +
+            "WHERE u.id = ?";
+    private static final String FIND_USER_BY_EMAIL = "SELECT u.id, u.firstname, u.lastname, u.email, " +
+            "u.password, r.name AS role, u.rating FROM users u " +
+            "JOIN roles r ON u.role_id = r.id WHERE email = ?";
+    private static final String FIND_ALL_USERS = "SELECT u.id, u.firstname, u.lastname, u.email, " +
+            "u.password, r.name AS role, u.rating FROM users u " +
+            "JOIN roles r ON u.role_id = r.id";
+    private static final String FIND_USERS_BY_LASTNAME = "SELECT u.id, u.firstname, u.lastname, u.email, " +
+            "u.password, r.name AS role, u.rating FROM users u JOIN roles r ON u.role_id = r.id " +
             "WHERE lastname = ?";
-    private static final String DELETE_USER_BY_ID = "DELETE FROM users WHERE user_id = ?";
+    private static final String DELETE_USER_BY_ID = "DELETE FROM users WHERE id = ?";
     private static final String COUNT_USERS = "SELECT count(*) FROM users";
-    private static final String COL_USER_ID = "user_id";
+    private static final String COL_USER_ID = "id";
     private static final String COL_FIRSTNAME = "firstname";
     private static final String COL_LASTNAME = "lastname";
     private static final String COL_EMAIL = "email";
-    private static final String COL_USER_PASSWORD = "user_password";
-    private static final String COL_USER_ROLE = "role_id";
+    private static final String COL_USER_PASSWORD = "password";
+    private static final String COL_USER_ROLE = "role";
     private static final String COL_RATING = "rating";
 
     private final DataBaseManager dataBaseManager;

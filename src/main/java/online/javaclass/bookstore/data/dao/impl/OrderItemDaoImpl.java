@@ -17,19 +17,19 @@ import java.util.List;
 @RequiredArgsConstructor
 @Log4j2
 public class OrderItemDaoImpl implements OrderItemDao {
-    private static final String FIND_ITEMS_BY_ORDER_ID = "SELECT oi.item_id, oi.order_id, oi.book_id, " +
-            "oi.quantity, oi.price FROM order_items oi WHERE order_id = ?";
-    private static final String FIND_ITEM_BY_ID = "SELECT oi.item_id, oi.order_id, oi.book_id, oi.quantity, " +
-            "oi.price FROM order_items oi WHERE item_id = ?";
-    private static final String FIND_ALL = "SELECT oi.item_id, oi.order_id, oi.book_id, oi.quantity, oi.price " +
+    private static final String FIND_ITEMS_BY_ORDER_ID = "SELECT oi.id, oi.order_id, oi.book_id, " +
+            "oi.quantity, oi.price FROM order_items oi WHERE oi.order_id = ?";
+    private static final String FIND_ITEM_BY_ID = "SELECT oi.id, oi.order_id, oi.book_id, oi.quantity, " +
+            "oi.price FROM order_items oi WHERE oi.id = ?";
+    private static final String FIND_ALL = "SELECT oi.id, oi.order_id, oi.book_id, oi.quantity, oi.price " +
             "FROM order_items oi";
     private static final String CREATE_ITEM = "INSERT INTO order_items (order_id, book_id, quantity, price) " +
             "VALUES (?, ?, ?, ?)";
-    private static final String UPDATE_ITEM = "UPDATE order_items SET order_id = ?, book_id = ?, quantity = ?, " +
-            "price = ? WHERE item_id = ?";
-    private static final String DELETE_ITEM_BY_ID = "DELETE FROM order_items WHERE item_id = ?";
+    private static final String UPDATE_ITEM = "UPDATE order_items oi SET order_id = ?, book_id = ?, quantity = ?, " +
+            "price = ? WHERE oi.id = ?";
+    private static final String DELETE_ITEM_BY_ID = "DELETE FROM order_items WHERE id = ?";
 
-    private static final String COL_ID = "item_id";
+    private static final String COL_ID = "id";
     private static final String COL_ORDER_ID = "order_id";
     private static final String COL_BOOK_ID = "book_id";
     private static final String COL_QUANTITY = "quantity";
