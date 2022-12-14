@@ -5,10 +5,7 @@ import lombok.extern.log4j.Log4j2;
 import online.javaclass.bookstore.data.connection.DataBaseManager;
 import online.javaclass.bookstore.data.dao.UserDao;
 import online.javaclass.bookstore.data.dto.UserDto;
-import online.javaclass.bookstore.service.exceptions.UnableToCreateException;
-import online.javaclass.bookstore.service.exceptions.UnableToDeleteException;
-import online.javaclass.bookstore.service.exceptions.UnableToFindException;
-import online.javaclass.bookstore.service.exceptions.UnableToUpdateException;
+import online.javaclass.bookstore.service.exceptions.*;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -92,7 +89,7 @@ public class UserDaoImpl implements UserDao {
             statement.setString(1, email);
             return extractedFromStatement(statement);
         } catch (SQLException e) {
-            log.error(e.getMessage() + e);
+            log.error(e.getMessage());
         }
         throw new UnableToFindException("Unable to find user with email " + email);
     }
@@ -103,7 +100,7 @@ public class UserDaoImpl implements UserDao {
             statement.setString(1, lastName);
             return createUserList(statement);
         } catch (SQLException e) {
-            log.error(e.getMessage() + e);
+            log.error(e.getMessage());
         }
         throw new UnableToFindException("Unable to find users with lastname " + lastName);
     }
@@ -113,7 +110,7 @@ public class UserDaoImpl implements UserDao {
              PreparedStatement statement = connection.prepareStatement(FIND_ALL_USERS)) {
             return createUserList(statement);
         } catch (SQLException e) {
-            log.error(e.getMessage() + e);
+            log.error(e.getMessage());
         }
         throw new UnableToFindException("No users found");
     }
@@ -126,7 +123,7 @@ public class UserDaoImpl implements UserDao {
             log.debug("DB query completed");
             return affectedRows == 1;
         } catch (SQLException e) {
-            log.error(e.getMessage() + e);
+            log.error(e.getMessage());
         }
         throw new UnableToDeleteException("Unable to delete user with id " + id);
     }
@@ -142,8 +139,9 @@ public class UserDaoImpl implements UserDao {
             }
             return count;
         } catch (SQLException e) {
-            throw new RuntimeException("Count failed!", e);
+           log.error(e.getMessage());
         }
+        throw new AppException("Count failed!");
     }
 
     private UserDto extractedFromStatement(PreparedStatement statement) throws SQLException {
@@ -169,7 +167,6 @@ public class UserDaoImpl implements UserDao {
     }
 
     private void setParameters(UserDto user, ResultSet result) throws SQLException {
-        while (result.next()) {
             user.setId(result.getLong(COL_ID));
             user.setFirstName(result.getString(COL_FIRSTNAME));
             user.setLastName(result.getString(COL_LASTNAME));
@@ -177,7 +174,6 @@ public class UserDaoImpl implements UserDao {
             user.setPassword(result.getString(COL_PASSWORD));
             user.setRole(UserDto.Role.valueOf(result.getString(COL_ROLE)));
             user.setRating(result.getBigDecimal(COL_RATING));
-        }
     }
 
     private void prepareStatementForCreate(UserDto user, PreparedStatement statement) throws SQLException {

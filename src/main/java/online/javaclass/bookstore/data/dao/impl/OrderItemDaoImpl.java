@@ -42,7 +42,7 @@ public class OrderItemDaoImpl implements OrderItemDao {
             statement.setLong(1, orderId);
             return createItemList(statement);
         } catch (SQLException e) {
-            log.error(e.getMessage() + e);
+            log.error(e.getMessage());
         }
         throw new UnableToFindException("Unable to find items with order id " + orderId);
     }
@@ -61,7 +61,7 @@ public class OrderItemDaoImpl implements OrderItemDao {
             statement.setLong(1, id);
             return extractedFromStatement(statement);
         } catch (SQLException e) {
-            log.error(e.getMessage() + e);
+            log.error(e.getMessage());
         }
         throw new UnableToFindException("No order item with id " + id + " found");
     }
@@ -72,7 +72,7 @@ public class OrderItemDaoImpl implements OrderItemDao {
              PreparedStatement statement = connection.prepareStatement(FIND_ALL)) {
             return createItemList(statement);
         } catch (SQLException e) {
-            log.error(e.getMessage() + e);
+            log.error(e.getMessage());
         }
         throw new UnableToFindException("No items found");
     }
@@ -91,7 +91,7 @@ public class OrderItemDaoImpl implements OrderItemDao {
                 return item;
             }
         } catch (Exception e) {
-            log.error(e.getMessage() + e);
+            log.error(e.getMessage());
         }
         throw new UnableToCreateException("Unable to create order item " + item);
     }
@@ -105,7 +105,7 @@ public class OrderItemDaoImpl implements OrderItemDao {
             log.debug("DB query completed");
             return item;
         } catch (SQLException e) {
-            log.error(e.getMessage() + e);
+            log.error(e.getMessage());
         }
         throw new UnableToUpdateException("Update failed! " + item);
     }
@@ -119,7 +119,7 @@ public class OrderItemDaoImpl implements OrderItemDao {
             log.debug("DB query completed");
             return affectedRows == 1;
         } catch (SQLException e) {
-            log.error(e.getMessage() + e);
+            log.error(e.getMessage());
         }
         throw new UnableToDeleteException("Unable to delete item with id " + id);
     }

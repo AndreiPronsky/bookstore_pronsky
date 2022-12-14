@@ -52,7 +52,7 @@ public class OrderDaoImpl implements OrderDao {
             statement.setLong(1, id);
             return extractedFromStatement(statement);
         } catch (SQLException e) {
-            log.error(e.getMessage() + e);
+            log.error(e.getMessage());
         }
         throw new UnableToFindException("Unable to find order with id " + id);
     }
@@ -69,7 +69,7 @@ public class OrderDaoImpl implements OrderDao {
             }
             return count;
         } catch (SQLException e) {
-            log.error(e.getMessage() + e);
+            log.error(e.getMessage());
         }
         throw new AppException("Count failed!");
     }
@@ -80,7 +80,7 @@ public class OrderDaoImpl implements OrderDao {
              PreparedStatement statement = connection.prepareStatement(FIND_ALL_ORDERS)) {
             return createOrderList(statement);
         } catch (SQLException e) {
-            log.error(e.getMessage() + e);
+            log.error(e.getMessage());
         }
         throw new UnableToFindException("Unable to find orders");
     }
@@ -99,7 +99,7 @@ public class OrderDaoImpl implements OrderDao {
             }
             return order;
         } catch (SQLException e) {
-            log.error(e.getMessage() + e);
+            log.error(e.getMessage());
         }
         throw new UnableToCreateException("Unable to create order " + order);
     }
@@ -152,10 +152,10 @@ public class OrderDaoImpl implements OrderDao {
 
     private void prepareStatementForCreate(OrderDto order, PreparedStatement statement) throws SQLException {
         statement.setLong(1, order.getUserId());
-        statement.setInt(2, order.getOrderStatus().ordinal() + 1);
-        statement.setInt(3, order.getPaymentMethod().ordinal() + 1);
-        statement.setInt(4, order.getPaymentStatus().ordinal() + 1);
-        statement.setInt(5, order.getDeliveryType().ordinal() + 1);
+        statement.setString(2, order.getOrderStatus().toString());
+        statement.setString(3, order.getPaymentMethod().toString());
+        statement.setString(4, order.getPaymentStatus().toString());
+        statement.setString(5, order.getDeliveryType().toString());
         statement.setBigDecimal(6, order.getCost());
     }
 

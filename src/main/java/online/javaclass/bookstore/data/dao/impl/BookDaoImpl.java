@@ -66,7 +66,7 @@ public class BookDaoImpl implements BookDao {
             }
             return count;
         } catch (SQLException e) {
-            log.error(e.getMessage() + e);
+            log.error(e.getMessage());
         }
         throw new AppException("Count failed!");
     }
@@ -84,7 +84,7 @@ public class BookDaoImpl implements BookDao {
                 return book;
             }
         } catch (SQLException e) {
-            log.error(e.getMessage(), e);
+            log.error(e.getMessage());
         }
         throw new UnableToCreateException("Unable to create book " + book);
     }
@@ -97,7 +97,7 @@ public class BookDaoImpl implements BookDao {
             log.debug("DB query completed");
             return book;
         } catch (SQLException e) {
-            log.error(e.getMessage() + e);
+            log.error(e.getMessage());
         }
         throw new UnableToUpdateException("Unable to update book " + book);
     }
@@ -108,7 +108,7 @@ public class BookDaoImpl implements BookDao {
             statement.setLong(1, id);
             return extractedFromStatement(statement);
         } catch (SQLException e) {
-            log.error(e.getMessage() + e);
+            log.error(e.getMessage());
         }
         throw new UnableToFindException("Unable to find book with id " + id);
     }
@@ -119,7 +119,7 @@ public class BookDaoImpl implements BookDao {
             statement.setString(1, isbn);
             return extractedFromStatement(statement);
         } catch (SQLException e) {
-            log.error(e.getMessage() + e);
+            log.error(e.getMessage());
         }
         throw new UnableToFindException("Unable to find book with isbn " + isbn);
     }
@@ -130,7 +130,7 @@ public class BookDaoImpl implements BookDao {
             statement.setString(1, author);
             return createBookList(statement);
         } catch (SQLException e) {
-            log.error(e.getMessage() + e);
+            log.error(e.getMessage());
         }
         throw new UnableToFindException("No books by " + author + " found");
     }
@@ -140,7 +140,7 @@ public class BookDaoImpl implements BookDao {
              PreparedStatement statement = connection.prepareStatement(FIND_ALL_BOOKS)) {
             return createBookList(statement);
         } catch (SQLException e) {
-            log.error(e.getMessage() + e);
+            log.error(e.getMessage());
         }
         throw new UnableToFindException("No books found!");
     }
@@ -153,7 +153,7 @@ public class BookDaoImpl implements BookDao {
             log.debug("DB query completed");
             return affectedRows == 1;
         } catch (SQLException e) {
-            log.error(e.getMessage() + e);
+            log.error(e.getMessage());
         }
         throw new UnableToDeleteException("Unable to delete book with id " + id);
     }

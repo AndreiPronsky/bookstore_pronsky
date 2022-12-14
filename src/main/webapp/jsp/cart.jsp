@@ -11,7 +11,7 @@
     <h1>Your cart is empty!</h1>
 </c:if>
 <c:if test="${!sessionScope.cart.isEmpty && sessionScope.cart != null}">
-    <form action="controller?command=confirm_order_form" method="post">
+    <form action="controller?command=cart" method="get">
     <table>
         <caption>Cart</caption>
         <thead>
@@ -24,13 +24,14 @@
         <tbody>
         <c:forEach items="${sessionScope.cart}" var="cartItem">
             <tr>
-                <td>${cartItem.value.title}</td>
-                <td>${cartItem.value.price}</td>
+                <td>${cartItem.key.title}</td>
+                <td>${cartItem.key.price}</td>
                 <td>
-                <label>Quantity<input type="number" name="quantity" step="1" min="0" value="${cartItem.value.quantity}"></label>
+                <label>Quantity<input type="number" name="quantity" step="1" min="0" value="${cartItem.value}"></label>
                 </td>
             </tr>
         </c:forEach>
+        <tr><td>${sessionScope.cost}</td></tr>
         </tbody>
     </table>
             <input type="submit" name="createOrder" value="Order">

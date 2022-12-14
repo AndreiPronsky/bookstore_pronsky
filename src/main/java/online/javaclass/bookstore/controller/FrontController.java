@@ -35,6 +35,7 @@ public class FrontController extends HttpServlet {
             page = command.execute(req);
             log.debug("Command executed");
         } catch (Exception e) {
+            log.error(e);
             page = processError(req, e);
         }
         req.getRequestDispatcher(page).forward(req, resp);

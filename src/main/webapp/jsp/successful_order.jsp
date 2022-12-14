@@ -5,6 +5,6 @@
 </head>
 <body>
 <jsp:include page="navbar.jsp"/>
-<h1> Number of your order is ${sessionScope.order_id}! Our manager will contact you soon!</h1>
+<h1> Number of your order is ${requestScope.order_id}! Our manager will contact you soon!</h1>
 </body>
 </html>

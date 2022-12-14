@@ -21,10 +21,10 @@
     <tbody>
     <c:forEach items="${sessionScope.cart}" var="cartItem">
       <tr>
-        <td>${cartItem.value.title}</td>
-        <td>${cartItem.value.price}</td>
+        <td>${cartItem.key.title}</td>
+        <td>${cartItem.key.price}</td>
         <td>
-            <label>Quantity<input type="number" name="quantity" step="1" min="0" value="${cartItem.value.quantity}"></label>
+          <label>Quantity<input type="submit" name="quantity" step="1" min="0" value="${cartItem.value}"></label>
         </td>
       </tr>
     </c:forEach>
@@ -52,6 +52,7 @@
     </select>
   </label>
   <br>
+    <label>Cost = ${sessionScope.cost}</label>
   <input type="submit" name="createOrder" value="Order">
 </form>
 </body>
