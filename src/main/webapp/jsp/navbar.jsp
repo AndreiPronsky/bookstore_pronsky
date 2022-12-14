@@ -7,6 +7,7 @@
         <li><a href="controller?command=cart">Cart</a></li>
         <c:if test="${sessionScope.user == null}">
             <li><a href="controller?command=login_form">Log In</a></li>
+            <li><a href="controller?command=add_user_form">Register</a></li>
         </c:if>
         <c:if test="${sessionScope.user != null}">
             <li><a href="controller?command=logout">Log Out</a></li>

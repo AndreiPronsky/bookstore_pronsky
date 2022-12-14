@@ -1,6 +1,7 @@
 package online.javaclass.bookstore.controller.command.impl;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import online.javaclass.bookstore.controller.command.Command;
@@ -22,8 +23,15 @@ public class AddUserCommand implements Command {
         user.setLastName(req.getParameter("lastname"));
         user.setEmail(req.getParameter("email"));
         user.setPassword(req.getParameter("password"));
-        user.setRole(UserDto.Role.values()[(Integer.parseInt(req.getParameter("role"))) - 1]);
-        user.setRating(BigDecimal.valueOf(Double.parseDouble(req.getParameter("rating"))));
+        HttpSession session = req.getSession();
+        if (session.getAttribute("user") == null) {
+            user.setRole(UserDto.Role.USER);
+            user.setRating(BigDecimal.ZERO);
+        }
+        else {
+            user.setRole(UserDto.Role.values()[(Integer.parseInt(req.getParameter("role"))) - 1]);
+            user.setRating(BigDecimal.valueOf(Double.parseDouble(req.getParameter("rating"))));
+        }
         UserDto newUser = userService.create(user);
         req.setAttribute("user", newUser);
         return "jsp/user.jsp";
