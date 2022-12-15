@@ -16,18 +16,34 @@ import java.util.List;
 @Log4j2
 @RequiredArgsConstructor
 public class OrderDaoImpl implements OrderDao {
-    private static final String FIND_ORDER_BY_ID = "SELECT order_id, user_id, status, payment_method, " +
-            "payment_status, delivery_type, cost FROM orders WHERE order_id = ?";
-    private static final String FIND_ALL_ORDERS = "SELECT order_id, user_id, status, payment_method, payment_status, " +
-            "delivery_type, cost FROM orders";
-    private static final String CREATE_ORDER = "INSERT INTO orders (user_id, status, payment_method, payment_status," +
-            "delivery_type, cost) VALUES (?, (SELECT status_id FROM order_status WHERE status_id = ?), " +
+    private static final String FIND_ORDER_BY_ID = "SELECT o.id, o.user_id, os.name AS status, " +
+            "pm.name AS payment_method, ps.name AS payment_status, dt.name AS delivery_type, cost FROM orders o " +
+            "JOIN order_status os ON o.status_id = os.id " +
+            "JOIN delivery_type dt on dt.id = o.delivery_type_id " +
+            "JOIN payment_method pm on o.payment_method_id = pm.id " +
+            "JOIN payment_status ps on o.payment_status_id = ps.id WHERE o.id = ? ";
+    private static final String FIND_ALL_ORDERS = "SELECT o.id, o.user_id, os.name AS status, " +
+            "pm.name AS payment_method, ps.name AS payment_status, dt.name AS delivery_type, cost FROM orders o " +
+            "JOIN order_status os ON o.status_id = os.id " +
+            "JOIN delivery_type dt on dt.id = o.delivery_type_id " +
+            "JOIN payment_method pm on o.payment_method_id = pm.id " +
+            "JOIN payment_status ps on o.payment_status_id = ps.id ";
+
+    private static final String FIND_ALL_ORDERS_PAGED = "SELECT o.id, o.user_id, os.name AS status, " +
+            "pm.name AS payment_method, ps.name AS payment_status, dt.name AS delivery_type, cost FROM orders o " +
+            "JOIN order_status os ON o.status_id = os.id " +
+            "JOIN delivery_type dt on dt.id = o.delivery_type_id " +
+            "JOIN payment_method pm on o.payment_method_id = pm.id " +
+            "JOIN payment_status ps on o.payment_status_id = ps.id " +
+            "LIMIT ? OFFSET ?";
+    private static final String CREATE_ORDER = "INSERT INTO orders (user_id, status_id, payment_method_id, payment_status_id," +
+            "delivery_type_id, cost) VALUES (?, (SELECT status_id FROM order_status WHERE status_id = ?), " +
             "(SELECT payment_method_id FROM payment_method WHERE payment_method_id = ?), " +
             "(SELECT payment_status_id FROM payment_status WHERE payment_status_id = ?), " +
             "(SELECT delivery_type_id FROM delivery_type WHERE delivery_type_id = ?), ?)";
-    private static final String UPDATE_ORDER = "UPDATE orders SET user_id = ?, status = ?, payment_method = ?, " +
-            "payment_status = ?, delivery_type = ?, cost = ? WHERE order_id = ?";
-    private static final String DELETE_ORDER_BY_ID = "DELETE FROM orders WHERE order_id = ?";
+    private static final String UPDATE_ORDER = "UPDATE orders SET user_id = ?, status_id = ?, payment_method_id = ?, " +
+            "payment_status_id = ?, delivery_type_id = ?, cost = ? WHERE id = ?";
+    private static final String DELETE_ORDER_BY_ID = "DELETE FROM orders WHERE id = ?";
     private static final String COL_STATUS = "status";
     private static final String COL_PAYMENT_METHOD = "payment_method";
     private static final String COL_PAYMENT_STATUS = "payment_status";
@@ -57,6 +73,20 @@ public class OrderDaoImpl implements OrderDao {
         List<OrderDto> orders = new ArrayList<>();
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_ALL_ORDERS)) {
+            addOrdersToList(orders, statement);
+            return orders;
+        } catch (SQLException e) {
+            throw new RuntimeException("No books found", e);
+        }
+    }
+
+    @Override
+    public List<OrderDto> findAll(int limit, int offset) {
+        List<OrderDto> orders = new ArrayList<>();
+        try (Connection connection = dataBaseManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(FIND_ALL_ORDERS_PAGED)) {
+            statement.setInt(1, limit);
+            statement.setInt(2, offset);
             addOrdersToList(orders, statement);
             return orders;
         } catch (SQLException e) {

@@ -38,8 +38,28 @@ public class BookRepositoryImpl implements BookRepository {
     }
 
     @Override
+    public List<Book> findByAuthor(String author, int limit, int offset) {
+        List<BookDto> bookDtos = bookDao.findByAuthor(author, limit, offset);
+        List<Book> books = new ArrayList<>();
+        for (BookDto bookDto : bookDtos) {
+            books.add(mapper.toEntity(bookDto));
+        }
+        return books;
+    }
+
+    @Override
     public List<Book> findAll() {
         List<BookDto> bookDtos = bookDao.findAll();
+        List<Book> books = new ArrayList<>();
+        for (BookDto bookDto : bookDtos) {
+            books.add(mapper.toEntity(bookDto));
+        }
+        return books;
+    }
+
+    @Override
+    public List<Book> findAll(int limit, int offset) {
+        List<BookDto> bookDtos = bookDao.findAll(limit, offset);
         List<Book> books = new ArrayList<>();
         for (BookDto bookDto : bookDtos) {
             books.add(mapper.toEntity(bookDto));

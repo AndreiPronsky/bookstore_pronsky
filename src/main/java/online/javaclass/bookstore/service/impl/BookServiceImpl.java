@@ -2,10 +2,11 @@ package online.javaclass.bookstore.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import online.javaclass.bookstore.service.EntityDtoMapperService;
+import online.javaclass.bookstore.controller.Pageable;
 import online.javaclass.bookstore.data.entities.Book;
 import online.javaclass.bookstore.data.repository.BookRepository;
 import online.javaclass.bookstore.service.BookService;
+import online.javaclass.bookstore.service.EntityDtoMapperService;
 import online.javaclass.bookstore.service.dto.BookDto;
 
 import java.util.List;
@@ -59,9 +60,25 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public List<BookDto> getByAuthor(String author, Pageable pageable) {
+        log.debug("get books by author");
+        return bookRepo.findByAuthor(author, pageable.getLimit(), pageable.getOffset()).stream()
+                .map(mapper::toDto)
+                .toList();
+    }
+
+    @Override
     public List<BookDto> getAll() {
         log.debug("get all books");
         return bookRepo.findAll().stream()
+                .map(mapper::toDto)
+                .toList();
+    }
+
+    @Override
+    public List<BookDto> getAll(Pageable pageable) {
+        log.debug("get all books");
+        return bookRepo.findAll(pageable.getLimit(), pageable.getOffset()).stream()
                 .map(mapper::toDto)
                 .toList();
     }

@@ -7,6 +7,8 @@ public interface AbstractRepository<K, T> {
 
     List<T> findAll();
 
+    List<T> findAll(int limit, int offset);
+
     T create(T entity);
 
     T update(T entity);

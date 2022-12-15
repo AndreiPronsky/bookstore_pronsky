@@ -17,19 +17,24 @@ import java.util.List;
 @RequiredArgsConstructor
 @Log4j2
 public class OrderItemDaoImpl implements OrderItemDao {
-    private static final String FIND_ITEMS_BY_ORDER_ID = "SELECT item_id, order_id, book_id, quantity, price FROM order_items" +
+    private static final String FIND_ITEMS_BY_ORDER_ID = "SELECT id, order_id, book_id, quantity, price FROM order_items" +
             " WHERE order_id = ?";
-    private static final String FIND_ITEM_BY_ID = "SELECT item_id, order_id, book_id, quantity, price FROM order_items " +
-            "WHERE item_id = ?";
-    private static final String FIND_ALL = "SELECT item_id, order_id, book_id, quantity, price FROM order_items";
+
+    private static final String FIND_ITEMS_BY_ORDER_ID_PAGED = "SELECT id, order_id, book_id, quantity, price " +
+            "FROM order_items WHERE order_id = ? LIMIT ? OFFSET ?";
+    private static final String FIND_ITEM_BY_ID = "SELECT id, order_id, book_id, quantity, price FROM order_items " +
+            "WHERE id = ?";
+    private static final String FIND_ALL = "SELECT id, order_id, book_id, quantity, price FROM order_items";
+    private static final String FIND_ALL_PAGED = "SELECT id, order_id, book_id, quantity, price FROM order_items " +
+            "LIMIT ? OFFSET ?";
     private static final String CREATE_ITEM = "INSERT INTO order_items (order_id, book_id, quantity, price) " +
             "VALUES (?, ?, ?, ?)";
     private static final String UPDATE_ITEM = "UPDATE order_items SET order_id = ?, book_id = ?, quantity = ?, " +
-            "price = ? WHERE item_id = ?";
-    private static final String DELETE_ITEM_BY_ID = "DELETE FROM order_items WHERE item_id = ?";
+            "price = ? WHERE id = ?";
+    private static final String DELETE_ITEM_BY_ID = "DELETE FROM order_items WHERE id = ?";
 
 
-    private static final String COL_ID = "item_id";
+    private static final String COL_ID = "id";
     private static final String COL_ORDER_ID = "order_id";
     private static final String COL_BOOK_ID = "book_id";
     private static final String COL_QUANTITY = "quantity";
@@ -43,6 +48,21 @@ public class OrderItemDaoImpl implements OrderItemDao {
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_ITEMS_BY_ORDER_ID)) {
             statement.setLong(1, orderId);
+            addItemsToList(orderItems, statement);
+            return orderItems;
+        } catch (SQLException e) {
+            throw new RuntimeException("No order items with order id " + orderId + " found", e);
+        }
+    }
+
+    @Override
+    public List<OrderItemDto> findAllByOrderId(Long orderId, int limit, int offset) {
+        List<OrderItemDto> orderItems = new ArrayList<>();
+        try (Connection connection = dataBaseManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(FIND_ITEMS_BY_ORDER_ID_PAGED)) {
+            statement.setLong(1, orderId);
+            statement.setInt(2, limit);
+            statement.setInt(3, offset);
             addItemsToList(orderItems, statement);
             return orderItems;
         } catch (SQLException e) {
@@ -79,6 +99,20 @@ public class OrderItemDaoImpl implements OrderItemDao {
         List<OrderItemDto> orderItems = new ArrayList<>();
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_ALL)) {
+            addItemsToList(orderItems, statement);
+            return orderItems;
+        } catch (SQLException e) {
+            throw new RuntimeException("No items found", e);
+        }
+    }
+
+    @Override
+    public List<OrderItemDto> findAll(int limit, int offset) {
+        List<OrderItemDto> orderItems = new ArrayList<>();
+        try (Connection connection = dataBaseManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(FIND_ALL_PAGED)) {
+            statement.setInt(1, limit);
+            statement.setInt(2, offset);
             addItemsToList(orderItems, statement);
             return orderItems;
         } catch (SQLException e) {

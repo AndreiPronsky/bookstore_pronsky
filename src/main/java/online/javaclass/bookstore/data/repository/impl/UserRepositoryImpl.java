@@ -32,6 +32,16 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public List<User> findAll(int limit, int offset) {
+        List<UserDto> userDtos = userDao.findAll(limit, offset);
+        List<User> users = new ArrayList<>();
+        for (UserDto user : userDtos) {
+            users.add(mapper.toEntity(user));
+        }
+        return users;
+    }
+
+    @Override
     public User create(User user) {
         UserDto userDto = mapper.toDto(user);
         UserDto createdUser = userDao.create(userDto);
@@ -60,6 +70,16 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public List<User> findByLastName(String lastname) {
         List<UserDto> userDtos = userDao.findByLastName(lastname);
+        List<User> users = new ArrayList<>();
+        for (UserDto userDto : userDtos) {
+            users.add(mapper.toEntity(userDto));
+        }
+        return users;
+    }
+
+    @Override
+    public List<User> findByLastName(String lastname, int limit, int offset) {
+        List<UserDto> userDtos = userDao.findByLastName(lastname, limit, offset);
         List<User> users = new ArrayList<>();
         for (UserDto userDto : userDtos) {
             users.add(mapper.toEntity(userDto));

@@ -15,19 +15,25 @@ import java.util.List;
 
 @Log4j2
 public class UserDaoImpl implements UserDao {
-    public static final String CREATE_USER = "INSERT INTO users (firstname, lastname, email, user_password, role_id, " +
-            "rating) VALUES (?, ?, ?, ?, (SELECT roles.roles_id FROM roles WHERE roles_id = ?), ?)";
+    public static final String CREATE_USER = "INSERT INTO users (firstname, lastname, email, password, role_id, " +
+            "rating) VALUES (?, ?, ?, ?, (SELECT roles.id FROM roles WHERE id = ?), ?)";
     public static final String UPDATE_USER = "UPDATE users SET firstname = ?, lastname = ?, email = ?, " +
-            "user_password = ?, role_id = ?, rating = ? WHERE user_id = ?";
-    public static final String FIND_USER_BY_ID = "SELECT user_id, firstname, lastname, email, user_password, " +
-            "role_id, rating FROM users JOIN roles ON users.role_id = roles.roles_id WHERE user_id = ?";
-    public static final String FIND_USER_BY_EMAIL = "SELECT user_id, firstname, lastname, email, user_password, " +
-            "role_id, rating FROM users JOIN roles ON users.role_id = roles.roles_id WHERE email = ?";
-    public static final String FIND_ALL_USERS = "SELECT user_id, firstname, lastname, email, user_password, role_id," +
-            " rating FROM users JOIN roles ON users.role_id = roles.roles_id";
-    public static final String FIND_USERS_BY_LASTNAME = "SELECT user_id, firstname, lastname, email, user_password, " +
-            "role_id, rating FROM users JOIN roles ON users.role_id = roles.roles_id WHERE lastname = ?";
-    public static final String DELETE_USER_BY_ID = "DELETE FROM users WHERE user_id = ?";
+            "password = ?, role_id = ?, rating = ? WHERE id = ?";
+    public static final String FIND_USER_BY_ID = "SELECT u.id, u.firstname, u.lastname, u.email, u.password, " +
+            "r.name AS role, u.rating FROM users u JOIN roles r ON u.role_id = r.id WHERE u.id = ?";
+    public static final String FIND_USER_BY_EMAIL = "SELECT u.id, u.firstname, u.lastname, u.email, u.password, " +
+            "r.name AS role, u.rating FROM users u JOIN roles r ON u.role_id = r.id WHERE u.email = ?";
+    public static final String FIND_ALL_USERS = "SELECT u.id, u.firstname, u.lastname, u.email, u.password, " +
+            "r.name AS role, u.rating FROM users u JOIN roles r ON u.role_id = r.id";
+    public static final String FIND_ALL_USERS_PAGED = "SELECT u.id, u.firstname, u.lastname, u.email, u.password, " +
+            "r.name AS role, u.rating FROM users u JOIN roles r ON u.role_id = r.id " +
+            "LIMIT ? OFFSET ?";
+    public static final String FIND_USERS_BY_LASTNAME = "SELECT u.id, u.firstname, u.lastname, u.email, u.password, " +
+            "r.name AS role, u.rating FROM users u JOIN roles r ON u.role_id = r.id WHERE lastname = ?";
+    public static final String FIND_USERS_BY_LASTNAME_PAGED = "SELECT u.id, u.firstname, u.lastname, u.email, u.password, " +
+            "r.name AS role, u.rating FROM users u JOIN roles r ON u.role_id = r.id WHERE lastname = ? " +
+            "LIMIT ? OFFSET ?";
+    public static final String DELETE_USER_BY_ID = "DELETE FROM users WHERE id = ?";
     public static final String COL_USER_ID = "user_id";
     public static final String COL_FIRSTNAME = "firstname";
     public static final String COL_LASTNAME = "lastname";
@@ -56,7 +62,6 @@ public class UserDaoImpl implements UserDao {
             throw new UnableToCreateException("Creation failed! " + user, e);
         }
     }
-
 
     public UserDto update(UserDto user) {
         try (Connection connection = dataBaseManager.getConnection();
@@ -116,10 +121,49 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
+    public List<UserDto> findByLastName(String lastName, int limit, int offset) {
+        List<UserDto> users = new ArrayList<>();
+        try (Connection connection = dataBaseManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(FIND_USERS_BY_LASTNAME_PAGED)) {
+            statement.setString(1, lastName);
+            statement.setInt(2, limit);
+            statement.setInt(3, offset);
+            ResultSet result = statement.executeQuery();
+            log.debug("DB query completed");
+            while (result.next()) {
+                long id = result.getLong("user_id");
+                UserDto userDto = findById(id);
+                users.add(userDto);
+            }
+            return users;
+        } catch (SQLException e) {
+            throw new RuntimeException("Unable to find users with lastname " + lastName, e);
+        }
+    }
+
     public List<UserDto> findAll() {
         List<UserDto> users = new ArrayList<>();
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_ALL_USERS)) {
+            ResultSet result = statement.executeQuery();
+            log.debug("DB query completed");
+            while (result.next()) {
+                long id = result.getLong("user_id");
+                UserDto userDto = findById(id);
+                users.add(userDto);
+            }
+            return users;
+        } catch (SQLException e) {
+            throw new RuntimeException("No users found", e);
+        }
+    }
+
+    public List<UserDto> findAll(int limit, int offset) {
+        List<UserDto> users = new ArrayList<>();
+        try (Connection connection = dataBaseManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(FIND_ALL_USERS_PAGED)) {
+            statement.setInt(1, limit);
+            statement.setInt(2, offset);
             ResultSet result = statement.executeQuery();
             log.debug("DB query completed");
             while (result.next()) {
