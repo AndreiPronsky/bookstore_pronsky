@@ -12,4 +12,5 @@ public interface AbstractService<K, T> {
     T update(T entity);
 
     void deleteById(K id);
+    Long count();
 }

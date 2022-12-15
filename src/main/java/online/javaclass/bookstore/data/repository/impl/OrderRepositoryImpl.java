@@ -24,6 +24,11 @@ public class OrderRepositoryImpl implements OrderRepository {
     private final EntityDtoMapperData mapper;
 
     @Override
+    public Long count() {
+        return orderDao.count();
+    }
+
+    @Override
     public Order findById(Long id) {
         OrderDto orderDto = orderDao.findById(id);
         return buildOrder(orderDto);
@@ -43,7 +48,12 @@ public class OrderRepositoryImpl implements OrderRepository {
     public Order create(Order order) {
         OrderDto orderDto = mapper.toDto(order);
         OrderDto createdOrder = orderDao.create(orderDto);
-        orderDto.getItems().forEach(orderItemDao::create);
+        List<OrderItemDto> items = orderDto.getItems();
+        for (OrderItemDto item : items) {
+            item.setOrderId(createdOrder.getId());
+        }
+        items.forEach(orderItemDao::create);
+        createdOrder.setItems(items);
         return mapper.toEntity(createdOrder);
     }
 

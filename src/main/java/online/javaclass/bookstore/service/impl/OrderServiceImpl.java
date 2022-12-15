@@ -17,6 +17,11 @@ public class OrderServiceImpl implements OrderService {
     private final EntityDtoMapperService mapper;
 
     @Override
+    public Long count() {
+        return orderRepo.count();
+    }
+
+    @Override
     public OrderDto getById(Long id) {
         log.debug("get order by id");
         Order order = orderRepo.findById(id);

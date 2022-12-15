@@ -1,45 +1,46 @@
 package online.javaclass.bookstore.data.dao.impl;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import online.javaclass.bookstore.data.connection.DataBaseManager;
 import online.javaclass.bookstore.data.dao.UserDao;
 import online.javaclass.bookstore.data.dto.UserDto;
-import online.javaclass.bookstore.service.exceptions.UnableToCreateException;
-import online.javaclass.bookstore.service.exceptions.UnableToDeleteException;
-import online.javaclass.bookstore.service.exceptions.UnableToFindException;
-import online.javaclass.bookstore.service.exceptions.UnableToUpdateException;
+import online.javaclass.bookstore.service.exceptions.*;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Log4j2
+@RequiredArgsConstructor
 public class UserDaoImpl implements UserDao {
-    public static final String CREATE_USER = "INSERT INTO users (firstname, lastname, email, user_password, role_id, " +
-            "rating) VALUES (?, ?, ?, ?, (SELECT roles.roles_id FROM roles WHERE roles_id = ?), ?)";
-    public static final String UPDATE_USER = "UPDATE users SET firstname = ?, lastname = ?, email = ?, " +
-            "user_password = ?, role_id = ?, rating = ? WHERE user_id = ?";
-    public static final String FIND_USER_BY_ID = "SELECT user_id, firstname, lastname, email, user_password, " +
-            "role_id, rating FROM users JOIN roles ON users.role_id = roles.roles_id WHERE user_id = ?";
-    public static final String FIND_USER_BY_EMAIL = "SELECT user_id, firstname, lastname, email, user_password, " +
-            "role_id, rating FROM users JOIN roles ON users.role_id = roles.roles_id WHERE email = ?";
-    public static final String FIND_ALL_USERS = "SELECT user_id, firstname, lastname, email, user_password, role_id," +
-            " rating FROM users JOIN roles ON users.role_id = roles.roles_id";
-    public static final String FIND_USERS_BY_LASTNAME = "SELECT user_id, firstname, lastname, email, user_password, " +
-            "role_id, rating FROM users JOIN roles ON users.role_id = roles.roles_id WHERE lastname = ?";
-    public static final String DELETE_USER_BY_ID = "DELETE FROM users WHERE user_id = ?";
-    public static final String COL_USER_ID = "user_id";
-    public static final String COL_FIRSTNAME = "firstname";
-    public static final String COL_LASTNAME = "lastname";
-    public static final String COL_EMAIL = "email";
-    public static final String COL_USER_PASSWORD = "user_password";
-    public static final String COL_USER_ROLE = "role_id";
-    public static final String COL_RATING = "rating";
-    private final DataBaseManager dataBaseManager;
+    private static final String CREATE_USER = "INSERT INTO users (firstname, lastname, email, password, role_id, " +
+            "rating) VALUES (?, ?, ?, ?, (SELECT r.id FROM roles r WHERE r.id = ?), ?)";
+    private static final String UPDATE_USER = "UPDATE users SET firstname = ?, lastname = ?, email = ?, " +
+            "password = ?, role_id = ?, rating = ? WHERE id = ?";
+    private static final String FIND_USER_BY_ID = "SELECT u.id, u.firstname, u.lastname, u.email, " +
+            "u.password, r.name AS role, u.rating FROM users u JOIN roles r ON u.role_id = r.id " +
+            "WHERE u.id = ?";
+    private static final String FIND_USER_BY_EMAIL = "SELECT u.id, u.firstname, u.lastname, u.email, " +
+            "u.password, r.name AS role, u.rating FROM users u " +
+            "JOIN roles r ON u.role_id = r.id WHERE email = ?";
+    private static final String FIND_ALL_USERS = "SELECT u.id, u.firstname, u.lastname, u.email, " +
+            "u.password, r.name AS role, u.rating FROM users u " +
+            "JOIN roles r ON u.role_id = r.id";
+    private static final String FIND_USERS_BY_LASTNAME = "SELECT u.id, u.firstname, u.lastname, u.email, " +
+            "u.password, r.name AS role, u.rating FROM users u JOIN roles r ON u.role_id = r.id " +
+            "WHERE lastname = ?";
+    private static final String DELETE_USER_BY_ID = "DELETE FROM users WHERE id = ?";
+    private static final String COUNT_USERS = "SELECT count(*) FROM users";
+    private static final String COL_ID = "id";
+    private static final String COL_FIRSTNAME = "firstname";
+    private static final String COL_LASTNAME = "lastname";
+    private static final String COL_EMAIL = "email";
+    private static final String COL_PASSWORD = "password";
+    private static final String COL_ROLE = "role";
+    private static final String COL_RATING = "rating";
 
-    public UserDaoImpl(DataBaseManager dataBaseManager) {
-        this.dataBaseManager = dataBaseManager;
-    }
+    private final DataBaseManager dataBaseManager;
 
     public UserDto create(UserDto user) {
         try (Connection connection = dataBaseManager.getConnection();
@@ -49,14 +50,14 @@ public class UserDaoImpl implements UserDao {
             log.debug("DB query completed");
             ResultSet result = statement.getGeneratedKeys();
             if (result.next()) {
-                user.setId(result.getLong(COL_USER_ID));
+                user.setId(result.getLong(COL_ID));
             }
-            return findById(result.getLong(COL_USER_ID));
+            return user;
         } catch (SQLException e) {
-            throw new UnableToCreateException("Creation failed! " + user, e);
+            log.error(e.getMessage() + e);
         }
+        throw new UnableToCreateException("Creation failed! " + user);
     }
-
 
     public UserDto update(UserDto user) {
         try (Connection connection = dataBaseManager.getConnection();
@@ -64,73 +65,54 @@ public class UserDaoImpl implements UserDao {
             prepareStatementForUpdate(user, statement);
             statement.executeUpdate();
             log.debug("DB query completed");
-            return findById(user.getId());
+            return user;
         } catch (SQLException e) {
-            throw new UnableToUpdateException("Update failed! " + user + " " + e.getMessage());
+            log.error(e.getMessage() + e);
         }
+        throw new UnableToUpdateException("Update failed! " + user);
     }
 
     public UserDto findById(Long id) {
-        UserDto user = new UserDto();
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_USER_BY_ID)) {
             statement.setLong(1, id);
-            ResultSet result = statement.executeQuery();
-            setParameters(user, result);
-            log.debug("DB query completed");
-            return user;
+            return extractedFromStatement(statement);
         } catch (SQLException e) {
-            throw new UnableToFindException("Unable to find user with id " + id, e);
+            log.error(e.getMessage() + e);
         }
+        throw new UnableToFindException("Unable to find user with id " + id);
     }
 
     public UserDto findByEmail(String email) {
-        UserDto user = new UserDto();
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_USER_BY_EMAIL)) {
             statement.setString(1, email);
-            ResultSet result = statement.executeQuery();
-            log.debug("DB query completed");
-            setParameters(user, result);
-            return user;
+            return extractedFromStatement(statement);
         } catch (SQLException e) {
-            throw new UnableToFindException("Unable to find user with email " + email, e);
+            log.error(e.getMessage());
         }
+        throw new UnableToFindException("Unable to find user with email " + email);
     }
 
     public List<UserDto> findByLastName(String lastName) {
-        List<UserDto> users = new ArrayList<>();
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_USERS_BY_LASTNAME)) {
             statement.setString(1, lastName);
-            ResultSet result = statement.executeQuery();
-            log.debug("DB query completed");
-            while (result.next()) {
-                long id = result.getLong("user_id");
-                UserDto userDto = findById(id);
-                users.add(userDto);
-            }
-            return users;
+            return createUserList(statement);
         } catch (SQLException e) {
-            throw new RuntimeException("Unable to find users with lastname " + lastName, e);
+            log.error(e.getMessage());
         }
+        throw new UnableToFindException("Unable to find users with lastname " + lastName);
     }
 
     public List<UserDto> findAll() {
-        List<UserDto> users = new ArrayList<>();
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_ALL_USERS)) {
-            ResultSet result = statement.executeQuery();
-            log.debug("DB query completed");
-            while (result.next()) {
-                long id = result.getLong("user_id");
-                UserDto userDto = findById(id);
-                users.add(userDto);
-            }
-            return users;
+            return createUserList(statement);
         } catch (SQLException e) {
-            throw new RuntimeException("No users found", e);
+            log.error(e.getMessage());
         }
+        throw new UnableToFindException("No users found");
     }
 
     public boolean deleteById(Long id) {
@@ -141,32 +123,57 @@ public class UserDaoImpl implements UserDao {
             log.debug("DB query completed");
             return affectedRows == 1;
         } catch (SQLException e) {
-            throw new UnableToDeleteException("Unable to delete user with id " + id, e);
+            log.error(e.getMessage());
         }
+        throw new UnableToDeleteException("Unable to delete user with id " + id);
     }
 
     public Long count() {
         try (Connection connection = dataBaseManager.getConnection();
              Statement statement = connection.createStatement()) {
-            ResultSet result = statement.executeQuery("SELECT count(*) FROM users");
+            ResultSet result = statement.executeQuery(COUNT_USERS);
             log.debug("DB query completed");
-            result.next();
-            return result.getLong("count");
+            Long count = null;
+            if (result.next()) {
+                count = result.getLong("count");
+            }
+            return count;
         } catch (SQLException e) {
-            throw new RuntimeException("Count failed!", e);
+           log.error(e.getMessage());
         }
+        throw new AppException("Count failed!");
+    }
+
+    private UserDto extractedFromStatement(PreparedStatement statement) throws SQLException {
+        ResultSet result = statement.executeQuery();
+        log.debug("DB query completed");
+        UserDto user = new UserDto();
+        if (result.next()) {
+            setParameters(user, result);
+        }
+        return user;
+    }
+
+    private List<UserDto> createUserList(PreparedStatement statement) throws SQLException {
+        ResultSet result = statement.executeQuery();
+        log.debug("DB query completed");
+        List<UserDto> users = new ArrayList<>();
+        while (result.next()) {
+            UserDto userDto = new UserDto();
+            setParameters(userDto, result);
+            users.add(userDto);
+        }
+        return users;
     }
 
     private void setParameters(UserDto user, ResultSet result) throws SQLException {
-        while (result.next()) {
-            user.setId(result.getLong(COL_USER_ID));
+            user.setId(result.getLong(COL_ID));
             user.setFirstName(result.getString(COL_FIRSTNAME));
             user.setLastName(result.getString(COL_LASTNAME));
             user.setEmail(result.getString(COL_EMAIL));
-            user.setPassword(result.getString(COL_USER_PASSWORD));
-            user.setRole(UserDto.Role.values()[(result.getInt(COL_USER_ROLE))]);
+            user.setPassword(result.getString(COL_PASSWORD));
+            user.setRole(UserDto.Role.valueOf(result.getString(COL_ROLE)));
             user.setRating(result.getBigDecimal(COL_RATING));
-        }
     }
 
     private void prepareStatementForCreate(UserDto user, PreparedStatement statement) throws SQLException {

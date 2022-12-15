@@ -8,4 +8,6 @@ public interface BookDao extends AbstractDao<Long, BookDto> {
     BookDto findByIsbn(String isbn);
 
     List<BookDto> findByAuthor(String author);
+
+    Long count();
 }

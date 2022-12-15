@@ -5,32 +5,32 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import online.javaclass.bookstore.controller.command.Command;
 import online.javaclass.bookstore.service.BookService;
-
-import java.math.BigDecimal;
+import online.javaclass.bookstore.service.dto.BookDto;
 import java.util.HashMap;
 import java.util.Map;
 
 @RequiredArgsConstructor
 public class AddToCartCommand implements Command {
+
     private final BookService bookService;
-    Map<String, Integer> cart;
-    BigDecimal totalCost;
 
     @Override
     public String execute(HttpServletRequest req) {
 
-        String title = bookService.getById(Long.parseLong(req.getParameter("id"))).getTitle();
+        Long bookId = Long.parseLong(req.getParameter("id"));
         HttpSession session = req.getSession();
+        Map<BookDto, Integer> cartItems = (Map)session.getAttribute("cart");
+        if (cartItems == null) {
+            cartItems = new HashMap<>();
+            session.setAttribute("cart", cartItems);
+        }
+        BookDto book = bookService.getById(bookId);
+        if (cartItems.containsKey(book)) {
+            cartItems.put(book, cartItems.get(book) + 1);
 
-        if (session.getAttribute("cart") == null) {
-            cart = new HashMap<>();
-            session.setAttribute("cart", cart);
-        }
-        if (cart.containsKey(title)) {
-            cart.put(title, cart.get(title) + 1);
         } else {
-            cart.put(title, 1);
+            cartItems.put(book, 1);
         }
-        return "jsp/cart.jsp";
+        return "jsp/books.jsp";
     }
 }

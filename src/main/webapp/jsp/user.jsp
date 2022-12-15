@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
   <title>Bookstore-pronsky</title>
@@ -17,8 +18,10 @@
   <p>${requestScope.user.lastName}</p>
   <h3>Email :</h3>
   <p>${requestScope.user.email}</p>
+  <c:if test="${sessionScope.user.Role == 'ADMIN'}">
   <h3> Role :</h3>
   <p>${requestScope.user.role}</p>
+  </c:if>
 </article>
 <footer></footer>
 </body>

@@ -16,17 +16,13 @@ public class AuthorisationFilter extends HttpFilter {
     protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
         String command = req.getParameter("command");
         HttpSession session = req.getSession();
-        if (requiresAuthorisation(command)) {
+        if (RestrictedCommandList.requiresAuthorisation(command)) {
             UserDto user = (UserDto) session.getAttribute("user");
-            if (!user.getRole().equals(UserDto.Role.ADMIN)) {
+            if (user.getRole().equals(UserDto.Role.USER)) {
                 req.getRequestDispatcher("jsp/error.jsp").forward(req, res);
                 return;
             }
         }
         chain.doFilter(req, res);
-    }
-
-    private static boolean requiresAuthorisation(String command) {
-        return RestrictedCommandList.INSTANCE.isAdminCommand(command);
     }
 }

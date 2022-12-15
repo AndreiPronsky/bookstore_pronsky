@@ -7,38 +7,36 @@
 </head>
 <body>
 <jsp:include page="navbar.jsp"/>
-<c:if test="${sessionScope.cart.isEmpty()}">
-    <h2>Your cart is empty!</h2>
+<c:if test="${sessionScope.cart == null}">
+    <h1>Your cart is empty!</h1>
 </c:if>
-<c:if test="${!sessionScope.cart.isEmpty()}">
-    <form action="controller?command=cart" method="post">
-        <table>
-            <caption>Cart</caption>
-            <thead>
+<c:if test="${!sessionScope.cart.isEmpty && sessionScope.cart != null}">
+    <form action="controller?command=cart" method="get">
+    <table>
+        <caption>Cart</caption>
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Price</th>
+            <th>Quantity</th>
+        </tr>
+        </thead>
+        <tbody>
+        <c:forEach items="${sessionScope.cart}" var="cartItem">
             <tr>
-                <th>Title</th>
-                <th>Price</th>
-                <th>Quantity</th>
+                <td>${cartItem.key.title}</td>
+                <td>${cartItem.key.price}</td>
+                <td>
+                <label>Quantity<input type="number" name="quantity" step="1" min="0" value="${cartItem.value}"></label>
+                </td>
             </tr>
-            </thead>
-            <tbody>
-            <c:forEach items="${sessionScope.cart}" var="cartItem">
-                <tr>
-                    <td>${cartItem.key}</td>
-                    <td>Price</td>
-                    <td>
-                        <form>
-                            <label>Quantity<input type="number" name="quantity" step="1" min="0"
-                                                  value="${cartItem.value}"></label>
-                        </form>
-                    </td>
-                </tr>
-            </c:forEach>
-            </tbody>
-        </table>
-        <input type="submit" name="createOrder">
+        </c:forEach>
+        <tr><td>${sessionScope.cost}</td></tr>
+        </tbody>
+    </table>
+            <input type="submit" name="createOrder" value="Order">
     </form>
 </c:if>
 <footer></footer>
-</body>
-</html>
+    </body>
+    </html>
