@@ -37,12 +37,12 @@ public class OrderDaoImpl implements OrderDao {
             "JOIN payment_status ps on o.payment_status_id = ps.id " +
             "LIMIT ? OFFSET ?";
     private static final String CREATE_ORDER = "INSERT INTO orders (user_id, status_id, payment_method_id, payment_status_id," +
-            "delivery_type_id, cost) VALUES (?, (SELECT status_id FROM order_status WHERE status_id = ?), " +
-            "(SELECT payment_method_id FROM payment_method WHERE payment_method_id = ?), " +
-            "(SELECT payment_status_id FROM payment_status WHERE payment_status_id = ?), " +
-            "(SELECT delivery_type_id FROM delivery_type WHERE delivery_type_id = ?), ?)";
-    private static final String UPDATE_ORDER = "UPDATE orders SET user_id = ?, status_id = ?, payment_method_id = ?, " +
-            "payment_status_id = ?, delivery_type_id = ?, cost = ? WHERE id = ?";
+            "delivery_type_id, cost) VALUES (?, (SELECT os.id FROM order_status os WHERE os.name = ?), " +
+            "(SELECT pm.id FROM payment_method pm WHERE pm.name = ?), " +
+            "(SELECT ps.id FROM payment_status ps WHERE ps.name = ?), " +
+            "(SELECT dt.id FROM delivery_type dt WHERE dt.name = ?), ?)";
+    private static final String UPDATE_ORDER = "UPDATE orders o SET user_id = ?, status_id = ?, payment_method_id = ?, " +
+            "payment_status_id = ?, delivery_type_id = ?, cost = ? WHERE o.id = ?";
     private static final String DELETE_ORDER_BY_ID = "DELETE FROM orders WHERE id = ?";
     private static final String COL_STATUS = "status";
     private static final String COL_PAYMENT_METHOD = "payment_method";
@@ -148,19 +148,19 @@ public class OrderDaoImpl implements OrderDao {
 
     private void prepareStatementForCreate(OrderDto order, PreparedStatement statement) throws SQLException {
         statement.setLong(1, order.getUserId());
-        statement.setInt(2, order.getOrderStatus().ordinal());
-        statement.setInt(3, order.getPaymentMethod().ordinal());
-        statement.setInt(4, order.getPaymentStatus().ordinal());
-        statement.setInt(5, order.getDeliveryType().ordinal());
+        statement.setString(2, order.getOrderStatus().toString());
+        statement.setString(3, order.getPaymentMethod().toString());
+        statement.setString(4, order.getPaymentStatus().toString());
+        statement.setString(5, order.getDeliveryType().toString());
         statement.setBigDecimal(6, order.getCost());
     }
 
     private void prepareStatementForUpdate(OrderDto order, PreparedStatement statement) throws SQLException {
         statement.setLong(1, order.getUserId());
-        statement.setInt(2, order.getOrderStatus().ordinal());
-        statement.setInt(3, order.getPaymentMethod().ordinal());
-        statement.setInt(4, order.getPaymentStatus().ordinal());
-        statement.setInt(5, order.getDeliveryType().ordinal());
+        statement.setInt(2, order.getOrderStatus().ordinal() + 1);
+        statement.setInt(3, order.getPaymentMethod().ordinal() + 1);
+        statement.setInt(4, order.getPaymentStatus().ordinal() + 1);
+        statement.setInt(5, order.getDeliveryType().ordinal() + 1);
         statement.setBigDecimal(6, order.getCost());
         statement.setLong(7, order.getId());
     }

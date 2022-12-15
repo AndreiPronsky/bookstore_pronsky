@@ -39,5 +39,4 @@ public class  BooksCommand implements Command {
     private String reformatAuthor(String rawAuthor) {
         return rawAuthor.replace("%20", " ");
     }
-
 }

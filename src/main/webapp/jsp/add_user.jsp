@@ -25,9 +25,9 @@
       <label>Role
         <select name="role" required="required">
           <option value="">Select role</option>
-          <option value="1">User</option>
-          <option value="2">Admin</option>
-          <option value="3">Manager</option>
+          <option value="USER">User</option>
+          <option value="ADMIN">Admin</option>
+          <option value="MANAGER">Manager</option>
         </select>
       </label>
     </li>

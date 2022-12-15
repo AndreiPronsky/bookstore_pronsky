@@ -15,7 +15,7 @@ public class EntityDtoMapperService {
         user.setLastName(userDto.getLastName());
         user.setEmail(userDto.getEmail());
         user.setPassword(userDto.getPassword());
-        user.setRole(User.Role.values()[(userDto.getRole().ordinal())]);
+        user.setRole(User.Role.valueOf(userDto.getRole().toString()));
         user.setRating(userDto.getRating());
         return user;
     }
@@ -27,7 +27,7 @@ public class EntityDtoMapperService {
         userDto.setLastName(user.getLastName());
         userDto.setEmail(user.getEmail());
         userDto.setPassword(user.getPassword());
-        userDto.setRole(UserDto.Role.values()[(user.getRole().ordinal()) - 1]);
+        userDto.setRole(UserDto.Role.valueOf(user.getRole().toString()));
         userDto.setRating(user.getRating());
         return userDto;
     }
@@ -65,8 +65,8 @@ public class EntityDtoMapperService {
         book.setTitle(bookDto.getTitle());
         book.setAuthor(bookDto.getAuthor());
         book.setIsbn(bookDto.getIsbn());
-        book.setGenre(Book.Genre.values()[(bookDto.getGenre().ordinal())]);
-        book.setCover(Book.Cover.values()[(bookDto.getCover().ordinal())]);
+        book.setGenre(Book.Genre.valueOf(bookDto.getGenre().toString()));
+        book.setCover(Book.Cover.valueOf(bookDto.getCover().toString()));
         book.setPages(bookDto.getPages());
         book.setPrice(bookDto.getPrice());
         book.setRating(bookDto.getRating());
@@ -79,8 +79,8 @@ public class EntityDtoMapperService {
         bookDto.setTitle(book.getTitle());
         bookDto.setAuthor(book.getAuthor());
         bookDto.setIsbn(book.getIsbn());
-        bookDto.setGenre(BookDto.Genre.values()[(book.getGenre().ordinal())]);
-        bookDto.setCover(BookDto.Cover.values()[(book.getCover().ordinal())]);
+        bookDto.setGenre(BookDto.Genre.valueOf(book.getGenre().toString()));
+        bookDto.setCover(BookDto.Cover.valueOf(book.getCover().toString()));
         bookDto.setPages(book.getPages());
         bookDto.setPrice(book.getPrice());
         bookDto.setRating(book.getRating());

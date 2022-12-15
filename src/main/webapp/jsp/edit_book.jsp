@@ -29,21 +29,21 @@
             <label>Genre
                 <select name="genre" required="required" >
                     <option value="">Select genre</option>
-                    <option value="1">Fiction</option>
-                    <option value="2">Mystery</option>
-                    <option value="3">Thriller</option>
-                    <option value="4">Horror</option>
-                    <option value="5">Historical</option>
-                    <option value="6">Romance</option>
-                    <option value="7">Western</option>
-                    <option value="8">Floristics</option>
-                    <option value="9">Science fiction</option>
-                    <option value="10">Dystopian</option>
-                    <option value="11">Realism</option>
-                    <option value="12">Religion</option>
-                    <option value="13">Medicine</option>
-                    <option value="14">Engineering</option>
-                    <option value="15">Art</option>
+                    <option value="FICTION">Fiction</option>
+                    <option value="MYSTERY">Mystery</option>
+                    <option value="THRILLER">Thriller</option>
+                    <option value="HORROR">Horror</option>
+                    <option value="HISTORICAL">Historical</option>
+                    <option value="ROMANCE">Romance</option>
+                    <option value="WESTERN">Western</option>
+                    <option value="FLORISTICS">Floristics</option>
+                    <option value="SCIENCE">Science fiction</option>
+                    <option value="DYSTOPIAN">Dystopian</option>
+                    <option value="REALISM">Realism</option>
+                    <option value="RELIGION">Religion</option>
+                    <option value="MEDICINE">Medicine</option>
+                    <option value="ENGINEERING">Engineering</option>
+                    <option value="ART">Art</option>
                 </select>
             </label>
         </li>
@@ -51,9 +51,9 @@
             <label>Cover
                 <select name="cover" required="required">
                     <option value="">Select cover</option>
-                    <option value="1">Soft</option>
-                    <option value="2">Hard</option>
-                    <option value="3">Special</option>
+                    <option value="SOFT">Soft</option>
+                    <option value="HARD">Hard</option>
+                    <option value="SPECIAL">Special</option>
                 </select>
             </label>
         </li>

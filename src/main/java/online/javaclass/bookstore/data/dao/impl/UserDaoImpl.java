@@ -1,5 +1,6 @@
 package online.javaclass.bookstore.data.dao.impl;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import online.javaclass.bookstore.data.connection.DataBaseManager;
 import online.javaclass.bookstore.data.dao.UserDao;
@@ -14,38 +15,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Log4j2
+@RequiredArgsConstructor
 public class UserDaoImpl implements UserDao {
-    public static final String CREATE_USER = "INSERT INTO users (firstname, lastname, email, password, role_id, " +
-            "rating) VALUES (?, ?, ?, ?, (SELECT roles.id FROM roles WHERE id = ?), ?)";
-    public static final String UPDATE_USER = "UPDATE users SET firstname = ?, lastname = ?, email = ?, " +
+    private static final String CREATE_USER = "INSERT INTO users (firstname, lastname, email, password, role_id, " +
+            "rating) VALUES (?, ?, ?, ?, (SELECT r.id FROM roles r WHERE r.name = ?), ?)";
+    private static final String UPDATE_USER = "UPDATE users SET firstname = ?, lastname = ?, email = ?, " +
             "password = ?, role_id = ?, rating = ? WHERE id = ?";
-    public static final String FIND_USER_BY_ID = "SELECT u.id, u.firstname, u.lastname, u.email, u.password, " +
+    private static final String FIND_USER_BY_ID = "SELECT u.id, u.firstname, u.lastname, u.email, u.password, " +
             "r.name AS role, u.rating FROM users u JOIN roles r ON u.role_id = r.id WHERE u.id = ?";
-    public static final String FIND_USER_BY_EMAIL = "SELECT u.id, u.firstname, u.lastname, u.email, u.password, " +
+    private static final String FIND_USER_BY_EMAIL = "SELECT u.id, u.firstname, u.lastname, u.email, u.password, " +
             "r.name AS role, u.rating FROM users u JOIN roles r ON u.role_id = r.id WHERE u.email = ?";
-    public static final String FIND_ALL_USERS = "SELECT u.id, u.firstname, u.lastname, u.email, u.password, " +
+    private static final String FIND_ALL_USERS = "SELECT u.id, u.firstname, u.lastname, u.email, u.password, " +
             "r.name AS role, u.rating FROM users u JOIN roles r ON u.role_id = r.id";
-    public static final String FIND_ALL_USERS_PAGED = "SELECT u.id, u.firstname, u.lastname, u.email, u.password, " +
+    private static final String FIND_ALL_USERS_PAGED = "SELECT u.id, u.firstname, u.lastname, u.email, u.password, " +
             "r.name AS role, u.rating FROM users u JOIN roles r ON u.role_id = r.id " +
             "LIMIT ? OFFSET ?";
-    public static final String FIND_USERS_BY_LASTNAME = "SELECT u.id, u.firstname, u.lastname, u.email, u.password, " +
+    private static final String FIND_USERS_BY_LASTNAME = "SELECT u.id, u.firstname, u.lastname, u.email, u.password, " +
             "r.name AS role, u.rating FROM users u JOIN roles r ON u.role_id = r.id WHERE lastname = ?";
-    public static final String FIND_USERS_BY_LASTNAME_PAGED = "SELECT u.id, u.firstname, u.lastname, u.email, u.password, " +
+    private static final String FIND_USERS_BY_LASTNAME_PAGED = "SELECT u.id, u.firstname, u.lastname, u.email, u.password, " +
             "r.name AS role, u.rating FROM users u JOIN roles r ON u.role_id = r.id WHERE lastname = ? " +
             "LIMIT ? OFFSET ?";
-    public static final String DELETE_USER_BY_ID = "DELETE FROM users WHERE id = ?";
-    public static final String COL_USER_ID = "user_id";
-    public static final String COL_FIRSTNAME = "firstname";
-    public static final String COL_LASTNAME = "lastname";
-    public static final String COL_EMAIL = "email";
-    public static final String COL_USER_PASSWORD = "user_password";
-    public static final String COL_USER_ROLE = "role_id";
-    public static final String COL_RATING = "rating";
+    private static final String DELETE_USER_BY_ID = "DELETE FROM users WHERE id = ?";
+    private static final String COL_USER_ID = "user_id";
+    private static final String COL_FIRSTNAME = "firstname";
+    private static final String COL_LASTNAME = "lastname";
+    private static final String COL_EMAIL = "email";
+    private static final String COL_USER_PASSWORD = "user_password";
+    private static final String COL_USER_ROLE = "role_id";
+    private static final String COL_RATING = "rating";
     private final DataBaseManager dataBaseManager;
-
-    public UserDaoImpl(DataBaseManager dataBaseManager) {
-        this.dataBaseManager = dataBaseManager;
-    }
 
     public UserDto create(UserDto user) {
         try (Connection connection = dataBaseManager.getConnection();
@@ -208,7 +206,7 @@ public class UserDaoImpl implements UserDao {
             user.setLastName(result.getString(COL_LASTNAME));
             user.setEmail(result.getString(COL_EMAIL));
             user.setPassword(result.getString(COL_USER_PASSWORD));
-            user.setRole(UserDto.Role.values()[(result.getInt(COL_USER_ROLE))]);
+            user.setRole(UserDto.Role.valueOf(result.getString(COL_USER_ROLE)));
             user.setRating(result.getBigDecimal(COL_RATING));
         }
     }
@@ -218,7 +216,7 @@ public class UserDaoImpl implements UserDao {
         statement.setString(2, user.getLastName());
         statement.setString(3, user.getEmail());
         statement.setString(4, user.getPassword());
-        statement.setInt(5, user.getRole().ordinal() + 1);
+        statement.setString(5, user.getRole().toString());
         statement.setBigDecimal(6, user.getRating());
     }
 
