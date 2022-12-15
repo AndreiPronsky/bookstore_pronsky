@@ -2,6 +2,7 @@ package online.javaclass.bookstore.data;
 
 import lombok.RequiredArgsConstructor;
 import online.javaclass.bookstore.data.dao.UserDao;
+import online.javaclass.bookstore.data.dto.BookDto;
 import online.javaclass.bookstore.data.dto.OrderDto;
 import online.javaclass.bookstore.data.dto.OrderItemDto;
 import online.javaclass.bookstore.data.dto.UserDto;
@@ -9,7 +10,6 @@ import online.javaclass.bookstore.data.entities.Book;
 import online.javaclass.bookstore.data.entities.Order;
 import online.javaclass.bookstore.data.entities.OrderItem;
 import online.javaclass.bookstore.data.entities.User;
-import online.javaclass.bookstore.data.dto.BookDto;
 
 import java.math.BigDecimal;
 import java.util.List;

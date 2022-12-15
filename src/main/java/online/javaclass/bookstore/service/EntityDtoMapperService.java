@@ -1,11 +1,11 @@
 package online.javaclass.bookstore.service;
 
-import online.javaclass.bookstore.service.dto.BookDto;
-import online.javaclass.bookstore.service.dto.OrderDto;
-import online.javaclass.bookstore.service.dto.UserDto;
 import online.javaclass.bookstore.data.entities.Book;
 import online.javaclass.bookstore.data.entities.Order;
 import online.javaclass.bookstore.data.entities.User;
+import online.javaclass.bookstore.service.dto.BookDto;
+import online.javaclass.bookstore.service.dto.OrderDto;
+import online.javaclass.bookstore.service.dto.UserDto;
 
 public class EntityDtoMapperService {
     public User toEntity(UserDto userDto) {
