@@ -7,8 +7,8 @@
 </head>
 <body>
 <jsp:include page="navbar.jsp"/>
-<h1>Add new user</h1>
-<form action="controller?command=add_user" method="post">
+<h1>Register</h1>
+<form action="controller?command=register" method="post">
   <ul class="wrapper">
     <li class="form-row">
       <label>Firstname<input type="text" name="firstname" minlength="1"></label>
@@ -22,21 +22,6 @@
     <li class="form-row">
       <label>password<input type="password" name="password" minlength="8"></label>
     </li>
-    <c:if test="${sessionScope.user.Role == 'ADMIN'}">
-      <li class="form-row">
-        <label>Role
-          <select name="role" required="required">
-            <option value="">Select role</option>
-            <option value="USER">User</option>
-            <option value="ADMIN">Admin</option>
-            <option value="MANAGER">Manager</option>
-          </select>
-        </label>
-      </li>
-      <li class="form-row">
-        <label>Rating<input type="number" name="rating" step="0.01" min="0.01"></label>
-      </li>
-    </c:if>
     <li class="form-row">
       <input type="submit" name="Create">
     </li>

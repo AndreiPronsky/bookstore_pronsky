@@ -213,7 +213,7 @@ public class UserDaoImpl implements UserDao {
         statement.setString(2, user.getLastName());
         statement.setString(3, user.getEmail());
         statement.setString(4, user.getPassword());
-        statement.setInt(5, user.getRole().ordinal() + 1);
+        statement.setString(5, user.getRole().toString());
         statement.setBigDecimal(6, user.getRating());
     }
 
