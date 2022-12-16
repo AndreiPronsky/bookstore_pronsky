@@ -10,5 +10,4 @@ public interface OrderItemDao extends AbstractDao<Long, OrderItemDto> {
     List<OrderItemDto> findAllByOrderId(Long orderId, int limit, int offset);
 
     void deleteAllByOrderId(Long orderId);
-
 }

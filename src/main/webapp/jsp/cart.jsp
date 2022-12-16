@@ -7,11 +7,11 @@
 </head>
 <body>
 <jsp:include page="navbar.jsp"/>
-<c:if test="${sessionScope.cart.isEmpty()}">
-    <h2>Your cart is empty!</h2>
+<c:if test="${sessionScope.cart == null}">
+    <h1>Your cart is empty!</h1>
 </c:if>
-<c:if test="${!sessionScope.cart.isEmpty()}">
-    <form action="controller?command=cart" method="post">
+<c:if test="${!sessionScope.cart.isEmpty && sessionScope.cart != null}">
+    <form action="controller?command=cart" method="get">
         <table>
             <caption>Cart</caption>
             <thead>
@@ -24,19 +24,17 @@
             <tbody>
             <c:forEach items="${sessionScope.cart}" var="cartItem">
                 <tr>
-                    <td>${cartItem.key}</td>
-                    <td>Price</td>
+                    <td>${cartItem.key.title}</td>
+                    <td>${cartItem.key.price}</td>
                     <td>
-                        <form>
-                            <label>Quantity<input type="number" name="quantity" step="1" min="0"
-                                                  value="${cartItem.value}"></label>
-                        </form>
+                        <label>Quantity<input type="number" name="quantity" step="1" min="0" value="${cartItem.value}"></label>
                     </td>
                 </tr>
             </c:forEach>
+            <tr><td>${sessionScope.cost}</td></tr>
             </tbody>
         </table>
-        <input type="submit" name="createOrder">
+        <input type="submit" name="createOrder" value="Order">
     </form>
 </c:if>
 <footer></footer>

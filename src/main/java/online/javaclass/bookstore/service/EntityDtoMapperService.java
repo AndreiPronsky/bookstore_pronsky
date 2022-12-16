@@ -1,11 +1,13 @@
 package online.javaclass.bookstore.service;
 
+import online.javaclass.bookstore.data.entities.OrderItem;
+import online.javaclass.bookstore.service.dto.BookDto;
+import online.javaclass.bookstore.service.dto.OrderDto;
+import online.javaclass.bookstore.service.dto.OrderItemDto;
+import online.javaclass.bookstore.service.dto.UserDto;
 import online.javaclass.bookstore.data.entities.Book;
 import online.javaclass.bookstore.data.entities.Order;
 import online.javaclass.bookstore.data.entities.User;
-import online.javaclass.bookstore.service.dto.BookDto;
-import online.javaclass.bookstore.service.dto.OrderDto;
-import online.javaclass.bookstore.service.dto.UserDto;
 
 public class EntityDtoMapperService {
     public User toEntity(UserDto userDto) {
@@ -15,7 +17,7 @@ public class EntityDtoMapperService {
         user.setLastName(userDto.getLastName());
         user.setEmail(userDto.getEmail());
         user.setPassword(userDto.getPassword());
-        user.setRole(User.Role.valueOf(userDto.getRole().toString()));
+        user.setRole(User.Role.values()[(userDto.getRole().ordinal())]);
         user.setRating(userDto.getRating());
         return user;
     }
@@ -40,7 +42,7 @@ public class EntityDtoMapperService {
         order.setPaymentMethod(Order.PaymentMethod.valueOf(orderDto.getPaymentMethod().toString()));
         order.setPaymentStatus(Order.PaymentStatus.valueOf(orderDto.getPaymentStatus().toString()));
         order.setDeliveryType(Order.DeliveryType.valueOf(orderDto.getDeliveryType().toString()));
-        order.setItems(orderDto.getItems());
+        order.setItems(orderDto.getItems().stream().map(this::toEntity).toList());
         order.setCost(orderDto.getCost());
         return order;
     }
@@ -53,7 +55,7 @@ public class EntityDtoMapperService {
         orderDto.setPaymentMethod(OrderDto.PaymentMethod.valueOf(order.getPaymentMethod().toString()));
         orderDto.setPaymentStatus(OrderDto.PaymentStatus.valueOf(order.getPaymentStatus().toString()));
         orderDto.setDeliveryType(OrderDto.DeliveryType.valueOf(order.getDeliveryType().toString()));
-        orderDto.setItems(order.getItems());
+        orderDto.setItems(order.getItems().stream().map(this::toDto).toList());
         orderDto.setCost(order.getCost());
         return orderDto;
     }
@@ -65,8 +67,8 @@ public class EntityDtoMapperService {
         book.setTitle(bookDto.getTitle());
         book.setAuthor(bookDto.getAuthor());
         book.setIsbn(bookDto.getIsbn());
-        book.setGenre(Book.Genre.valueOf(bookDto.getGenre().toString()));
-        book.setCover(Book.Cover.valueOf(bookDto.getCover().toString()));
+        book.setGenre(Book.Genre.values()[(bookDto.getGenre().ordinal())]);
+        book.setCover(Book.Cover.values()[(bookDto.getCover().ordinal())]);
         book.setPages(bookDto.getPages());
         book.setPrice(bookDto.getPrice());
         book.setRating(bookDto.getRating());
@@ -87,5 +89,23 @@ public class EntityDtoMapperService {
         return bookDto;
     }
 
+    public OrderItemDto toDto(OrderItem item) {
+        OrderItemDto itemDto = new OrderItemDto();
+        itemDto.setOrderId(item.getOrderId());
+        itemDto.setQuantity(item.getQuantity());
+        itemDto.setPrice(item.getPrice());
+        itemDto.setBookId(item.getBookId());
+        itemDto.setId(item.getId());
+        return itemDto;
+    }
 
+    public OrderItem toEntity(OrderItemDto itemDto) {
+        OrderItem orderItem = new OrderItem();
+        orderItem.setBookId(itemDto.getBookId());
+        orderItem.setPrice(itemDto.getPrice());
+        orderItem.setId(itemDto.getId());
+        orderItem.setOrderId(itemDto.getOrderId());
+        orderItem.setQuantity(itemDto.getQuantity());
+        return orderItem;
+    }
 }

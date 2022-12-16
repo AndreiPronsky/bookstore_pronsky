@@ -53,7 +53,12 @@ public class OrderRepositoryImpl implements OrderRepository {
     public Order create(Order order) {
         OrderDto orderDto = mapper.toDto(order);
         OrderDto createdOrder = orderDao.create(orderDto);
-        orderDto.getItems().forEach(orderItemDao::create);
+        List<OrderItemDto> items = orderDto.getItems();
+        for (OrderItemDto item : items) {
+            item.setOrderId(createdOrder.getId());
+        }
+        items.forEach(orderItemDao::create);
+        createdOrder.setItems(items);
         return mapper.toEntity(createdOrder);
     }
 

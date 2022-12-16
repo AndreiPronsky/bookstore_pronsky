@@ -1,7 +1,6 @@
 package online.javaclass.bookstore.service.dto;
 
 import lombok.Data;
-import online.javaclass.bookstore.data.entities.OrderItem;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -15,7 +14,7 @@ public class OrderDto {
     private PaymentStatus paymentStatus;
     private DeliveryType deliveryType;
     private BigDecimal cost;
-    private List<OrderItem> items;
+    private List<OrderItemDto> items;
 
     public enum OrderStatus {
         OPEN,

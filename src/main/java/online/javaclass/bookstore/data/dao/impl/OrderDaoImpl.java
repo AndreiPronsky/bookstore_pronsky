@@ -8,6 +8,8 @@ import online.javaclass.bookstore.data.dto.OrderDto;
 import online.javaclass.bookstore.service.exceptions.UnableToCreateException;
 import online.javaclass.bookstore.service.exceptions.UnableToDeleteException;
 import online.javaclass.bookstore.service.exceptions.UnableToUpdateException;
+import online.javaclass.bookstore.service.exceptions.UnableToFindException;
+import online.javaclass.bookstore.service.exceptions.AppException;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -44,54 +46,66 @@ public class OrderDaoImpl implements OrderDao {
     private static final String UPDATE_ORDER = "UPDATE orders o SET user_id = ?, status_id = ?, payment_method_id = ?, " +
             "payment_status_id = ?, delivery_type_id = ?, cost = ? WHERE o.id = ?";
     private static final String DELETE_ORDER_BY_ID = "DELETE FROM orders WHERE id = ?";
+    private static final String COUNT_ORDERS = "SELECT count(*) FROM orders";
     private static final String COL_STATUS = "status";
     private static final String COL_PAYMENT_METHOD = "payment_method";
     private static final String COL_PAYMENT_STATUS = "payment_status";
     private static final String COL_DELIVERY_TYPE = "delivery_type";
     private static final String COL_USER_ID = "user_id";
-    private static final String COL_ID = "order_id";
+    private static final String COL_ID = "id";
     private final DataBaseManager dataBaseManager;
 
     @Override
     public OrderDto findById(Long id) {
-        OrderDto order = new OrderDto();
         try (Connection connection = dataBaseManager.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(FIND_ORDER_BY_ID);
             statement.setLong(1, id);
-            ResultSet result = statement.executeQuery();
-            if (result.next()) {
-                setParameters(order, result);
-            }
+            return extractedFromStatement(statement);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            log.error(e.getMessage());
         }
-        return null;
+        throw new UnableToFindException("Unable to find order with id " + id);
+    }
+
+@Override
+    public Long count() {
+        try (Connection connection = dataBaseManager.getConnection();
+             Statement statement = connection.createStatement()) {
+            ResultSet result = statement.executeQuery(COUNT_ORDERS);
+            log.debug("DB query completed");
+            Long count = null;
+            if (result.next()) {
+                count = result.getLong("count");
+            }
+            return count;
+        } catch (SQLException e) {
+            log.error(e.getMessage());
+        }
+        throw new AppException("Count failed!");
     }
 
     @Override
     public List<OrderDto> findAll() {
-        List<OrderDto> orders = new ArrayList<>();
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_ALL_ORDERS)) {
-            addOrdersToList(orders, statement);
-            return orders;
+            return createOrderList(statement);
         } catch (SQLException e) {
-            throw new RuntimeException("No books found", e);
+            log.error(e.getMessage());
         }
+        throw new UnableToFindException("Unable to find orders");
     }
 
     @Override
     public List<OrderDto> findAll(int limit, int offset) {
-        List<OrderDto> orders = new ArrayList<>();
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_ALL_ORDERS_PAGED)) {
             statement.setInt(1, limit);
             statement.setInt(2, offset);
-            addOrdersToList(orders, statement);
-            return orders;
+            return createOrderList(statement);
         } catch (SQLException e) {
-            throw new RuntimeException("No books found", e);
+            log.error(e.getMessage());
         }
+        throw new UnableToFindException("Unable to find orders");
     }
 
     @Override
@@ -103,13 +117,14 @@ public class OrderDaoImpl implements OrderDao {
             log.debug("DB query completed");
             ResultSet result = statement.getGeneratedKeys();
             if (result.next()) {
+                log.debug("Created order with id" + result.getLong(COL_ID));
                 order.setId(result.getLong(COL_ID));
             }
-            log.debug("Created order with id" + result.getLong(COL_ID));
-            return findById(result.getLong(COL_ID));
-        } catch (Exception e) {
-            throw new UnableToCreateException("Creation failed! " + order, e);
+            return order;
+        } catch (SQLException e) {
+            log.error(e.getMessage());
         }
+        throw new UnableToCreateException("Unable to create order " + order);
     }
 
     @Override
@@ -119,10 +134,11 @@ public class OrderDaoImpl implements OrderDao {
             prepareStatementForUpdate(order, statement);
             statement.executeUpdate();
             log.debug("DB query completed");
-            return findById(order.getId());
+            return order;
         } catch (SQLException e) {
-            throw new UnableToUpdateException("Update failed! " + order, e);
+            log.error("Unable to update order " + order);
         }
+        throw new UnableToUpdateException("Update failed! " + order);
     }
 
     @Override
@@ -134,14 +150,25 @@ public class OrderDaoImpl implements OrderDao {
             log.debug("DB query completed");
             return affectedRows == 1;
         } catch (SQLException e) {
-            throw new UnableToDeleteException("Unable to delete order with id " + id, e);
+            log.error("Unable to delete order with id " + id);
         }
+        throw new UnableToDeleteException("Unable to delete order with id " + id);
     }
 
-    private static void setParameters(OrderDto order, ResultSet result) throws SQLException {
+    private OrderDto extractedFromStatement(PreparedStatement statement) throws SQLException {
+        ResultSet result = statement.executeQuery();
+        log.debug("DB query completed");
+        OrderDto order = new OrderDto();
+        if (result.next()) {
+            setParameters(order, result);
+        }
+        return order;
+    }
+
+    private void setParameters(OrderDto order, ResultSet result) throws SQLException {
         order.setUserId(result.getLong(COL_USER_ID));
-        order.setOrderStatus(OrderDto.OrderStatus.valueOf(result.getString(COL_STATUS)));
-        order.setPaymentMethod(OrderDto.PaymentMethod.valueOf(result.getString(COL_PAYMENT_METHOD)));
+        order.setOrderStatus(OrderDto.OrderStatus.values()[result.getInt(COL_STATUS)]);
+        order.setPaymentMethod(OrderDto.PaymentMethod.values()[result.getInt(COL_PAYMENT_METHOD)]);
         order.setPaymentStatus(OrderDto.PaymentStatus.valueOf(result.getString(COL_PAYMENT_STATUS)));
         order.setDeliveryType(OrderDto.DeliveryType.valueOf(result.getString(COL_DELIVERY_TYPE)));
     }
@@ -157,21 +184,23 @@ public class OrderDaoImpl implements OrderDao {
 
     private void prepareStatementForUpdate(OrderDto order, PreparedStatement statement) throws SQLException {
         statement.setLong(1, order.getUserId());
-        statement.setInt(2, order.getOrderStatus().ordinal() + 1);
-        statement.setInt(3, order.getPaymentMethod().ordinal() + 1);
-        statement.setInt(4, order.getPaymentStatus().ordinal() + 1);
-        statement.setInt(5, order.getDeliveryType().ordinal() + 1);
+        statement.setInt(2, order.getOrderStatus().ordinal());
+        statement.setInt(3, order.getPaymentMethod().ordinal());
+        statement.setInt(4, order.getPaymentStatus().ordinal());
+        statement.setInt(5, order.getDeliveryType().ordinal());
         statement.setBigDecimal(6, order.getCost());
         statement.setLong(7, order.getId());
     }
 
-    private void addOrdersToList(List<OrderDto> orders, PreparedStatement statement) throws SQLException {
+    private List<OrderDto> createOrderList(PreparedStatement statement) throws SQLException {
         ResultSet result = statement.executeQuery();
+        List<OrderDto> orders = new ArrayList<>();
         log.debug("DB query completed");
         while (result.next()) {
-            long id = result.getLong(COL_ID);
-            OrderDto order = findById(id);
+            OrderDto order = new OrderDto();
+            setParameters(order, result);
             orders.add(order);
         }
+        return orders;
     }
 }

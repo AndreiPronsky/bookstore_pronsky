@@ -20,7 +20,7 @@ public class BookDaoImpl implements BookDao {
             "(SELECT c.id FROM covers c WHERE c.name = ?), ?, ?, ?)";
     private static final String UPDATE_BOOK = "UPDATE books SET title = ?, author = ?, isbn = ?, " +
             "(SELECT g.id FROM genres g WHERE g.name = ?), " +
-            " (SELECT c.id FROM covers c WHERE c.name = ?), pages = ?, price = ?, rating = ? WHERE book_id = ?";
+            " (SELECT c.id FROM covers c WHERE c.name = ?), pages = ?, price = ?, rating = ? WHERE id = ?";
     private static final String FIND_BOOK_BY_ID = "SELECT b.id, b.title, b.author, b.isbn, g.name AS genre, " +
             "c.name AS cover, b.pages, b.price, b.rating FROM books b " +
             "JOIN genres g ON b.genre_id = g.id " +

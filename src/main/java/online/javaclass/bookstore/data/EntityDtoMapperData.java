@@ -46,10 +46,10 @@ public class EntityDtoMapperData {
         Order order = new Order();
         order.setId(orderDto.getId());
         order.setUser(toEntity(userDao.findById(orderDto.getUserId())));
-        order.setOrderStatus(Order.OrderStatus.valueOf(orderDto.getOrderStatus().toString()));
-        order.setPaymentMethod(Order.PaymentMethod.valueOf(orderDto.getPaymentMethod().toString()));
-        order.setPaymentStatus(Order.PaymentStatus.valueOf(orderDto.getPaymentStatus().toString()));
-        order.setDeliveryType(Order.DeliveryType.valueOf(orderDto.getDeliveryType().toString()));
+        order.setOrderStatus(Order.OrderStatus.values()[orderDto.getOrderStatus().ordinal()]);
+        order.setPaymentMethod(Order.PaymentMethod.values()[orderDto.getPaymentMethod().ordinal()]);
+        order.setPaymentStatus(Order.PaymentStatus.values()[orderDto.getPaymentStatus().ordinal()]);
+        order.setDeliveryType(Order.DeliveryType.values()[orderDto.getDeliveryType().ordinal()]);
         order.setItems(getOrderItemList(orderDto));
         order.setCost(calculateCost(orderDto));
         return order;
@@ -59,10 +59,10 @@ public class EntityDtoMapperData {
         OrderDto orderDto = new OrderDto();
         orderDto.setId(order.getId());
         orderDto.setUserId(order.getUser().getId());
-        orderDto.setOrderStatus(OrderDto.OrderStatus.valueOf(order.getOrderStatus().toString()));
-        orderDto.setPaymentMethod(OrderDto.PaymentMethod.valueOf(order.getOrderStatus().toString()));
-        orderDto.setPaymentStatus(OrderDto.PaymentStatus.valueOf(order.getPaymentStatus().toString()));
-        orderDto.setDeliveryType(OrderDto.DeliveryType.valueOf(order.getDeliveryType().toString()));
+        orderDto.setOrderStatus(OrderDto.OrderStatus.values()[order.getOrderStatus().ordinal()]);
+        orderDto.setPaymentMethod(OrderDto.PaymentMethod.values()[order.getOrderStatus().ordinal()]);
+        orderDto.setPaymentStatus(OrderDto.PaymentStatus.values()[order.getPaymentStatus().ordinal()]);
+        orderDto.setDeliveryType(OrderDto.DeliveryType.values()[order.getDeliveryType().ordinal()]);
         orderDto.setItems(getOrderItemDtoList(order));
         orderDto.setCost(order.getCost());
         return orderDto;
@@ -95,7 +95,6 @@ public class EntityDtoMapperData {
         bookDto.setRating(book.getRating());
         return bookDto;
     }
-
 
     public OrderItemDto toDto(OrderItem item) {
         OrderItemDto itemDto = new OrderItemDto();
