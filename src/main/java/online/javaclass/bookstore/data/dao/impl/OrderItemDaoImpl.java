@@ -31,14 +31,11 @@ public class OrderItemDaoImpl implements OrderItemDao {
     private static final String UPDATE_ITEM = "UPDATE order_items SET order_id = ?, book_id = ?, quantity = ?, " +
             "price = ? WHERE id = ?";
     private static final String DELETE_ITEM_BY_ID = "DELETE FROM order_items WHERE id = ?";
-
-
     private static final String COL_ID = "id";
     private static final String COL_ORDER_ID = "order_id";
     private static final String COL_BOOK_ID = "book_id";
     private static final String COL_QUANTITY = "quantity";
     private static final String COL_PRICE = "price";
-
     private final DataBaseManager dataBaseManager;
 
     @Override

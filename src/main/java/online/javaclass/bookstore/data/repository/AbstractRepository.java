@@ -14,4 +14,6 @@ public interface AbstractRepository<K, T> {
     T update(T entity);
 
     boolean deleteById(K id);
+
+    Long count();
 }

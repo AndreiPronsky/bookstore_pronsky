@@ -13,6 +13,25 @@
     <h2>No books found!</h2>
 </c:if>
 <c:if test="${!requestScope.books.isEmpty()}">
+    <div class="paging">
+        <p>${requestScope.total_pages}</p>
+        <br>
+        <a href="controller?command=books&page=1">First</a>
+        <c:if test="${requestScope.page <= 1} ">
+            <a>Previous</a>
+        </c:if>
+        <c:if test="${requestScope.page > 1}">
+            <a href="controller?command=books&page=${requestScope.page - 1}">Previous</a>
+        </c:if>
+            ${requestScope.page}
+        <c:if test="${requestScope.page < requestScope.total_pages}">
+            <a href="controller?command=books&page=">Next</a>
+        </c:if>
+        <c:if test="${requestScope.page >= requestScope.total_pages}">
+            <a>Next</a>
+        </c:if>
+        <a href="controller?command=books&page=${requestScope.total_pages}">Last</a>
+    </div>
     <table>
         <caption>Books</caption>
         <thead>

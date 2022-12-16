@@ -1,6 +1,6 @@
 package online.javaclass.bookstore.service;
 
-import online.javaclass.bookstore.controller.Pageable;
+import online.javaclass.bookstore.service.dto.PageableDto;
 
 import java.util.List;
 
@@ -9,11 +9,12 @@ public interface AbstractService<K, T> {
 
     List<T> getAll();
 
-    List<T> getAll(Pageable pageable);
+    List<T> getAll(PageableDto pageable);
 
     T create(T entity);
 
     T update(T entity);
 
     void deleteById(K id);
+    Long count();
 }

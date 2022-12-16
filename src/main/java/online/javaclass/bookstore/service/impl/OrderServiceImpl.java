@@ -2,7 +2,7 @@ package online.javaclass.bookstore.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import online.javaclass.bookstore.controller.Pageable;
+import online.javaclass.bookstore.service.dto.PageableDto;
 import online.javaclass.bookstore.data.entities.Order;
 import online.javaclass.bookstore.data.repository.OrderRepository;
 import online.javaclass.bookstore.service.EntityDtoMapperService;
@@ -36,7 +36,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderDto> getAll(Pageable pageable) {
+    public List<OrderDto> getAll(PageableDto pageable) {
         log.debug("get all orders");
         return orderRepo.findAll(pageable.getLimit(), pageable.getOffset()).stream()
                 .map(mapper::toDto)
@@ -66,5 +66,10 @@ public class OrderServiceImpl implements OrderService {
         if (!deleted) {
             log.error("Unable to delete order with id : " + id);
         }
+    }
+
+    @Override
+    public Long count() {
+        return orderRepo.count();
     }
 }

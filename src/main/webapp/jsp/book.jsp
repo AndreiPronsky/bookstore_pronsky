@@ -16,6 +16,7 @@
          <p>${requestScope.book.author}</p>
          <h3>Title :</h3>
          <p>${requestScope.book.title}</p>
+            <p><a href="controller?command=add_to_cart&id=${requestScope.book.id}">Add to cart</a></p>
         </article>
         <footer></footer>
      </body>

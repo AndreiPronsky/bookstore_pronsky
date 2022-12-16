@@ -37,7 +37,6 @@ public class UserDaoImpl implements UserDao {
             "r.name AS role, u.rating FROM users u JOIN roles r ON u.role_id = r.id WHERE lastname = ? " +
             "LIMIT ? OFFSET ?";
     private static final String DELETE_USER_BY_ID = "DELETE FROM users WHERE id = ?";
-
     private static final String COUNT_USERS = "SELECT count(*) FROM users";
     private static final String COL_ID = "id";
     private static final String COL_FIRSTNAME = "firstname";
@@ -46,7 +45,6 @@ public class UserDaoImpl implements UserDao {
     private static final String COL_PASSWORD = "password";
     private static final String COL_ROLE = "role";
     private static final String COL_RATING = "rating";
-
     private final DataBaseManager dataBaseManager;
 
     public UserDto create(UserDto user) {

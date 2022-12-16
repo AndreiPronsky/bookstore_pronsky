@@ -1,14 +1,23 @@
 package online.javaclass.bookstore.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import online.javaclass.bookstore.service.dto.PageableDto;
 
 public class PagingUtil {
 
     private static final int DEFAULT_PAGE = 1;
     private static final int DEFAULT_PAGE_SIZE = 5;
 
-    public static Pageable getPageable(HttpServletRequest req) {
-        return new Pageable(getPage(req), getPageSize(req));
+    public static PageableDto getPageable(HttpServletRequest req) {
+        return new PageableDto(getPage(req), getPageSize(req));
+    }
+
+    public static Long getTotalPages(Long totalItems, PageableDto pageable) {
+        Long pages = totalItems / pageable.getPageSize();
+        if (totalItems % pageable.getPageSize() != 0) {
+            pages++;
+        }
+        return pages;
     }
 
     private static int getPage(HttpServletRequest req) {

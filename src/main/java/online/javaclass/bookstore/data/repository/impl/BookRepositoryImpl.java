@@ -85,4 +85,9 @@ public class BookRepositoryImpl implements BookRepository {
     public boolean deleteById(Long id) {
         return bookDao.deleteById(id);
     }
+
+    @Override
+    public Long count() {
+        return bookDao.count();
+    }
 }
