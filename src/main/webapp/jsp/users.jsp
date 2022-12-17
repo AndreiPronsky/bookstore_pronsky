@@ -13,6 +13,23 @@
   <h2>No users found!</h2>
 </c:if>
 <c:if test="${!requestScope.users.isEmpty()}">
+  <div class="paging">
+    <a href="controller?command=users&page=1">First</a>
+    <c:if test="${requestScope.page <= 1} ">
+      <a>Previous</a>
+    </c:if>
+    <c:if test="${requestScope.page > 1}">
+      <a href="controller?command=users&page=${requestScope.page - 1}">Previous</a>
+    </c:if>
+      ${requestScope.page}
+    <c:if test="${requestScope.page < requestScope.total_pages}">
+      <a href="controller?command=users&page=${requestScope.page + 1}">Next</a>
+    </c:if>
+    <c:if test="${requestScope.page >= requestScope.total_pages}">
+      <a>Next</a>
+    </c:if>
+    <a href="controller?command=users&page=${requestScope.total_pages}">Last</a>
+  </div>
   <table>
     <caption>Users</caption>
     <thead>

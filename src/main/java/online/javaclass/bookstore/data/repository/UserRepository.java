@@ -10,4 +10,7 @@ public interface UserRepository extends AbstractRepository<Long, User> {
 
     List<User> findByLastName(String lastName);
 
+    List<User> findByLastName(String lastname, int limit, int offset);
+
+    Long count();
 }

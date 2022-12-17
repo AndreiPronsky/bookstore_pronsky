@@ -12,17 +12,9 @@
 </c:if>
 <c:if test="${!sessionScope.cart.isEmpty && sessionScope.cart != null}">
     <form action="controller?command=cart" method="get">
-    <table>
-        <caption>Cart</caption>
-        <thead>
-        <tr>
-            <th>Title</th>
-            <th>Price</th>
-            <th>Quantity</th>
-        </tr>
-        </thead>
-        <tbody>
-        <c:forEach items="${sessionScope.cart}" var="cartItem">
+        <table>
+            <caption>Cart</caption>
+            <thead>
             <tr>
                 <td>${cartItem.key.title}</td>
                 <td>${cartItem.key.price}</td>
@@ -30,11 +22,21 @@
                 <label>Quantity<input type="number" name="quantity" step="1" min="0" value="${cartItem.value}"></label>
                 </td>
             </tr>
-        </c:forEach>
-        <tr><td>${sessionScope.cost}</td></tr>
-        </tbody>
-    </table>
-            <input type="submit" name="createOrder" value="Order">
+            </thead>
+            <tbody>
+            <c:forEach items="${sessionScope.cart}" var="cartItem">
+                <tr>
+                    <td>${cartItem.key.title}</td>
+                    <td>${cartItem.key.price}</td>
+                    <td>
+                        <label>Quantity<input type="number" name="quantity" step="1" min="0" value="${cartItem.value}"></label>
+                    </td>
+                </tr>
+            </c:forEach>
+            <tr><td>${sessionScope.cost}</td></tr>
+            </tbody>
+        </table>
+        <input type="submit" name="createOrder" value="Order">
     </form>
 </c:if>
 <footer></footer>

@@ -17,16 +17,19 @@ import java.util.List;
 @RequiredArgsConstructor
 @Log4j2
 public class OrderItemDaoImpl implements OrderItemDao {
-    private static final String FIND_ITEMS_BY_ORDER_ID = "SELECT oi.id, oi.order_id, oi.book_id, " +
-            "oi.quantity, oi.price FROM order_items oi WHERE oi.order_id = ?";
-    private static final String FIND_ITEM_BY_ID = "SELECT oi.id, oi.order_id, oi.book_id, oi.quantity, " +
-            "oi.price FROM order_items oi WHERE oi.id = ?";
-    private static final String FIND_ALL = "SELECT oi.id, oi.order_id, oi.book_id, oi.quantity, oi.price " +
-            "FROM order_items oi";
+    private static final String FIND_ITEMS_BY_ORDER_ID = "SELECT id, order_id, book_id, quantity, price FROM order_items" +
+            " WHERE order_id = ?";
+    private static final String FIND_ITEMS_BY_ORDER_ID_PAGED = "SELECT id, order_id, book_id, quantity, price " +
+            "FROM order_items WHERE order_id = ? LIMIT ? OFFSET ?";
+    private static final String FIND_ITEM_BY_ID = "SELECT id, order_id, book_id, quantity, price FROM order_items " +
+            "WHERE id = ?";
+    private static final String FIND_ALL = "SELECT id, order_id, book_id, quantity, price FROM order_items";
+    private static final String FIND_ALL_PAGED = "SELECT id, order_id, book_id, quantity, price FROM order_items " +
+            "LIMIT ? OFFSET ?";
     private static final String CREATE_ITEM = "INSERT INTO order_items (order_id, book_id, quantity, price) " +
             "VALUES (?, ?, ?, ?)";
-    private static final String UPDATE_ITEM = "UPDATE order_items oi SET order_id = ?, book_id = ?, quantity = ?, " +
-            "price = ? WHERE oi.id = ?";
+    private static final String UPDATE_ITEM = "UPDATE order_items SET order_id = ?, book_id = ?, quantity = ?, " +
+            "price = ? WHERE id = ?";
     private static final String DELETE_ITEM_BY_ID = "DELETE FROM order_items WHERE id = ?";
     private static final String COL_ID = "id";
     private static final String COL_ORDER_ID = "order_id";
@@ -44,7 +47,23 @@ public class OrderItemDaoImpl implements OrderItemDao {
         } catch (SQLException e) {
             log.error(e.getMessage());
         }
-        throw new UnableToFindException("Unable to find items with order id " + orderId);
+        throw new UnableToFindException("No order items with order id " + orderId + " found");
+    }
+
+    @Override
+    public List<OrderItemDto> findAllByOrderId(Long orderId, int limit, int offset) {
+        List<OrderItemDto> orderItems = new ArrayList<>();
+        try (Connection connection = dataBaseManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(FIND_ITEMS_BY_ORDER_ID_PAGED)) {
+            statement.setLong(1, orderId);
+            statement.setInt(2, limit);
+            statement.setInt(3, offset);
+            addItemsToList(orderItems, statement);
+            return orderItems;
+        } catch (SQLException e) {
+            log.error(e.getMessage());
+        }
+        throw new UnableToFindException("No order items with order id " + orderId + " found");
     }
 
     @Override
@@ -63,7 +82,7 @@ public class OrderItemDaoImpl implements OrderItemDao {
         } catch (SQLException e) {
             log.error(e.getMessage());
         }
-        throw new UnableToFindException("No order item with id " + id + " found");
+        throw new UnableToFindException("No order items found");
     }
 
     @Override
@@ -74,7 +93,22 @@ public class OrderItemDaoImpl implements OrderItemDao {
         } catch (SQLException e) {
             log.error(e.getMessage());
         }
-        throw new UnableToFindException("No items found");
+        throw new UnableToFindException("No order items found");
+    }
+
+    @Override
+    public List<OrderItemDto> findAll(int limit, int offset) {
+        List<OrderItemDto> orderItems = new ArrayList<>();
+        try (Connection connection = dataBaseManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(FIND_ALL_PAGED)) {
+            statement.setInt(1, limit);
+            statement.setInt(2, offset);
+            addItemsToList(orderItems, statement);
+            return orderItems;
+        } catch (SQLException e) {
+            log.error(e.getMessage());
+        }
+        throw new UnableToFindException("No order items found");
     }
 
     @Override
@@ -122,16 +156,6 @@ public class OrderItemDaoImpl implements OrderItemDao {
             log.error(e.getMessage());
         }
         throw new UnableToDeleteException("Unable to delete item with id " + id);
-    }
-
-    private OrderItemDto extractedFromStatement(PreparedStatement statement) throws SQLException {
-        ResultSet result = statement.executeQuery();
-        log.debug("DB query completed");
-        OrderItemDto item = new OrderItemDto();
-        if (result.next()) {
-            setParameters(item, result);
-        }
-        return item;
     }
 
     private List<OrderItemDto> createItemList(PreparedStatement statement) throws SQLException {

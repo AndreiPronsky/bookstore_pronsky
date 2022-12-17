@@ -3,16 +3,45 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Bookstore-pronsky</title>
+    <title>Books</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <jsp:include page="navbar.jsp"/>
-<jsp:include page="searchbar.jsp"/>
-<h1>Welcome to bookstore_pronsky, dear ${sessionScope.user != null ? sessionScope.user.firstName : 'Guest'}</h1>
-
-<div class="container">
-    <div class="row">
+<header></header>
+<c:if test="${requestScope.books.isEmpty()}">
+    <h2>No books found!</h2>
+</c:if>
+<c:if test="${!requestScope.books.isEmpty()}">
+    <div class="paging">
+        <a href="controller?command=books&page=1">First</a>
+        <c:if test="${requestScope.page <= 1} ">
+            <a>Previous</a>
+        </c:if>
+        <c:if test="${requestScope.page > 1}">
+            <a href="controller?command=books&page=${requestScope.page - 1}">Previous</a>
+        </c:if>
+            ${requestScope.page}
+        <c:if test="${requestScope.page < requestScope.total_pages}">
+            <a href="controller?command=books&page=${requestScope.page + 1}">Next</a>
+        </c:if>
+        <c:if test="${requestScope.page >= requestScope.total_pages}">
+            <a>Next</a>
+        </c:if>
+        <a href="controller?command=books&page=${requestScope.total_pages}">Last</a>
+    </div>
+    <table>
+        <caption>Books</caption>
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Author</th>
+            <th>Title</th>
+            <th>Genre</th>
+            <th>Price</th>
+        </tr>
+        </thead>
+        <tbody>
         <c:forEach items="${requestScope.books}" var="book">
 
             <div class="col-md-3 my-3">

@@ -3,8 +3,10 @@ package online.javaclass.bookstore.controller.command.impl;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import online.javaclass.bookstore.controller.PagingUtil;
 import online.javaclass.bookstore.controller.command.Command;
 import online.javaclass.bookstore.service.UserService;
+import online.javaclass.bookstore.service.dto.PageableDto;
 import online.javaclass.bookstore.service.dto.UserDto;
 
 import java.util.List;
@@ -18,13 +20,10 @@ public class UsersCommand implements Command {
     public String execute(HttpServletRequest req) {
         List<UserDto> users;
         try {
-            String rawLastName = req.getParameter("lastname");
-            if (rawLastName == null) {
-                users = userService.getAll();
-            } else {
-                String lastName = reformatLastName(rawLastName);
-                users = userService.getByLastName(lastName);
-            }
+            PageableDto pageable = PagingUtil.getPageable(req);
+            users = userService.getAll(pageable);
+            req.setAttribute("page", pageable.getPage());
+            req.setAttribute("total_pages", pageable.getTotalPages());
             req.setAttribute("users", users);
             return "jsp/users.jsp";
         } catch (Exception e) {

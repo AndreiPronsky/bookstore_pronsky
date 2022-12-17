@@ -45,6 +45,16 @@ public class OrderRepositoryImpl implements OrderRepository {
     }
 
     @Override
+    public List<Order> findAll(int limit, int offset) {
+        List<Order> orders = new ArrayList<>();
+        List<OrderDto> orderDtoList = orderDao.findAll(limit, offset);
+        for (OrderDto orderDto : orderDtoList) {
+            orders.add(buildOrder(orderDto));
+        }
+        return orders;
+    }
+
+    @Override
     public Order create(Order order) {
         OrderDto orderDto = mapper.toDto(order);
         OrderDto createdOrder = orderDao.create(orderDto);
@@ -88,5 +98,10 @@ public class OrderRepositoryImpl implements OrderRepository {
         }
         order.setItems(orderItems);
         return order;
+    }
+
+    @Override
+    public Long count() {
+        return orderDao.count();
     }
 }

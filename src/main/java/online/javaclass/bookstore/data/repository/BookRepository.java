@@ -9,4 +9,7 @@ public interface BookRepository extends AbstractRepository<Long, Book> {
     Book findByIsbn(String isbn);
 
     List<Book> findByAuthor(String author);
+
+    List<Book> findByAuthor(String author, int limit, int offset);
+
 }

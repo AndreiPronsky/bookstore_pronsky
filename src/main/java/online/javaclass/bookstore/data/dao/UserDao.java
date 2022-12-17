@@ -9,5 +9,7 @@ public interface UserDao extends AbstractDao<Long, UserDto> {
 
     List<UserDto> findByLastName(String lastname);
 
+    List<UserDto> findByLastName(String lastname, int limit, int offset);
+
     Long count();
 }

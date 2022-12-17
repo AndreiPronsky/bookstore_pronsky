@@ -5,7 +5,12 @@ import lombok.extern.log4j.Log4j2;
 import online.javaclass.bookstore.data.connection.DataBaseManager;
 import online.javaclass.bookstore.data.dao.OrderDao;
 import online.javaclass.bookstore.data.dto.OrderDto;
-import online.javaclass.bookstore.service.exceptions.*;
+
+import online.javaclass.bookstore.service.exceptions.UnableToCreateException;
+import online.javaclass.bookstore.service.exceptions.UnableToDeleteException;
+import online.javaclass.bookstore.service.exceptions.UnableToUpdateException;
+import online.javaclass.bookstore.service.exceptions.UnableToFindException;
+import online.javaclass.bookstore.service.exceptions.AppException;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -14,30 +19,36 @@ import java.util.List;
 @Log4j2
 @RequiredArgsConstructor
 public class OrderDaoImpl implements OrderDao {
-
-    private static final String FIND_ORDER_BY_ID = "SELECT o.id, o.user_id, os.name AS order_status, " +
-            "pm.name AS payment_method, ps.name AS payment_status, dt.name AS delivery_type, o.cost FROM orders o " +
-            "JOIN order_status os on o.status_id = os.id " +
+    private static final String FIND_ORDER_BY_ID = "SELECT o.id, o.user_id, os.name AS status, " +
+            "pm.name AS payment_method, ps.name AS payment_status, dt.name AS delivery_type, cost FROM orders o " +
+            "JOIN order_status os ON o.status_id = os.id " +
             "JOIN delivery_type dt on dt.id = o.delivery_type_id " +
             "JOIN payment_method pm on o.payment_method_id = pm.id " +
-            "JOIN payment_status ps on o.payment_status_id = ps.id WHERE o.id = ?";
-    private static final String FIND_ALL_ORDERS = "SELECT o.id, o.user_id, os.name AS order_status, " +
-            "pm.name AS payment_method, ps.name AS payment_status, dt.name AS delivery_type, o.cost FROM orders o " +
-            "JOIN order_status os on o.status_id = os.id " +
+            "JOIN payment_status ps on o.payment_status_id = ps.id WHERE o.id = ? ";
+    private static final String FIND_ALL_ORDERS = "SELECT o.id, o.user_id, os.name AS status, " +
+            "pm.name AS payment_method, ps.name AS payment_status, dt.name AS delivery_type, cost FROM orders o " +
+            "JOIN order_status os ON o.status_id = os.id " +
             "JOIN delivery_type dt on dt.id = o.delivery_type_id " +
             "JOIN payment_method pm on o.payment_method_id = pm.id " +
             "JOIN payment_status ps on o.payment_status_id = ps.id ";
+
+    private static final String FIND_ALL_ORDERS_PAGED = "SELECT o.id, o.user_id, os.name AS status, " +
+            "pm.name AS payment_method, ps.name AS payment_status, dt.name AS delivery_type, cost FROM orders o " +
+            "JOIN order_status os ON o.status_id = os.id " +
+            "JOIN delivery_type dt on dt.id = o.delivery_type_id " +
+            "JOIN payment_method pm on o.payment_method_id = pm.id " +
+            "JOIN payment_status ps on o.payment_status_id = ps.id " +
+            "LIMIT ? OFFSET ?";
     private static final String CREATE_ORDER = "INSERT INTO orders (user_id, status_id, payment_method_id, payment_status_id," +
-            "delivery_type_id, cost) VALUES (?, " +
-            "(SELECT os.id FROM order_status os WHERE os.name = ?), " +
+            "delivery_type_id, cost) VALUES (?, (SELECT os.id FROM order_status os WHERE os.name = ?), " +
             "(SELECT pm.id FROM payment_method pm WHERE pm.name = ?), " +
             "(SELECT ps.id FROM payment_status ps WHERE ps.name = ?), " +
             "(SELECT dt.id FROM delivery_type dt WHERE dt.name = ?), ?)";
     private static final String UPDATE_ORDER = "UPDATE orders o SET user_id = ?, status_id = ?, payment_method_id = ?, " +
             "payment_status_id = ?, delivery_type_id = ?, cost = ? WHERE o.id = ?";
-    private static final String DELETE_ORDER_BY_ID = "DELETE FROM orders o WHERE o.id = ?";
+    private static final String DELETE_ORDER_BY_ID = "DELETE FROM orders WHERE id = ?";
     private static final String COUNT_ORDERS = "SELECT count(*) FROM orders";
-    private static final String COL_STATUS = "order_status";
+    private static final String COL_STATUS = "status";
     private static final String COL_PAYMENT_METHOD = "payment_method";
     private static final String COL_PAYMENT_STATUS = "payment_status";
     private static final String COL_DELIVERY_TYPE = "delivery_type";
@@ -57,7 +68,7 @@ public class OrderDaoImpl implements OrderDao {
         throw new UnableToFindException("Unable to find order with id " + id);
     }
 
-    @Override
+@Override
     public Long count() {
         try (Connection connection = dataBaseManager.getConnection();
              Statement statement = connection.createStatement()) {
@@ -78,6 +89,19 @@ public class OrderDaoImpl implements OrderDao {
     public List<OrderDto> findAll() {
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_ALL_ORDERS)) {
+            return createOrderList(statement);
+        } catch (SQLException e) {
+            log.error(e.getMessage());
+        }
+        throw new UnableToFindException("Unable to find orders");
+    }
+
+    @Override
+    public List<OrderDto> findAll(int limit, int offset) {
+        try (Connection connection = dataBaseManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(FIND_ALL_ORDERS_PAGED)) {
+            statement.setInt(1, limit);
+            statement.setInt(2, offset);
             return createOrderList(statement);
         } catch (SQLException e) {
             log.error(e.getMessage());

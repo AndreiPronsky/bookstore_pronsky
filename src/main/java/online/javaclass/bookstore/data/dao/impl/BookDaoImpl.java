@@ -7,11 +7,7 @@ import online.javaclass.bookstore.data.dao.BookDao;
 import online.javaclass.bookstore.data.dto.BookDto;
 import online.javaclass.bookstore.service.exceptions.*;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,8 +18,9 @@ public class BookDaoImpl implements BookDao {
     private static final String CREATE_BOOK = "INSERT INTO books (title, author, isbn, genre_id, cover_id, pages, price, rating) " +
             "VALUES (?, ?, ?, (SELECT g.id FROM genres g WHERE g.name = ?), " +
             "(SELECT c.id FROM covers c WHERE c.name = ?), ?, ?, ?)";
-    private static final String UPDATE_BOOK = "UPDATE books SET title = ?, author = ?, isbn = ?, genre_id = ?," +
-            " cover_id = ?, pages = ?, price = ?, rating = ? WHERE book_id = ?";
+    private static final String UPDATE_BOOK = "UPDATE books SET title = ?, author = ?, isbn = ?, " +
+            "(SELECT g.id FROM genres g WHERE g.name = ?), " +
+            " (SELECT c.id FROM covers c WHERE c.name = ?), pages = ?, price = ?, rating = ? WHERE id = ?";
     private static final String FIND_BOOK_BY_ID = "SELECT b.id, b.title, b.author, b.isbn, g.name AS genre, " +
             "c.name AS cover, b.pages, b.price, b.rating FROM books b " +
             "JOIN genres g ON b.genre_id = g.id " +
@@ -36,10 +33,21 @@ public class BookDaoImpl implements BookDao {
             "c.name AS cover, b.pages, b.price, b.rating FROM books b " +
             "JOIN genres g ON b.genre_id = g.id " +
             "JOIN covers c on b.cover_id = c.id";
+    private static final String FIND_ALL_BOOKS_PAGED = "SELECT b.id, b.title, b.author, b.isbn, g.name AS genre, " +
+            "c.name AS cover, b.pages, b.price, b.rating FROM books b " +
+            "JOIN genres g ON b.genre_id = g.id " +
+            "JOIN covers c on b.cover_id = c.id " +
+            "ORDER BY b.id LIMIT ? OFFSET ? ";
     private static final String FIND_BOOKS_BY_AUTHOR = "SELECT b.id, b.title, b.author, b.isbn, g.name AS genre, " +
             "c.name AS cover, b.pages, b.price, b.rating FROM books b" +
             "JOIN genres g ON b.genre_id = g.id " +
             "JOIN covers c ON b.cover_id = c.id WHERE author = ?";
+
+    private static final String FIND_BOOKS_BY_AUTHOR_PAGED = "SELECT b.id, b.title, b.author, b.isbn, g.name AS genre, " +
+            "c.name AS cover, b.pages, b.price, b.rating FROM books b" +
+            "JOIN genres g ON b.genre_id = g.id " +
+            "JOIN covers c ON b.cover_id = c.id WHERE author = ?" +
+            "ORDER BY b.id LIMIT ? OFFSET ?";
     private static final String DELETE_BOOK_BY_ID = "DELETE FROM books WHERE id = ?";
 
     private static final String COUNT_BOOKS = "SELECT count(*) FROM books";
@@ -135,9 +143,35 @@ public class BookDaoImpl implements BookDao {
         throw new UnableToFindException("No books by " + author + " found");
     }
 
+    public List<BookDto> findByAuthor(String author, int limit, int offset) {
+        try (Connection connection = dataBaseManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(FIND_BOOKS_BY_AUTHOR_PAGED)) {
+            statement.setString(1, author);
+            statement.setInt(2, limit);
+            statement.setInt(3, offset);
+            return createBookList(statement);
+        } catch (SQLException e) {
+            log.error(e.getMessage());
+        }
+        throw new UnableToFindException("No books by " + author + " found");
+    }
+
     public List<BookDto> findAll() {
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_ALL_BOOKS)) {
+            return createBookList(statement);
+        } catch (SQLException e) {
+            log.error(e.getMessage());
+        }
+        throw new UnableToFindException("No books found!");
+    }
+
+    @Override
+    public List<BookDto> findAll(int limit, int offset) {
+        try (Connection connection = dataBaseManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(FIND_ALL_BOOKS_PAGED)) {
+            statement.setInt(1, limit);
+            statement.setInt(2, offset);
             return createBookList(statement);
         } catch (SQLException e) {
             log.error(e.getMessage());
@@ -196,8 +230,8 @@ public class BookDaoImpl implements BookDao {
         statement.setString(1, book.getTitle());
         statement.setString(2, book.getAuthor());
         statement.setString(3, book.getIsbn());
-        statement.setInt(4, book.getGenre().ordinal() + 1);
-        statement.setInt(5, book.getCover().ordinal() + 1);
+        statement.setString(4, book.getGenre().toString());
+        statement.setString(5, book.getCover().toString());
         statement.setInt(6, book.getPages());
         statement.setBigDecimal(7, book.getPrice());
         statement.setBigDecimal(8, book.getRating());
@@ -207,8 +241,8 @@ public class BookDaoImpl implements BookDao {
         statement.setString(1, book.getTitle());
         statement.setString(2, book.getAuthor());
         statement.setString(3, book.getIsbn());
-        statement.setInt(4, book.getGenre().ordinal() + 1);
-        statement.setInt(5, book.getCover().ordinal() + 1);
+        statement.setString(4, book.getGenre().toString());
+        statement.setString(5, book.getCover().toString());
         statement.setInt(6, book.getPages());
         statement.setBigDecimal(7, book.getPrice());
         statement.setBigDecimal(8, book.getRating());

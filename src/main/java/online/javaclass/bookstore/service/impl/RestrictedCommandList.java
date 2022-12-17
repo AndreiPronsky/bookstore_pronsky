@@ -18,6 +18,7 @@ public enum RestrictedCommandList {
         accessConfig.put("edit_book", UserDto.Role.MANAGER);
         accessConfig.put("edit_book_form", UserDto.Role.MANAGER);
         accessConfig.put("edit_user", UserDto.Role.ADMIN);
+        accessConfig.put("add_user", UserDto.Role.ADMIN);
         accessConfig.put("edit_user_form", UserDto.Role.ADMIN);
         accessConfig.put("user", UserDto.Role.ADMIN);
         accessConfig.put("users", UserDto.Role.ADMIN);
@@ -50,3 +51,4 @@ public enum RestrictedCommandList {
                 || RestrictedCommandList.INSTANCE.isManagerCommand(command));
     }
 }
+

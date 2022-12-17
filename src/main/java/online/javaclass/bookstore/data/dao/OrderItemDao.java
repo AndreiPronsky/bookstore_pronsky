@@ -7,6 +7,7 @@ import java.util.List;
 public interface OrderItemDao extends AbstractDao<Long, OrderItemDto> {
     List<OrderItemDto> findAllByOrderId(Long orderId);
 
-    void deleteAllByOrderId(Long orderId);
+    List<OrderItemDto> findAllByOrderId(Long orderId, int limit, int offset);
 
+    void deleteAllByOrderId(Long orderId);
 }

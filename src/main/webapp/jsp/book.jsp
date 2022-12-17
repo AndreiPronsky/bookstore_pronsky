@@ -2,7 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
     <head>
-        <title>Bookstore-pronsky</title>
+        <title>Book</title>
         <link rel="stylesheet" href="css/style.css">
     </head>
     <body>
@@ -16,6 +16,7 @@
          <p>${requestScope.book.author}</p>
          <h3>Title :</h3>
          <p>${requestScope.book.title}</p>
+            <p><a href="controller?command=add_to_cart&id=${requestScope.book.id}">Add to cart</a></p>
         </article>
         <footer></footer>
      </body>

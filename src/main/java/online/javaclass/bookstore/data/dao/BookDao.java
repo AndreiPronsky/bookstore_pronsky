@@ -9,5 +9,9 @@ public interface BookDao extends AbstractDao<Long, BookDto> {
 
     List<BookDto> findByAuthor(String author);
 
+    List<BookDto> findByAuthor(String author, int limit, int offset);
+
     Long count();
+
+    List<BookDto> findAll(int limit, int offset);
 }
