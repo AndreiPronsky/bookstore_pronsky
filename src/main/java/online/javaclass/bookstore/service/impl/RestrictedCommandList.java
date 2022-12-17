@@ -51,3 +51,4 @@ public enum RestrictedCommandList {
                 || RestrictedCommandList.INSTANCE.isManagerCommand(command));
     }
 }
+

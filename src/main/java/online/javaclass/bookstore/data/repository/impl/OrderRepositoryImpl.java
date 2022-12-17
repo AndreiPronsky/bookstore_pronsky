@@ -24,6 +24,11 @@ public class OrderRepositoryImpl implements OrderRepository {
     private final EntityDtoMapperData mapper;
 
     @Override
+    public Long count() {
+        return orderDao.count();
+    }
+
+    @Override
     public Order findById(Long id) {
         OrderDto orderDto = orderDao.findById(id);
         return buildOrder(orderDto);

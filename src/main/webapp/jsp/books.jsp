@@ -43,22 +43,26 @@
         </thead>
         <tbody>
         <c:forEach items="${requestScope.books}" var="book">
-            <tr>
-                <td>${book.id}</td>
-                <td>${book.author}</td>
-                <td><a href="controller?command=book&id=${book.id}">${book.title}</a></td>
-                <td>${book.genre}</td>
-                <td>${book.price}</td>
-                <td><a href="controller?command=add_to_cart&id=${book.id}">Add to cart</a></td>
-                <c:if test="${sessionScope.user.role.toString() == 'ADMIN'
-                || sessionScope.user.role.toString() == 'MANAGER'}">
-                    <td><a href="controller?command=edit_book_form&id=${book.id}">Edit book</a></td>
-                </c:if>
-            </tr>
+
+            <div class="col-md-3 my-3">
+                <div class="card w-100" style="width: 18rem;">
+                    <img class="card-img-top" src="..." alt="card-image">
+                    <div class="card-body">
+                        <h5 class="card-author">${book.author}</h5>
+                        <h5 class="card-title">
+                            <a href="controller?command=book&id=${book.id}">${book.title}</a>
+                        </h5>
+                        <h6 class="price">${book.price}</h6>
+                        <h6 class="genre">${book.genre}</h6>
+                        <div class="mt-3 d-flex justify-content-between">
+                            <a href="controller?command=add_to_cart&id=${book.id}">Add to cart</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </c:forEach>
-        </tbody>
-    </table>
-</c:if>
-<footer></footer>
+    </div>
+</div>
 </body>
 </html>

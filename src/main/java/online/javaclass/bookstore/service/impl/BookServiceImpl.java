@@ -20,6 +20,11 @@ public class BookServiceImpl implements BookService {
     private final EntityDtoMapperService mapper;
 
     @Override
+    public Long count() {
+        return bookRepo.count();
+    }
+
+    @Override
     public BookDto create(BookDto bookDto) {
         log.debug("create book");
         Book book = mapper.toEntity(bookDto);

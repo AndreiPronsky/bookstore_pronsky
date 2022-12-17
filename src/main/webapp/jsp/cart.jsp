@@ -16,9 +16,11 @@
             <caption>Cart</caption>
             <thead>
             <tr>
-                <th>Title</th>
-                <th>Price</th>
-                <th>Quantity</th>
+                <td>${cartItem.key.title}</td>
+                <td>${cartItem.key.price}</td>
+                <td>
+                <label>Quantity<input type="number" name="quantity" step="1" min="0" value="${cartItem.value}"></label>
+                </td>
             </tr>
             </thead>
             <tbody>
@@ -38,5 +40,5 @@
     </form>
 </c:if>
 <footer></footer>
-</body>
-</html>
+    </body>
+    </html>

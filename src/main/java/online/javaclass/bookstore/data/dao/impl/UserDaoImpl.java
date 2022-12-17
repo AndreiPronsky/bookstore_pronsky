@@ -5,6 +5,7 @@ import lombok.extern.log4j.Log4j2;
 import online.javaclass.bookstore.data.connection.DataBaseManager;
 import online.javaclass.bookstore.data.dao.UserDao;
 import online.javaclass.bookstore.data.dto.UserDto;
+
 import online.javaclass.bookstore.service.exceptions.UnableToCreateException;
 import online.javaclass.bookstore.service.exceptions.UnableToDeleteException;
 import online.javaclass.bookstore.service.exceptions.UnableToFindException;
@@ -45,6 +46,7 @@ public class UserDaoImpl implements UserDao {
     private static final String COL_PASSWORD = "password";
     private static final String COL_ROLE = "role";
     private static final String COL_RATING = "rating";
+
     private final DataBaseManager dataBaseManager;
 
     public UserDto create(UserDto user) {
@@ -204,7 +206,6 @@ public class UserDaoImpl implements UserDao {
         user.setPassword(result.getString(COL_PASSWORD));
         user.setRole(UserDto.Role.valueOf(result.getString(COL_ROLE)));
         user.setRating(result.getBigDecimal(COL_RATING));
-    }
 
     private void prepareStatementForCreate(UserDto user, PreparedStatement statement) throws SQLException {
         statement.setString(1, user.getFirstName());

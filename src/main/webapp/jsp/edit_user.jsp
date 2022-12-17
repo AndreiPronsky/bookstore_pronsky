@@ -38,7 +38,7 @@
       <label>Rating<input type="number" name="rating" step="0.01" min="0.01" value="${requestScope.user.rating}"></label>
     </li>
     <li class="form-row">
-      <input type="submit" name="Edit">
+      <input type="submit" name="Edit" value="Edit">
     </li>
   </ul>
 </form>

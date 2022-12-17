@@ -13,8 +13,9 @@ import online.javaclass.bookstore.service.dto.UserDto;
 
 import java.util.List;
 
-@RequiredArgsConstructor
+
 @Log4j2
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepo;
@@ -51,13 +52,6 @@ public class UserServiceImpl implements UserService {
     public UserDto getById(Long id) {
         log.debug("get user by id");
         User user = userRepo.findById(id);
-        return mapper.toDto(user);
-    }
-
-    @Override
-    public UserDto getByEmail(String email) {
-        log.debug("get user by email");
-        User user = userRepo.findByEmail(email);
         return mapper.toDto(user);
     }
 
