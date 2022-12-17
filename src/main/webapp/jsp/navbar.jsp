@@ -3,7 +3,7 @@
 <nav>
     <ul class="navbar">
         <li><a href="controller?command=home">Home</a></li>
-        <li><a href="controller?command=books">Books</a></li>
+        <li><a href="controller?command=books&page=1">Books</a></li>
         <li><a href="controller?command=cart">Cart</a></li>
         <c:if test="${sessionScope.user == null}">
             <li><a href="controller?command=login_form">Log In</a></li>
@@ -15,7 +15,6 @@
         <c:if test="${sessionScope.user.role.toString() == 'ADMIN'}">
             <li><a href="controller?command=users">Users</a></li>
             <li><a href="controller?command=add_user_form">Add new user</a></li>
-            <li><a href="controller?command=edit_user_form">Edit user</a></li>
         </c:if>
         <c:if test="${sessionScope.user.role.toString() == 'MANAGER'}">
             <li><a href="controller?command=add_book_form">Add new book</a></li>

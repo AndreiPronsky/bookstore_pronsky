@@ -3,7 +3,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Bookstore-pronsky</title>
+    <title>Books</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -14,8 +14,6 @@
 </c:if>
 <c:if test="${!requestScope.books.isEmpty()}">
     <div class="paging">
-        <p>${requestScope.total_pages}</p>
-        <br>
         <a href="controller?command=books&page=1">First</a>
         <c:if test="${requestScope.page <= 1} ">
             <a>Previous</a>
@@ -25,7 +23,7 @@
         </c:if>
             ${requestScope.page}
         <c:if test="${requestScope.page < requestScope.total_pages}">
-            <a href="controller?command=books&page=">Next</a>
+            <a href="controller?command=books&page=${requestScope.page + 1}">Next</a>
         </c:if>
         <c:if test="${requestScope.page >= requestScope.total_pages}">
             <a>Next</a>

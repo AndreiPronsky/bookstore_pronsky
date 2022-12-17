@@ -28,15 +28,15 @@ public class PagingUtil {
         return extractParameters(req, "page_size", DEFAULT_PAGE_SIZE);
     }
 
-    private static int extractParameters(HttpServletRequest req, String page, int defaultPage) {
-        req.getParameter(page);
-        if (page == null) {
-            return defaultPage;
+    private static int extractParameters(HttpServletRequest req, String param, int defaultValue) {
+        String page = req.getParameter(param);
+        if (param == null) {
+            return defaultValue;
         }
         try {
-            return Integer.parseInt("page");
+            return Integer.parseInt(page);
         } catch (NumberFormatException e) {
-            return defaultPage;
+            return defaultValue;
         }
     }
 }

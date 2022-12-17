@@ -2,6 +2,7 @@ package online.javaclass.bookstore.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import online.javaclass.bookstore.controller.PagingUtil;
 import online.javaclass.bookstore.service.dto.PageableDto;
 import online.javaclass.bookstore.data.entities.User;
 import online.javaclass.bookstore.data.repository.UserRepository;
@@ -95,11 +96,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDto> getAll(PageableDto pageable) {
         log.debug("get all users");
-        return userRepo.findAll(pageable.getLimit(), pageable.getOffset()).stream()
+        List<UserDto> users = userRepo.findAll(pageable.getLimit(), pageable.getOffset()).stream()
                 .map(mapper::toDto)
                 .toList();
+        Long totalItems = userRepo.count();
+        Long totalPages = PagingUtil.getTotalPages(totalItems, pageable);
+        pageable.setTotalItems(userRepo.count());
+        pageable.setTotalPages(totalPages);
+        return users;
     }
-
 
 
     @Override

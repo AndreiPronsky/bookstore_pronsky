@@ -30,12 +30,12 @@ public class UserDaoImpl implements UserDao {
             "r.name AS role, u.rating FROM users u JOIN roles r ON u.role_id = r.id";
     private static final String FIND_ALL_USERS_PAGED = "SELECT u.id, u.firstname, u.lastname, u.email, u.password, " +
             "r.name AS role, u.rating FROM users u JOIN roles r ON u.role_id = r.id " +
-            "LIMIT ? OFFSET ?";
+            "ORDER BY u.id LIMIT ? OFFSET ?";
     private static final String FIND_USERS_BY_LASTNAME = "SELECT u.id, u.firstname, u.lastname, u.email, u.password, " +
             "r.name AS role, u.rating FROM users u JOIN roles r ON u.role_id = r.id WHERE lastname = ?";
     private static final String FIND_USERS_BY_LASTNAME_PAGED = "SELECT u.id, u.firstname, u.lastname, u.email, u.password, " +
             "r.name AS role, u.rating FROM users u JOIN roles r ON u.role_id = r.id WHERE lastname = ? " +
-            "LIMIT ? OFFSET ?";
+            "ORDER BY u.id LIMIT ? OFFSET ?";
     private static final String DELETE_USER_BY_ID = "DELETE FROM users WHERE id = ?";
     private static final String COUNT_USERS = "SELECT count(*) FROM users";
     private static final String COL_ID = "id";
