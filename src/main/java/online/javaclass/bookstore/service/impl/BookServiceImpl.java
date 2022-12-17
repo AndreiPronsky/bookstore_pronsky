@@ -102,9 +102,4 @@ public class BookServiceImpl implements BookService {
             log.error("Unable to delete book with id : " + id);
         }
     }
-
-    @Override
-    public Long count() {
-        return bookRepo.count();
-    }
 }

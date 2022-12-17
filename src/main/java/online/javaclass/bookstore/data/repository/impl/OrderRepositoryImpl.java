@@ -99,9 +99,5 @@ public class OrderRepositoryImpl implements OrderRepository {
         order.setItems(orderItems);
         return order;
     }
-
-    @Override
-    public Long count() {
-        return orderDao.count();
-    }
+    
 }

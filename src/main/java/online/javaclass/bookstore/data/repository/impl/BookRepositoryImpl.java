@@ -16,11 +16,6 @@ public class BookRepositoryImpl implements BookRepository {
     private final EntityDtoMapperData mapper;
 
     @Override
-    public Long count() {
-        return bookDao.count();
-    }
-
-    @Override
     public Book findById(Long id) {
         BookDto bookDto = bookDao.findById(id);
         return mapper.toEntity(bookDto);

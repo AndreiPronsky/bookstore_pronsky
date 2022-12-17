@@ -72,9 +72,4 @@ public class OrderServiceImpl implements OrderService {
             log.error("Unable to delete order with id : " + id);
         }
     }
-
-    @Override
-    public Long count() {
-        return orderRepo.count();
-    }
 }

@@ -206,6 +206,7 @@ public class UserDaoImpl implements UserDao {
         user.setPassword(result.getString(COL_PASSWORD));
         user.setRole(UserDto.Role.valueOf(result.getString(COL_ROLE)));
         user.setRating(result.getBigDecimal(COL_RATING));
+    }
 
     private void prepareStatementForCreate(UserDto user, PreparedStatement statement) throws SQLException {
         statement.setString(1, user.getFirstName());

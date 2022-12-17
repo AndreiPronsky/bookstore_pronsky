@@ -1,49 +1,53 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:setBundle basename="messages"/>
+<c:if test="${sessionScope.lang != null}">
+    <fmt:setLocale value="${sessionScope.lang}"/>
+</c:if>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Books</title>
+    <title><fmt:message key="books"/></title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <jsp:include page="navbar.jsp"/>
 <header></header>
 <c:if test="${requestScope.books.isEmpty()}">
-    <h2>No books found!</h2>
+    <h2><fmt:message key="no_books_found"/></h2>
 </c:if>
 <c:if test="${!requestScope.books.isEmpty()}">
     <div class="paging">
-        <a href="controller?command=books&page=1">First</a>
+        <a href="controller?command=books&page=1"><fmt:message key="first"/></a>
         <c:if test="${requestScope.page <= 1} ">
-            <a>Previous</a>
+            <a><fmt:message key="previous"/></a>
         </c:if>
         <c:if test="${requestScope.page > 1}">
-            <a href="controller?command=books&page=${requestScope.page - 1}">Previous</a>
+            <a href="controller?command=books&page=${requestScope.page - 1}"><fmt:message key="previous"/></a>
         </c:if>
             ${requestScope.page}
         <c:if test="${requestScope.page < requestScope.total_pages}">
-            <a href="controller?command=books&page=${requestScope.page + 1}">Next</a>
+            <a href="controller?command=books&page=${requestScope.page + 1}"><fmt:message key="next"/></a>
         </c:if>
         <c:if test="${requestScope.page >= requestScope.total_pages}">
-            <a>Next</a>
+            <a><fmt:message key="next"/></a>
         </c:if>
-        <a href="controller?command=books&page=${requestScope.total_pages}">Last</a>
+        <a href="controller?command=books&page=${requestScope.total_pages}"><fmt:message key="last"/></a>
     </div>
     <table>
-        <caption>Books</caption>
+        <caption><fmt:message key="books"/></caption>
         <thead>
         <tr>
-            <th>Id</th>
-            <th>Author</th>
-            <th>Title</th>
-            <th>Genre</th>
-            <th>Price</th>
+            <th><fmt:message key="id"/></th>
+            <th><fmt:message key="author"/></th>
+            <th><fmt:message key="title"/></th>
+            <th><fmt:message key="genre"/></th>
+            <th><fmt:message key="price"/></th>
         </tr>
         </thead>
         <tbody>
         <c:forEach items="${requestScope.books}" var="book">
-
             <div class="col-md-3 my-3">
                 <div class="card w-100" style="width: 18rem;">
                     <img class="card-img-top" src="..." alt="card-image">
@@ -55,14 +59,14 @@
                         <h6 class="price">${book.price}</h6>
                         <h6 class="genre">${book.genre}</h6>
                         <div class="mt-3 d-flex justify-content-between">
-                            <a href="controller?command=add_to_cart&id=${book.id}">Add to cart</a>
+                            <a href="controller?command=add_to_cart&id=${book.id}"><fmt:message key="add_to_cart"/></a>
                         </div>
                     </div>
                 </div>
             </div>
-
         </c:forEach>
-    </div>
-</div>
+        </tbody>
+    </table>
+</c:if>
 </body>
 </html>

@@ -58,7 +58,7 @@ public class OrderItemDaoImpl implements OrderItemDao {
             statement.setLong(1, orderId);
             statement.setInt(2, limit);
             statement.setInt(3, offset);
-            addItemsToList(orderItems, statement);
+            createItemList(statement);
             return orderItems;
         } catch (SQLException e) {
             log.error(e.getMessage());
@@ -103,7 +103,7 @@ public class OrderItemDaoImpl implements OrderItemDao {
              PreparedStatement statement = connection.prepareStatement(FIND_ALL_PAGED)) {
             statement.setInt(1, limit);
             statement.setInt(2, offset);
-            addItemsToList(orderItems, statement);
+            createItemList(statement);
             return orderItems;
         } catch (SQLException e) {
             log.error(e.getMessage());
@@ -156,6 +156,16 @@ public class OrderItemDaoImpl implements OrderItemDao {
             log.error(e.getMessage());
         }
         throw new UnableToDeleteException("Unable to delete item with id " + id);
+    }
+
+    private OrderItemDto extractedFromStatement(PreparedStatement statement) throws SQLException {
+        ResultSet result = statement.executeQuery();
+        log.debug("DB query completed");
+        OrderItemDto item = new OrderItemDto();
+        if (result.next()) {
+            setParameters(item, result);
+        }
+        return item;
     }
 
     private List<OrderItemDto> createItemList(PreparedStatement statement) throws SQLException {
