@@ -14,4 +14,6 @@ public interface BookDao extends AbstractDao<Long, BookDto> {
     Long count();
 
     List<BookDto> findAll(int limit, int offset);
+
+    List<BookDto> search(String input);
 }

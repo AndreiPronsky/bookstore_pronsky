@@ -69,6 +69,7 @@ public class CommandFactory {
         map.put("register_form", new RegisterFormCommand());
         map.put("register", new RegisterCommand(userService));
         map.put("change_lang", new ChangeLanguageCommand());
+        map.put("search", new SearchCommand(bookService));
     }
 
     public Command getCommand(String command) {

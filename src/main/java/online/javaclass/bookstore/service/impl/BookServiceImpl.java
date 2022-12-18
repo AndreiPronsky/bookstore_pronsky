@@ -66,6 +66,14 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public List<BookDto> search(String input) {
+        log.debug("search by " + input);
+        return bookRepo.search(input).stream()
+                .map(mapper::toDto)
+                .toList();
+    }
+
+    @Override
     public List<BookDto> getByAuthor(String author, PageableDto pageable) {
         log.debug("get books by author");
         return bookRepo.findByAuthor(author, pageable.getLimit(), pageable.getOffset()).stream()

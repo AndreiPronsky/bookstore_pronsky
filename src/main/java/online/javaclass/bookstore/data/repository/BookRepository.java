@@ -12,4 +12,6 @@ public interface BookRepository extends AbstractRepository<Long, Book> {
 
     List<Book> findByAuthor(String author, int limit, int offset);
 
+    List<Book> search(String input);
+
 }

@@ -48,8 +48,12 @@ public class BookDaoImpl implements BookDao {
             "JOIN genres g ON b.genre_id = g.id " +
             "JOIN covers c ON b.cover_id = c.id WHERE author = ?" +
             "ORDER BY b.id LIMIT ? OFFSET ?";
-    private static final String DELETE_BOOK_BY_ID = "DELETE FROM books WHERE id = ?";
 
+    private static final String SEARCH = "SELECT b.id, b.title, b.author, b.isbn, g.name AS genre," +
+            "c.name AS cover, b.pages, b.price, b.rating FROM books b " +
+            "JOIN genres g ON b.genre_id = g.id " +
+            "JOIN covers c ON b.cover_id = c.id WHERE b.title LIKE ?";
+    private static final String DELETE_BOOK_BY_ID = "DELETE FROM books WHERE id = ?";
     private static final String COUNT_BOOKS = "SELECT count(*) FROM books";
     private static final String COL_ID = "id";
     private static final String COL_TITLE = "title";
@@ -62,6 +66,19 @@ public class BookDaoImpl implements BookDao {
     private static final String COL_RATING = "rating";
 
     private final DataBaseManager dataBaseManager;
+
+    @Override
+    public List<BookDto> search(String input) {
+        try (Connection connection = dataBaseManager.getConnection();
+        PreparedStatement statement = connection.prepareStatement(SEARCH)) {
+            String reformatedForSearchInput = "%" + input + "%";
+            statement.setString(1, reformatedForSearchInput);
+            return createBookList(statement);
+        } catch (SQLException e) {
+            log.error(e.getMessage());
+        }
+        throw new UnableToFindException("Unable to find books, containing " + input + " in title");
+    }
 
     public Long count() {
         try (Connection connection = dataBaseManager.getConnection();
