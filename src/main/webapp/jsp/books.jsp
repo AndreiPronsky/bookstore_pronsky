@@ -38,13 +38,13 @@
     <table>
         <caption><fmt:message key="books"/></caption>
         <thead>
-        <tr>
-            <th><fmt:message key="id"/></th>
-            <th><fmt:message key="author"/></th>
-            <th><fmt:message key="title"/></th>
-            <th><fmt:message key="genre"/></th>
-            <th><fmt:message key="price"/></th>
-        </tr>
+<%--        <tr>--%>
+<%--            <th><fmt:message key="id"/></th>--%>
+<%--            <th><fmt:message key="author"/></th>--%>
+<%--            <th><fmt:message key="title"/></th>--%>
+<%--            <th><fmt:message key="genre"/></th>--%>
+<%--            <th><fmt:message key="price"/></th>--%>
+<%--        </tr>--%>
         </thead>
         <tbody>
         <c:forEach items="${requestScope.books}" var="book">
