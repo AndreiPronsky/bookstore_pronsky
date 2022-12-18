@@ -24,6 +24,7 @@ public class ConfirmOrderCommand implements Command {
         OrderDto order = setOrderParameters(req, session);
         OrderDto createdOrder = orderService.create(order);
         req.setAttribute("order_id", createdOrder.getId());
+        session.removeAttribute("cart");
         return "jsp/successful_order.jsp";
     }
 

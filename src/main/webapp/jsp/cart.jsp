@@ -16,7 +16,7 @@
     <h1><fmt:message key="your_cart_is_empty"/></h1>
 </c:if>
 <c:if test="${!sessionScope.cart.isEmpty && sessionScope.cart != null}">
-    <form action="controller?command=cart" method="get">
+    <form action="controller?command=cart" method="post">
         <table>
             <caption><fmt:message key="cart"/></caption>
             <thead>

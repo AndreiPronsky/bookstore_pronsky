@@ -6,18 +6,10 @@
     <fmt:setLocale value="${sessionScope.lang}"/>
 </c:if>
 <html>
-<head>
-    <title></title>
-</head>
-<body>
-<div id="searchbar"><fmt:message key="search"/></div>
+<div class="search">
 <form action="controller?command=search" method="post">
-    <ul class="wrapper">
-        <li class="form-row">
-            <label><fmt:message key="search"/><input type="text" name="search" minlength="1"></label>
-            <input type="submit">
-        </li>
-    </ul>
+        <input type="text" name="search" class="search" placeholder="<fmt:message key="search"/>">
+    <input type="submit" name="submit" class="submit" value="<fmt:message key="search"/>">
 </form>
-</body>
+</div>
 </html>

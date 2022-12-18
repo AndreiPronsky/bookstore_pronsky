@@ -5,9 +5,13 @@
 <c:if test="${sessionScope.lang != null}">
     <fmt:setLocale value="${sessionScope.lang}"/>
 </c:if>
-<nav>
-    <ul class="navbar">
-        <li><a href="controller?command=home"><fmt:message key="home"/></a></li>
+<header class="header">
+    <a href="controller?command=home">
+        <div class="logo-image">
+            <img height="75" src="css/images/logo.png" class="img-fluid" alt="logo">
+        </div>
+    </a>
+    <ul class="main-nav">
         <li><a href="controller?command=books&page=1"><fmt:message key="books"/></a></li>
         <li><a href="controller?command=cart"><fmt:message key="cart"/></a></li>
         <c:if test="${sessionScope.user == null}">
@@ -27,4 +31,8 @@
         <li><a href="controller?command=change_lang&lang=ru">Русский</a></li>
         <li><a href="controller?command=change_lang&lang=en">English</a></li>
     </ul>
-</nav>
+</header>
+
+
+
+

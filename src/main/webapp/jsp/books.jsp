@@ -13,12 +13,14 @@
 </head>
 <body>
 <jsp:include page="navbar.jsp"/>
+<jsp:include page="searchbar.jsp"/>
 <header></header>
 <c:if test="${requestScope.books.isEmpty()}">
     <h2><fmt:message key="no_books_found"/></h2>
 </c:if>
 <c:if test="${!requestScope.books.isEmpty()}">
     <div class="paging">
+        <c:if test="${requestScope.total_pages > 1}">
         <a href="controller?command=books&page=1"><fmt:message key="first"/></a>
         <c:if test="${requestScope.page <= 1} ">
             <a><fmt:message key="previous"/></a>
@@ -34,9 +36,9 @@
             <a><fmt:message key="next"/></a>
         </c:if>
         <a href="controller?command=books&page=${requestScope.total_pages}"><fmt:message key="last"/></a>
+        </c:if>
     </div>
     <table>
-        <caption><fmt:message key="books"/></caption>
         <thead>
 <%--        <tr>--%>
 <%--            <th><fmt:message key="id"/></th>--%>
