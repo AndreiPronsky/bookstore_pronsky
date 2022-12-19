@@ -21,12 +21,12 @@
                 <td>${cartItem.key.title}</td>
                 <td>${cartItem.key.price}</td>
                 <td>
-                    <a href="controller?command=dec_qua&id=${cartItem.key.id }">-</a>
+                    <a href="controller?command=corr_cart&action=dec&id=${cartItem.key.id }">-</a>
                     <label><fmt:message key="quantity"/>
                         <input type="number" name="quantity" step="1" min="0" value="${cartItem.value}">
                     </label>
-                    <a href="controller?command=inc_qua&id=${cartItem.key.id }">+</a>
-                    <a href="controller?command=remove_from_cart&id=${cartItem.key.id }"><fmt:message key="remove"/></a>
+                    <a href="controller?command=corr_cart&action=inc&id=${cartItem.key.id }">+</a>
+                    <a href="controller?command=corr_cart&action=remove&id=${cartItem.key.id }"><fmt:message key="remove"/></a>
                 </td>
                 <td>${cartItem.key.price * cartItem.value }</td>
             </tr>

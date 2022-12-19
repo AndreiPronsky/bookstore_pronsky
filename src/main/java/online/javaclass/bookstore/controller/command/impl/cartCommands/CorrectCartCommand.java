@@ -7,20 +7,31 @@ import online.javaclass.bookstore.service.dto.BookDto;
 
 import java.util.Map;
 
-public class RemoveFromCartCommand implements Command {
+public class CorrectCartCommand implements Command {
     @Override
     public String execute(HttpServletRequest req) {
         long id = Long.parseLong(req.getParameter("id"));
+        String action = req.getParameter("action");
         HttpSession session = req.getSession();
         Map<BookDto, Integer> cart = (Map) session.getAttribute("cart");
         for (Map.Entry<BookDto, Integer> item : cart.entrySet()) {
             Long itemId = item.getKey().getId();
+            Integer quantity = item.getValue();
             if (itemId == id) {
-                cart.remove(item.getKey());
+                if (action.equals("dec")) {
+                    cart.put(item.getKey(), quantity - 1);
+                    break;
+                }
+                if (action.equals("inc")) {
+                    cart.put(item.getKey(), quantity + 1);
+                    break;
+                }
+                if (action.equals("remove")) {
+                    cart.remove(item.getKey());
+                    break;
+                }
             }
         }
-        session.setAttribute("cart", cart);
         return "jsp/confirm_order.jsp";
     }
 }
-
