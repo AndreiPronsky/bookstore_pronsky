@@ -1,4 +1,4 @@
-package online.javaclass.bookstore.controller.command.impl;
+package online.javaclass.bookstore.controller.command.impl.cartCommands;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -34,7 +34,7 @@ public class ConfirmOrderCommand implements Command {
         order.setOrderStatus(OrderDto.OrderStatus.OPEN);
         order.setPaymentMethod(OrderDto.PaymentMethod.valueOf(req.getParameter("payment_method")));
         order.setPaymentStatus(OrderDto.PaymentStatus.UNPAID);
-        order.setCost(BigDecimal.valueOf(Double.parseDouble(session.getAttribute("cost").toString())));
+        order.setCost(calculateCost(session));
         order.setItems(listItems(session));
         UserDto user = (UserDto) session.getAttribute("user");
         order.setUser(user);
@@ -52,5 +52,14 @@ public class ConfirmOrderCommand implements Command {
             items.add(itemDto);
         }
         return items;
+    }
+
+    private BigDecimal calculateCost(HttpSession session) {
+        Map<BookDto, Integer> cartItemMap = (Map)session.getAttribute("cart");
+        BigDecimal cost = BigDecimal.ZERO;
+        for (Map.Entry<BookDto, Integer> entry : cartItemMap.entrySet()) {
+            cost = cost.add(entry.getKey().getPrice().multiply(BigDecimal.valueOf(entry.getValue())));
+        }
+        return cost;
     }
 }

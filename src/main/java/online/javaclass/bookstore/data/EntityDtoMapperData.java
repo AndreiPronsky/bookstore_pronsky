@@ -60,7 +60,7 @@ public class EntityDtoMapperData {
         orderDto.setId(order.getId());
         orderDto.setUserId(order.getUser().getId());
         orderDto.setOrderStatus(OrderDto.OrderStatus.values()[order.getOrderStatus().ordinal()]);
-        orderDto.setPaymentMethod(OrderDto.PaymentMethod.values()[order.getOrderStatus().ordinal()]);
+        orderDto.setPaymentMethod(OrderDto.PaymentMethod.values()[order.getPaymentMethod().ordinal()]);
         orderDto.setPaymentStatus(OrderDto.PaymentStatus.values()[order.getPaymentStatus().ordinal()]);
         orderDto.setDeliveryType(OrderDto.DeliveryType.values()[order.getDeliveryType().ordinal()]);
         orderDto.setItems(getOrderItemDtoList(order));

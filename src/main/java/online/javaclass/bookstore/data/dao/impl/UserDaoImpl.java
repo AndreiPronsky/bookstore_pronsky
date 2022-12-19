@@ -63,7 +63,7 @@ public class UserDaoImpl implements UserDao {
         } catch (SQLException e) {
             log.error(e.getMessage() + e);
         }
-        throw new UnableToCreateException("Creation failed! " + user);
+        throw new UnableToCreateException("Creation failed! ");
     }
 
     public UserDto update(UserDto user) {
@@ -76,7 +76,7 @@ public class UserDaoImpl implements UserDao {
         } catch (SQLException e) {
             log.error(e.getMessage() + e);
         }
-        throw new UnableToUpdateException("Update failed! " + user);
+        throw new UnableToUpdateException("Update failed! ");
     }
 
     public UserDto findById(Long id) {

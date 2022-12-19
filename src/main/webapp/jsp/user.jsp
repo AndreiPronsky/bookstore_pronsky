@@ -16,18 +16,13 @@
 <article>
   <h1><fmt:message key="user"/></h1>
   <c:if test="${sessionScope.user.role.toString() == 'ADMIN'}">
-  <h3><fmt:message key="id"/> :</h3>
-  <p>${requestScope.user.id}</p>
+  <h3><fmt:message key="id"/> : ${requestScope.user.id}</h3>
   </c:if>
-  <h3><fmt:message key="firstname"/> :</h3>
-  <p>${requestScope.user.firstName}</p>
-  <h3><fmt:message key="lastname"/> :</h3>
-  <p>${requestScope.user.lastName}</p>
-  <h3><fmt:message key="email"/> :</h3>
-  <p>${requestScope.user.email}</p>
+  <h3><fmt:message key="firstname"/> : ${requestScope.user.firstName}</h3>
+  <h3><fmt:message key="lastname"/> : ${requestScope.user.lastName}</h3>
+  <h3><fmt:message key="email"/> : ${requestScope.user.email}</h3>
   <c:if test="${sessionScope.user.role.toString() == 'ADMIN'}">
-  <h3><fmt:message key="role"/> :</h3>
-  <p>${requestScope.user.role}</p>
+  <h3><fmt:message key="role"/> : ${requestScope.user.role}</h3>
   </c:if>
 </article>
 <footer></footer>

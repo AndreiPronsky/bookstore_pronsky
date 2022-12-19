@@ -29,7 +29,7 @@ public class FrontController extends HttpServlet {
     private void process(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String commandParameter = req.getParameter("command");
         Command command = CommandFactory.INSTANCE.getCommand(commandParameter);
-        log.debug("Got command from factory");
+        log.debug("Got command from factory " + commandParameter);
         String page;
         try {
             page = command.execute(req);

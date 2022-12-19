@@ -1,4 +1,4 @@
-package online.javaclass.bookstore.controller.command.impl;
+package online.javaclass.bookstore.controller.command.impl.userCommands;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -30,9 +30,5 @@ public class UsersCommand implements Command {
             log.error(e.getClass() + " " + e.getMessage());
             return "jsp/error.jsp";
         }
-    }
-
-    private String reformatLastName(String rawLastName) {
-        return rawLastName.replace("%20", " ");
     }
 }

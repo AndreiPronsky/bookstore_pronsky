@@ -1,4 +1,4 @@
-package online.javaclass.bookstore.controller.command.impl;
+package online.javaclass.bookstore.controller.command.impl.bookCommands;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;

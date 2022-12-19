@@ -1,15 +1,13 @@
-package online.javaclass.bookstore.controller.command.impl;
+package online.javaclass.bookstore.controller.command.impl.bookCommands;
 
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import online.javaclass.bookstore.controller.command.Command;
 
 @Log4j2
-@RequiredArgsConstructor
-public class AddUserFormCommand implements Command {
+public class AddBookFormCommand implements Command {
     @Override
     public String execute(HttpServletRequest req) {
-        return "jsp/add_user.jsp";
+        return "jsp/add_book.jsp";
     }
 }

@@ -40,7 +40,8 @@ public class OrderDaoImpl implements OrderDao {
             "JOIN payment_status ps on o.payment_status_id = ps.id " +
             "LIMIT ? OFFSET ?";
     private static final String CREATE_ORDER = "INSERT INTO orders (user_id, status_id, payment_method_id, payment_status_id," +
-            "delivery_type_id, cost) VALUES (?, (SELECT os.id FROM order_status os WHERE os.name = ?), " +
+            "delivery_type_id, cost) VALUES (?, " +
+            "(SELECT os.id FROM order_status os WHERE os.name = ?), " +
             "(SELECT pm.id FROM payment_method pm WHERE pm.name = ?), " +
             "(SELECT ps.id FROM payment_status ps WHERE ps.name = ?), " +
             "(SELECT dt.id FROM delivery_type dt WHERE dt.name = ?), ?)";
@@ -168,8 +169,8 @@ public class OrderDaoImpl implements OrderDao {
 
     private void setParameters(OrderDto order, ResultSet result) throws SQLException {
         order.setUserId(result.getLong(COL_USER_ID));
-        order.setOrderStatus(OrderDto.OrderStatus.values()[result.getInt(COL_STATUS)]);
-        order.setPaymentMethod(OrderDto.PaymentMethod.values()[result.getInt(COL_PAYMENT_METHOD)]);
+        order.setOrderStatus(OrderDto.OrderStatus.valueOf(result.getString(COL_STATUS)));
+        order.setPaymentMethod(OrderDto.PaymentMethod.valueOf(result.getString(COL_PAYMENT_METHOD)));
         order.setPaymentStatus(OrderDto.PaymentStatus.valueOf(result.getString(COL_PAYMENT_STATUS)));
         order.setDeliveryType(OrderDto.DeliveryType.valueOf(result.getString(COL_DELIVERY_TYPE)));
     }

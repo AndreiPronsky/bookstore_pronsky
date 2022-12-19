@@ -17,34 +17,30 @@
 </c:if>
 <c:if test="${!sessionScope.cart.isEmpty && sessionScope.cart != null}">
     <form action="controller?command=cart" method="post">
-        <table>
-            <caption><fmt:message key="cart"/></caption>
-            <thead>
-            <tr>
-                <td><fmt:message key="title"/></td>
-                <td><fmt:message key="price"/></td>
-                <td>
-                    <label><fmt:message key="quantity"/><input type="number" name="quantity" step="1" min="0"
-                                                               value="<fmt:message key="quantity"/>"></label>
-                </td>
-            </tr>
-            </thead>
-            <tbody>
+<%--        <table>--%>
+<%--            <caption><fmt:message key="cart"/></caption>--%>
+<%--            <thead>--%>
+<%--            <tr>--%>
+<%--                <td><fmt:message key="title"/></td>--%>
+<%--                <td><fmt:message key="price"/></td>--%>
+<%--                <td><fmt:message key="quantity"/></td>--%>
+<%--            </tr>--%>
+<%--            </thead>--%>
+<%--        </table>--%>
             <c:forEach items="${sessionScope.cart}" var="cartItem">
-                <tr>
-                    <td>${cartItem.key.title}</td>
-                    <td>${cartItem.key.price}</td>
-                    <td>
-                        <label><fmt:message key="quantity"/><input type="number" name="quantity" step="1" min="0"
-                                                                   value="${cartItem.value}"></label>
-                    </td>
-                </tr>
+                <ul class="wrapper">
+                    <li>${cartItem.key.title}</li>
+                    <li>${cartItem.key.price}</li>
+                    <li class="form-row">
+                        <label>
+                            <input type="number" name="quantity" step="1" min="0"
+                                   value="${cartItem.value}"></label>
+                    </li>
+                </ul>
             </c:forEach>
-            <tr>
-                <td>${sessionScope.cost}</td>
-            </tr>
-            </tbody>
-        </table>
+            <li>
+                <label><fmt:message key="cost"/> ${sessionScope.cost}</label>
+            </li>
         <input type="submit" name="createOrder" value="<fmt:message key="order"/>">
     </form>
 </c:if>
