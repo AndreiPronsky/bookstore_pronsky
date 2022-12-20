@@ -2,6 +2,7 @@ package online.javaclass.bookstore.data.dao.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import online.javaclass.bookstore.MessageManager;
 import online.javaclass.bookstore.data.connection.DataBaseManager;
 import online.javaclass.bookstore.data.dao.OrderDao;
 import online.javaclass.bookstore.data.dto.OrderDto;
@@ -66,7 +67,7 @@ public class OrderDaoImpl implements OrderDao {
         } catch (SQLException e) {
             log.error(e.getMessage());
         }
-        throw new UnableToFindException("Unable to find order with id " + id);
+        throw new UnableToFindException(MessageManager.INSTANCE.getMessage("order.unable_to_find_id") + id);
     }
 
 @Override
@@ -83,7 +84,7 @@ public class OrderDaoImpl implements OrderDao {
         } catch (SQLException e) {
             log.error(e.getMessage());
         }
-        throw new AppException("Count failed!");
+        throw new AppException(MessageManager.INSTANCE.getMessage("count_failed"));
     }
 
     @Override
@@ -94,7 +95,7 @@ public class OrderDaoImpl implements OrderDao {
         } catch (SQLException e) {
             log.error(e.getMessage());
         }
-        throw new UnableToFindException("Unable to find orders");
+        throw new UnableToFindException(MessageManager.INSTANCE.getMessage("orders.unable_to_find"));
     }
 
     @Override
@@ -107,7 +108,7 @@ public class OrderDaoImpl implements OrderDao {
         } catch (SQLException e) {
             log.error(e.getMessage());
         }
-        throw new UnableToFindException("Unable to find orders");
+        throw new UnableToFindException(MessageManager.INSTANCE.getMessage("orders.unable_to_find"));
     }
 
     @Override
@@ -126,7 +127,7 @@ public class OrderDaoImpl implements OrderDao {
         } catch (SQLException e) {
             log.error(e.getMessage());
         }
-        throw new UnableToCreateException("Unable to create order " + order);
+        throw new UnableToCreateException(MessageManager.INSTANCE.getMessage("order.unable_to_create"));
     }
 
     @Override
@@ -140,7 +141,7 @@ public class OrderDaoImpl implements OrderDao {
         } catch (SQLException e) {
             log.error("Unable to update order " + order);
         }
-        throw new UnableToUpdateException("Update failed! " + order);
+        throw new UnableToUpdateException(MessageManager.INSTANCE.getMessage("order.unable_to_update"));
     }
 
     @Override
@@ -154,7 +155,7 @@ public class OrderDaoImpl implements OrderDao {
         } catch (SQLException e) {
             log.error("Unable to delete order with id " + id);
         }
-        throw new UnableToDeleteException("Unable to delete order with id " + id);
+        throw new UnableToDeleteException(MessageManager.INSTANCE.getMessage("order.unable_to_delete"));
     }
 
     private OrderDto extractedFromStatement(PreparedStatement statement) throws SQLException {

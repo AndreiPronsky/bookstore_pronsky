@@ -2,6 +2,7 @@ package online.javaclass.bookstore.data.dao.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import online.javaclass.bookstore.MessageManager;
 import online.javaclass.bookstore.data.connection.DataBaseManager;
 import online.javaclass.bookstore.data.dao.UserDao;
 import online.javaclass.bookstore.data.dto.UserDto;
@@ -63,7 +64,7 @@ public class UserDaoImpl implements UserDao {
         } catch (SQLException e) {
             log.error(e.getMessage() + e);
         }
-        throw new UnableToCreateException("Creation failed! ");
+        throw new UnableToCreateException(MessageManager.INSTANCE.getMessage("user.unable_to_create"));
     }
 
     public UserDto update(UserDto user) {
@@ -76,7 +77,7 @@ public class UserDaoImpl implements UserDao {
         } catch (SQLException e) {
             log.error(e.getMessage() + e);
         }
-        throw new UnableToUpdateException("Update failed! ");
+        throw new UnableToUpdateException(MessageManager.INSTANCE.getMessage("user.unable_to_update"));
     }
 
     public UserDto findById(Long id) {
@@ -87,18 +88,26 @@ public class UserDaoImpl implements UserDao {
         } catch (SQLException e) {
             log.error(e.getMessage() + e);
         }
-        throw new UnableToFindException("Unable to find user with id " + id);
+        throw new UnableToFindException(MessageManager.INSTANCE.getMessage("user.unable_to_find_id") + id);
     }
 
     public UserDto findByEmail(String email) {
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_USER_BY_EMAIL)) {
             statement.setString(1, email);
-            return extractedFromStatement(statement);
+            UserDto user = extractedFromStatement(statement);
+            if (user != null) {
+                return user;
+            } else {
+                log.error("Unable to find user with email " + email);
+                throw new UnableToFindException(MessageManager.INSTANCE.getMessage
+                        ("user.unable_to_find_email") + " " + email);
+            }
         } catch (SQLException e) {
             log.error(e.getMessage());
         }
-        throw new UnableToFindException("Unable to find user with email " + email);
+        throw new UnableToFindException(MessageManager.INSTANCE.getMessage
+                ("user.unable_to_find_email") + " " + email);
     }
 
     public List<UserDto> findByLastName(String lastName) {
@@ -122,7 +131,7 @@ public class UserDaoImpl implements UserDao {
         } catch (SQLException e) {
             log.error(e.getMessage());
         }
-        throw new UnableToFindException("Unable to find users with lastname " + lastName);
+        throw new UnableToFindException(MessageManager.INSTANCE.getMessage("users.unable_to_find_lastname") + lastName);
     }
 
     public List<UserDto> findAll() {
@@ -132,7 +141,7 @@ public class UserDaoImpl implements UserDao {
         } catch (SQLException e) {
             log.error(e.getMessage());
         }
-        throw new UnableToFindException("No users found");
+        throw new UnableToFindException(MessageManager.INSTANCE.getMessage("users.not_found"));
     }
 
     public List<UserDto> findAll(int limit, int offset) {
@@ -144,7 +153,7 @@ public class UserDaoImpl implements UserDao {
         } catch (SQLException e) {
             log.error(e.getMessage());
         }
-        throw new UnableToFindException("No users found");
+        throw new UnableToFindException(MessageManager.INSTANCE.getMessage("users.not_found"));
     }
 
     public boolean deleteById(Long id) {
@@ -157,7 +166,7 @@ public class UserDaoImpl implements UserDao {
         } catch (SQLException e) {
             log.error(e.getMessage());
         }
-        throw new UnableToDeleteException("Unable to delete user with id " + id);
+        throw new UnableToDeleteException(MessageManager.INSTANCE.getMessage("user.unable_to_delete"));
     }
 
     public Long count() {
@@ -179,8 +188,9 @@ public class UserDaoImpl implements UserDao {
     private UserDto extractedFromStatement(PreparedStatement statement) throws SQLException {
         ResultSet result = statement.executeQuery();
         log.debug("DB query completed");
-        UserDto user = new UserDto();
+        UserDto user = null;
         if (result.next()) {
+            user=new UserDto();
             setParameters(user, result);
         }
         return user;

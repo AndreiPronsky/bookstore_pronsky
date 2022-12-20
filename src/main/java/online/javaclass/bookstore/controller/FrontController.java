@@ -27,6 +27,9 @@ public class FrontController extends HttpServlet {
     }
 
     private void process(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+//        HttpSession session = req.getSession();
+//        ThreadLocal<String> threadLocal = new ThreadLocal<>();
+//        threadLocal.set((String)session.getAttribute("lang"));
         String commandParameter = req.getParameter("command");
         Command command = CommandFactory.INSTANCE.getCommand(commandParameter);
         log.debug("Got command from factory " + commandParameter);
