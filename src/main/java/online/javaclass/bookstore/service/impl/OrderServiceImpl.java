@@ -18,6 +18,14 @@ public class OrderServiceImpl implements OrderService {
     private final EntityDtoMapperService mapper;
 
     @Override
+    public List<OrderDto> getOrdersByUserId(Long userId) {
+        log.debug("get orders by user id");
+        return orderRepo.getAllByUserId(userId).stream()
+                .map(mapper::toDto)
+                .toList();
+    }
+
+    @Override
     public Long count() {
         return orderRepo.count();
     }
@@ -25,7 +33,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDto getById(Long id) {
         log.debug("get order by id");
-        Order order = orderRepo.findById(id);
+        Order order = orderRepo.getById(id);
         if (order == null) {
             throw new RuntimeException("Book with id " + id + " not found!");
         }
@@ -35,7 +43,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderDto> getAll() {
         log.debug("get all orders");
-        return orderRepo.findAll().stream()
+        return orderRepo.getAll().stream()
                 .map(mapper::toDto)
                 .toList();
     }
@@ -43,7 +51,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderDto> getAll(PageableDto pageable) {
         log.debug("get all orders");
-        return orderRepo.findAll(pageable.getLimit(), pageable.getOffset()).stream()
+        return orderRepo.getAll(pageable.getLimit(), pageable.getOffset()).stream()
                 .map(mapper::toDto)
                 .toList();
     }

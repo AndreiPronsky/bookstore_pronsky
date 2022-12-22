@@ -20,8 +20,6 @@ import java.util.List;
 public class OrderItemDaoImpl implements OrderItemDao {
     private static final String FIND_ITEMS_BY_ORDER_ID = "SELECT id, order_id, book_id, quantity, price FROM order_items" +
             " WHERE order_id = ?";
-    private static final String FIND_ITEMS_BY_ORDER_ID_PAGED = "SELECT id, order_id, book_id, quantity, price " +
-            "FROM order_items WHERE order_id = ? LIMIT ? OFFSET ?";
     private static final String FIND_ITEM_BY_ID = "SELECT id, order_id, book_id, quantity, price FROM order_items " +
             "WHERE id = ?";
     private static final String FIND_ALL = "SELECT id, order_id, book_id, quantity, price FROM order_items";
@@ -40,7 +38,7 @@ public class OrderItemDaoImpl implements OrderItemDao {
     private final DataBaseManager dataBaseManager;
 
     @Override
-    public List<OrderItemDto> findAllByOrderId(Long orderId) {
+    public List<OrderItemDto> getAllByOrderId(Long orderId) {
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_ITEMS_BY_ORDER_ID)) {
             statement.setLong(1, orderId);
@@ -52,30 +50,14 @@ public class OrderItemDaoImpl implements OrderItemDao {
     }
 
     @Override
-    public List<OrderItemDto> findAllByOrderId(Long orderId, int limit, int offset) {
-        List<OrderItemDto> orderItems = new ArrayList<>();
-        try (Connection connection = dataBaseManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(FIND_ITEMS_BY_ORDER_ID_PAGED)) {
-            statement.setLong(1, orderId);
-            statement.setInt(2, limit);
-            statement.setInt(3, offset);
-            createItemList(statement);
-            return orderItems;
-        } catch (SQLException e) {
-            log.error(e.getMessage());
-        }
-        throw new UnableToFindException(MessageManager.INSTANCE.getMessage("items.not_found_by_ord_id"));
-    }
-
-    @Override
     public void deleteAllByOrderId(Long orderId) {
-        for (OrderItemDto item : findAllByOrderId(orderId)) {
+        for (OrderItemDto item : getAllByOrderId(orderId)) {
             deleteById(item.getId());
         }
     }
 
     @Override
-    public OrderItemDto findById(Long id) {
+    public OrderItemDto getById(Long id) {
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_ITEM_BY_ID)) {
             statement.setLong(1, id);
@@ -87,7 +69,7 @@ public class OrderItemDaoImpl implements OrderItemDao {
     }
 
     @Override
-    public List<OrderItemDto> findAll() {
+    public List<OrderItemDto> getAll() {
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_ALL)) {
             return createItemList(statement);
@@ -98,7 +80,7 @@ public class OrderItemDaoImpl implements OrderItemDao {
     }
 
     @Override
-    public List<OrderItemDto> findAll(int limit, int offset) {
+    public List<OrderItemDto> getAll(int limit, int offset) {
         List<OrderItemDto> orderItems = new ArrayList<>();
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_ALL_PAGED)) {

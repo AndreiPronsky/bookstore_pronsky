@@ -20,6 +20,7 @@
         </c:if>
         <c:if test="${sessionScope.user != null}">
             <li><a href="controller?command=logout"><fmt:message key="logout"/></a></li>
+            <li><a href="controller?command=my_orders"><fmt:message key="my_orders"/></a></li>
         </c:if>
         <c:if test="${sessionScope.user.role.toString() == 'ADMIN'}">
             <li><a href="controller?command=users"><fmt:message key="users"/></a></li>

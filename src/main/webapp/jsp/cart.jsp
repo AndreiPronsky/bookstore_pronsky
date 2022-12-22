@@ -17,16 +17,6 @@
 </c:if>
 <c:if test="${!sessionScope.cart.isEmpty && sessionScope.cart != null}">
     <form action="controller?command=cart" method="post">
-<%--        <table>--%>
-<%--            <caption><fmt:message key="cart"/></caption>--%>
-<%--            <thead>--%>
-<%--            <tr>--%>
-<%--                <td><fmt:message key="title"/></td>--%>
-<%--                <td><fmt:message key="price"/></td>--%>
-<%--                <td><fmt:message key="quantity"/></td>--%>
-<%--            </tr>--%>
-<%--            </thead>--%>
-<%--        </table>--%>
             <c:forEach items="${sessionScope.cart}" var="cartItem">
                 <ul class="wrapper">
                     <li>${cartItem.key.title}</li>

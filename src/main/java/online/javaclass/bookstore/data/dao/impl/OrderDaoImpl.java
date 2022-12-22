@@ -6,12 +6,7 @@ import online.javaclass.bookstore.MessageManager;
 import online.javaclass.bookstore.data.connection.DataBaseManager;
 import online.javaclass.bookstore.data.dao.OrderDao;
 import online.javaclass.bookstore.data.dto.OrderDto;
-
-import online.javaclass.bookstore.service.exceptions.UnableToCreateException;
-import online.javaclass.bookstore.service.exceptions.UnableToDeleteException;
-import online.javaclass.bookstore.service.exceptions.UnableToUpdateException;
-import online.javaclass.bookstore.service.exceptions.UnableToFindException;
-import online.javaclass.bookstore.service.exceptions.AppException;
+import online.javaclass.bookstore.service.exceptions.*;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -26,6 +21,14 @@ public class OrderDaoImpl implements OrderDao {
             "JOIN delivery_type dt on dt.id = o.delivery_type_id " +
             "JOIN payment_method pm on o.payment_method_id = pm.id " +
             "JOIN payment_status ps on o.payment_status_id = ps.id WHERE o.id = ? ";
+
+    private static final String FIND_ORDERS_BY_USER_ID = "SELECT o.id, o.user_id, os.name AS status, " +
+            "pm.name AS payment_method, ps.name AS payment_status, dt.name AS delivery_type, cost FROM orders o " +
+            "JOIN order_status os ON o.status_id = os.id " +
+            "JOIN delivery_type dt on dt.id = o.delivery_type_id " +
+            "JOIN payment_method pm on o.payment_method_id = pm.id " +
+            "JOIN payment_status ps on o.payment_status_id = ps.id " +
+            "WHERE o.user_id = ? ORDER BY o.id";
     private static final String FIND_ALL_ORDERS = "SELECT o.id, o.user_id, os.name AS status, " +
             "pm.name AS payment_method, ps.name AS payment_status, dt.name AS delivery_type, cost FROM orders o " +
             "JOIN order_status os ON o.status_id = os.id " +
@@ -56,10 +59,23 @@ public class OrderDaoImpl implements OrderDao {
     private static final String COL_DELIVERY_TYPE = "delivery_type";
     private static final String COL_USER_ID = "user_id";
     private static final String COL_ID = "id";
+    private static final String COL_COST = "cost";
     private final DataBaseManager dataBaseManager;
 
     @Override
-    public OrderDto findById(Long id) {
+    public List<OrderDto> getAllByUserId(Long userId) {
+        try (Connection connection = dataBaseManager.getConnection()) {
+            PreparedStatement statement = connection.prepareStatement(FIND_ORDERS_BY_USER_ID);
+            statement.setLong(1, userId);
+            return createOrderList(statement);
+        } catch (SQLException e) {
+            log.error(e.getMessage());
+        }
+        throw new UnableToFindException(MessageManager.INSTANCE.getMessage("orders.unable_to_find"));
+    }
+
+    @Override
+    public OrderDto getById(Long id) {
         try (Connection connection = dataBaseManager.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(FIND_ORDER_BY_ID);
             statement.setLong(1, id);
@@ -88,7 +104,7 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public List<OrderDto> findAll() {
+    public List<OrderDto> getAll() {
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_ALL_ORDERS)) {
             return createOrderList(statement);
@@ -99,7 +115,7 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public List<OrderDto> findAll(int limit, int offset) {
+    public List<OrderDto> getAll(int limit, int offset) {
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_ALL_ORDERS_PAGED)) {
             statement.setInt(1, limit);
@@ -169,11 +185,13 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     private void setParameters(OrderDto order, ResultSet result) throws SQLException {
+        order.setId(result.getLong(COL_ID));
         order.setUserId(result.getLong(COL_USER_ID));
         order.setOrderStatus(OrderDto.OrderStatus.valueOf(result.getString(COL_STATUS)));
         order.setPaymentMethod(OrderDto.PaymentMethod.valueOf(result.getString(COL_PAYMENT_METHOD)));
         order.setPaymentStatus(OrderDto.PaymentStatus.valueOf(result.getString(COL_PAYMENT_STATUS)));
         order.setDeliveryType(OrderDto.DeliveryType.valueOf(result.getString(COL_DELIVERY_TYPE)));
+        order.setCost(result.getBigDecimal(COL_COST));
     }
 
     private void prepareStatementForCreate(OrderDto order, PreparedStatement statement) throws SQLException {

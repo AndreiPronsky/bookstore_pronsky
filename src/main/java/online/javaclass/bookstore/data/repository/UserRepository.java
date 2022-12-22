@@ -6,11 +6,11 @@ import java.util.List;
 
 public interface UserRepository extends AbstractRepository<Long, User> {
 
-    User findByEmail(String email);
+    User getByEmail(String email);
 
-    List<User> findByLastName(String lastName);
+    List<User> getByLastName(String lastName);
 
-    List<User> findByLastName(String lastname, int limit, int offset);
+    List<User> getByLastName(String lastname, int limit, int offset);
 
     Long count();
 }

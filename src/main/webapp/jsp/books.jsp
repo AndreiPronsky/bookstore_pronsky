@@ -39,31 +39,40 @@
         </c:if>
     </div>
     <table>
+        <caption><fmt:message key="books"/></caption>
+        <thead>
+        <tr>
+            <th><fmt:message key="author"/></th>
+            <th><fmt:message key="title"/></th>
+            <th><fmt:message key="price"/></th>
+            <th><fmt:message key="genre"/></th>
+        </tr>
+        </thead>
         <tbody>
         <c:forEach items="${requestScope.books}" var="book">
-            <div class="col-md-3 my-3">
-                <div class="card w-100" style="width: 18rem;">
-                    <img class="card-img-top" src="..." alt="card-image">
-                    <div class="card-body">
-                        <h5 class="card-author">${book.author}</h5>
-                        <h5 class="card-title">
-                            <a href="controller?command=book&id=${book.id}">${book.title}</a>
-                        </h5>
-                        <h6 class="price">${book.price}</h6>
-                        <h6 class="genre">${book.genre}</h6>
-                        <div class="mt-3 d-flex justify-content-between">
-                            <a href="controller?command=add_to_cart&id=${book.id}"><fmt:message key="add_to_cart"/>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <tr>
+                <td>
+                    <img src="..." alt="book-image">
+                </td>
+                <td>
+                    <h5>${book.author}</h5>
+                </td>
+                <td>
+                    <h5><a href="controller?command=book&id=${book.id}">${book.title}</a></h5>
+                </td>
+                <td>
+                    <h6>${book.price}</h6>
+                </td>
+                <td>
+                    <h6>${book.genre}</h6>
+                </td>
+                <td>
+                    <a href="controller?command=add_to_cart&id=${book.id}"><fmt:message key="add_to_cart"/></a>
+                </td>
+            </tr>
         </c:forEach>
         </tbody>
     </table>
 </c:if>
-<%--<c:redirect url="controller?command=books">--%>
-<%--    <c:param name="books" value="${requestScope.books}"/>--%>
-<%--</c:redirect>--%>
 </body>
 </html>

@@ -11,7 +11,6 @@ import online.javaclass.bookstore.data.entities.Order;
 import online.javaclass.bookstore.data.entities.OrderItem;
 import online.javaclass.bookstore.data.entities.User;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -45,13 +44,13 @@ public class EntityDtoMapperData {
     public Order toEntity(OrderDto orderDto) {
         Order order = new Order();
         order.setId(orderDto.getId());
-        order.setUser(toEntity(userDao.findById(orderDto.getUserId())));
+        order.setUser(toEntity(userDao.getById(orderDto.getUserId())));
         order.setOrderStatus(Order.OrderStatus.values()[orderDto.getOrderStatus().ordinal()]);
         order.setPaymentMethod(Order.PaymentMethod.values()[orderDto.getPaymentMethod().ordinal()]);
         order.setPaymentStatus(Order.PaymentStatus.values()[orderDto.getPaymentStatus().ordinal()]);
         order.setDeliveryType(Order.DeliveryType.values()[orderDto.getDeliveryType().ordinal()]);
         order.setItems(getOrderItemList(orderDto));
-        order.setCost(calculateCost(orderDto));
+        order.setCost(orderDto.getCost());
         return order;
     }
 
@@ -114,16 +113,6 @@ public class EntityDtoMapperData {
         item.setQuantity(itemDto.getQuantity());
         item.setPrice(itemDto.getPrice());
         return item;
-    }
-
-    private BigDecimal calculateCost(OrderDto orderDto) {
-        List<OrderItemDto> itemDtos = orderDto.getItems();
-        BigDecimal totalCost = BigDecimal.ZERO;
-        for (OrderItemDto item : itemDtos) {
-            BigDecimal itemCost = item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity()));
-            totalCost = totalCost.add(itemCost);
-        }
-        return totalCost;
     }
 
     private List<OrderItem> getOrderItemList(OrderDto orderDto) {

@@ -53,7 +53,7 @@ public class BookDaoImpl implements BookDao {
     private static final String SEARCH = "SELECT b.id, b.title, b.author, b.isbn, g.name AS genre," +
             "c.name AS cover, b.pages, b.price, b.rating FROM books b " +
             "JOIN genres g ON b.genre_id = g.id " +
-            "JOIN covers c ON b.cover_id = c.id WHERE b.title LIKE ?";
+            "JOIN covers c ON b.cover_id = c.id WHERE b.title LIKE ? OR b.author LIKE ?";
     private static final String DELETE_BOOK_BY_ID = "DELETE FROM books WHERE id = ?";
     private static final String COUNT_BOOKS = "SELECT count(*) FROM books";
     private static final String COL_ID = "id";
@@ -74,6 +74,7 @@ public class BookDaoImpl implements BookDao {
         PreparedStatement statement = connection.prepareStatement(SEARCH)) {
             String reformatedForSearchInput = "%" + input + "%";
             statement.setString(1, reformatedForSearchInput);
+            statement.setString(2, reformatedForSearchInput);
             return createBookList(statement);
         } catch (SQLException e) {
             log.error(e.getMessage());
@@ -129,7 +130,7 @@ public class BookDaoImpl implements BookDao {
         throw new UnableToUpdateException(MessageManager.INSTANCE.getMessage("book.unable_to_update"));
     }
 
-    public BookDto findById(Long id) {
+    public BookDto getById(Long id) {
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_BOOK_BY_ID)) {
             statement.setLong(1, id);
@@ -140,7 +141,7 @@ public class BookDaoImpl implements BookDao {
         throw new UnableToFindException(MessageManager.INSTANCE.getMessage("book.unable_to_find_id"));
     }
 
-    public BookDto findByIsbn(String isbn) {
+    public BookDto getByIsbn(String isbn) {
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_BOOK_BY_ISBN)) {
             statement.setString(1, isbn);
@@ -151,7 +152,7 @@ public class BookDaoImpl implements BookDao {
         throw new UnableToFindException(MessageManager.INSTANCE.getMessage("book.unable_to_find_isbn"));
     }
 
-    public List<BookDto> findByAuthor(String author) {
+    public List<BookDto> getByAuthor(String author) {
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_BOOKS_BY_AUTHOR)) {
             statement.setString(1, author);
@@ -162,7 +163,7 @@ public class BookDaoImpl implements BookDao {
         throw new UnableToFindException(MessageManager.INSTANCE.getMessage("books.unable_to_find_author"));
     }
 
-    public List<BookDto> findByAuthor(String author, int limit, int offset) {
+    public List<BookDto> getByAuthor(String author, int limit, int offset) {
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_BOOKS_BY_AUTHOR_PAGED)) {
             statement.setString(1, author);
@@ -175,7 +176,7 @@ public class BookDaoImpl implements BookDao {
         throw new UnableToFindException(MessageManager.INSTANCE.getMessage("books.unable_to_find_author"));
     }
 
-    public List<BookDto> findAll() {
+    public List<BookDto> getAll() {
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_ALL_BOOKS)) {
             return createBookList(statement);
@@ -186,7 +187,7 @@ public class BookDaoImpl implements BookDao {
     }
 
     @Override
-    public List<BookDto> findAll(int limit, int offset) {
+    public List<BookDto> getAll(int limit, int offset) {
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_ALL_BOOKS_PAGED)) {
             statement.setInt(1, limit);

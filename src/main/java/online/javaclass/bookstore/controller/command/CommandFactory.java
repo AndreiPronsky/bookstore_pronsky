@@ -74,6 +74,7 @@ public class CommandFactory {
         map.put("change_lang", new ChangeLanguageCommand());
         map.put("search", new SearchCommand(bookService));
         map.put("corr_cart", new CorrectCartCommand());
+        map.put("my_orders", new UserOrdersCommand(orderService, bookService));
     }
 
     public Command getCommand(String command) {

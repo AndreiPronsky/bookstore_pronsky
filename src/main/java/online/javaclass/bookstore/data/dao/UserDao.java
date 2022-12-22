@@ -5,11 +5,11 @@ import online.javaclass.bookstore.data.dto.UserDto;
 import java.util.List;
 
 public interface UserDao extends AbstractDao<Long, UserDto> {
-    UserDto findByEmail(String email);
+    UserDto getByEmail(String email);
 
-    List<UserDto> findByLastName(String lastname);
+    List<UserDto> getByLastName(String lastname);
 
-    List<UserDto> findByLastName(String lastname, int limit, int offset);
+    List<UserDto> getByLastName(String lastname, int limit, int offset);
 
     Long count();
 }

@@ -3,11 +3,11 @@ package online.javaclass.bookstore.data.dao;
 import java.util.List;
 
 public interface AbstractDao<K, T> {
-    T findById(K id);
+    T getById(K id);
 
-    List<T> findAll();
+    List<T> getAll();
 
-    List<T> findAll(int limit, int offset);
+    List<T> getAll(int limit, int offset);
 
     T create(T entity);
 

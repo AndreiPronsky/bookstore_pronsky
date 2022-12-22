@@ -106,3 +106,7 @@ a {
     color: #ffffff;
     border-radius: 5px;
 }
+
+td {
+    border: #34495e solid 2px;
+}

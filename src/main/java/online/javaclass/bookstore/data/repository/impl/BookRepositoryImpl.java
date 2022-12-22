@@ -16,20 +16,20 @@ public class BookRepositoryImpl implements BookRepository {
     private final EntityDtoMapperData mapper;
 
     @Override
-    public Book findById(Long id) {
-        BookDto bookDto = bookDao.findById(id);
+    public Book getById(Long id) {
+        BookDto bookDto = bookDao.getById(id);
         return mapper.toEntity(bookDto);
     }
 
     @Override
-    public Book findByIsbn(String isbn) {
-        BookDto bookDto = bookDao.findByIsbn(isbn);
+    public Book getByIsbn(String isbn) {
+        BookDto bookDto = bookDao.getByIsbn(isbn);
         return mapper.toEntity(bookDto);
     }
 
     @Override
-    public List<Book> findByAuthor(String author) {
-        List<BookDto> bookDtos = bookDao.findByAuthor(author);
+    public List<Book> getByAuthor(String author) {
+        List<BookDto> bookDtos = bookDao.getByAuthor(author);
         List<Book> books = new ArrayList<>();
         for (BookDto bookDto : bookDtos) {
             books.add(mapper.toEntity(bookDto));
@@ -48,8 +48,8 @@ public class BookRepositoryImpl implements BookRepository {
     }
 
     @Override
-    public List<Book> findByAuthor(String author, int limit, int offset) {
-        List<BookDto> bookDtos = bookDao.findByAuthor(author, limit, offset);
+    public List<Book> getByAuthor(String author, int limit, int offset) {
+        List<BookDto> bookDtos = bookDao.getByAuthor(author, limit, offset);
         List<Book> books = new ArrayList<>();
         for (BookDto bookDto : bookDtos) {
             books.add(mapper.toEntity(bookDto));
@@ -58,8 +58,8 @@ public class BookRepositoryImpl implements BookRepository {
     }
 
     @Override
-    public List<Book> findAll() {
-        List<BookDto> bookDtos = bookDao.findAll();
+    public List<Book> getAll() {
+        List<BookDto> bookDtos = bookDao.getAll();
         List<Book> books = new ArrayList<>();
         for (BookDto bookDto : bookDtos) {
             books.add(mapper.toEntity(bookDto));
@@ -68,8 +68,8 @@ public class BookRepositoryImpl implements BookRepository {
     }
 
     @Override
-    public List<Book> findAll(int limit, int offset) {
-        List<BookDto> bookDtos = bookDao.findAll(limit, offset);
+    public List<Book> getAll(int limit, int offset) {
+        List<BookDto> bookDtos = bookDao.getAll(limit, offset);
         List<Book> books = new ArrayList<>();
         for (BookDto bookDto : bookDtos) {
             books.add(mapper.toEntity(bookDto));

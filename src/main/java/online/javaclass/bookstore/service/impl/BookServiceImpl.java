@@ -43,7 +43,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public BookDto getById(Long id) {
         log.debug("get book by id");
-        Book book = bookRepo.findById(id);
+        Book book = bookRepo.getById(id);
         if (book == null) {
             throw new RuntimeException("Book with id " + id + " not found!");
         }
@@ -53,14 +53,14 @@ public class BookServiceImpl implements BookService {
     @Override
     public BookDto getByIsbn(String isbn) {
         log.debug("get book by isbn");
-        Book book = bookRepo.findByIsbn(isbn);
+        Book book = bookRepo.getByIsbn(isbn);
         return mapper.toDto(book);
     }
 
     @Override
     public List<BookDto> getByAuthor(String author) {
         log.debug("get books by author");
-        return bookRepo.findByAuthor(author).stream()
+        return bookRepo.getByAuthor(author).stream()
                 .map(mapper::toDto)
                 .toList();
     }
@@ -76,7 +76,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<BookDto> getByAuthor(String author, PageableDto pageable) {
         log.debug("get books by author");
-        return bookRepo.findByAuthor(author, pageable.getLimit(), pageable.getOffset()).stream()
+        return bookRepo.getByAuthor(author, pageable.getLimit(), pageable.getOffset()).stream()
                 .map(mapper::toDto)
                 .toList();
     }
@@ -84,7 +84,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<BookDto> getAll() {
         log.debug("get all books");
-        return bookRepo.findAll().stream()
+        return bookRepo.getAll().stream()
                 .map(mapper::toDto)
                 .toList();
     }
@@ -92,7 +92,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<BookDto> getAll(PageableDto pageable) {
         log.debug("get all books");
-        List<BookDto> books =bookRepo.findAll(pageable.getLimit(), pageable.getOffset()).stream()
+        List<BookDto> books =bookRepo.getAll(pageable.getLimit(), pageable.getOffset()).stream()
                 .map(mapper::toDto)
                 .toList();
         Long totalItems = bookRepo.count();

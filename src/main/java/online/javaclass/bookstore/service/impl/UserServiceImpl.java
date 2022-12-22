@@ -24,7 +24,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto login(String email, String password) {
-        User user = userRepo.findByEmail(email);
+        User user = userRepo.getByEmail(email);
         if (user == null || !user.getPassword().equals((digest.hashPassword(password)))) {
             throw new RuntimeException("Wrong email or password!");
         }
@@ -51,14 +51,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto getById(Long id) {
         log.debug("get user by id");
-        User user = userRepo.findById(id);
+        User user = userRepo.getById(id);
         return mapper.toDto(user);
     }
 
     @Override
     public List<UserDto> getByLastName(String lastname) {
         log.debug("get user(s) by lastname");
-        List<UserDto> userDtos = userRepo.findByLastName(lastname).stream()
+        List<UserDto> userDtos = userRepo.getByLastName(lastname).stream()
                 .map(mapper::toDto)
                 .toList();
         if (userDtos.isEmpty()) {
@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDto> getByLastName(String lastname, PageableDto pageable) {
         log.debug("get user(s) by lastname");
-        List<UserDto> userDtos = userRepo.findByLastName(lastname, pageable.getLimit(), pageable.getOffset()).stream()
+        List<UserDto> userDtos = userRepo.getByLastName(lastname, pageable.getLimit(), pageable.getOffset()).stream()
                 .map(mapper::toDto)
                 .toList();
         if (userDtos.isEmpty()) {
@@ -82,7 +82,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDto> getAll() {
         log.debug("get all users");
-        return userRepo.findAll().stream()
+        return userRepo.getAll().stream()
                 .map(mapper::toDto)
                 .toList();
     }
@@ -90,7 +90,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDto> getAll(PageableDto pageable) {
         log.debug("get all users");
-        List<UserDto> users = userRepo.findAll(pageable.getLimit(), pageable.getOffset()).stream()
+        List<UserDto> users = userRepo.getAll(pageable.getLimit(), pageable.getOffset()).stream()
                 .map(mapper::toDto)
                 .toList();
         Long totalItems = userRepo.count();

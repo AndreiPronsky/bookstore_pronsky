@@ -6,12 +6,7 @@ import online.javaclass.bookstore.MessageManager;
 import online.javaclass.bookstore.data.connection.DataBaseManager;
 import online.javaclass.bookstore.data.dao.UserDao;
 import online.javaclass.bookstore.data.dto.UserDto;
-
-import online.javaclass.bookstore.service.exceptions.UnableToCreateException;
-import online.javaclass.bookstore.service.exceptions.UnableToDeleteException;
-import online.javaclass.bookstore.service.exceptions.UnableToFindException;
-import online.javaclass.bookstore.service.exceptions.UnableToUpdateException;
-import online.javaclass.bookstore.service.exceptions.AppException;
+import online.javaclass.bookstore.service.exceptions.*;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -80,7 +75,7 @@ public class UserDaoImpl implements UserDao {
         throw new UnableToUpdateException(MessageManager.INSTANCE.getMessage("user.unable_to_update"));
     }
 
-    public UserDto findById(Long id) {
+    public UserDto getById(Long id) {
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_USER_BY_ID)) {
             statement.setLong(1, id);
@@ -91,7 +86,7 @@ public class UserDaoImpl implements UserDao {
         throw new UnableToFindException(MessageManager.INSTANCE.getMessage("user.unable_to_find_id") + id);
     }
 
-    public UserDto findByEmail(String email) {
+    public UserDto getByEmail(String email) {
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_USER_BY_EMAIL)) {
             statement.setString(1, email);
@@ -110,7 +105,7 @@ public class UserDaoImpl implements UserDao {
                 ("user.unable_to_find_email") + " " + email);
     }
 
-    public List<UserDto> findByLastName(String lastName) {
+    public List<UserDto> getByLastName(String lastName) {
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_USERS_BY_LASTNAME)) {
             statement.setString(1, lastName);
@@ -121,7 +116,7 @@ public class UserDaoImpl implements UserDao {
         throw new UnableToFindException("Unable to find users with lastname " + lastName);
     }
 
-    public List<UserDto> findByLastName(String lastName, int limit, int offset) {
+    public List<UserDto> getByLastName(String lastName, int limit, int offset) {
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_USERS_BY_LASTNAME_PAGED)) {
             statement.setString(1, lastName);
@@ -134,7 +129,7 @@ public class UserDaoImpl implements UserDao {
         throw new UnableToFindException(MessageManager.INSTANCE.getMessage("users.unable_to_find_lastname") + lastName);
     }
 
-    public List<UserDto> findAll() {
+    public List<UserDto> getAll() {
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_ALL_USERS)) {
             return createUserList(statement);
@@ -144,7 +139,7 @@ public class UserDaoImpl implements UserDao {
         throw new UnableToFindException(MessageManager.INSTANCE.getMessage("users.not_found"));
     }
 
-    public List<UserDto> findAll(int limit, int offset) {
+    public List<UserDto> getAll(int limit, int offset) {
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_ALL_USERS_PAGED)) {
             statement.setInt(1, limit);
