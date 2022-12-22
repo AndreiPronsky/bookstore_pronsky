@@ -2,39 +2,29 @@ package online.javaclass.bookstore.data.connection;
 
 import lombok.extern.log4j.Log4j2;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Connection;
-import java.util.Properties;
 
 @Log4j2
 public class DataBaseManager implements AutoCloseable {
     public static final DataBaseManager INSTANCE = new DataBaseManager();
-    private ConnectionPool pool;
     private static final String PATH_TO_PROPS = "/connection-config.properties";
+    private final String driver;
     private final String url;
     private final String user;
     private final String password;
+    private ConnectionPool pool;
 
     private DataBaseManager() {
-        Properties properties = new Properties();
-        try (InputStream input = this.getClass().getResourceAsStream(PATH_TO_PROPS)) {
-            properties.load(input);
-            log.debug("Properties extracted");
-        } catch (IOException e) {
-            log.error("unable to extract connection properties", e);
-        }
-
-        url = properties.getProperty("db.url");
-        user = properties.getProperty("db.user");
-        password = properties.getProperty("db.password");
-        pool = new ConnectionPool(url, user, password);
-        log.debug("Properties are set, pool created");
+        ConnectionPropertyManager propertyManager = new ConnectionPropertyManager(PATH_TO_PROPS);
+        driver = propertyManager.getDriver();
+        url = propertyManager.getUrl();
+        user = propertyManager.getUser();
+        password = propertyManager.getPassword();
     }
 
     public Connection getConnection() {
         if (pool == null) {
-            pool = new ConnectionPool(url, user, password);
+            pool = new ConnectionPool(driver, url, user, password);
             log.debug("Connection pool created");
         }
         log.debug("connection established");

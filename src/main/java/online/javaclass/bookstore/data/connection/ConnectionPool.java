@@ -14,14 +14,14 @@ import java.util.concurrent.LinkedBlockingDeque;
 public class ConnectionPool {
     private final BlockingDeque<ProxyConnection> freeConnections;
     private Queue<ProxyConnection> givenAwayConnections;
-    public static final int POOL_SIZE = 4;
+    public static final int POOL_SIZE = 8;
 
-    ConnectionPool(String url, String user, String password) {
+    ConnectionPool(String driver, String url, String user, String password) {
 
         freeConnections = new LinkedBlockingDeque<>(POOL_SIZE);
         givenAwayConnections = new ArrayDeque<>();
         try {
-            Class.forName("org.postgresql.Driver");
+            Class.forName(driver);
             log.info("DB driver loaded");
             for (int i = 0; i < POOL_SIZE; i++) {
                 Connection connection = DriverManager.getConnection(url, user, password);
