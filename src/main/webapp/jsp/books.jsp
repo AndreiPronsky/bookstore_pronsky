@@ -42,17 +42,19 @@
         <caption><fmt:message key="books"/></caption>
         <thead>
         <tr>
+            <th></th>
             <th><fmt:message key="author"/></th>
             <th><fmt:message key="title"/></th>
             <th><fmt:message key="price"/></th>
             <th><fmt:message key="genre"/></th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
         <c:forEach items="${requestScope.books}" var="book">
             <tr>
                 <td>
-                    <img src="..." alt="book-image">
+                    <img height="100" src="css/coverImages/${book.id}.png" alt="book-image">
                 </td>
                 <td>
                     <h5>${book.author}</h5>
@@ -67,7 +69,8 @@
                     <h6>${book.genre}</h6>
                 </td>
                 <td>
-                    <a href="controller?command=add_to_cart&id=${book.id}"><fmt:message key="add_to_cart"/></a>
+                    <a href="controller?command=add_to_cart&id=${book.id}">
+                        <img height="30" src="css/serviceImages/cart.png" alt=<fmt:message key="add_to_cart"/>></a>
                 </td>
             </tr>
         </c:forEach>

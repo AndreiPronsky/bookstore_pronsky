@@ -83,3 +83,5 @@ CREATE TABLE IF NOT EXISTS order_items
     quantity SMALLINT,
     price    NUMERIC(5, 2)
 );
+
+-- DROP TABLE books CASCADE;

@@ -7,11 +7,14 @@
 </c:if>
 <html>
 <head>
+    <meta charset="UTF-8">
     <title><fmt:message key="cart"/></title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <jsp:include page="navbar.jsp"/>
+<jsp:include page="searchbar.jsp"/>
+<header></header>
 <c:if test="${sessionScope.cart == null}">
     <h1><fmt:message key="your_cart_is_empty"/></h1>
 </c:if>
@@ -34,6 +37,5 @@
         <input type="submit" name="createOrder" value="<fmt:message key="order"/>">
     </form>
 </c:if>
-<footer></footer>
 </body>
 </html>
