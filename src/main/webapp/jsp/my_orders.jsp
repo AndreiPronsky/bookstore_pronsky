@@ -23,24 +23,30 @@
         <thead>
         <tr>
             <th><fmt:message key="order"/></th>
-            <th><fmt:message key="title"/></th>
-            <th><fmt:message key="price"/></th>
-            <th><fmt:message key="quantity"/></th>
+            <th><fmt:message key="title"/> <fmt:message key="price"/> <fmt:message key="quantity"/></th>
             <th><fmt:message key="cost"/></th>
         </tr>
         </thead>
         <tbody>
         <c:forEach items="${requestScope.orders}" var="order">
             <tr>
-            <td rowspan="${order.value.size()}">${order.key.id}</td>
-            <c:forEach items="${order.value}" var="item">
-                <td>${item.value.title}</td>
-                <td>${item.key.price}</td>
-                <td>${item.key.quantity}</td>
-                <td rowspan="${order.value.size()}">${order.key.cost}</td>
-                </tr>
-            </c:forEach>
+                <td>${order.key.id}</td>
+                <td>
+                    <c:forEach items="${order.value}" var="item">
+                        <table>
+                            <tr>
+                                <td>${item.value.title}</td>
+                                <td>${item.key.price}</td>
+                                <td>${item.key.quantity}</td>
+                            </tr>
+                        </table>
+                    </c:forEach>
+                </td>
+                <td>${order.key.cost}</td>
+            </tr>
         </c:forEach>
         </tbody>
     </table>
 </c:if>
+</body>
+</html>

@@ -20,7 +20,8 @@ public class OrderDaoImpl implements OrderDao {
             "JOIN order_status os ON o.status_id = os.id " +
             "JOIN delivery_type dt on dt.id = o.delivery_type_id " +
             "JOIN payment_method pm on o.payment_method_id = pm.id " +
-            "JOIN payment_status ps on o.payment_status_id = ps.id WHERE o.id = ? ";
+            "JOIN payment_status ps on o.payment_status_id = ps.id " +
+            "WHERE o.id = ?";
 
     private static final String FIND_ORDERS_BY_USER_ID = "SELECT o.id, o.user_id, os.name AS status, " +
             "pm.name AS payment_method, ps.name AS payment_status, dt.name AS delivery_type, cost FROM orders o " +
