@@ -45,6 +45,9 @@ public class UserDaoImpl implements UserDao {
 
     private final DataBaseManager dataBaseManager;
 
+    private final ThreadLocal<MessageManager> context = new ThreadLocal<>();
+    MessageManager messageManager = context.get();
+
     public UserDto create(UserDto user) {
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(CREATE_USER, Statement.RETURN_GENERATED_KEYS)) {
@@ -59,7 +62,7 @@ public class UserDaoImpl implements UserDao {
         } catch (SQLException e) {
             log.error(e.getMessage() + e);
         }
-        throw new UnableToCreateException(MessageManager.INSTANCE.getMessage("user.unable_to_create"));
+        throw new UnableToCreateException(messageManager.getMessage("user.unable_to_create"));
     }
 
     public UserDto update(UserDto user) {
@@ -72,7 +75,7 @@ public class UserDaoImpl implements UserDao {
         } catch (SQLException e) {
             log.error(e.getMessage() + e);
         }
-        throw new UnableToUpdateException(MessageManager.INSTANCE.getMessage("user.unable_to_update"));
+        throw new UnableToUpdateException(messageManager.getMessage("user.unable_to_update"));
     }
 
     public UserDto getById(Long id) {
@@ -83,7 +86,7 @@ public class UserDaoImpl implements UserDao {
         } catch (SQLException e) {
             log.error(e.getMessage() + e);
         }
-        throw new UnableToFindException(MessageManager.INSTANCE.getMessage("user.unable_to_find_id") + id);
+        throw new UnableToFindException(messageManager.getMessage("user.unable_to_find_id") + id);
     }
 
     public UserDto getByEmail(String email) {
@@ -95,13 +98,13 @@ public class UserDaoImpl implements UserDao {
                 return user;
             } else {
                 log.error("Unable to find user with email " + email);
-                throw new UnableToFindException(MessageManager.INSTANCE.getMessage
+                throw new UnableToFindException(messageManager.getMessage
                         ("user.unable_to_find_email") + " " + email);
             }
         } catch (SQLException e) {
             log.error(e.getMessage());
         }
-        throw new UnableToFindException(MessageManager.INSTANCE.getMessage
+        throw new UnableToFindException(messageManager.getMessage
                 ("user.unable_to_find_email") + " " + email);
     }
 
@@ -113,7 +116,7 @@ public class UserDaoImpl implements UserDao {
         } catch (SQLException e) {
             log.error(e.getMessage());
         }
-        throw new UnableToFindException("Unable to find users with lastname " + lastName);
+        throw new UnableToFindException(messageManager.getMessage("users.unable_to_find_lastname") + lastName);
     }
 
     public List<UserDto> getByLastName(String lastName, int limit, int offset) {
@@ -126,7 +129,7 @@ public class UserDaoImpl implements UserDao {
         } catch (SQLException e) {
             log.error(e.getMessage());
         }
-        throw new UnableToFindException(MessageManager.INSTANCE.getMessage("users.unable_to_find_lastname") + lastName);
+        throw new UnableToFindException(messageManager.getMessage("users.unable_to_find_lastname") + lastName);
     }
 
     public List<UserDto> getAll() {
@@ -136,7 +139,7 @@ public class UserDaoImpl implements UserDao {
         } catch (SQLException e) {
             log.error(e.getMessage());
         }
-        throw new UnableToFindException(MessageManager.INSTANCE.getMessage("users.not_found"));
+        throw new UnableToFindException(messageManager.getMessage("users.not_found"));
     }
 
     public List<UserDto> getAll(int limit, int offset) {
@@ -148,7 +151,7 @@ public class UserDaoImpl implements UserDao {
         } catch (SQLException e) {
             log.error(e.getMessage());
         }
-        throw new UnableToFindException(MessageManager.INSTANCE.getMessage("users.not_found"));
+        throw new UnableToFindException(messageManager.getMessage("users.not_found"));
     }
 
     public boolean deleteById(Long id) {
@@ -161,7 +164,7 @@ public class UserDaoImpl implements UserDao {
         } catch (SQLException e) {
             log.error(e.getMessage());
         }
-        throw new UnableToDeleteException(MessageManager.INSTANCE.getMessage("user.unable_to_delete"));
+        throw new UnableToDeleteException(messageManager.getMessage("user.unable_to_delete"));
     }
 
     public Long count() {
@@ -177,7 +180,7 @@ public class UserDaoImpl implements UserDao {
         } catch (SQLException e) {
             log.error(e.getMessage());
         }
-        throw new AppException("Count failed!");
+        throw new AppException(messageManager.getMessage("count_failed"));
     }
 
     private UserDto extractedFromStatement(PreparedStatement statement) throws SQLException {

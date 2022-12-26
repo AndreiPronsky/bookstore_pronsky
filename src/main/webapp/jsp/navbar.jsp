@@ -4,6 +4,7 @@
 <fmt:setBundle basename="messages"/>
 <c:if test="${sessionScope.lang != null}">
     <fmt:setLocale value="${sessionScope.lang}"/>
+    <fmt:setBundle basename="messages"/>
 </c:if>
 <header class="header">
     <a href="controller?command=home">
@@ -29,13 +30,9 @@
         <c:if test="${sessionScope.user.role.toString() == 'MANAGER'}">
             <li><a href="controller?command=add_book_form"><fmt:message key="add.book"/></a></li>
         </c:if>
-        <li><a href="controller?command=change_lang&lang=ru">
+        <li><a href="controller?command=change_lang&lang=ru_RU">
             <img height="30" src="css/serviceImages/RU.png" alt="Русский"></a></li>
-        <li><a href="controller?command=change_lang&lang=en">
+        <li><a href="controller?command=change_lang&lang=en_UK">
             <img height="30" src="css/serviceImages/UK.png" alt="English"></a></li>
     </ul>
 </header>
-
-
-
-

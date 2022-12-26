@@ -37,6 +37,9 @@ public class OrderItemDaoImpl implements OrderItemDao {
     private static final String COL_PRICE = "price";
     private final DataBaseManager dataBaseManager;
 
+    private final ThreadLocal<MessageManager> context = new ThreadLocal<>();
+    MessageManager messageManager = context.get();
+
     @Override
     public List<OrderItemDto> getAllByOrderId(Long orderId) {
         try (Connection connection = dataBaseManager.getConnection();
@@ -46,7 +49,7 @@ public class OrderItemDaoImpl implements OrderItemDao {
         } catch (SQLException e) {
             log.error(e.getMessage());
         }
-        throw new UnableToFindException(MessageManager.INSTANCE.getMessage("items.not_found_by_ord_id"));
+        throw new UnableToFindException(messageManager.getMessage("items.not_found_by_ord_id"));
     }
 
     @Override
@@ -65,7 +68,7 @@ public class OrderItemDaoImpl implements OrderItemDao {
         } catch (SQLException e) {
             log.error(e.getMessage());
         }
-        throw new UnableToFindException(MessageManager.INSTANCE.getMessage("items.not_found"));
+        throw new UnableToFindException(messageManager.getMessage("items.not_found"));
     }
 
     @Override
@@ -76,7 +79,7 @@ public class OrderItemDaoImpl implements OrderItemDao {
         } catch (SQLException e) {
             log.error(e.getMessage());
         }
-        throw new UnableToFindException(MessageManager.INSTANCE.getMessage("items.not_found"));
+        throw new UnableToFindException(messageManager.getMessage("items.not_found"));
     }
 
     @Override
@@ -91,7 +94,7 @@ public class OrderItemDaoImpl implements OrderItemDao {
         } catch (SQLException e) {
             log.error(e.getMessage());
         }
-        throw new UnableToFindException(MessageManager.INSTANCE.getMessage("items.not_found"));
+        throw new UnableToFindException(messageManager.getMessage("items.not_found"));
     }
 
     @Override
@@ -110,7 +113,7 @@ public class OrderItemDaoImpl implements OrderItemDao {
         } catch (Exception e) {
             log.error(e.getMessage());
         }
-        throw new UnableToCreateException(MessageManager.INSTANCE.getMessage("item.unable_to_create"));
+        throw new UnableToCreateException(messageManager.getMessage("item.unable_to_create"));
     }
 
     @Override
@@ -124,7 +127,7 @@ public class OrderItemDaoImpl implements OrderItemDao {
         } catch (SQLException e) {
             log.error(e.getMessage());
         }
-        throw new UnableToUpdateException(MessageManager.INSTANCE.getMessage("item.unable_to_update"));
+        throw new UnableToUpdateException(messageManager.getMessage("item.unable_to_update"));
     }
 
     @Override
@@ -138,7 +141,7 @@ public class OrderItemDaoImpl implements OrderItemDao {
         } catch (SQLException e) {
             log.error(e.getMessage());
         }
-        throw new UnableToDeleteException(MessageManager.INSTANCE.getMessage("item.unable_to_delete"));
+        throw new UnableToDeleteException(messageManager.getMessage("item.unable_to_delete"));
     }
 
     private OrderItemDto extractedFromStatement(PreparedStatement statement) throws SQLException {

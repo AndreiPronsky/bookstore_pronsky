@@ -65,8 +65,9 @@ public class BookDaoImpl implements BookDao {
     private static final String COL_PAGES = "pages";
     private static final String COL_PRICE = "price";
     private static final String COL_RATING = "rating";
-
     private final DataBaseManager dataBaseManager;
+
+    private final MessageManager messageManager = new MessageManager();
 
     @Override
     public List<BookDto> search(String input) {
@@ -79,8 +80,8 @@ public class BookDaoImpl implements BookDao {
         } catch (SQLException e) {
             log.error(e.getMessage());
         }
-        throw new UnableToFindException(MessageManager.INSTANCE.getMessage("books.unable_to_find_containing")
-                + " " + input + MessageManager.INSTANCE.getMessage("in_title"));
+        throw new UnableToFindException(messageManager.getMessage("books.unable_to_find_containing")
+                + " " + input + messageManager.getMessage("in_title"));
     }
 
     public Long count() {
@@ -96,7 +97,7 @@ public class BookDaoImpl implements BookDao {
         } catch (SQLException e) {
             log.error(e.getMessage());
         }
-        throw new AppException(MessageManager.INSTANCE.getMessage("count_failed"));
+        throw new AppException(messageManager.getMessage("count_failed"));
     }
 
     public BookDto create(BookDto book) {
@@ -114,7 +115,7 @@ public class BookDaoImpl implements BookDao {
         } catch (SQLException e) {
             log.error(e.getMessage());
         }
-        throw new UnableToCreateException(MessageManager.INSTANCE.getMessage("book.unable_to_create"));
+        throw new UnableToCreateException(messageManager.getMessage("book.unable_to_create"));
     }
 
     public BookDto update(BookDto book) {
@@ -127,7 +128,7 @@ public class BookDaoImpl implements BookDao {
         } catch (SQLException e) {
             log.error(e.getMessage());
         }
-        throw new UnableToUpdateException(MessageManager.INSTANCE.getMessage("book.unable_to_update"));
+        throw new UnableToUpdateException(messageManager.getMessage("book.unable_to_update"));
     }
 
     public BookDto getById(Long id) {
@@ -138,7 +139,7 @@ public class BookDaoImpl implements BookDao {
         } catch (SQLException e) {
             log.error(e.getMessage());
         }
-        throw new UnableToFindException(MessageManager.INSTANCE.getMessage("book.unable_to_find_id"));
+        throw new UnableToFindException(messageManager.getMessage("book.unable_to_find_id"));
     }
 
     public BookDto getByIsbn(String isbn) {
@@ -149,7 +150,7 @@ public class BookDaoImpl implements BookDao {
         } catch (SQLException e) {
             log.error(e.getMessage());
         }
-        throw new UnableToFindException(MessageManager.INSTANCE.getMessage("book.unable_to_find_isbn"));
+        throw new UnableToFindException(messageManager.getMessage("book.unable_to_find_isbn"));
     }
 
     public List<BookDto> getByAuthor(String author) {
@@ -160,7 +161,7 @@ public class BookDaoImpl implements BookDao {
         } catch (SQLException e) {
             log.error(e.getMessage());
         }
-        throw new UnableToFindException(MessageManager.INSTANCE.getMessage("books.unable_to_find_author"));
+        throw new UnableToFindException(messageManager.getMessage("books.unable_to_find_author"));
     }
 
     public List<BookDto> getByAuthor(String author, int limit, int offset) {
@@ -173,7 +174,7 @@ public class BookDaoImpl implements BookDao {
         } catch (SQLException e) {
             log.error(e.getMessage());
         }
-        throw new UnableToFindException(MessageManager.INSTANCE.getMessage("books.unable_to_find_author"));
+        throw new UnableToFindException(messageManager.getMessage("books.unable_to_find_author"));
     }
 
     public List<BookDto> getAll() {
@@ -183,7 +184,7 @@ public class BookDaoImpl implements BookDao {
         } catch (SQLException e) {
             log.error(e.getMessage());
         }
-        throw new UnableToFindException(MessageManager.INSTANCE.getMessage("books.unable_to_find"));
+        throw new UnableToFindException(messageManager.getMessage("books.unable_to_find"));
     }
 
     @Override
@@ -196,7 +197,7 @@ public class BookDaoImpl implements BookDao {
         } catch (SQLException e) {
             log.error(e.getMessage());
         }
-        throw new UnableToFindException(MessageManager.INSTANCE.getMessage("books.unable_to_find"));
+        throw new UnableToFindException(messageManager.getMessage("books.unable_to_find"));
     }
 
     public boolean deleteById(Long id) {
@@ -209,7 +210,7 @@ public class BookDaoImpl implements BookDao {
         } catch (SQLException e) {
             log.error(e.getMessage());
         }
-        throw new UnableToDeleteException(MessageManager.INSTANCE.getMessage("book.unable_to_delete") + id);
+        throw new UnableToDeleteException(messageManager.getMessage("book.unable_to_delete") + id);
     }
 
     private BookDto extractedFromStatement(PreparedStatement statement) throws SQLException {
