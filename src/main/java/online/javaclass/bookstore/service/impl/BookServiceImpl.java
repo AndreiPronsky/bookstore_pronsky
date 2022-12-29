@@ -44,9 +44,6 @@ public class BookServiceImpl implements BookService {
     public BookDto getById(Long id) {
         log.debug("get book by id");
         Book book = bookRepo.getById(id);
-        if (book == null) {
-            throw new RuntimeException("Book with id " + id + " not found!");
-        }
         return mapper.toDto(book);
     }
 

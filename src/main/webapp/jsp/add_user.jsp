@@ -3,8 +3,8 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:if test="${sessionScope.lang != null}">
   <fmt:setLocale value="${sessionScope.lang}"/>
-  <fmt:setBundle basename="messages"/>
 </c:if>
+<fmt:setBundle basename="messages"/>
 <html>
 <head>
   <title><fmt:message key="register"/></title>
@@ -27,7 +27,7 @@
     <li class="form-row">
       <label><fmt:message key="password"/><input type="password" name="password" minlength="8"></label>
     </li>
-    <c:if test="${sessionScope.user.Role == 'ADMIN'}">
+    <c:if test="${sessionScope.user.role == 'ADMIN'}">
       <li class="form-row">
         <label><fmt:message key="role"/>
           <select name="role" required="required">

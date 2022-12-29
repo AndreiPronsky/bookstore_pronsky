@@ -34,9 +34,6 @@ public class OrderServiceImpl implements OrderService {
     public OrderDto getById(Long id) {
         log.debug("get order by id");
         Order order = orderRepo.getById(id);
-        if (order == null) {
-            throw new RuntimeException("Book with id " + id + " not found!");
-        }
         return mapper.toDto(order);
     }
 

@@ -48,8 +48,9 @@ public class OrderItemDaoImpl implements OrderItemDao {
             return createItemList(statement);
         } catch (SQLException e) {
             log.error(e.getMessage());
+            throw new UnableToFindException("Item not found" + e);
         }
-        throw new UnableToFindException(messageManager.getMessage("items.not_found_by_ord_id"));
+
     }
 
     @Override
@@ -68,7 +69,7 @@ public class OrderItemDaoImpl implements OrderItemDao {
         } catch (SQLException e) {
             log.error(e.getMessage());
         }
-        throw new UnableToFindException(messageManager.getMessage("items.not_found"));
+        throw new UnableToFindException("items.not_found");
     }
 
     @Override
@@ -126,8 +127,9 @@ public class OrderItemDaoImpl implements OrderItemDao {
             return item;
         } catch (SQLException e) {
             log.error(e.getMessage());
+            throw new UnableToUpdateException("item.unable_to_update");
         }
-        throw new UnableToUpdateException(messageManager.getMessage("item.unable_to_update"));
+
     }
 
     @Override

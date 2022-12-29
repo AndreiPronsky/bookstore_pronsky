@@ -10,6 +10,7 @@ import online.javaclass.bookstore.service.DigestService;
 import online.javaclass.bookstore.service.EntityDtoMapperService;
 import online.javaclass.bookstore.service.UserService;
 import online.javaclass.bookstore.service.dto.UserDto;
+import online.javaclass.bookstore.service.exceptions.LoginException;
 
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class UserServiceImpl implements UserService {
     public UserDto login(String email, String password) {
         User user = userRepo.getByEmail(email);
         if (user == null || !user.getPassword().equals((digest.hashPassword(password)))) {
-            throw new RuntimeException("Wrong email or password!");
+            throw new LoginException("Wrong email or password!");
         }
         return mapper.toDto(user);
     }
@@ -58,25 +59,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDto> getByLastName(String lastname) {
         log.debug("get user(s) by lastname");
-        List<UserDto> userDtos = userRepo.getByLastName(lastname).stream()
+        return userRepo.getByLastName(lastname).stream()
                 .map(mapper::toDto)
                 .toList();
-        if (userDtos.isEmpty()) {
-            log.error("Unable to find users with lastname : " + lastname);
-        }
-        return userDtos;
     }
 
     @Override
     public List<UserDto> getByLastName(String lastname, PageableDto pageable) {
         log.debug("get user(s) by lastname");
-        List<UserDto> userDtos = userRepo.getByLastName(lastname, pageable.getLimit(), pageable.getOffset()).stream()
+        return userRepo.getByLastName(lastname, pageable.getLimit(), pageable.getOffset()).stream()
                 .map(mapper::toDto)
                 .toList();
-        if (userDtos.isEmpty()) {
-            log.error("Unable to find users with lastname : " + lastname);
-        }
-        return userDtos;
     }
 
     @Override
@@ -104,10 +97,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteById(Long id) {
         log.debug("delete user by id");
-        boolean deleted = userRepo.deleteById(id);
-        if (!deleted) {
-            log.error("Unable to delete user with id : " + id);
-        }
+        userRepo.deleteById(id);
     }
 
     @Override

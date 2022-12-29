@@ -1,11 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
 <c:if test="${sessionScope.lang != null}">
     <fmt:setLocale value="${sessionScope.lang}"/>
-    <fmt:setBundle basename="messages"/>
 </c:if>
+<fmt:setBundle basename="messages"/>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -26,6 +25,7 @@
             <th><fmt:message key="order"/></th>
             <th><fmt:message key="title"/> <fmt:message key="price"/> <fmt:message key="quantity"/></th>
             <th><fmt:message key="cost"/></th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
@@ -44,6 +44,12 @@
                     </c:forEach>
                 </td>
                 <td>${order.key.cost}</td>
+                <td>
+                    <c:if test="${order.key.statusStatus == 'OPEN'}">
+                        <a href="controller?command=edit_order_form&id=${order.key.id}">
+                            <fmt:message key="edit_order"/></a>
+                    </c:if>
+                </td>
             </tr>
         </c:forEach>
         </tbody>

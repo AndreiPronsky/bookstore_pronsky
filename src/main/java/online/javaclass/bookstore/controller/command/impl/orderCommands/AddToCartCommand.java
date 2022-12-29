@@ -1,4 +1,4 @@
-package online.javaclass.bookstore.controller.command.impl.cartCommands;
+package online.javaclass.bookstore.controller.command.impl.orderCommands;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -16,7 +16,6 @@ public class AddToCartCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest req) {
-
         Long bookId = Long.parseLong(req.getParameter("id"));
         HttpSession session = req.getSession();
         Map<BookDto, Integer> cartItems = (Map)session.getAttribute("cart");

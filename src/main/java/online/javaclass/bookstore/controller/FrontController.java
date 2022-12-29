@@ -43,8 +43,7 @@ public class FrontController extends HttpServlet {
     }
 
     private String processError(HttpServletRequest req, Exception e) {
-        String page;
-        page = CommandFactory.INSTANCE.getCommand("error").execute(req);
+        String page = CommandFactory.INSTANCE.getCommand("error").execute(req);
         String message = e.getMessage();
         req.setAttribute("message", message);
         return page;

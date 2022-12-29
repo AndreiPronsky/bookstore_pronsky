@@ -3,8 +3,8 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:if test="${sessionScope.lang != null}">
     <fmt:setLocale value="${sessionScope.lang}"/>
-    <fmt:setBundle basename="messages"/>
 </c:if>
+<fmt:setBundle basename="messages"/>
 <html>
 <head>
     <title><fmt:message key="edit_book"/></title>
@@ -68,10 +68,14 @@
             </label>
         </li>
         <li class="form-row">
-            <label><fmt:message key="pages"/><input type="number" name="pages" step="1" min="1" value="${requestScope.book.pages}"></label>
+            <label><fmt:message key="pages"/>
+                <input type="number" name="pages" step="1" min="1" value="${requestScope.book.pages}">
+            </label>
         </li>
         <li class="form-row">
-            <label><fmt:message key="rating"/><input type="number" name="rating" step="0.01" min="0.01" value="${requestScope.book.rating}"></label>
+            <label><fmt:message key="rating"/>
+                <input type="number" name="rating" step="0.01" min="0.01" value="${requestScope.book.rating}">
+            </label>
         </li>
         <li class="form-row">
             <input type="submit" name="Edit" value="<fmt:message key="edit"/>">

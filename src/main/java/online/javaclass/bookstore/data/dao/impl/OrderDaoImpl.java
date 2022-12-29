@@ -50,8 +50,11 @@ public class OrderDaoImpl implements OrderDao {
             "(SELECT pm.id FROM payment_method pm WHERE pm.name = ?), " +
             "(SELECT ps.id FROM payment_status ps WHERE ps.name = ?), " +
             "(SELECT dt.id FROM delivery_type dt WHERE dt.name = ?), ?)";
-    private static final String UPDATE_ORDER = "UPDATE orders o SET user_id = ?, status_id = ?, payment_method_id = ?, " +
-            "payment_status_id = ?, delivery_type_id = ?, cost = ? WHERE o.id = ?";
+    private static final String UPDATE_ORDER = "UPDATE orders o SET user_id = ?, " +
+            "status_id = (SELECT os.id FROM order_status os WHERE os.name = ?), " +
+            "payment_method_id = (SELECT pm.id FROM payment_method pm WHERE pm.name = ?), " +
+            "payment_status_id = (SELECT ps.id FROM payment_status ps WHERE ps.name = ?), " +
+            "delivery_type_id = (SELECT dt.id FROM delivery_type dt WHERE dt.name = ?), cost = ? WHERE o.id = ?";
     private static final String DELETE_ORDER_BY_ID = "DELETE FROM orders WHERE id = ?";
     private static final String COUNT_ORDERS = "SELECT count(*) FROM orders";
     private static final String COL_STATUS = "status";
@@ -160,8 +163,8 @@ public class OrderDaoImpl implements OrderDao {
             return order;
         } catch (SQLException e) {
             log.error("Unable to update order " + order);
+            throw new UnableToUpdateException("Unable to update" + e);
         }
-        throw new UnableToUpdateException(messageManager.getMessage("order.unable_to_update"));
     }
 
     @Override
@@ -209,10 +212,10 @@ public class OrderDaoImpl implements OrderDao {
 
     private void prepareStatementForUpdate(OrderDto order, PreparedStatement statement) throws SQLException {
         statement.setLong(1, order.getUserId());
-        statement.setInt(2, order.getOrderStatus().ordinal());
-        statement.setInt(3, order.getPaymentMethod().ordinal());
-        statement.setInt(4, order.getPaymentStatus().ordinal());
-        statement.setInt(5, order.getDeliveryType().ordinal());
+        statement.setString(2, order.getOrderStatus().toString());
+        statement.setString(3, order.getPaymentMethod().toString());
+        statement.setString(4, order.getPaymentStatus().toString());
+        statement.setString(5, order.getDeliveryType().toString());
         statement.setBigDecimal(6, order.getCost());
         statement.setLong(7, order.getId());
     }

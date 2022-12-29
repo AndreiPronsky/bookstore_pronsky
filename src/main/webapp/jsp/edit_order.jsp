@@ -7,28 +7,28 @@
 <fmt:setBundle basename="messages"/>
 <html>
 <head>
-    <title><fmt:message key="confirm_order"/></title>
+    <title><fmt:message key="edit_order"/></title>
 </head>
 <body>
 <jsp:include page="navbar.jsp"/>
-<h1><fmt:message key="confirm_order"/></h1>
-<form action="controller?command=confirm_order" method="post">
+<h1><fmt:message key="edit_order"/></h1>
+<form action="controller?command=edit_order&id=${sessionScope.order.id}" method="post">
     <table>
         <tbody>
-        <c:forEach items="${sessionScope.cart}" var="cartItem">
-            <c:set var="total" value="${total + cartItem.key.price * cartItem.value }"/>
+        <c:forEach items="${sessionScope.items}" var="item">
+            <c:set var="total" value="${total + item.key.price * item.value }"/>
             <tr>
-                <td>${cartItem.key.title}</td>
-                <td>${cartItem.key.price}</td>
+                <td>${item.key.title}</td>
+                <td>${item.key.price}</td>
                 <td>
-                    <a href="controller?command=corr_cart&action=dec&id=${cartItem.key.id }">-</a>
+                    <a href="controller?command=corr_order&action=dec&id=${item.key.id }">-</a>
                     <label><fmt:message key="quantity"/>
-                        <input type="number" name="quantity" step="1" min="0" value="${cartItem.value}">
+                        <input type="number" name="quantity" step="1" min="0" value="${item.value}">
                     </label>
-                    <a href="controller?command=corr_cart&action=inc&id=${cartItem.key.id }">+</a>
-                    <a href="controller?command=corr_cart&action=remove&id=${cartItem.key.id }"><fmt:message key="remove"/></a>
+                    <a href="controller?command=corr_order&action=inc&id=${item.key.id }">+</a>
+                    <a href="controller?command=corr_order&action=remove&id=${item.key.id }"><fmt:message key="remove"/></a>
                 </td>
-                <td>${cartItem.key.price * cartItem.value }</td>
+                <td>${item.key.price * item.value }</td>
             </tr>
         </c:forEach>
         <td>
@@ -54,11 +54,11 @@
             </label>
         </td>
         <td>
-        <label><fmt:message key="cost"/> = ${total}</label>
+            <label><fmt:message key="cost"/> = ${total}</label>
         </td>
         </tbody>
     </table>
-    <input type="submit" name="createOrder" value="Order">
+    <input type="submit" name="updateOrder" value="<fmt:message key="edit"/>">
 </form>
 </body>
 </html>

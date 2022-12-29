@@ -1,11 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<fmt:setBundle basename="messages"/>
 <c:if test="${sessionScope.lang != null}">
     <fmt:setLocale value="${sessionScope.lang}"/>
-    <fmt:setBundle basename="messages"/>
 </c:if>
+<fmt:setBundle basename="messages"/>
 <header class="header">
     <a href="controller?command=home">
         <div class="logo-image">
@@ -21,6 +20,8 @@
         </c:if>
         <c:if test="${sessionScope.user != null}">
             <li><a href="controller?command=logout"><fmt:message key="logout"/></a></li>
+        </c:if>
+        <c:if test="${sessionScope.user.role.toString() == 'USER'}">
             <li><a href="controller?command=my_orders"><fmt:message key="my_orders"/></a></li>
         </c:if>
         <c:if test="${sessionScope.user.role.toString() == 'ADMIN'}">

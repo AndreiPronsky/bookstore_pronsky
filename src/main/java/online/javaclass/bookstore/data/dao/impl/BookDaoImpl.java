@@ -20,8 +20,8 @@ public class BookDaoImpl implements BookDao {
             "VALUES (?, ?, ?, (SELECT g.id FROM genres g WHERE g.name = ?), " +
             "(SELECT c.id FROM covers c WHERE c.name = ?), ?, ?, ?)";
     private static final String UPDATE_BOOK = "UPDATE books SET title = ?, author = ?, isbn = ?, " +
-            "(SELECT g.id FROM genres g WHERE g.name = ?), " +
-            " (SELECT c.id FROM covers c WHERE c.name = ?), pages = ?, price = ?, rating = ? WHERE id = ?";
+            "genre_id = (SELECT g.id FROM genres g WHERE g.name = ?), " +
+            "cover_id = (SELECT c.id FROM covers c WHERE c.name = ?), pages = ?, price = ?, rating = ? WHERE id = ?";
     private static final String FIND_BOOK_BY_ID = "SELECT b.id, b.title, b.author, b.isbn, g.name AS genre, " +
             "c.name AS cover, b.pages, b.price, b.rating FROM books b " +
             "JOIN genres g ON b.genre_id = g.id " +
@@ -136,10 +136,10 @@ public class BookDaoImpl implements BookDao {
              PreparedStatement statement = connection.prepareStatement(FIND_BOOK_BY_ID)) {
             statement.setLong(1, id);
             return extractedFromStatement(statement);
-        } catch (SQLException e) {
+        } catch (SQLException | NullPointerException e) {
             log.error(e.getMessage());
+            throw new UnableToFindException(messageManager.getMessage("book.unable_to_find_id"));
         }
-        throw new UnableToFindException(messageManager.getMessage("book.unable_to_find_id"));
     }
 
     public BookDto getByIsbn(String isbn) {
@@ -216,11 +216,14 @@ public class BookDaoImpl implements BookDao {
     private BookDto extractedFromStatement(PreparedStatement statement) throws SQLException {
         ResultSet result = statement.executeQuery();
         log.debug("DB query completed");
-        BookDto book = new BookDto();
         if (result.next()) {
+            BookDto book = new BookDto();
             setParameters(book, result);
+            return book;
         }
-        return book;
+        else {
+            return null;
+        }
     }
 
     private List<BookDto> createBookList(PreparedStatement statement) throws SQLException {

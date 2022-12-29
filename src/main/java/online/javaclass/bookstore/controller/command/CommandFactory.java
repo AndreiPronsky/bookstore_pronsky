@@ -2,7 +2,7 @@ package online.javaclass.bookstore.controller.command;
 
 import online.javaclass.bookstore.controller.command.impl.*;
 import online.javaclass.bookstore.controller.command.impl.bookCommands.*;
-import online.javaclass.bookstore.controller.command.impl.cartCommands.*;
+import online.javaclass.bookstore.controller.command.impl.orderCommands.*;
 import online.javaclass.bookstore.controller.command.impl.userCommands.*;
 import online.javaclass.bookstore.data.dao.BookDao;
 import online.javaclass.bookstore.data.dao.OrderDao;
@@ -75,6 +75,9 @@ public class CommandFactory {
         map.put("search", new SearchCommand(bookService));
         map.put("corr_cart", new CorrectCartCommand());
         map.put("my_orders", new UserOrdersCommand(orderService, bookService));
+        map.put("edit_order_form", new EditOrderFormCommand(orderService, bookService));
+        map.put("edit_order", new EditOrderCommand(orderService));
+        map.put("corr_order", new CorrectOrderCommand());
     }
 
     public Command getCommand(String command) {

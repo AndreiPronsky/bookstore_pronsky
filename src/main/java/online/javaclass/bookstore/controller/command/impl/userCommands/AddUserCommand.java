@@ -29,7 +29,7 @@ public class AddUserCommand implements Command {
             user.setRating(BigDecimal.ZERO);
         }
         else {
-            user.setRole(UserDto.Role.values()[(Integer.parseInt(req.getParameter("role"))) - 1]);
+            user.setRole(UserDto.Role.valueOf(req.getParameter("role")));
             user.setRating(BigDecimal.valueOf(Double.parseDouble(req.getParameter("rating"))));
         }
         UserDto newUser = userService.create(user);

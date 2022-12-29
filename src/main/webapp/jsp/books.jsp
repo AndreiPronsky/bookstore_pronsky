@@ -3,8 +3,8 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:if test="${sessionScope.lang != null}">
     <fmt:setLocale value="${sessionScope.lang}"/>
-    <fmt:setBundle basename="messages"/>
 </c:if>
+<fmt:setBundle basename="messages"/>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -31,9 +31,6 @@
             ${requestScope.page}
             <c:if test="${requestScope.page < requestScope.total_pages}">
                 <a href="controller?command=books&page=${requestScope.page + 1}"><fmt:message key="next"/></a>
-            </c:if>
-            <c:if test="${requestScope.page >= requestScope.total_pages}">
-                <a><fmt:message key="next"/></a>
             </c:if>
             <a href="controller?command=books&page=${requestScope.total_pages}"><fmt:message key="last"/></a>
         </c:if>
@@ -69,8 +66,13 @@
                     <h6>${book.genre}</h6>
                 </td>
                 <td>
+                    <c:if test="${sessionScope.user.role.toString() == 'MANAGER'}">
+                        <a href="controller?command=edit_book_form&id=${book.id}"><fmt:message key="edit_book"/></a>
+                    </c:if>
+                    <c:if test="${sessionScope.user.role.toString() != 'MANAGER'}">
                     <a href="controller?command=add_to_cart&id=${book.id}">
                         <img height="30" src="css/serviceImages/cart.png" alt=<fmt:message key="add_to_cart"/>></a>
+                </c:if>
                 </td>
             </tr>
         </c:forEach>
