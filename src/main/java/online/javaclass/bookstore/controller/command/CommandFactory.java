@@ -46,7 +46,7 @@ public class CommandFactory {
         BookService bookService = new BookServiceImpl(bookRepository, serviceMapper);
         UserRepository userRepository = new UserRepositoryImpl(userDao, dataMapper);
         UserService userService = new UserServiceImpl(userRepository, serviceMapper);
-        OrderRepository orderRepository = new OrderRepositoryImpl(orderDao, userDao, orderItemDao, dataMapper);
+        OrderRepository orderRepository = new OrderRepositoryImpl(orderDao, orderItemDao, dataMapper);
         OrderService orderService = new OrderServiceImpl(orderRepository,serviceMapper);
         map = new HashMap<>();
         map.put("book", new BookCommand(bookService));

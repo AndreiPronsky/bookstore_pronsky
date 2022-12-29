@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import online.javaclass.bookstore.data.EntityDtoMapperData;
 import online.javaclass.bookstore.data.dao.OrderDao;
 import online.javaclass.bookstore.data.dao.OrderItemDao;
-import online.javaclass.bookstore.data.dao.UserDao;
 import online.javaclass.bookstore.data.dto.OrderDto;
 import online.javaclass.bookstore.data.dto.OrderItemDto;
 import online.javaclass.bookstore.data.entities.Order;
@@ -17,7 +16,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderRepositoryImpl implements OrderRepository {
     private final OrderDao orderDao;
-    private final UserDao userDao;
     private final OrderItemDao orderItemDao;
     private final EntityDtoMapperData mapper;
 

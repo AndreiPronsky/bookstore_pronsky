@@ -22,8 +22,8 @@
     <form action="controller?command=cart" method="post">
             <c:forEach items="${sessionScope.cart}" var="cartItem">
                 <ul class="wrapper">
-                    <li>${cartItem.key.title}</li>
-                    <li>${cartItem.key.price}</li>
+                    <li><c:out value="${cartItem.key.title}"/></li>
+                    <li><c:out value="${cartItem.key.price}"/></li>
                     <li class="form-row">
                         <label>
                             <input type="number" name="quantity" step="1" min="0"
@@ -32,7 +32,7 @@
                 </ul>
             </c:forEach>
             <li>
-                <label><fmt:message key="cost"/> ${sessionScope.cost}</label>
+                <label><fmt:message key="cost"/><c:out value="${sessionScope.cost}"/></label>
             </li>
         <input type="submit" name="createOrder" value="<fmt:message key="order"/>">
     </form>

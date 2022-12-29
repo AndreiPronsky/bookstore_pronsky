@@ -18,8 +18,8 @@
         <c:forEach items="${sessionScope.cart}" var="cartItem">
             <c:set var="total" value="${total + cartItem.key.price * cartItem.value }"/>
             <tr>
-                <td>${cartItem.key.title}</td>
-                <td>${cartItem.key.price}</td>
+                <td><c:out value="${cartItem.key.title}"/></td>
+                <td><c:out value="${cartItem.key.price}"/></td>
                 <td>
                     <a href="controller?command=corr_cart&action=dec&id=${cartItem.key.id }">-</a>
                     <label><fmt:message key="quantity"/>
@@ -28,7 +28,7 @@
                     <a href="controller?command=corr_cart&action=inc&id=${cartItem.key.id }">+</a>
                     <a href="controller?command=corr_cart&action=remove&id=${cartItem.key.id }"><fmt:message key="remove"/></a>
                 </td>
-                <td>${cartItem.key.price * cartItem.value }</td>
+                <td><c:out value="${cartItem.key.price * cartItem.value }"/></td>
             </tr>
         </c:forEach>
         <td>
@@ -54,7 +54,7 @@
             </label>
         </td>
         <td>
-        <label><fmt:message key="cost"/> = ${total}</label>
+        <label><fmt:message key="cost"/> = <c:out value="${total}"/></label>
         </td>
         </tbody>
     </table>

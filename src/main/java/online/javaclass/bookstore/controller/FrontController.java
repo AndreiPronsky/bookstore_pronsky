@@ -38,8 +38,13 @@ public class FrontController extends HttpServlet {
             log.error(e);
             page = processError(req, e);
         }
-        req.getRequestDispatcher(page).forward(req, resp);
-        log.debug("Forwarded");
+        if (page.startsWith("REDIRECT:")) {
+            resp.sendRedirect(page.substring(9));
+            log.debug("Redirected");
+        } else {
+            req.getRequestDispatcher(page).forward(req, resp);
+            log.debug("Forwarded");
+        }
     }
 
     private String processError(HttpServletRequest req, Exception e) {

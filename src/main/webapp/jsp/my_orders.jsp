@@ -31,21 +31,21 @@
         <tbody>
         <c:forEach items="${requestScope.orders}" var="order">
             <tr>
-                <td>${order.key.id}</td>
+                <td><c:out value="${order.key.id}"/></td>
                 <td>
                     <c:forEach items="${order.value}" var="item">
                         <table>
                             <tr>
-                                <td>${item.value.title}</td>
-                                <td>${item.key.price}</td>
-                                <td>${item.key.quantity}</td>
+                                <td><c:out value="${item.value.title}"/></td>
+                                <td><c:out value="${item.key.price}"/></td>
+                                <td><c:out value="${item.key.quantity}"/></td>
                             </tr>
                         </table>
                     </c:forEach>
                 </td>
-                <td>${order.key.cost}</td>
+                <td><c:out value="${order.key.cost}"/></td>
                 <td>
-                    <c:if test="${order.key.statusStatus == 'OPEN'}">
+                    <c:if test="${order.key.orderStatus == 'OPEN'}">
                         <a href="controller?command=edit_order_form&id=${order.key.id}">
                             <fmt:message key="edit_order"/></a>
                     </c:if>

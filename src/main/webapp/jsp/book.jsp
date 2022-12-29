@@ -16,11 +16,11 @@
         <article>
          <h1><fmt:message key="book"/> : </h1>
          <h3><fmt:message key="id"/> : </h3>
-         <p>${requestScope.book.id}</p>
+         <p><c:out value="${requestScope.book.id}"/></p>
          <h3><fmt:message key="author"/> : </h3>
-         <p>${requestScope.book.author}</p>
+         <p><c:out value="${requestScope.book.author}"/></p>
          <h3><fmt:message key="title"/> : </h3>
-         <p>${requestScope.book.title}</p>
+         <p><c:out value="${requestScope.book.title}"/></p>
             <p><a href="controller?command=add_to_cart&id=${requestScope.book.id}"><fmt:message key="add_to_cart"/></a></p>
         </article>
         <footer></footer>

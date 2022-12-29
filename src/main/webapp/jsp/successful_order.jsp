@@ -11,6 +11,7 @@
 </head>
 <body>
 <jsp:include page="navbar.jsp"/>
-<h1> <fmt:message key="number_of_your_order_is"/> : ${requestScope.order_id}! <fmt:message key="our_manager_will_contact_you_soon"/></h1>
+<h1><fmt:message key="number_of_your_order_is"/> : <c:out value="${requestScope.order_id}"/>!
+    <fmt:message key="our_manager_will_contact_you_soon"/></h1>
 </body>
 </html>

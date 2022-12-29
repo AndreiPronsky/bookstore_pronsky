@@ -18,8 +18,8 @@
         <c:forEach items="${sessionScope.items}" var="item">
             <c:set var="total" value="${total + item.key.price * item.value }"/>
             <tr>
-                <td>${item.key.title}</td>
-                <td>${item.key.price}</td>
+                <td><c:out value="${item.key.title}"/></td>
+                <td><c:out value="${item.key.price}"/></td>
                 <td>
                     <a href="controller?command=corr_order&action=dec&id=${item.key.id }">-</a>
                     <label><fmt:message key="quantity"/>
@@ -54,7 +54,7 @@
             </label>
         </td>
         <td>
-            <label><fmt:message key="cost"/> = ${total}</label>
+            <label><fmt:message key="cost"/> = <c:out value="${total}"/></label>
         </td>
         </tbody>
     </table>

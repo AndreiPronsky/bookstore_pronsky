@@ -46,13 +46,12 @@
     <tbody>
     <c:forEach items="${requestScope.users}" var="user">
       <tr>
-        <td>${user.id}</td>
-        <td>${user.firstName}</td>
-        <td>${user.lastName}</td>
-        <td>${user.email}</td>
-        <td>${user.role}</td>
-        <c:if test="${sessionScope.user.role.toString() == 'ADMIN'
-                || sessionScope.user.role.toString() == 'MANAGER'}">
+        <td><c:out value="${user.id}"/></td>
+        <td><c:out value="${user.firstName}"/></td>
+        <td><c:out value="${user.lastName}"/></td>
+        <td><c:out value="${user.email}"/></td>
+        <td><c:out value="${user.role}"/></td>
+        <c:if test="${sessionScope.user.role.toString() == 'ADMIN'}">
           <td><a href="controller?command=edit_user_form&id=${user.id}"><fmt:message key="edit_user"/></a></td>
         </c:if>
       </tr>

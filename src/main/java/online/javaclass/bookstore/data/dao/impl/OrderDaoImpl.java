@@ -163,7 +163,7 @@ public class OrderDaoImpl implements OrderDao {
             return order;
         } catch (SQLException e) {
             log.error("Unable to update order " + order);
-            throw new UnableToUpdateException("Unable to update" + e);
+            throw new UnableToUpdateException(messageManager.getMessage("order.unable_to_update"));
         }
     }
 

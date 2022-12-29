@@ -13,23 +13,18 @@ import java.util.List;
 
 @Log4j2
 @RequiredArgsConstructor
-public class  BooksCommand implements Command {
+public class BooksCommand implements Command {
     private final BookService bookService;
 
     @Override
     public String execute(HttpServletRequest req) {
         List<BookDto> books;
-        try {
-            PageableDto pageable = PagingUtil.getPageable(req);
-            books = bookService.getAll(pageable);
-            req.setAttribute("page", pageable.getPage());
-            req.setAttribute("total_pages", pageable.getTotalPages());
-            req.setAttribute("books", books);
-            return "jsp/books.jsp";
-        } catch (Exception e) {
-            log.error(e.getClass() + " " + e.getMessage());
-            return "jsp/error.jsp";
-        }
+        PageableDto pageable = PagingUtil.getPageable(req);
+        books = bookService.getAll(pageable);
+        req.setAttribute("page", pageable.getPage());
+        req.setAttribute("total_pages", pageable.getTotalPages());
+        req.setAttribute("books", books);
+        return "jsp/books.jsp";
     }
 }
 

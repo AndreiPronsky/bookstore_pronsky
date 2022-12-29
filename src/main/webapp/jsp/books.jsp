@@ -54,16 +54,16 @@
                     <img height="100" src="css/coverImages/${book.id}.png" alt="book-image">
                 </td>
                 <td>
-                    <h5>${book.author}</h5>
+                    <h5><c:out value="${book.author}"/></h5>
                 </td>
                 <td>
-                    <h5><a href="controller?command=book&id=${book.id}">${book.title}</a></h5>
+                    <h5><a href="controller?command=book&id=${book.id}"><c:out value="${book.title}"/></a></h5>
                 </td>
                 <td>
-                    <h6>${book.price}</h6>
+                    <h6><c:out value="${book.price}"/></h6>
                 </td>
                 <td>
-                    <h6>${book.genre}</h6>
+                    <h6><c:out value="${book.genre}"/></h6>
                 </td>
                 <td>
                     <c:if test="${sessionScope.user.role.toString() == 'MANAGER'}">

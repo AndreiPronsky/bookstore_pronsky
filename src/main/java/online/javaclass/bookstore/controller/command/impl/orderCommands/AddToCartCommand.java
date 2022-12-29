@@ -30,6 +30,6 @@ public class AddToCartCommand implements Command {
         } else {
             cartItems.put(book, 1);
         }
-        return "jsp/books.jsp";
+        return "REDIRECT:" + "controller?command=books";
     }
 }
