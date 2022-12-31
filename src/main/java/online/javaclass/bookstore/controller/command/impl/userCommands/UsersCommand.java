@@ -18,17 +18,12 @@ public class UsersCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest req) {
+        PageableDto pageable = PagingUtil.getPageable(req);
         List<UserDto> users;
-        try {
-            PageableDto pageable = PagingUtil.getPageable(req);
-            users = userService.getAll(pageable);
-            req.setAttribute("page", pageable.getPage());
-            req.setAttribute("total_pages", pageable.getTotalPages());
-            req.setAttribute("users", users);
-            return "jsp/users.jsp";
-        } catch (Exception e) {
-            log.error(e.getClass() + " " + e.getMessage());
-            return "jsp/error.jsp";
-        }
+        users = userService.getAll(pageable);
+        req.setAttribute("page", pageable.getPage());
+        req.setAttribute("total_pages", pageable.getTotalPages());
+        req.setAttribute("users", users);
+        return "jsp/users.jsp";
     }
 }

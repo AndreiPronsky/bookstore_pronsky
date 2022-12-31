@@ -14,23 +14,9 @@ public class BookCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest req) {
-        try {
-            Long id = processId(req);
+            Long id = Long.parseLong(req.getParameter("id"));
             BookDto book = bookService.getById(id);
             req.setAttribute("book", book);
             return "jsp/book.jsp";
-        } catch (Exception e) {
-            log.error(e.getClass() + " " + e.getMessage());
-            return "jsp/error.jsp";
-        }
-    }
-
-    private Long processId(HttpServletRequest req) {
-        try {
-            String rawId = req.getParameter("id");
-            return Long.parseLong(rawId);
-        } catch (NumberFormatException e) {
-            throw new NumberFormatException(e.getMessage());
-        }
     }
 }

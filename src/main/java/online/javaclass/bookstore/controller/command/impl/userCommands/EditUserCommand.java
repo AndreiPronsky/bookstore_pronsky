@@ -21,6 +21,7 @@ public class EditUserCommand implements Command {
         BigDecimal rating = BigDecimal.valueOf(Double.parseDouble(req.getParameter("rating")));
         UserDto.Role role = UserDto.Role.valueOf(req.getParameter("role"));
         UserDto user = setUserParameters(req, role, rating);
+        user.setId(Long.parseLong(req.getParameter("id")));
         UserDto newUser = userService.update(user);
         req.setAttribute("user", newUser);
         return "jsp/user.jsp";

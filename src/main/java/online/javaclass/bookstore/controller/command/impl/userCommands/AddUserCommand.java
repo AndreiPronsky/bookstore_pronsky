@@ -18,20 +18,18 @@ public class AddUserCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest req) {
-        UserDto user = new UserDto();
-        user.setFirstName(req.getParameter("firstname"));
-        user.setLastName(req.getParameter("lastname"));
-        user.setEmail(req.getParameter("email"));
-        user.setPassword(req.getParameter("password"));
+        UserDto.Role role;
+        BigDecimal rating;
         HttpSession session = req.getSession();
         if (session.getAttribute("user") == null) {
-            user.setRole(UserDto.Role.USER);
-            user.setRating(BigDecimal.ZERO);
+            role = UserDto.Role.USER;
+            rating = BigDecimal.ZERO;
         }
         else {
-            user.setRole(UserDto.Role.valueOf(req.getParameter("role")));
-            user.setRating(BigDecimal.valueOf(Double.parseDouble(req.getParameter("rating"))));
+            role = UserDto.Role.valueOf(req.getParameter("role"));
+            rating = BigDecimal.valueOf(Double.parseDouble(req.getParameter("rating")));
         }
+        UserDto user = UserCommandUtils.setUserParameters(req, role, rating);
         UserDto newUser = userService.create(user);
         req.setAttribute("user", newUser);
         return "jsp/user.jsp";

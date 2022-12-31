@@ -3,6 +3,7 @@ package online.javaclass.bookstore.controller.command.impl.bookCommands;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import online.javaclass.bookstore.controller.FrontController;
 import online.javaclass.bookstore.controller.command.Command;
 import online.javaclass.bookstore.service.BookService;
 import online.javaclass.bookstore.service.dto.BookDto;
@@ -19,6 +20,7 @@ public class EditBookCommand implements Command {
         book.setId(Long.parseLong(req.getParameter("id")));
         BookDto updatedBook = bookService.update(book);
         req.setAttribute("book", updatedBook);
-        return "REDIRECT:" + "controller?command=book&id=" + updatedBook.getId();
+        String page = "controller?command=book&id=" + updatedBook.getId();
+        return FrontController.REDIRECT + page;
     }
 }

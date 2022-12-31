@@ -11,6 +11,7 @@ import online.javaclass.bookstore.service.dto.BookDto;
 import online.javaclass.bookstore.service.dto.OrderDto;
 import online.javaclass.bookstore.service.dto.OrderItemDto;
 import online.javaclass.bookstore.service.dto.UserDto;
+import online.javaclass.bookstore.service.exceptions.AppException;
 
 import java.util.HashMap;
 import java.util.List;
@@ -28,20 +29,25 @@ public class UserOrdersCommand implements Command {
             HttpSession session = req.getSession();
             UserDto user = (UserDto) session.getAttribute("user");
             Long userId = user.getId();
-            Map<OrderDto, Map<OrderItemDto, BookDto>> orders = new HashMap<>();
-            List<OrderDto> userOrders = orderService.getOrdersByUserId(userId);
-            for (OrderDto order : userOrders) {
-                Map<OrderItemDto, BookDto> itemBookMap = new HashMap<>();
-                for (OrderItemDto item : order.getItems()) {
-                    itemBookMap.put(item, bookService.getById(item.getBookId()));
-                }
-                orders.put(order, itemBookMap);
-            }
+            Map<OrderDto, Map<OrderItemDto, BookDto>> orders = mapOrdersByUserId(userId);
             req.setAttribute("orders", orders);
             return "jsp/my_orders.jsp";
-        } catch (Exception e) {
-            log.error(e.getClass() + " " + e.getMessage());
+        } catch (AppException e) {
+            log.error(e.getMessage());
             return "jsp/error.jsp";
         }
+    }
+
+    private Map<OrderDto, Map<OrderItemDto, BookDto>> mapOrdersByUserId(Long userId) {
+        Map<OrderDto, Map<OrderItemDto, BookDto>> orders = new HashMap<>();
+        List<OrderDto> userOrders = orderService.getOrdersByUserId(userId);
+        for (OrderDto order : userOrders) {
+            Map<OrderItemDto, BookDto> itemBookMap = new HashMap<>();
+            for (OrderItemDto item : order.getItems()) {
+                itemBookMap.put(item, bookService.getById(item.getBookId()));
+            }
+            orders.put(order, itemBookMap);
+        }
+        return orders;
     }
 }

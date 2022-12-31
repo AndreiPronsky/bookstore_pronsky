@@ -4,7 +4,7 @@
 <c:if test="${sessionScope.lang != null}">
   <fmt:setLocale value="${sessionScope.lang}"/>
 </c:if>
-
+<fmt:setBundle basename="messages"/>
 <html>
 <head>
   <title><fmt:message key="register"/></title>
