@@ -13,7 +13,7 @@ import java.util.concurrent.LinkedBlockingDeque;
 @Log4j2
 public class ConnectionPool {
     private final BlockingDeque<ProxyConnection> freeConnections;
-    private Queue<ProxyConnection> givenAwayConnections;
+    private final Queue<ProxyConnection> givenAwayConnections;
     public static final int POOL_SIZE = 4;
 
     ConnectionPool(String driver, String url, String user, String password) {

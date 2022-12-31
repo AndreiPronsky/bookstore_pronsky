@@ -11,6 +11,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SearchCommand implements Command {
     private final BookService bookService;
+
     @Override
     public String execute(HttpServletRequest req) {
         String input = req.getParameter("search");

@@ -1,6 +1,6 @@
 package online.javaclass.bookstore.service.exceptions;
 
-public class UnableToFindException extends AppException{
+public class UnableToFindException extends AppException {
     public UnableToFindException() {
     }
 

@@ -7,6 +7,7 @@ import online.javaclass.bookstore.controller.FrontController;
 import online.javaclass.bookstore.controller.command.Command;
 import online.javaclass.bookstore.service.BookService;
 import online.javaclass.bookstore.service.dto.BookDto;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,7 +20,7 @@ public class AddToCartCommand implements Command {
     public String execute(HttpServletRequest req) {
         Long bookId = Long.parseLong(req.getParameter("id"));
         HttpSession session = req.getSession();
-        Map<BookDto, Integer> cartItems = (Map)session.getAttribute("cart");
+        Map<BookDto, Integer> cartItems = (Map) session.getAttribute("cart");
         if (cartItems == null) {
             cartItems = new HashMap<>();
             session.setAttribute("cart", cartItems);

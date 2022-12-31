@@ -64,7 +64,7 @@ public class UserDaoImpl implements UserDao {
             if (e.getMessage().startsWith("ERROR: duplicate key value violates unique constraint")) {
                 throw new LoginException(messageManager.getMessage("error.email_in_use"));
             }
-        throw new UnableToCreateException(messageManager.getMessage("user.unable_to_create"));
+            throw new UnableToCreateException(messageManager.getMessage("user.unable_to_create"));
         }
     }
 
@@ -191,7 +191,7 @@ public class UserDaoImpl implements UserDao {
         log.debug("DB query completed");
         UserDto user = null;
         if (result.next()) {
-            user=new UserDto();
+            user = new UserDto();
             setParameters(user, result);
         }
         return user;

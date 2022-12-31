@@ -19,6 +19,7 @@ public class RegisterCommand implements Command {
     private final UserService userService;
     private final UserDto.Role defaultRole = UserDto.Role.USER;
     private final BigDecimal defaultRating = BigDecimal.ZERO;
+
     @Override
     public String execute(HttpServletRequest req) {
         UserDto user = setUserParameters(req, defaultRole, defaultRating);

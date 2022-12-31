@@ -14,9 +14,9 @@ public class UserCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest req) {
-            Long id = Long.parseLong(req.getParameter("id"));
-            UserDto user = userService.getById(id);
-            req.setAttribute("user", user);
-            return "jsp/user.jsp";
+        Long id = Long.parseLong(req.getParameter("id"));
+        UserDto user = userService.getById(id);
+        req.setAttribute("user", user);
+        return "jsp/user.jsp";
     }
 }

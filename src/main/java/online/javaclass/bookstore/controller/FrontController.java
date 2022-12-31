@@ -20,6 +20,7 @@ public class FrontController extends HttpServlet {
     public static final String REDIRECT = "REDIRECT:";
     private static final String DEFAULT_CLIENT_MESSAGE = "Ooops... Something went wrong";
     private static final String DEFAULT_SERVER_MESSAGE = "We are already working on the problem, we will soon solve this issue!";
+
     @Override
     public void init() {
         log.info("FRONT CONTROLLER INITIALISED");
@@ -30,6 +31,7 @@ public class FrontController extends HttpServlet {
         DataBaseManager.INSTANCE.close();
         log.info("FRONT CONTROLLER DESTROYED");
     }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         process(req, resp);
@@ -80,13 +82,10 @@ public class FrontController extends HttpServlet {
             message = DEFAULT_CLIENT_MESSAGE;
             req.setAttribute("message", message);
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-        }
-        else {
+        } else {
             message = DEFAULT_SERVER_MESSAGE;
             req.setAttribute("message", message);
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
-
-
 }

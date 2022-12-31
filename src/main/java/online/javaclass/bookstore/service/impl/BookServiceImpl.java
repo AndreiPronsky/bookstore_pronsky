@@ -89,7 +89,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<BookDto> getAll(PageableDto pageable) {
         log.debug("get all books");
-        List<BookDto> books =bookRepo.getAll(pageable.getLimit(), pageable.getOffset()).stream()
+        List<BookDto> books = bookRepo.getAll(pageable.getLimit(), pageable.getOffset()).stream()
                 .map(mapper::toDto)
                 .toList();
         Long totalItems = bookRepo.count();

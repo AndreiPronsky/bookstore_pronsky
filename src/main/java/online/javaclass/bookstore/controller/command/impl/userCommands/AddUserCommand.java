@@ -24,8 +24,7 @@ public class AddUserCommand implements Command {
         if (session.getAttribute("user") == null) {
             role = UserDto.Role.USER;
             rating = BigDecimal.ZERO;
-        }
-        else {
+        } else {
             role = UserDto.Role.valueOf(req.getParameter("role"));
             rating = BigDecimal.valueOf(Double.parseDouble(req.getParameter("rating")));
         }
