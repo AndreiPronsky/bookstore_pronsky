@@ -9,9 +9,11 @@ import lombok.extern.log4j.Log4j2;
 import online.javaclass.bookstore.controller.command.Command;
 import online.javaclass.bookstore.controller.command.CommandFactory;
 import online.javaclass.bookstore.data.connection.DataBaseManager;
-import online.javaclass.bookstore.service.exceptions.AppException;
+import online.javaclass.bookstore.exceptions.AppException;
+import online.javaclass.bookstore.exceptions.ValidationException;
 
 import java.io.IOException;
+import java.util.List;
 
 @Log4j2
 @WebServlet("/controller")
@@ -74,7 +76,11 @@ public class FrontController extends HttpServlet {
 
     private void verifyErrorAndSetMessage(HttpServletRequest req, HttpServletResponse resp, Exception e) {
         String message;
-        if (e instanceof AppException) {
+        if (e instanceof ValidationException) {
+            List<String> messages = ((ValidationException) e).getMessages();
+            req.setAttribute("messages", messages);
+        }
+        else if (e instanceof AppException) {
             message = e.getMessage();
             req.setAttribute("message", message);
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);

@@ -1,4 +1,4 @@
-package online.javaclass.bookstore.service.exceptions;
+package online.javaclass.bookstore.exceptions;
 
 public class UnableToDeleteException extends AppException {
     public UnableToDeleteException() {

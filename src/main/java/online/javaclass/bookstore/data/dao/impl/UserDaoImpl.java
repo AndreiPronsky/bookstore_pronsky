@@ -6,7 +6,7 @@ import online.javaclass.bookstore.MessageManager;
 import online.javaclass.bookstore.data.connection.DataBaseManager;
 import online.javaclass.bookstore.data.dao.UserDao;
 import online.javaclass.bookstore.data.dto.UserDto;
-import online.javaclass.bookstore.service.exceptions.*;
+import online.javaclass.bookstore.exceptions.*;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -77,8 +77,8 @@ public class UserDaoImpl implements UserDao {
             return user;
         } catch (SQLException e) {
             log.error(e.getMessage() + e);
+            throw new UnableToUpdateException(messageManager.getMessage("user.unable_to_update"));
         }
-        throw new UnableToUpdateException(messageManager.getMessage("user.unable_to_update"));
     }
 
     public UserDto getById(Long id) {
@@ -88,8 +88,8 @@ public class UserDaoImpl implements UserDao {
             return extractedFromStatement(statement);
         } catch (SQLException e) {
             log.error(e.getMessage() + e);
+            throw new UnableToFindException(messageManager.getMessage("user.unable_to_find_id") + id);
         }
-        throw new UnableToFindException(messageManager.getMessage("user.unable_to_find_id") + id);
     }
 
     public UserDto getByEmail(String email) {
@@ -117,9 +117,9 @@ public class UserDaoImpl implements UserDao {
             statement.setString(1, lastName);
             return createUserList(statement);
         } catch (SQLException e) {
-            log.error(e.getMessage());
+            log.error(e.getMessage() + e);
+            throw new UnableToFindException(messageManager.getMessage("users.unable_to_find_lastname") + lastName);
         }
-        throw new UnableToFindException(messageManager.getMessage("users.unable_to_find_lastname") + lastName);
     }
 
     public List<UserDto> getByLastName(String lastName, int limit, int offset) {
@@ -130,9 +130,9 @@ public class UserDaoImpl implements UserDao {
             statement.setInt(3, offset);
             return createUserList(statement);
         } catch (SQLException e) {
-            log.error(e.getMessage());
+            log.error(e.getMessage() + e);
+            throw new UnableToFindException(messageManager.getMessage("users.unable_to_find_lastname") + lastName);
         }
-        throw new UnableToFindException(messageManager.getMessage("users.unable_to_find_lastname") + lastName);
     }
 
     public List<UserDto> getAll() {
@@ -140,9 +140,9 @@ public class UserDaoImpl implements UserDao {
              PreparedStatement statement = connection.prepareStatement(FIND_ALL_USERS)) {
             return createUserList(statement);
         } catch (SQLException e) {
-            log.error(e.getMessage());
+            log.error(e.getMessage() + e);
+            throw new UnableToFindException(messageManager.getMessage("users.not_found"));
         }
-        throw new UnableToFindException(messageManager.getMessage("users.not_found"));
     }
 
     public List<UserDto> getAll(int limit, int offset) {
@@ -152,9 +152,9 @@ public class UserDaoImpl implements UserDao {
             statement.setInt(2, offset);
             return createUserList(statement);
         } catch (SQLException e) {
-            log.error(e.getMessage());
+            log.error(e.getMessage() + e);
+            throw new UnableToFindException(messageManager.getMessage("users.not_found"));
         }
-        throw new UnableToFindException(messageManager.getMessage("users.not_found"));
     }
 
     public boolean deleteById(Long id) {
@@ -165,9 +165,9 @@ public class UserDaoImpl implements UserDao {
             log.debug("DB query completed");
             return affectedRows == 1;
         } catch (SQLException e) {
-            log.error(e.getMessage());
+            log.error(e.getMessage() + e);
+            throw new UnableToDeleteException(messageManager.getMessage("user.unable_to_delete"));
         }
-        throw new UnableToDeleteException(messageManager.getMessage("user.unable_to_delete"));
     }
 
     public Long count() {
@@ -181,9 +181,9 @@ public class UserDaoImpl implements UserDao {
             }
             return count;
         } catch (SQLException e) {
-            log.error(e.getMessage());
+            log.error(e.getMessage() + e);
+            throw new AppException(messageManager.getMessage("count_failed"));
         }
-        throw new AppException(messageManager.getMessage("count_failed"));
     }
 
     private UserDto extractedFromStatement(PreparedStatement statement) throws SQLException {

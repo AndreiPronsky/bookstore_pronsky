@@ -11,7 +11,7 @@ import online.javaclass.bookstore.service.dto.BookDto;
 import online.javaclass.bookstore.service.dto.OrderDto;
 import online.javaclass.bookstore.service.dto.OrderItemDto;
 import online.javaclass.bookstore.service.dto.UserDto;
-import online.javaclass.bookstore.service.exceptions.AppException;
+import online.javaclass.bookstore.exceptions.AppException;
 
 import java.util.HashMap;
 import java.util.List;

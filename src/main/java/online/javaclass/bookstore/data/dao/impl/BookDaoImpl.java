@@ -2,9 +2,11 @@ package online.javaclass.bookstore.data.dao.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import online.javaclass.bookstore.MessageManager;
 import online.javaclass.bookstore.data.connection.DataBaseManager;
 import online.javaclass.bookstore.data.dao.BookDao;
 import online.javaclass.bookstore.data.dto.BookDto;
+import online.javaclass.bookstore.exceptions.*;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -65,6 +67,9 @@ public class BookDaoImpl implements BookDao {
     private static final String COL_RATING = "rating";
     private final DataBaseManager dataBaseManager;
 
+    private final ThreadLocal<MessageManager> context = new ThreadLocal<>();
+    MessageManager messageManager = context.get();
+
     @Override
     public List<BookDto> search(String input) {
         try (Connection connection = dataBaseManager.getConnection();
@@ -74,8 +79,9 @@ public class BookDaoImpl implements BookDao {
             statement.setString(2, reformatedForSearchInput);
             return createBookList(statement);
         } catch (SQLException e) {
-            log.error(e.getMessage());
-            throw new RuntimeException(e);
+            log.error(e.getMessage() + e);
+            throw new UnableToFindException(messageManager.getMessage("books.unable_to_find_containing")
+                    + " " + input + messageManager.getMessage("in_title"));
         }
     }
 
@@ -90,8 +96,8 @@ public class BookDaoImpl implements BookDao {
             }
             return count;
         } catch (SQLException e) {
-            log.error(e.getMessage());
-            throw new RuntimeException(e);
+            log.error(e.getMessage() + e);
+            throw new AppException(messageManager.getMessage("count_failed"));
         }
     }
 
@@ -108,8 +114,8 @@ public class BookDaoImpl implements BookDao {
             }
             return book;
         } catch (SQLException e) {
-            log.error(e.getMessage());
-            throw new RuntimeException(e);
+            log.error(e.getMessage() + e);
+            throw new UnableToCreateException(messageManager.getMessage("book.unable_to_create"));
         }
     }
 
@@ -121,8 +127,8 @@ public class BookDaoImpl implements BookDao {
             log.debug("DB query completed");
             return book;
         } catch (SQLException e) {
-            log.error(e.getMessage());
-            throw new RuntimeException(e);
+            log.error(e.getMessage() + e);
+            throw new UnableToUpdateException(messageManager.getMessage("book.unable_to_update"));
         }
     }
 
@@ -132,8 +138,8 @@ public class BookDaoImpl implements BookDao {
             statement.setLong(1, id);
             return extractedFromStatement(statement);
         } catch (SQLException e) {
-            log.error(e.getMessage());
-            throw new RuntimeException(e);
+            log.error(e.getMessage() + e);
+            throw new UnableToFindException(messageManager.getMessage("book.unable_to_find_id"));
         }
     }
 
@@ -143,8 +149,8 @@ public class BookDaoImpl implements BookDao {
             statement.setString(1, isbn);
             return extractedFromStatement(statement);
         } catch (SQLException e) {
-            log.error(e.getMessage());
-            throw new RuntimeException(e);
+            log.error(e.getMessage() + e);
+            throw new UnableToFindException(messageManager.getMessage("book.unable_to_find_isbn"));
         }
     }
 
@@ -154,8 +160,8 @@ public class BookDaoImpl implements BookDao {
             statement.setString(1, author);
             return createBookList(statement);
         } catch (SQLException e) {
-            log.error(e.getMessage());
-            throw new RuntimeException(e);
+            log.error(e.getMessage() + e);
+            throw new UnableToFindException(messageManager.getMessage("books.unable_to_find_author"));
         }
     }
 
@@ -167,8 +173,8 @@ public class BookDaoImpl implements BookDao {
             statement.setInt(3, offset);
             return createBookList(statement);
         } catch (SQLException e) {
-            log.error(e.getMessage());
-            throw new RuntimeException(e);
+            log.error(e.getMessage() + e);
+            throw new UnableToFindException(messageManager.getMessage("books.unable_to_find_author"));
         }
     }
 
@@ -177,8 +183,8 @@ public class BookDaoImpl implements BookDao {
              PreparedStatement statement = connection.prepareStatement(FIND_ALL_BOOKS)) {
             return createBookList(statement);
         } catch (SQLException e) {
-            log.error(e.getMessage());
-            throw new RuntimeException(e);
+            log.error(e.getMessage() + e);
+            throw new UnableToFindException(messageManager.getMessage("books.unable_to_find"));
         }
     }
 
@@ -190,8 +196,8 @@ public class BookDaoImpl implements BookDao {
             statement.setInt(2, offset);
             return createBookList(statement);
         } catch (SQLException e) {
-            log.error(e.getMessage());
-            throw new RuntimeException(e);
+            log.error(e.getMessage() + e);
+            throw new UnableToFindException(messageManager.getMessage("books.unable_to_find"));
         }
     }
 
@@ -203,21 +209,20 @@ public class BookDaoImpl implements BookDao {
             log.debug("DB query completed");
             return affectedRows == 1;
         } catch (SQLException e) {
-            log.error(e.getMessage());
-            throw new RuntimeException(e);
+            log.error(e.getMessage() + e);
+            throw new UnableToDeleteException(messageManager.getMessage("book.unable_to_delete") + id);
         }
     }
 
     private BookDto extractedFromStatement(PreparedStatement statement) throws SQLException {
         ResultSet result = statement.executeQuery();
         log.debug("DB query completed");
+        BookDto book = null;
         if (result.next()) {
-            BookDto book = new BookDto();
+             book = new BookDto();
             setParameters(book, result);
-            return book;
-        } else {
-            return null;
         }
+        return book;
     }
 
     private List<BookDto> createBookList(PreparedStatement statement) throws SQLException {

@@ -1,4 +1,4 @@
-package online.javaclass.bookstore.service.exceptions;
+package online.javaclass.bookstore.exceptions;
 
 public class LoginException extends AppException {
     public LoginException() {

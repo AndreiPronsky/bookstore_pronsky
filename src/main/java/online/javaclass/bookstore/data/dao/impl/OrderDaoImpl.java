@@ -6,7 +6,7 @@ import online.javaclass.bookstore.MessageManager;
 import online.javaclass.bookstore.data.connection.DataBaseManager;
 import online.javaclass.bookstore.data.dao.OrderDao;
 import online.javaclass.bookstore.data.dto.OrderDto;
-import online.javaclass.bookstore.service.exceptions.*;
+import online.javaclass.bookstore.exceptions.*;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -76,9 +76,9 @@ public class OrderDaoImpl implements OrderDao {
             statement.setLong(1, userId);
             return createOrderList(statement);
         } catch (SQLException e) {
-            log.error(e.getMessage());
+            log.error(e.getMessage() + e);
+            throw new UnableToFindException(messageManager.getMessage("orders.unable_to_find"));
         }
-        throw new UnableToFindException(messageManager.getMessage("orders.unable_to_find"));
     }
 
     @Override
@@ -88,10 +88,11 @@ public class OrderDaoImpl implements OrderDao {
             statement.setLong(1, id);
             return extractedFromStatement(statement);
         } catch (SQLException e) {
-            log.error(e.getMessage());
+            log.error(e.getMessage() + e);
+            throw new UnableToFindException(messageManager.getMessage("order.unable_to_find_id") + id);
         }
-        throw new UnableToFindException(messageManager.getMessage("order.unable_to_find_id") + id);
     }
+
 
     @Override
     public Long count() {
@@ -105,9 +106,9 @@ public class OrderDaoImpl implements OrderDao {
             }
             return count;
         } catch (SQLException e) {
-            log.error(e.getMessage());
+            log.error(e.getMessage() + e);
+            throw new AppException(messageManager.getMessage("count_failed"));
         }
-        throw new AppException(messageManager.getMessage("count_failed"));
     }
 
     @Override
@@ -116,9 +117,9 @@ public class OrderDaoImpl implements OrderDao {
              PreparedStatement statement = connection.prepareStatement(FIND_ALL_ORDERS)) {
             return createOrderList(statement);
         } catch (SQLException e) {
-            log.error(e.getMessage());
+            log.error(e.getMessage() + e);
+            throw new UnableToFindException(messageManager.getMessage("orders.unable_to_find"));
         }
-        throw new UnableToFindException(messageManager.getMessage("orders.unable_to_find"));
     }
 
     @Override
@@ -129,9 +130,9 @@ public class OrderDaoImpl implements OrderDao {
             statement.setInt(2, offset);
             return createOrderList(statement);
         } catch (SQLException e) {
-            log.error(e.getMessage());
+            log.error(e.getMessage() + e);
+            throw new UnableToFindException(messageManager.getMessage("orders.unable_to_find"));
         }
-        throw new UnableToFindException(messageManager.getMessage("orders.unable_to_find"));
     }
 
     @Override
@@ -148,9 +149,9 @@ public class OrderDaoImpl implements OrderDao {
             }
             return order;
         } catch (SQLException e) {
-            log.error(e.getMessage());
+            log.error(e.getMessage() + e);
+            throw new UnableToCreateException(messageManager.getMessage("order.unable_to_create"));
         }
-        throw new UnableToCreateException(messageManager.getMessage("order.unable_to_create"));
     }
 
     @Override
@@ -162,7 +163,7 @@ public class OrderDaoImpl implements OrderDao {
             log.debug("DB query completed");
             return order;
         } catch (SQLException e) {
-            log.error("Unable to update order " + order);
+            log.error(e.getMessage() + e);
             throw new UnableToUpdateException(messageManager.getMessage("order.unable_to_update"));
         }
     }
@@ -176,16 +177,18 @@ public class OrderDaoImpl implements OrderDao {
             log.debug("DB query completed");
             return affectedRows == 1;
         } catch (SQLException e) {
-            log.error("Unable to delete order with id " + id);
+            log.error(e.getMessage() + e);
+            throw new UnableToDeleteException(messageManager.getMessage("order.unable_to_delete"));
         }
-        throw new UnableToDeleteException(messageManager.getMessage("order.unable_to_delete"));
+
     }
 
     private OrderDto extractedFromStatement(PreparedStatement statement) throws SQLException {
         ResultSet result = statement.executeQuery();
         log.debug("DB query completed");
-        OrderDto order = new OrderDto();
+        OrderDto order = null;
         if (result.next()) {
+            order = new OrderDto();
             setParameters(order, result);
         }
         return order;

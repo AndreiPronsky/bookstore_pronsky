@@ -6,10 +6,10 @@ import online.javaclass.bookstore.MessageManager;
 import online.javaclass.bookstore.data.connection.DataBaseManager;
 import online.javaclass.bookstore.data.dao.OrderItemDao;
 import online.javaclass.bookstore.data.dto.OrderItemDto;
-import online.javaclass.bookstore.service.exceptions.UnableToCreateException;
-import online.javaclass.bookstore.service.exceptions.UnableToDeleteException;
-import online.javaclass.bookstore.service.exceptions.UnableToFindException;
-import online.javaclass.bookstore.service.exceptions.UnableToUpdateException;
+import online.javaclass.bookstore.exceptions.UnableToCreateException;
+import online.javaclass.bookstore.exceptions.UnableToDeleteException;
+import online.javaclass.bookstore.exceptions.UnableToFindException;
+import online.javaclass.bookstore.exceptions.UnableToUpdateException;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -47,10 +47,9 @@ public class OrderItemDaoImpl implements OrderItemDao {
             statement.setLong(1, orderId);
             return createItemList(statement);
         } catch (SQLException e) {
-            log.error(e.getMessage());
+            log.error(e.getMessage() + e);
             throw new UnableToFindException(messageManager.getMessage("items.not_found"));
         }
-
     }
 
     @Override
@@ -67,9 +66,9 @@ public class OrderItemDaoImpl implements OrderItemDao {
             statement.setLong(1, id);
             return extractedFromStatement(statement);
         } catch (SQLException e) {
-            log.error(e.getMessage());
+            log.error(e.getMessage() + e);
+            throw new UnableToFindException(messageManager.getMessage("items.not_found"));
         }
-        throw new UnableToFindException(messageManager.getMessage("items.not_found"));
     }
 
     @Override
@@ -78,9 +77,9 @@ public class OrderItemDaoImpl implements OrderItemDao {
              PreparedStatement statement = connection.prepareStatement(FIND_ALL)) {
             return createItemList(statement);
         } catch (SQLException e) {
-            log.error(e.getMessage());
+            log.error(e.getMessage() + e);
+            throw new UnableToFindException(messageManager.getMessage("items.not_found"));
         }
-        throw new UnableToFindException(messageManager.getMessage("items.not_found"));
     }
 
     @Override
@@ -93,9 +92,10 @@ public class OrderItemDaoImpl implements OrderItemDao {
             createItemList(statement);
             return orderItems;
         } catch (SQLException e) {
-            log.error(e.getMessage());
+            log.error(e.getMessage() + e);
+            throw new UnableToFindException(messageManager.getMessage("items.not_found"));
         }
-        throw new UnableToFindException(messageManager.getMessage("items.not_found"));
+
     }
 
     @Override
@@ -109,12 +109,12 @@ public class OrderItemDaoImpl implements OrderItemDao {
             if (result.next()) {
                 item.setId(result.getLong(COL_ID));
                 log.debug("Created item with id" + result.getLong(COL_ID));
-                return item;
             }
-        } catch (Exception e) {
-            log.error(e.getMessage());
+            return item;
+        } catch (SQLException e) {
+            log.error(e.getMessage() + e);
+            throw new UnableToCreateException(messageManager.getMessage("item.unable_to_create"));
         }
-        throw new UnableToCreateException(messageManager.getMessage("item.unable_to_create"));
     }
 
     @Override
@@ -126,7 +126,7 @@ public class OrderItemDaoImpl implements OrderItemDao {
             log.debug("DB query completed");
             return item;
         } catch (SQLException e) {
-            log.error(e.getMessage());
+            log.error(e.getMessage() + e);
             throw new UnableToUpdateException(messageManager.getMessage("item.unable_to_update"));
         }
 
@@ -141,19 +141,20 @@ public class OrderItemDaoImpl implements OrderItemDao {
             log.debug("DB query completed");
             return affectedRows == 1;
         } catch (SQLException e) {
-            log.error(e.getMessage());
+            log.error(e.getMessage() + e);
+            throw new UnableToDeleteException(messageManager.getMessage("item.unable_to_delete"));
         }
-        throw new UnableToDeleteException(messageManager.getMessage("item.unable_to_delete"));
     }
 
     private OrderItemDto extractedFromStatement(PreparedStatement statement) throws SQLException {
         ResultSet result = statement.executeQuery();
         log.debug("DB query completed");
-        OrderItemDto item = new OrderItemDto();
         if (result.next()) {
+            OrderItemDto item = new OrderItemDto();
             setParameters(item, result);
+            return item;
         }
-        return item;
+        return null;
     }
 
     private List<OrderItemDto> createItemList(PreparedStatement statement) throws SQLException {
