@@ -5,6 +5,8 @@ import lombok.extern.log4j.Log4j2;
 import online.javaclass.bookstore.MessageManager;
 import online.javaclass.bookstore.data.entities.Order;
 import online.javaclass.bookstore.data.repository.OrderRepository;
+import online.javaclass.bookstore.exceptions.UnableToDeleteException;
+import online.javaclass.bookstore.exceptions.UnableToFindException;
 import online.javaclass.bookstore.exceptions.ValidationException;
 import online.javaclass.bookstore.service.EntityDtoMapperService;
 import online.javaclass.bookstore.service.OrderService;
@@ -27,9 +29,14 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderDto> getOrdersByUserId(Long userId) {
         log.debug("get orders by user id");
-        return orderRepo.getAllByUserId(userId).stream()
+        List<OrderDto> orders = orderRepo.getAllByUserId(userId).stream()
                 .map(mapper::toDto)
                 .toList();
+        if (orders.isEmpty()) {
+            throw new UnableToFindException(messageManager.getMessage("orders.unable_to_find_user_id" + " " + userId));
+        } else {
+            return orders;
+        }
     }
 
     @Override
@@ -41,23 +48,36 @@ public class OrderServiceImpl implements OrderService {
     public OrderDto getById(Long id) {
         log.debug("get order by id");
         Order order = orderRepo.getById(id);
+        if (order == null) {
+            throw new UnableToFindException(messageManager.getMessage("order.unable_to_find_id"));
+        }
         return mapper.toDto(order);
     }
 
     @Override
     public List<OrderDto> getAll() {
         log.debug("get all orders");
-        return orderRepo.getAll().stream()
+        List<OrderDto> orders = orderRepo.getAll().stream()
                 .map(mapper::toDto)
                 .toList();
+        if (orders.isEmpty()) {
+            throw new UnableToFindException(messageManager.getMessage("orders.unable_to_find"));
+        } else {
+            return orders;
+        }
     }
 
     @Override
     public List<OrderDto> getAll(PageableDto pageable) {
         log.debug("get all orders");
-        return orderRepo.getAll(pageable.getLimit(), pageable.getOffset()).stream()
+        List<OrderDto> orders = orderRepo.getAll(pageable.getLimit(), pageable.getOffset()).stream()
                 .map(mapper::toDto)
                 .toList();
+        if (orders.isEmpty()) {
+            throw new UnableToFindException(messageManager.getMessage("orders.unable_to_find"));
+        } else {
+            return orders;
+        }
     }
 
     @Override
@@ -84,6 +104,7 @@ public class OrderServiceImpl implements OrderService {
         boolean deleted = orderRepo.deleteById(id);
         if (!deleted) {
             log.error("Unable to delete order with id : " + id);
+            throw new UnableToDeleteException(messageManager.getMessage("order.unable_to delete"));
         }
     }
 
@@ -92,7 +113,7 @@ public class OrderServiceImpl implements OrderService {
         List<String> messages = new ArrayList<>();
         List<OrderItemDto> items = order.getItems();
         BigDecimal totalCost = BigDecimal.ZERO;
-        for (OrderItemDto item: items) {
+        for (OrderItemDto item : items) {
             totalCost = totalCost.add(item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
         }
         if (!order.getCost().equals(totalCost)) {

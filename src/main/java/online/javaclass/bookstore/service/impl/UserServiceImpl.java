@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import online.javaclass.bookstore.MessageManager;
 import online.javaclass.bookstore.controller.PagingUtil;
+import online.javaclass.bookstore.exceptions.UnableToDeleteException;
+import online.javaclass.bookstore.exceptions.UnableToFindException;
 import online.javaclass.bookstore.exceptions.ValidationException;
 import online.javaclass.bookstore.service.dto.PageableDto;
 import online.javaclass.bookstore.data.entities.User;
@@ -61,31 +63,50 @@ public class UserServiceImpl implements UserService {
     public UserDto getById(Long id) {
         log.debug("get user by id");
         User user = userRepo.getById(id);
-        return mapper.toDto(user);
+        if (user == null) {
+            throw new UnableToFindException(messageManager.getMessage("user.unable_to_find_id"));
+        } else {
+            return mapper.toDto(user);
+        }
     }
 
     @Override
     public List<UserDto> getByLastName(String lastname) {
         log.debug("get user(s) by lastname");
-        return userRepo.getByLastName(lastname).stream()
+        List<UserDto> users = userRepo.getByLastName(lastname).stream()
                 .map(mapper::toDto)
                 .toList();
+        if (users.isEmpty()) {
+            throw new UnableToFindException(messageManager.getMessage("users.unable_to_find_lastname" + " " + lastname));
+        } else {
+            return users;
+        }
     }
 
     @Override
     public List<UserDto> getByLastName(String lastname, PageableDto pageable) {
         log.debug("get user(s) by lastname");
-        return userRepo.getByLastName(lastname, pageable.getLimit(), pageable.getOffset()).stream()
+        List<UserDto> users = userRepo.getByLastName(lastname, pageable.getLimit(), pageable.getOffset()).stream()
                 .map(mapper::toDto)
                 .toList();
+        if (users.isEmpty()) {
+            throw new UnableToFindException(messageManager.getMessage("users.unable_to_find_lastname" + " " + lastname));
+        } else {
+            return users;
+        }
     }
 
     @Override
     public List<UserDto> getAll() {
         log.debug("get all users");
-        return userRepo.getAll().stream()
+        List<UserDto> users = userRepo.getAll().stream()
                 .map(mapper::toDto)
                 .toList();
+        if (users.isEmpty()) {
+            throw new UnableToFindException(messageManager.getMessage("users.unable_to_find"));
+        } else {
+            return users;
+        }
     }
 
     @Override
@@ -94,18 +115,26 @@ public class UserServiceImpl implements UserService {
         List<UserDto> users = userRepo.getAll(pageable.getLimit(), pageable.getOffset()).stream()
                 .map(mapper::toDto)
                 .toList();
-        Long totalItems = userRepo.count();
-        Long totalPages = PagingUtil.getTotalPages(totalItems, pageable);
-        pageable.setTotalItems(userRepo.count());
-        pageable.setTotalPages(totalPages);
-        return users;
+        if (users.isEmpty()) {
+            throw new UnableToFindException(messageManager.getMessage("users.unable_to_find"));
+        } else {
+            Long totalItems = userRepo.count();
+            Long totalPages = PagingUtil.getTotalPages(totalItems, pageable);
+            pageable.setTotalItems(userRepo.count());
+            pageable.setTotalPages(totalPages);
+            return users;
+        }
     }
 
 
     @Override
     public void deleteById(Long id) {
         log.debug("delete user by id");
-        userRepo.deleteById(id);
+        boolean deleted = userRepo.deleteById(id);
+        if (!deleted) {
+            log.error("Unable to delete user with id : " + id);
+            throw new UnableToDeleteException(messageManager.getMessage("user.unable_to_delete_id") + " " + id);
+        }
     }
 
     @Override

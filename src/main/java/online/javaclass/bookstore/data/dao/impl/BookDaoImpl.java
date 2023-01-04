@@ -234,11 +234,7 @@ public class BookDaoImpl implements BookDao {
             setParameters(book, result);
             books.add(book);
         }
-        if (books.isEmpty()) {
-            return null;
-        } else {
             return books;
-        }
     }
 
     private void setParameters(BookDto book, ResultSet result) throws SQLException {

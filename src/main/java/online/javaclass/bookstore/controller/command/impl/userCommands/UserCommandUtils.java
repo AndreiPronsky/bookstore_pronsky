@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 public class UserCommandUtils {
     static UserDto setUserParameters(HttpServletRequest req, UserDto.Role role, BigDecimal rating) {
         UserDto user = new UserDto();
-        user.setFirstName(req.getParameter("firstname"));
+        user.setFirstName(req.getParameter("firstname").toLowerCase());
         user.setLastName(req.getParameter("lastname"));
         user.setEmail(req.getParameter("email"));
         user.setPassword(req.getParameter("password"));

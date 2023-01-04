@@ -15,7 +15,7 @@ public class LoginCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest req) {
-        String email = req.getParameter("email");
+        String email = req.getParameter("email").toLowerCase();
         String password = req.getParameter("password");
         UserDto userDto = userService.login(email, password);
         HttpSession session = req.getSession();
