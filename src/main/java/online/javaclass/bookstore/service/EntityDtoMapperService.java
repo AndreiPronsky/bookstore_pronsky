@@ -11,6 +11,9 @@ import online.javaclass.bookstore.data.entities.User;
 
 public class EntityDtoMapperService {
     public User toEntity(UserDto userDto) {
+        if (userDto == null) {
+            return null;
+        }
         User user = new User();
         user.setId(userDto.getId());
         user.setFirstName(userDto.getFirstName());
@@ -35,6 +38,9 @@ public class EntityDtoMapperService {
     }
 
     public Order toEntity(OrderDto orderDto) {
+        if (orderDto == null) {
+            return null;
+        }
         Order order = new Order();
         order.setId(orderDto.getId());
         order.setUser(toEntity(orderDto.getUser()));
@@ -62,6 +68,9 @@ public class EntityDtoMapperService {
 
 
     public Book toEntity(BookDto bookDto) {
+        if (bookDto == null) {
+            return null;
+        }
         Book book = new Book();
         book.setId(bookDto.getId());
         book.setTitle(bookDto.getTitle());
@@ -100,6 +109,9 @@ public class EntityDtoMapperService {
     }
 
     public OrderItem toEntity(OrderItemDto itemDto) {
+        if (itemDto == null) {
+            return null;
+        }
         OrderItem orderItem = new OrderItem();
         orderItem.setBookId(itemDto.getBookId());
         orderItem.setPrice(itemDto.getPrice());

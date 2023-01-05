@@ -11,7 +11,6 @@ import online.javaclass.bookstore.data.entities.Order;
 import online.javaclass.bookstore.data.entities.OrderItem;
 import online.javaclass.bookstore.data.entities.User;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -19,6 +18,9 @@ public class EntityDtoMapperData {
     private final UserDao userDao;
 
     public User toEntity(UserDto userDto) {
+        if (userDto == null) {
+            return null;
+        }
         User user = new User();
         user.setId(userDto.getId());
         user.setFirstName(userDto.getFirstName());
@@ -43,15 +45,18 @@ public class EntityDtoMapperData {
     }
 
     public Order toEntity(OrderDto orderDto) {
+        if (orderDto == null) {
+            return null;
+        }
         Order order = new Order();
         order.setId(orderDto.getId());
-        order.setUser(toEntity(userDao.findById(orderDto.getUserId())));
+        order.setUser(toEntity(userDao.getById(orderDto.getUserId())));
         order.setOrderStatus(Order.OrderStatus.values()[orderDto.getOrderStatus().ordinal()]);
         order.setPaymentMethod(Order.PaymentMethod.values()[orderDto.getPaymentMethod().ordinal()]);
         order.setPaymentStatus(Order.PaymentStatus.values()[orderDto.getPaymentStatus().ordinal()]);
         order.setDeliveryType(Order.DeliveryType.values()[orderDto.getDeliveryType().ordinal()]);
         order.setItems(getOrderItemList(orderDto));
-        order.setCost(calculateCost(orderDto));
+        order.setCost(orderDto.getCost());
         return order;
     }
 
@@ -60,7 +65,7 @@ public class EntityDtoMapperData {
         orderDto.setId(order.getId());
         orderDto.setUserId(order.getUser().getId());
         orderDto.setOrderStatus(OrderDto.OrderStatus.values()[order.getOrderStatus().ordinal()]);
-        orderDto.setPaymentMethod(OrderDto.PaymentMethod.values()[order.getOrderStatus().ordinal()]);
+        orderDto.setPaymentMethod(OrderDto.PaymentMethod.values()[order.getPaymentMethod().ordinal()]);
         orderDto.setPaymentStatus(OrderDto.PaymentStatus.values()[order.getPaymentStatus().ordinal()]);
         orderDto.setDeliveryType(OrderDto.DeliveryType.values()[order.getDeliveryType().ordinal()]);
         orderDto.setItems(getOrderItemDtoList(order));
@@ -69,6 +74,9 @@ public class EntityDtoMapperData {
     }
 
     public Book toEntity(BookDto bookDto) {
+        if (bookDto == null) {
+            return null;
+        }
         Book book = new Book();
         book.setId(bookDto.getId());
         book.setTitle(bookDto.getTitle());
@@ -107,6 +115,9 @@ public class EntityDtoMapperData {
     }
 
     public OrderItem toEntity(OrderItemDto itemDto) {
+        if (itemDto == null) {
+            return null;
+        }
         OrderItem item = new OrderItem();
         item.setId(itemDto.getId());
         item.setOrderId(itemDto.getOrderId());
@@ -114,16 +125,6 @@ public class EntityDtoMapperData {
         item.setQuantity(itemDto.getQuantity());
         item.setPrice(itemDto.getPrice());
         return item;
-    }
-
-    private BigDecimal calculateCost(OrderDto orderDto) {
-        List<OrderItemDto> itemDtos = orderDto.getItems();
-        BigDecimal totalCost = BigDecimal.ZERO;
-        for (OrderItemDto item : itemDtos) {
-            BigDecimal itemCost = item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity()));
-            totalCost = totalCost.add(itemCost);
-        }
-        return totalCost;
     }
 
     private List<OrderItem> getOrderItemList(OrderDto orderDto) {

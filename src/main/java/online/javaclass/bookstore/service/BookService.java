@@ -13,4 +13,6 @@ public interface BookService extends AbstractService<Long, BookDto> {
 
     List<BookDto> getByAuthor(String author, PageableDto pageable);
 
+    List<BookDto> search(String input);
+
 }

@@ -2,13 +2,14 @@ package online.javaclass.bookstore.data.dao.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import online.javaclass.bookstore.MessageManager;
 import online.javaclass.bookstore.data.connection.DataBaseManager;
 import online.javaclass.bookstore.data.dao.OrderItemDao;
 import online.javaclass.bookstore.data.dto.OrderItemDto;
-import online.javaclass.bookstore.service.exceptions.UnableToCreateException;
-import online.javaclass.bookstore.service.exceptions.UnableToDeleteException;
-import online.javaclass.bookstore.service.exceptions.UnableToFindException;
-import online.javaclass.bookstore.service.exceptions.UnableToUpdateException;
+import online.javaclass.bookstore.exceptions.UnableToCreateException;
+import online.javaclass.bookstore.exceptions.UnableToDeleteException;
+import online.javaclass.bookstore.exceptions.UnableToFindException;
+import online.javaclass.bookstore.exceptions.UnableToUpdateException;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -19,8 +20,6 @@ import java.util.List;
 public class OrderItemDaoImpl implements OrderItemDao {
     private static final String FIND_ITEMS_BY_ORDER_ID = "SELECT id, order_id, book_id, quantity, price FROM order_items" +
             " WHERE order_id = ?";
-    private static final String FIND_ITEMS_BY_ORDER_ID_PAGED = "SELECT id, order_id, book_id, quantity, price " +
-            "FROM order_items WHERE order_id = ? LIMIT ? OFFSET ?";
     private static final String FIND_ITEM_BY_ID = "SELECT id, order_id, book_id, quantity, price FROM order_items " +
             "WHERE id = ?";
     private static final String FIND_ALL = "SELECT id, order_id, book_id, quantity, price FROM order_items";
@@ -37,78 +36,64 @@ public class OrderItemDaoImpl implements OrderItemDao {
     private static final String COL_QUANTITY = "quantity";
     private static final String COL_PRICE = "price";
     private final DataBaseManager dataBaseManager;
+    private final MessageManager messageManager = MessageManager.INSTANCE;
 
     @Override
-    public List<OrderItemDto> findAllByOrderId(Long orderId) {
+    public List<OrderItemDto> getAllByOrderId(Long orderId) {
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_ITEMS_BY_ORDER_ID)) {
             statement.setLong(1, orderId);
             return createItemList(statement);
         } catch (SQLException e) {
-            log.error(e.getMessage());
+            log.error(e.getMessage() + e);
+            throw new UnableToFindException(messageManager.getMessage("items.not_found"));
         }
-        throw new UnableToFindException("No order items with order id " + orderId + " found");
-    }
-
-    @Override
-    public List<OrderItemDto> findAllByOrderId(Long orderId, int limit, int offset) {
-        List<OrderItemDto> orderItems = new ArrayList<>();
-        try (Connection connection = dataBaseManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(FIND_ITEMS_BY_ORDER_ID_PAGED)) {
-            statement.setLong(1, orderId);
-            statement.setInt(2, limit);
-            statement.setInt(3, offset);
-            addItemsToList(orderItems, statement);
-            return orderItems;
-        } catch (SQLException e) {
-            log.error(e.getMessage());
-        }
-        throw new UnableToFindException("No order items with order id " + orderId + " found");
     }
 
     @Override
     public void deleteAllByOrderId(Long orderId) {
-        for (OrderItemDto item : findAllByOrderId(orderId)) {
+        for (OrderItemDto item : getAllByOrderId(orderId)) {
             deleteById(item.getId());
         }
     }
 
     @Override
-    public OrderItemDto findById(Long id) {
+    public OrderItemDto getById(Long id) {
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_ITEM_BY_ID)) {
             statement.setLong(1, id);
             return extractedFromStatement(statement);
         } catch (SQLException e) {
-            log.error(e.getMessage());
+            log.error(e.getMessage() + e);
+            throw new UnableToFindException(messageManager.getMessage("items.not_found"));
         }
-        throw new UnableToFindException("No order items found");
     }
 
     @Override
-    public List<OrderItemDto> findAll() {
+    public List<OrderItemDto> getAll() {
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_ALL)) {
             return createItemList(statement);
         } catch (SQLException e) {
-            log.error(e.getMessage());
+            log.error(e.getMessage() + e);
+            throw new UnableToFindException(messageManager.getMessage("items.not_found"));
         }
-        throw new UnableToFindException("No order items found");
     }
 
     @Override
-    public List<OrderItemDto> findAll(int limit, int offset) {
+    public List<OrderItemDto> getAll(int limit, int offset) {
         List<OrderItemDto> orderItems = new ArrayList<>();
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_ALL_PAGED)) {
             statement.setInt(1, limit);
             statement.setInt(2, offset);
-            addItemsToList(orderItems, statement);
+            createItemList(statement);
             return orderItems;
         } catch (SQLException e) {
-            log.error(e.getMessage());
+            log.error(e.getMessage() + e);
+            throw new UnableToFindException(messageManager.getMessage("items.not_found"));
         }
-        throw new UnableToFindException("No order items found");
+
     }
 
     @Override
@@ -122,12 +107,12 @@ public class OrderItemDaoImpl implements OrderItemDao {
             if (result.next()) {
                 item.setId(result.getLong(COL_ID));
                 log.debug("Created item with id" + result.getLong(COL_ID));
-                return item;
             }
-        } catch (Exception e) {
-            log.error(e.getMessage());
+            return item;
+        } catch (SQLException e) {
+            log.error(e.getMessage() + e);
+            throw new UnableToCreateException(messageManager.getMessage("item.unable_to_create"));
         }
-        throw new UnableToCreateException("Unable to create order item " + item);
     }
 
     @Override
@@ -139,9 +124,10 @@ public class OrderItemDaoImpl implements OrderItemDao {
             log.debug("DB query completed");
             return item;
         } catch (SQLException e) {
-            log.error(e.getMessage());
+            log.error(e.getMessage() + e);
+            throw new UnableToUpdateException(messageManager.getMessage("item.unable_to_update"));
         }
-        throw new UnableToUpdateException("Update failed! " + item);
+
     }
 
     @Override
@@ -153,9 +139,20 @@ public class OrderItemDaoImpl implements OrderItemDao {
             log.debug("DB query completed");
             return affectedRows == 1;
         } catch (SQLException e) {
-            log.error(e.getMessage());
+            log.error(e.getMessage() + e);
+            throw new UnableToDeleteException(messageManager.getMessage("item.unable_to_delete"));
         }
-        throw new UnableToDeleteException("Unable to delete item with id " + id);
+    }
+
+    private OrderItemDto extractedFromStatement(PreparedStatement statement) throws SQLException {
+        ResultSet result = statement.executeQuery();
+        log.debug("DB query completed");
+        if (result.next()) {
+            OrderItemDto item = new OrderItemDto();
+            setParameters(item, result);
+            return item;
+        }
+        return null;
     }
 
     private List<OrderItemDto> createItemList(PreparedStatement statement) throws SQLException {

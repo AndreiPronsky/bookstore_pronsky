@@ -1,6 +1,9 @@
 package online.javaclass.bookstore.controller.command;
 
 import online.javaclass.bookstore.controller.command.impl.*;
+import online.javaclass.bookstore.controller.command.impl.bookCommands.*;
+import online.javaclass.bookstore.controller.command.impl.orderCommands.*;
+import online.javaclass.bookstore.controller.command.impl.userCommands.*;
 import online.javaclass.bookstore.data.dao.BookDao;
 import online.javaclass.bookstore.data.dao.OrderDao;
 import online.javaclass.bookstore.data.dao.OrderItemDao;
@@ -43,8 +46,8 @@ public class CommandFactory {
         BookService bookService = new BookServiceImpl(bookRepository, serviceMapper);
         UserRepository userRepository = new UserRepositoryImpl(userDao, dataMapper);
         UserService userService = new UserServiceImpl(userRepository, serviceMapper);
-        OrderRepository orderRepository = new OrderRepositoryImpl(orderDao, userDao, orderItemDao, dataMapper);
-        OrderService orderService = new OrderServiceImpl(orderRepository,serviceMapper);
+        OrderRepository orderRepository = new OrderRepositoryImpl(orderDao, orderItemDao, dataMapper);
+        OrderService orderService = new OrderServiceImpl(orderRepository, serviceMapper);
         map = new HashMap<>();
         map.put("book", new BookCommand(bookService));
         map.put("books", new BooksCommand(bookService));
@@ -68,6 +71,13 @@ public class CommandFactory {
         map.put("confirm_order", new ConfirmOrderCommand(orderService));
         map.put("register_form", new RegisterFormCommand());
         map.put("register", new RegisterCommand(userService));
+        map.put("change_lang", new ChangeLanguageCommand());
+        map.put("search", new SearchCommand(bookService));
+        map.put("corr_cart", new CorrectCartCommand());
+        map.put("my_orders", new UserOrdersCommand(orderService, bookService));
+        map.put("edit_order_form", new EditOrderFormCommand(orderService, bookService));
+        map.put("edit_order", new EditOrderCommand(orderService));
+        map.put("corr_order", new CorrectOrderCommand());
     }
 
     public Command getCommand(String command) {

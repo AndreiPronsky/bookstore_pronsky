@@ -26,9 +26,7 @@ public class OrderDto {
     public enum PaymentMethod {
         CASH,
         CARD,
-        BANK_TRANSFER,
-        CASH_TO_COURIER,
-        CARD_TO_COURIER
+        BANK_TRANSFER
     }
 
     public enum PaymentStatus {

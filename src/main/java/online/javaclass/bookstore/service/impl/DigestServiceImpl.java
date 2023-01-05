@@ -16,8 +16,7 @@ public class DigestServiceImpl implements DigestService {
             byte[] bytesOut = messageDigest.digest();
             BigInteger bigInteger = new BigInteger(1, bytesOut);
             return bigInteger.toString(16).toUpperCase();
-        }
-        catch (NoSuchAlgorithmException e) {
+        } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
     }

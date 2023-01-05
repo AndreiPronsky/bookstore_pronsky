@@ -1,29 +1,34 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<c:if test="${sessionScope.lang != null}">
+  <fmt:setLocale value="${sessionScope.lang}"/>
+</c:if>
+<fmt:setBundle basename="messages"/>
 <html>
 <head>
-  <title>Register</title>
+  <title><fmt:message key="register"/></title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <jsp:include page="navbar.jsp"/>
-<h1>Register</h1>
+<h1><fmt:message key="register"/></h1>
 <form action="controller?command=register" method="post">
   <ul class="wrapper">
     <li class="form-row">
-      <label>Firstname<input type="text" name="firstname" minlength="1"></label>
+      <label><fmt:message key="firstname"/><input type="text" name="firstname" minlength="1"></label>
     </li>
     <li class="form-row">
-      <label>Lastname<input type="text" name="lastname" minlength="1"></label>
+      <label><fmt:message key="lastname"/><input type="text" name="lastname" minlength="1"></label>
     </li>
     <li class="form-row">
-      <label>Email<input type="text" name="email" minlength="13"></label>
+      <label><fmt:message key="email"/><input type="text" name="email" minlength="13"></label>
     </li>
     <li class="form-row">
-      <label>password<input type="password" name="password" minlength="8"></label>
+      <label><fmt:message key="password"/><input type="password" name="password" minlength="8"></label>
     </li>
     <li class="form-row">
-      <input type="submit" name="Create">
+      <input type="submit" name="Create" value="<fmt:message key="register"/>">
     </li>
   </ul>
 </form>

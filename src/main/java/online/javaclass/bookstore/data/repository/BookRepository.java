@@ -6,10 +6,12 @@ import java.util.List;
 
 public interface BookRepository extends AbstractRepository<Long, Book> {
 
-    Book findByIsbn(String isbn);
+    Book getByIsbn(String isbn);
 
-    List<Book> findByAuthor(String author);
+    List<Book> getByAuthor(String author);
 
-    List<Book> findByAuthor(String author, int limit, int offset);
+    List<Book> getByAuthor(String author, int limit, int offset);
+
+    List<Book> search(String input);
 
 }

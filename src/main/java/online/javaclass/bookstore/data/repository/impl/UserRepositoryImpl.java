@@ -16,14 +16,14 @@ public class UserRepositoryImpl implements UserRepository {
     private final EntityDtoMapperData mapper;
 
     @Override
-    public User findById(Long id) {
-        UserDto userDto = userDao.findById(id);
+    public User getById(Long id) {
+        UserDto userDto = userDao.getById(id);
         return mapper.toEntity(userDto);
     }
 
     @Override
-    public List<User> findAll() {
-        List<UserDto> userDtos = userDao.findAll();
+    public List<User> getAll() {
+        List<UserDto> userDtos = userDao.getAll();
         List<User> users = new ArrayList<>();
         for (UserDto user : userDtos) {
             users.add(mapper.toEntity(user));
@@ -32,8 +32,8 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public List<User> findAll(int limit, int offset) {
-        List<UserDto> userDtos = userDao.findAll(limit, offset);
+    public List<User> getAll(int limit, int offset) {
+        List<UserDto> userDtos = userDao.getAll(limit, offset);
         List<User> users = new ArrayList<>();
         for (UserDto user : userDtos) {
             users.add(mapper.toEntity(user));
@@ -61,15 +61,15 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User findByEmail(String email) {
-        UserDto userDto = userDao.findByEmail(email);
+    public User getByEmail(String email) {
+        UserDto userDto = userDao.getByEmail(email);
         return mapper.toEntity(userDto);
 
     }
 
     @Override
-    public List<User> findByLastName(String lastname) {
-        List<UserDto> userDtos = userDao.findByLastName(lastname);
+    public List<User> getByLastName(String lastname) {
+        List<UserDto> userDtos = userDao.getByLastName(lastname);
         List<User> users = new ArrayList<>();
         for (UserDto userDto : userDtos) {
             users.add(mapper.toEntity(userDto));
@@ -78,8 +78,8 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public List<User> findByLastName(String lastname, int limit, int offset) {
-        List<UserDto> userDtos = userDao.findByLastName(lastname, limit, offset);
+    public List<User> getByLastName(String lastname, int limit, int offset) {
+        List<UserDto> userDtos = userDao.getByLastName(lastname, limit, offset);
         List<User> users = new ArrayList<>();
         for (UserDto userDto : userDtos) {
             users.add(mapper.toEntity(userDto));
