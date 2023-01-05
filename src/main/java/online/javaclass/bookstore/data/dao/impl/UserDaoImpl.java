@@ -44,9 +44,7 @@ public class UserDaoImpl implements UserDao {
     private static final String COL_RATING = "rating";
 
     private final DataBaseManager dataBaseManager;
-
-    private final ThreadLocal<MessageManager> context = new ThreadLocal<>();
-    MessageManager messageManager = context.get();
+    private final MessageManager messageManager = MessageManager.INSTANCE;
 
     public UserDto create(UserDto user) {
         try (Connection connection = dataBaseManager.getConnection();
@@ -96,19 +94,11 @@ public class UserDaoImpl implements UserDao {
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_USER_BY_EMAIL)) {
             statement.setString(1, email);
-            UserDto user = extractedFromStatement(statement);
-            if (user != null) {
-                return user;
-            } else {
-                log.error("Unable to find user with email " + email);
-                throw new UnableToFindException(messageManager.getMessage
-                        ("user.unable_to_find_email") + " " + email);
-            }
+            return extractedFromStatement(statement);
         } catch (SQLException e) {
             log.error(e.getMessage());
         }
-        throw new UnableToFindException(messageManager.getMessage
-                ("user.unable_to_find_email") + " " + email);
+        throw new UnableToFindException(messageManager.getMessage("user.unable_to_find_email") + " " + email);
     }
 
     public List<UserDto> getByLastName(String lastName) {

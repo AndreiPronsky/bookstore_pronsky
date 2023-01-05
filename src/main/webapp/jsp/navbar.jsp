@@ -31,9 +31,9 @@
         <c:if test="${sessionScope.user.role.toString() == 'MANAGER'}">
             <li><a href="controller?command=add_book_form"><fmt:message key="add.book"/></a></li>
         </c:if>
-        <li><a href="controller?command=change_lang&lang=ru_RU">
+        <li><a href="controller?command=change_lang&lang=ru">
             <img height="30" src="css/serviceImages/RU.png" alt="Русский"></a></li>
-        <li><a href="controller?command=change_lang&lang=en_UK">
+        <li><a href="controller?command=change_lang&lang=en">
             <img height="30" src="css/serviceImages/UK.png" alt="English"></a></li>
     </ul>
 </header>

@@ -36,9 +36,7 @@ public class OrderItemDaoImpl implements OrderItemDao {
     private static final String COL_QUANTITY = "quantity";
     private static final String COL_PRICE = "price";
     private final DataBaseManager dataBaseManager;
-
-    private final ThreadLocal<MessageManager> context = new ThreadLocal<>();
-    MessageManager messageManager = context.get();
+    private final MessageManager messageManager = MessageManager.INSTANCE;
 
     @Override
     public List<OrderItemDto> getAllByOrderId(Long orderId) {

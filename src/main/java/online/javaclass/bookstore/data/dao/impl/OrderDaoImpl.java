@@ -65,9 +65,7 @@ public class OrderDaoImpl implements OrderDao {
     private static final String COL_ID = "id";
     private static final String COL_COST = "cost";
     private final DataBaseManager dataBaseManager;
-
-    private final ThreadLocal<MessageManager> context = new ThreadLocal<>();
-    MessageManager messageManager = context.get();
+    private final MessageManager messageManager = MessageManager.INSTANCE;
 
     @Override
     public List<OrderDto> getAllByUserId(Long userId) {

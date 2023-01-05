@@ -66,17 +66,15 @@ public class BookDaoImpl implements BookDao {
     private static final String COL_PRICE = "price";
     private static final String COL_RATING = "rating";
     private final DataBaseManager dataBaseManager;
-
-    private final ThreadLocal<MessageManager> context = new ThreadLocal<>();
-    MessageManager messageManager = context.get();
+    private final MessageManager messageManager = MessageManager.INSTANCE;
 
     @Override
     public List<BookDto> search(String input) {
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(SEARCH)) {
-            String reformatedForSearchInput = "%" + input + "%";
-            statement.setString(1, reformatedForSearchInput);
-            statement.setString(2, reformatedForSearchInput);
+            String reformattedForSearchInput = "%" + input + "%";
+            statement.setString(1, reformattedForSearchInput);
+            statement.setString(2, reformattedForSearchInput);
             return createBookList(statement);
         } catch (SQLException e) {
             log.error(e.getMessage() + e);

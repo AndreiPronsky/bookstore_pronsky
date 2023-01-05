@@ -23,8 +23,7 @@ import java.util.List;
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepo;
     private final EntityDtoMapperService mapper;
-    private final ThreadLocal<MessageManager> context = new ThreadLocal<>();
-    MessageManager messageManager = context.get();
+    private final MessageManager messageManager = MessageManager.INSTANCE;
 
     @Override
     public List<OrderDto> getOrdersByUserId(Long userId) {

@@ -8,6 +8,7 @@
 <html>
 <head>
     <title><fmt:message key="successful_order"/></title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <jsp:include page="navbar.jsp"/>

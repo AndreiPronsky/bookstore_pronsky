@@ -5,7 +5,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.log4j.Log4j2;
+import online.javaclass.bookstore.MessageManager;
 import online.javaclass.bookstore.controller.command.Command;
 import online.javaclass.bookstore.controller.command.CommandFactory;
 import online.javaclass.bookstore.data.connection.DataBaseManager;
@@ -45,6 +47,12 @@ public class FrontController extends HttpServlet {
     }
 
     private void process(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession();
+        String lang = String.valueOf(req.getLocale());
+        if (session.getAttribute("lang") != null) {
+            lang = (String)session.getAttribute("lang");
+        }
+        MessageManager.INSTANCE.setLocale(lang);
         String commandParameter = req.getParameter("command");
         Command command = CommandFactory.INSTANCE.getCommand(commandParameter);
         log.debug("Got command from factory " + commandParameter);

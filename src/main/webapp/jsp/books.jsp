@@ -70,7 +70,7 @@
                         <a href="controller?command=edit_book_form&id=${book.id}"><fmt:message key="edit_book"/></a>
                     </c:if>
                     <c:if test="${sessionScope.user.role.toString() != 'MANAGER'}">
-                    <a href="controller?command=add_to_cart&id=${book.id}">
+                    <a href="controller?command=add_to_cart&id=${book.id}&page=${requestScope.page}">
                         <img height="30" src="css/serviceImages/cart.png" alt=<fmt:message key="add_to_cart"/>></a>
                 </c:if>
                 </td>

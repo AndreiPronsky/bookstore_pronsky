@@ -24,8 +24,7 @@ public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepo;
     private final EntityDtoMapperService mapper;
-    private final ThreadLocal<MessageManager> context = new ThreadLocal<>();
-    MessageManager messageManager = context.get();
+    MessageManager messageManager = MessageManager.INSTANCE;
 
     @Override
     public Long count() {

@@ -28,8 +28,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepo;
     private final EntityDtoMapperService mapper;
     DigestService digest = new DigestServiceImpl();
-    private final ThreadLocal<MessageManager> context = new ThreadLocal<>();
-    MessageManager messageManager = context.get();
+    MessageManager messageManager = MessageManager.INSTANCE;
 
     @Override
     public UserDto login(String email, String password) {
