@@ -72,19 +72,6 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookDto> getByAuthor(String author) {
-        log.debug("get books by author");
-        List<BookDto> books = bookRepo.getByAuthor(author).stream()
-                .map(mapper::toDto)
-                .toList();
-        if (books.isEmpty()) {
-            throw new UnableToFindException(messageManager.getMessage("books.unable_to_find_author") + " " + author);
-        } else {
-            return books;
-        }
-    }
-
-    @Override
     public List<BookDto> search(String input) {
         log.debug("search by " + input);
         List<BookDto> books = bookRepo.search(input).stream()
@@ -108,18 +95,6 @@ public class BookServiceImpl implements BookService {
         } else {
             return books;
         }
-    }
-
-    @Override
-    public List<BookDto> getAll() {
-        log.debug("get all books");
-        List<BookDto> books = bookRepo.getAll().stream()
-                .map(mapper::toDto)
-                .toList();
-        if (books.isEmpty()) {
-            throw new UnableToFindException(messageManager.getMessage("books.not_found"));
-        }
-        return books;
     }
 
     @Override

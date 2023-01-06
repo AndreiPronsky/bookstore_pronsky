@@ -22,16 +22,6 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public List<User> getAll() {
-        List<UserDto> userDtos = userDao.getAll();
-        List<User> users = new ArrayList<>();
-        for (UserDto user : userDtos) {
-            users.add(mapper.toEntity(user));
-        }
-        return users;
-    }
-
-    @Override
     public List<User> getAll(int limit, int offset) {
         List<UserDto> userDtos = userDao.getAll(limit, offset);
         List<User> users = new ArrayList<>();
@@ -65,16 +55,6 @@ public class UserRepositoryImpl implements UserRepository {
         UserDto userDto = userDao.getByEmail(email);
         return mapper.toEntity(userDto);
 
-    }
-
-    @Override
-    public List<User> getByLastName(String lastname) {
-        List<UserDto> userDtos = userDao.getByLastName(lastname);
-        List<User> users = new ArrayList<>();
-        for (UserDto userDto : userDtos) {
-            users.add(mapper.toEntity(userDto));
-        }
-        return users;
     }
 
     @Override

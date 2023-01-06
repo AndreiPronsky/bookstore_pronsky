@@ -9,8 +9,6 @@ public interface BookService extends AbstractService<Long, BookDto> {
 
     BookDto getByIsbn(String isbn);
 
-    List<BookDto> getByAuthor(String author);
-
     List<BookDto> getByAuthor(String author, PageableDto pageable);
 
     List<BookDto> search(String input);

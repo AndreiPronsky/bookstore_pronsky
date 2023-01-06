@@ -46,6 +46,7 @@ public class UserDaoImpl implements UserDao {
     private final DataBaseManager dataBaseManager;
     private final MessageManager messageManager = MessageManager.INSTANCE;
 
+    @Override
     public UserDto create(UserDto user) {
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(CREATE_USER, Statement.RETURN_GENERATED_KEYS)) {
@@ -66,6 +67,7 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
+    @Override
     public UserDto update(UserDto user) {
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(UPDATE_USER)) {
@@ -79,6 +81,7 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
+    @Override
     public UserDto getById(Long id) {
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_USER_BY_ID)) {
@@ -90,6 +93,7 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
+    @Override
     public UserDto getByEmail(String email) {
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_USER_BY_EMAIL)) {
@@ -101,17 +105,7 @@ public class UserDaoImpl implements UserDao {
         throw new UnableToFindException(messageManager.getMessage("user.unable_to_find_email") + " " + email);
     }
 
-    public List<UserDto> getByLastName(String lastName) {
-        try (Connection connection = dataBaseManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(FIND_USERS_BY_LASTNAME)) {
-            statement.setString(1, lastName);
-            return createUserList(statement);
-        } catch (SQLException e) {
-            log.error(e.getMessage() + e);
-            throw new UnableToFindException(messageManager.getMessage("users.unable_to_find_lastname") + lastName);
-        }
-    }
-
+    @Override
     public List<UserDto> getByLastName(String lastName, int limit, int offset) {
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_USERS_BY_LASTNAME_PAGED)) {
@@ -125,16 +119,7 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
-    public List<UserDto> getAll() {
-        try (Connection connection = dataBaseManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(FIND_ALL_USERS)) {
-            return createUserList(statement);
-        } catch (SQLException e) {
-            log.error(e.getMessage() + e);
-            throw new UnableToFindException(messageManager.getMessage("users.not_found"));
-        }
-    }
-
+    @Override
     public List<UserDto> getAll(int limit, int offset) {
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_ALL_USERS_PAGED)) {
@@ -147,6 +132,7 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
+    @Override
     public boolean deleteById(Long id) {
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(DELETE_USER_BY_ID)) {
@@ -160,6 +146,7 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
+    @Override
     public Long count() {
         try (Connection connection = dataBaseManager.getConnection();
              Statement statement = connection.createStatement()) {

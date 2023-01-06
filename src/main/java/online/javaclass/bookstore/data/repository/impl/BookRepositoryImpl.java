@@ -28,16 +28,6 @@ public class BookRepositoryImpl implements BookRepository {
     }
 
     @Override
-    public List<Book> getByAuthor(String author) {
-        List<BookDto> bookDtos = bookDao.getByAuthor(author);
-        List<Book> books = new ArrayList<>();
-        for (BookDto bookDto : bookDtos) {
-            books.add(mapper.toEntity(bookDto));
-        }
-        return books;
-    }
-
-    @Override
     public List<Book> search(String input) {
         List<BookDto> bookDtos = bookDao.search(input);
         List<Book> books = new ArrayList<>();
@@ -50,16 +40,6 @@ public class BookRepositoryImpl implements BookRepository {
     @Override
     public List<Book> getByAuthor(String author, int limit, int offset) {
         List<BookDto> bookDtos = bookDao.getByAuthor(author, limit, offset);
-        List<Book> books = new ArrayList<>();
-        for (BookDto bookDto : bookDtos) {
-            books.add(mapper.toEntity(bookDto));
-        }
-        return books;
-    }
-
-    @Override
-    public List<Book> getAll() {
-        List<BookDto> bookDtos = bookDao.getAll();
         List<Book> books = new ArrayList<>();
         for (BookDto bookDto : bookDtos) {
             books.add(mapper.toEntity(bookDto));

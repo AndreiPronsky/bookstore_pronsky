@@ -110,17 +110,6 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public List<OrderDto> getAll() {
-        try (Connection connection = dataBaseManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(FIND_ALL_ORDERS)) {
-            return createOrderList(statement);
-        } catch (SQLException e) {
-            log.error(e.getMessage() + e);
-            throw new UnableToFindException(messageManager.getMessage("orders.unable_to_find"));
-        }
-    }
-
-    @Override
     public List<OrderDto> getAll(int limit, int offset) {
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_ALL_ORDERS_PAGED)) {

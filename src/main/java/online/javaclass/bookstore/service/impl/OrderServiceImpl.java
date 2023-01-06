@@ -54,19 +54,6 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderDto> getAll() {
-        log.debug("get all orders");
-        List<OrderDto> orders = orderRepo.getAll().stream()
-                .map(mapper::toDto)
-                .toList();
-        if (orders.isEmpty()) {
-            throw new UnableToFindException(messageManager.getMessage("orders.unable_to_find"));
-        } else {
-            return orders;
-        }
-    }
-
-    @Override
     public List<OrderDto> getAll(PageableDto pageable) {
         log.debug("get all orders");
         List<OrderDto> orders = orderRepo.getAll(pageable.getLimit(), pageable.getOffset()).stream()

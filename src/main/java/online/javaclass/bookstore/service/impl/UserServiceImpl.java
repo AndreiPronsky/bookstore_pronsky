@@ -70,19 +70,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> getByLastName(String lastname) {
-        log.debug("get user(s) by lastname");
-        List<UserDto> users = userRepo.getByLastName(lastname).stream()
-                .map(mapper::toDto)
-                .toList();
-        if (users.isEmpty()) {
-            throw new UnableToFindException(messageManager.getMessage("users.unable_to_find_lastname" + " " + lastname));
-        } else {
-            return users;
-        }
-    }
-
-    @Override
     public List<UserDto> getByLastName(String lastname, PageableDto pageable) {
         log.debug("get user(s) by lastname");
         List<UserDto> users = userRepo.getByLastName(lastname, pageable.getLimit(), pageable.getOffset()).stream()
@@ -90,19 +77,6 @@ public class UserServiceImpl implements UserService {
                 .toList();
         if (users.isEmpty()) {
             throw new UnableToFindException(messageManager.getMessage("users.unable_to_find_lastname" + " " + lastname));
-        } else {
-            return users;
-        }
-    }
-
-    @Override
-    public List<UserDto> getAll() {
-        log.debug("get all users");
-        List<UserDto> users = userRepo.getAll().stream()
-                .map(mapper::toDto)
-                .toList();
-        if (users.isEmpty()) {
-            throw new UnableToFindException(messageManager.getMessage("users.unable_to_find"));
         } else {
             return users;
         }

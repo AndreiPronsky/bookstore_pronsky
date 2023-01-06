@@ -83,6 +83,7 @@ public class BookDaoImpl implements BookDao {
         }
     }
 
+    @Override
     public Long count() {
         try (Connection connection = dataBaseManager.getConnection();
              Statement statement = connection.createStatement()) {
@@ -99,6 +100,7 @@ public class BookDaoImpl implements BookDao {
         }
     }
 
+    @Override
     public BookDto create(BookDto book) {
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(CREATE_BOOK, Statement.RETURN_GENERATED_KEYS)) {
@@ -117,6 +119,7 @@ public class BookDaoImpl implements BookDao {
         }
     }
 
+    @Override
     public BookDto update(BookDto book) {
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(UPDATE_BOOK)) {
@@ -130,6 +133,7 @@ public class BookDaoImpl implements BookDao {
         }
     }
 
+    @Override
     public BookDto getById(Long id) {
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_BOOK_BY_ID)) {
@@ -141,6 +145,7 @@ public class BookDaoImpl implements BookDao {
         }
     }
 
+    @Override
     public BookDto getByIsbn(String isbn) {
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_BOOK_BY_ISBN)) {
@@ -152,17 +157,7 @@ public class BookDaoImpl implements BookDao {
         }
     }
 
-    public List<BookDto> getByAuthor(String author) {
-        try (Connection connection = dataBaseManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(FIND_BOOKS_BY_AUTHOR)) {
-            statement.setString(1, author);
-            return createBookList(statement);
-        } catch (SQLException e) {
-            log.error(e.getMessage() + e);
-            throw new UnableToFindException(messageManager.getMessage("books.unable_to_find_author"));
-        }
-    }
-
+    @Override
     public List<BookDto> getByAuthor(String author, int limit, int offset) {
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_BOOKS_BY_AUTHOR_PAGED)) {
@@ -173,16 +168,6 @@ public class BookDaoImpl implements BookDao {
         } catch (SQLException e) {
             log.error(e.getMessage() + e);
             throw new UnableToFindException(messageManager.getMessage("books.unable_to_find_author"));
-        }
-    }
-
-    public List<BookDto> getAll() {
-        try (Connection connection = dataBaseManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(FIND_ALL_BOOKS)) {
-            return createBookList(statement);
-        } catch (SQLException e) {
-            log.error(e.getMessage() + e);
-            throw new UnableToFindException(messageManager.getMessage("books.unable_to_find"));
         }
     }
 
@@ -199,6 +184,7 @@ public class BookDaoImpl implements BookDao {
         }
     }
 
+    @Override
     public boolean deleteById(Long id) {
         try (Connection connection = dataBaseManager.getConnection();
              PreparedStatement statement = connection.prepareStatement(DELETE_BOOK_BY_ID)) {
@@ -217,7 +203,7 @@ public class BookDaoImpl implements BookDao {
         log.debug("DB query completed");
         BookDto book = null;
         if (result.next()) {
-             book = new BookDto();
+            book = new BookDto();
             setParameters(book, result);
         }
         return book;
@@ -232,7 +218,7 @@ public class BookDaoImpl implements BookDao {
             setParameters(book, result);
             books.add(book);
         }
-            return books;
+        return books;
     }
 
     private void setParameters(BookDto book, ResultSet result) throws SQLException {

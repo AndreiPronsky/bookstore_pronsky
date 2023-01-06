@@ -40,18 +40,7 @@ public class OrderRepositoryImpl implements OrderRepository {
     @Override
     public Order getById(Long id) {
         OrderDto orderDto = orderDao.getById(id);
-        Order order = buildOrder(orderDto);
-        return order;
-    }
-
-    @Override
-    public List<Order> getAll() {
-        List<Order> orders = new ArrayList<>();
-        List<OrderDto> orderDtoList = orderDao.getAll();
-        for (OrderDto orderDto : orderDtoList) {
-            orders.add(buildOrder(orderDto));
-        }
-        return orders;
+        return buildOrder(orderDto);
     }
 
     @Override

@@ -8,8 +8,6 @@ public interface UserRepository extends AbstractRepository<Long, User> {
 
     User getByEmail(String email);
 
-    List<User> getByLastName(String lastName);
-
     List<User> getByLastName(String lastname, int limit, int offset);
 
     Long count();

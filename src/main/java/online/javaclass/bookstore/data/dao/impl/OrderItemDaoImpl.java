@@ -70,17 +70,6 @@ public class OrderItemDaoImpl implements OrderItemDao {
     }
 
     @Override
-    public List<OrderItemDto> getAll() {
-        try (Connection connection = dataBaseManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(FIND_ALL)) {
-            return createItemList(statement);
-        } catch (SQLException e) {
-            log.error(e.getMessage() + e);
-            throw new UnableToFindException(messageManager.getMessage("items.not_found"));
-        }
-    }
-
-    @Override
     public List<OrderItemDto> getAll(int limit, int offset) {
         List<OrderItemDto> orderItems = new ArrayList<>();
         try (Connection connection = dataBaseManager.getConnection();
