@@ -33,6 +33,9 @@ public class EntityDtoMapperData {
     }
 
     public UserDto toDto(User user) {
+        if (user == null) {
+            return null;
+        }
         UserDto userDto = new UserDto();
         userDto.setId(user.getId());
         userDto.setFirstName(user.getFirstName());
@@ -61,6 +64,9 @@ public class EntityDtoMapperData {
     }
 
     public OrderDto toDto(Order order) {
+        if (order == null) {
+            return null;
+        }
         OrderDto orderDto = new OrderDto();
         orderDto.setId(order.getId());
         orderDto.setUserId(order.getUser().getId());
@@ -91,6 +97,9 @@ public class EntityDtoMapperData {
     }
 
     public BookDto toDto(Book book) {
+        if (book == null) {
+            return null;
+        }
         BookDto bookDto = new BookDto();
         bookDto.setId(book.getId());
         bookDto.setTitle(book.getTitle());
@@ -105,6 +114,9 @@ public class EntityDtoMapperData {
     }
 
     public OrderItemDto toDto(OrderItem item) {
+        if (item == null) {
+            return null;
+        }
         OrderItemDto itemDto = new OrderItemDto();
         itemDto.setId(item.getId());
         itemDto.setOrderId(item.getOrderId());
