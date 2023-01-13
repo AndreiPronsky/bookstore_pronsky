@@ -16,7 +16,7 @@ public enum MessageManager {
     }
 
     public void setLocale(String lang) {
-        Locale locale = new Locale("ru");
+        Locale locale = Locale.getDefault();
         if (lang != null) {
             locale = new Locale(lang);
         }

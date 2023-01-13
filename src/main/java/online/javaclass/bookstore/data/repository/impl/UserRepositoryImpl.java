@@ -52,9 +52,11 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User getByEmail(String email) {
-        UserDto userDto = userDao.getByEmail(email);
-        return mapper.toEntity(userDto);
-
+         if (userDao.getByEmail(email) == null) {
+             return null;
+         } else {
+             return mapper.toEntity(userDao.getByEmail(email));
+         }
     }
 
     @Override

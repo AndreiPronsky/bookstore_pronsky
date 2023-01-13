@@ -39,7 +39,7 @@
         </label>
       </li>
       <li class="form-row">
-        <label><fmt:message key="rating"/><input type="number" name="rating" step="0.01" min="0.01"></label>
+        <label><fmt:message key="rating"/><input type="number" name="rating" step="0.01" min="0.01" max="5.0"></label>
       </li>
     </c:if>
     <li class="form-row">

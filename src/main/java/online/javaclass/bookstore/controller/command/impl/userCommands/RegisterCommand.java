@@ -10,8 +10,6 @@ import online.javaclass.bookstore.service.dto.UserDto;
 
 import java.math.BigDecimal;
 
-import static online.javaclass.bookstore.controller.command.impl.userCommands.UserCommandUtils.setUserParameters;
-
 @Log4j2
 @RequiredArgsConstructor
 public class RegisterCommand implements Command {
@@ -19,10 +17,11 @@ public class RegisterCommand implements Command {
     private final UserService userService;
     private final UserDto.Role defaultRole = UserDto.Role.USER;
     private final BigDecimal defaultRating = BigDecimal.ZERO;
+    UserCommandUtils userCommandUtils = new UserCommandUtils();
 
     @Override
     public String execute(HttpServletRequest req) {
-        UserDto user = setUserParameters(req, defaultRole, defaultRating);
+        UserDto user = userCommandUtils.setUserParameters(req, defaultRole, defaultRating);
         UserDto newUser = userService.create(user);
         HttpSession session = req.getSession();
         session.setAttribute("user", newUser);

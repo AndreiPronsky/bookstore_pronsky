@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 public class AddUserCommand implements Command {
 
     private final UserService userService;
+    private static UserCommandUtils userCommandUtils = new UserCommandUtils();
 
     @Override
     public String execute(HttpServletRequest req) {
@@ -28,7 +29,7 @@ public class AddUserCommand implements Command {
             role = UserDto.Role.valueOf(req.getParameter("role"));
             rating = BigDecimal.valueOf(Double.parseDouble(req.getParameter("rating")));
         }
-        UserDto user = UserCommandUtils.setUserParameters(req, role, rating);
+        UserDto user = userCommandUtils.setUserParameters(req, role, rating);
         UserDto newUser = userService.create(user);
         req.setAttribute("user", newUser);
         return "jsp/user.jsp";

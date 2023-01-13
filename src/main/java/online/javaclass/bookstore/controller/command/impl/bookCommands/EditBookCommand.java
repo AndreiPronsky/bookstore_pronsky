@@ -13,10 +13,11 @@ import online.javaclass.bookstore.service.dto.BookDto;
 public class EditBookCommand implements Command {
 
     private final BookService bookService;
+    private final BookCommandUtils commandUtils = new BookCommandUtils();
 
     @Override
     public String execute(HttpServletRequest req) {
-        BookDto book = BookCommandUtils.setBookParameters(req);
+        BookDto book = commandUtils.setBookParameters(req);
         book.setId(Long.parseLong(req.getParameter("id")));
         BookDto updatedBook = bookService.update(book);
         req.setAttribute("book", updatedBook);

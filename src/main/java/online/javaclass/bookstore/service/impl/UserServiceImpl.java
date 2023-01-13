@@ -4,20 +4,17 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import online.javaclass.bookstore.MessageManager;
 import online.javaclass.bookstore.controller.PagingUtil;
-import online.javaclass.bookstore.exceptions.UnableToDeleteException;
-import online.javaclass.bookstore.exceptions.UnableToFindException;
-import online.javaclass.bookstore.exceptions.ValidationException;
-import online.javaclass.bookstore.service.dto.PageableDto;
 import online.javaclass.bookstore.data.entities.User;
 import online.javaclass.bookstore.data.repository.UserRepository;
+import online.javaclass.bookstore.exceptions.LoginException;
+import online.javaclass.bookstore.exceptions.UnableToDeleteException;
+import online.javaclass.bookstore.exceptions.UnableToFindException;
 import online.javaclass.bookstore.service.DigestService;
 import online.javaclass.bookstore.service.EntityDtoMapperService;
 import online.javaclass.bookstore.service.UserService;
+import online.javaclass.bookstore.service.dto.PageableDto;
 import online.javaclass.bookstore.service.dto.UserDto;
-import online.javaclass.bookstore.exceptions.LoginException;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -41,8 +38,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto create(UserDto userDto) {
-        log.debug("create user");
-        validate(userDto);
+        log.debug("create user" + userDto);
         userDto.setPassword(digest.hashPassword(userDto.getPassword()));
         User user = mapper.toEntity(userDto);
         User created = userRepo.create(user);
@@ -52,7 +48,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto update(UserDto userDto) {
         log.debug("update user");
-        validate(userDto);
         User user = mapper.toEntity(userDto);
         User updated = userRepo.update(user);
         return mapper.toDto(updated);
@@ -89,7 +84,7 @@ public class UserServiceImpl implements UserService {
                 .map(mapper::toDto)
                 .toList();
         if (users.isEmpty()) {
-            throw new UnableToFindException(messageManager.getMessage("users.unable_to_find"));
+            throw new UnableToFindException(messageManager.getMessage("users.not_found"));
         } else {
             Long totalItems = userRepo.count();
             Long totalPages = PagingUtil.getTotalPages(totalItems, pageable);
@@ -114,30 +109,5 @@ public class UserServiceImpl implements UserService {
     public Long count() {
         log.debug("count users");
         return userRepo.count();
-    }
-
-    @Override
-    public void validate(UserDto user) {
-        List<String> messages = new ArrayList<>();
-        if (user.getFirstName() == null || user.getFirstName().isBlank()) {
-            messages.add(messageManager.getMessage("error.invalid_firstname"));
-        }
-        if (user.getLastName() == null || user.getLastName().isBlank()) {
-            messages.add(messageManager.getMessage("error.invalid_lastname"));
-        }
-        String validEmailRegex = "^[\\w\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
-        if (user.getEmail() == null || !user.getEmail().matches(validEmailRegex)) {
-            messages.add(messageManager.getMessage("error.invalid_email"));
-        }
-        if (user.getPassword() == null || (user.getPassword().length() < 8)) {
-            messages.add(messageManager.getMessage("error.invalid_password"));
-        }
-        if (user.getRating().compareTo(BigDecimal.ZERO) < 0 ||
-                user.getRating().compareTo(BigDecimal.valueOf(5)) > 0) {
-            messages.add(messageManager.getMessage("error.invalid rating"));
-        }
-        if (!messages.isEmpty()) {
-            throw new ValidationException(messages);
-        }
     }
 }

@@ -9,18 +9,17 @@ import online.javaclass.bookstore.service.dto.UserDto;
 
 import java.math.BigDecimal;
 
-import static online.javaclass.bookstore.controller.command.impl.userCommands.UserCommandUtils.setUserParameters;
-
 @Log4j2
 @RequiredArgsConstructor
 public class EditUserCommand implements Command {
     private final UserService userService;
+    private static UserCommandUtils userCommandUtils = new UserCommandUtils();
 
     @Override
     public String execute(HttpServletRequest req) {
         BigDecimal rating = BigDecimal.valueOf(Double.parseDouble(req.getParameter("rating")));
         UserDto.Role role = UserDto.Role.valueOf(req.getParameter("role"));
-        UserDto user = setUserParameters(req, role, rating);
+        UserDto user = userCommandUtils.setUserParameters(req, role, rating);
         user.setId(Long.parseLong(req.getParameter("id")));
         UserDto newUser = userService.update(user);
         req.setAttribute("user", newUser);

@@ -40,14 +40,15 @@ public class CommandFactory {
         UserDao userDao = new UserDaoImpl(manager);
         OrderDao orderDao = new OrderDaoImpl(manager);
         OrderItemDao orderItemDao = new OrderItemDaoImpl(manager);
-        EntityDtoMapperData dataMapper = new EntityDtoMapperData(userDao);
+        EntityDtoMapperData dataMapper = new EntityDtoMapperData();
         EntityDtoMapperService serviceMapper = new EntityDtoMapperService();
         BookRepository bookRepository = new BookRepositoryImpl(bookDao, dataMapper);
         BookService bookService = new BookServiceImpl(bookRepository, serviceMapper);
         UserRepository userRepository = new UserRepositoryImpl(userDao, dataMapper);
         UserService userService = new UserServiceImpl(userRepository, serviceMapper);
-        OrderRepository orderRepository = new OrderRepositoryImpl(orderDao, orderItemDao, dataMapper);
+        OrderRepository orderRepository = new OrderRepositoryImpl(orderDao, orderItemDao, userDao, dataMapper);
         OrderService orderService = new OrderServiceImpl(orderRepository, serviceMapper);
+
         map = new HashMap<>();
         map.put("book", new BookCommand(bookService));
         map.put("books", new BooksCommand(bookService));
@@ -78,6 +79,10 @@ public class CommandFactory {
         map.put("edit_order_form", new EditOrderFormCommand(orderService, bookService));
         map.put("edit_order", new EditOrderCommand(orderService));
         map.put("corr_order", new CorrectOrderCommand());
+        map.put("search_orders", new SearchOrdersCommand(orderService));
+        map.put("edit_order_admin", new EditOrderAdminCommand(orderService));
+        map.put("orders", new OrdersCommand(orderService, userService));
+        map.put("order", new OrderCommand(orderService));
     }
 
     public Command getCommand(String command) {

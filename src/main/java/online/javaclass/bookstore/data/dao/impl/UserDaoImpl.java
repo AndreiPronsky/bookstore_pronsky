@@ -23,13 +23,9 @@ public class UserDaoImpl implements UserDao {
             "r.name AS role, u.rating FROM users u JOIN roles r ON u.role_id = r.id WHERE u.id = ?";
     private static final String FIND_USER_BY_EMAIL = "SELECT u.id, u.firstname, u.lastname, u.email, u.password, " +
             "r.name AS role, u.rating FROM users u JOIN roles r ON u.role_id = r.id WHERE u.email = ?";
-    private static final String FIND_ALL_USERS = "SELECT u.id, u.firstname, u.lastname, u.email, u.password, " +
-            "r.name AS role, u.rating FROM users u JOIN roles r ON u.role_id = r.id";
     private static final String FIND_ALL_USERS_PAGED = "SELECT u.id, u.firstname, u.lastname, u.email, u.password, " +
             "r.name AS role, u.rating FROM users u JOIN roles r ON u.role_id = r.id " +
             "ORDER BY u.id LIMIT ? OFFSET ?";
-    private static final String FIND_USERS_BY_LASTNAME = "SELECT u.id, u.firstname, u.lastname, u.email, u.password, " +
-            "r.name AS role, u.rating FROM users u JOIN roles r ON u.role_id = r.id WHERE lastname = ?";
     private static final String FIND_USERS_BY_LASTNAME_PAGED = "SELECT u.id, u.firstname, u.lastname, u.email, u.password, " +
             "r.name AS role, u.rating FROM users u JOIN roles r ON u.role_id = r.id WHERE lastname = ? " +
             "ORDER BY u.id LIMIT ? OFFSET ?";
@@ -55,6 +51,7 @@ public class UserDaoImpl implements UserDao {
             log.debug("DB query completed");
             ResultSet result = statement.getGeneratedKeys();
             if (result.next()) {
+                log.debug("Created user with id" + result.getLong(COL_ID));
                 user.setId(result.getLong(COL_ID));
             }
             return user;
@@ -101,8 +98,8 @@ public class UserDaoImpl implements UserDao {
             return extractedFromStatement(statement);
         } catch (SQLException e) {
             log.error(e.getMessage());
+            return null;
         }
-        throw new UnableToFindException(messageManager.getMessage("user.unable_to_find_email") + " " + email);
     }
 
     @Override

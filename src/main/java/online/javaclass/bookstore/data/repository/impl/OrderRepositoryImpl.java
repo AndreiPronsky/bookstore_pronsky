@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import online.javaclass.bookstore.data.EntityDtoMapperData;
 import online.javaclass.bookstore.data.dao.OrderDao;
 import online.javaclass.bookstore.data.dao.OrderItemDao;
+import online.javaclass.bookstore.data.dao.UserDao;
 import online.javaclass.bookstore.data.dto.OrderDto;
 import online.javaclass.bookstore.data.dto.OrderItemDto;
+import online.javaclass.bookstore.data.dto.UserDto;
 import online.javaclass.bookstore.data.entities.Order;
 import online.javaclass.bookstore.data.repository.OrderRepository;
 
@@ -17,6 +19,7 @@ import java.util.List;
 public class OrderRepositoryImpl implements OrderRepository {
     private final OrderDao orderDao;
     private final OrderItemDao orderItemDao;
+    private final UserDao userDao;
     private final EntityDtoMapperData mapper;
 
     @Override
@@ -28,11 +31,14 @@ public class OrderRepositoryImpl implements OrderRepository {
     public List<Order> getAllByUserId(Long userId) {
         List<Order> orders = new ArrayList<>();
         List<OrderDto> orderDtos = orderDao.getAllByUserId(userId);
+        UserDto user = userDao.getById(userId);
         for (OrderDto orderDto : orderDtos) {
             List<OrderItemDto> itemDtos = orderItemDao.getAllByOrderId(orderDto.getId());
             orderDto.setItems(itemDtos);
             orderDto.setCost(calculateCost(itemDtos));
-            orders.add(mapper.toEntity(orderDto));
+            Order order = mapper.toEntity(orderDto);
+            order.setUser(mapper.toEntity(user));
+            orders.add(order);
         }
         return orders;
     }
@@ -48,7 +54,9 @@ public class OrderRepositoryImpl implements OrderRepository {
         List<Order> orders = new ArrayList<>();
         List<OrderDto> orderDtoList = orderDao.getAll(limit, offset);
         for (OrderDto orderDto : orderDtoList) {
-            orders.add(buildOrder(orderDto));
+            Order order = buildOrder(orderDto);
+            order.setUser(mapper.toEntity(userDao.getById(orderDto.getUserId())));
+            orders.add(order);
         }
         return orders;
     }
@@ -76,6 +84,7 @@ public class OrderRepositoryImpl implements OrderRepository {
             orderItemDao.create(item);
         }
         updatedOrder.setItems(itemDtos);
+        updatedOrder.setUserId(order.getUser().getId());
         return mapper.toEntity(updatedOrder);
     }
 
@@ -87,7 +96,9 @@ public class OrderRepositoryImpl implements OrderRepository {
     private Order buildOrder(OrderDto orderDto) {
         List<OrderItemDto> orderItemDtos = orderItemDao.getAllByOrderId(orderDto.getId());
         orderDto.setItems(orderItemDtos);
-        return mapper.toEntity(orderDto);
+        Order order = mapper.toEntity(orderDto);
+        order.setUser(mapper.toEntity(userDao.getById(orderDto.getUserId())));
+        return order;
     }
 
     private BigDecimal calculateCost(List<OrderItemDto> items) {

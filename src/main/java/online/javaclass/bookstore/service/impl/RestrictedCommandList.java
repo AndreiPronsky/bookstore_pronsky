@@ -22,6 +22,8 @@ public enum RestrictedCommandList {
         accessConfig.put("edit_user_form", UserDto.Role.ADMIN);
         accessConfig.put("user", UserDto.Role.ADMIN);
         accessConfig.put("users", UserDto.Role.ADMIN);
+        accessConfig.put("orders", UserDto.Role.ADMIN);
+        accessConfig.put("edit_order_admin", UserDto.Role.ADMIN);
     }
 
     private UserDto.Role getRole(String command) {

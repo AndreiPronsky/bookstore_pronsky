@@ -17,6 +17,4 @@ public interface AbstractService<K, T> {
     void deleteById(K id);
 
     Long count();
-
-    void validate(T entity) ;
 }

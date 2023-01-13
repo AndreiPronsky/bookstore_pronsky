@@ -25,7 +25,7 @@
         </li>
         <li class="form-row">
             <label><fmt:message key="author"/>
-                <input type="text" name="author" minlength="1" value="${requestScope.book.author}"></label>
+                <input type="text" name="author" minlength="2" value="${requestScope.book.author}"></label>
         </li>
         <li class="form-row">
             <label><fmt:message key="isbn"/>
@@ -74,7 +74,7 @@
         </li>
         <li class="form-row">
             <label><fmt:message key="rating"/>
-                <input type="number" name="rating" step="0.01" min="0.01" value="${requestScope.book.rating}">
+                <input type="number" name="rating" step="0.01" min="0.01" max="5.0" value="${requestScope.book.rating}">
             </label>
         </li>
         <li class="form-row">

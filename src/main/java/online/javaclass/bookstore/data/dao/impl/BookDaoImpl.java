@@ -30,20 +30,11 @@ public class BookDaoImpl implements BookDao {
             "c.name AS cover, b.pages, b.price, b.rating FROM books b " +
             "JOIN genres g ON b.genre_id = g.id " +
             "JOIN covers c ON b.cover_id = c.id WHERE isbn = ?";
-    private static final String FIND_ALL_BOOKS = "SELECT b.id, b.title, b.author, b.isbn, g.name AS genre, " +
-            "c.name AS cover, b.pages, b.price, b.rating FROM books b " +
-            "JOIN genres g ON b.genre_id = g.id " +
-            "JOIN covers c on b.cover_id = c.id";
     private static final String FIND_ALL_BOOKS_PAGED = "SELECT b.id, b.title, b.author, b.isbn, g.name AS genre, " +
             "c.name AS cover, b.pages, b.price, b.rating FROM books b " +
             "JOIN genres g ON b.genre_id = g.id " +
             "JOIN covers c on b.cover_id = c.id " +
             "ORDER BY b.id LIMIT ? OFFSET ? ";
-    private static final String FIND_BOOKS_BY_AUTHOR = "SELECT b.id, b.title, b.author, b.isbn, g.name AS genre, " +
-            "c.name AS cover, b.pages, b.price, b.rating FROM books b" +
-            "JOIN genres g ON b.genre_id = g.id " +
-            "JOIN covers c ON b.cover_id = c.id WHERE author = ?";
-
     private static final String FIND_BOOKS_BY_AUTHOR_PAGED = "SELECT b.id, b.title, b.author, b.isbn, g.name AS genre, " +
             "c.name AS cover, b.pages, b.price, b.rating FROM books b" +
             "JOIN genres g ON b.genre_id = g.id " +

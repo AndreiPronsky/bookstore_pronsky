@@ -22,8 +22,7 @@ public class OrderItemDaoImpl implements OrderItemDao {
             " WHERE order_id = ?";
     private static final String FIND_ITEM_BY_ID = "SELECT id, order_id, book_id, quantity, price FROM order_items " +
             "WHERE id = ?";
-    private static final String FIND_ALL = "SELECT id, order_id, book_id, quantity, price FROM order_items";
-    private static final String FIND_ALL_PAGED = "SELECT id, order_id, book_id, quantity, price FROM order_items " +
+        private static final String FIND_ALL_PAGED = "SELECT id, order_id, book_id, quantity, price FROM order_items " +
             "LIMIT ? OFFSET ?";
     private static final String CREATE_ITEM = "INSERT INTO order_items (order_id, book_id, quantity, price) " +
             "VALUES (?, ?, ?, ?)";

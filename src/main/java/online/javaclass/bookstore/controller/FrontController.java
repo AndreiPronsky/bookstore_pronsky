@@ -48,7 +48,7 @@ public class FrontController extends HttpServlet {
 
     private void process(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
-        String lang = String.valueOf(req.getLocale());
+        String lang = req.getLocale().getLanguage();
         if (session.getAttribute("lang") != null) {
             lang = (String)session.getAttribute("lang");
         }

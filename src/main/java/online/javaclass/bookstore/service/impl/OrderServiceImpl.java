@@ -3,6 +3,7 @@ package online.javaclass.bookstore.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import online.javaclass.bookstore.MessageManager;
+import online.javaclass.bookstore.controller.PagingUtil;
 import online.javaclass.bookstore.data.entities.Order;
 import online.javaclass.bookstore.data.repository.OrderRepository;
 import online.javaclass.bookstore.exceptions.UnableToDeleteException;
@@ -62,6 +63,10 @@ public class OrderServiceImpl implements OrderService {
         if (orders.isEmpty()) {
             throw new UnableToFindException(messageManager.getMessage("orders.unable_to_find"));
         } else {
+            Long totalItems = orderRepo.count();
+            Long totalPages = PagingUtil.getTotalPages(totalItems, pageable);
+            pageable.setTotalItems(orderRepo.count());
+            pageable.setTotalPages(totalPages);
             return orders;
         }
     }

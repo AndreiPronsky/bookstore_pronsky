@@ -2,6 +2,7 @@ package online.javaclass.bookstore.data;
 
 import lombok.RequiredArgsConstructor;
 import online.javaclass.bookstore.data.dao.UserDao;
+import online.javaclass.bookstore.data.dao.impl.UserDaoImpl;
 import online.javaclass.bookstore.data.dto.BookDto;
 import online.javaclass.bookstore.data.dto.OrderDto;
 import online.javaclass.bookstore.data.dto.OrderItemDto;
@@ -15,7 +16,6 @@ import java.util.List;
 
 @RequiredArgsConstructor
 public class EntityDtoMapperData {
-    private final UserDao userDao;
 
     public User toEntity(UserDto userDto) {
         if (userDto == null) {
@@ -53,7 +53,6 @@ public class EntityDtoMapperData {
         }
         Order order = new Order();
         order.setId(orderDto.getId());
-        order.setUser(toEntity(userDao.getById(orderDto.getUserId())));
         order.setOrderStatus(Order.OrderStatus.values()[orderDto.getOrderStatus().ordinal()]);
         order.setPaymentMethod(Order.PaymentMethod.values()[orderDto.getPaymentMethod().ordinal()]);
         order.setPaymentStatus(Order.PaymentStatus.values()[orderDto.getPaymentStatus().ordinal()]);

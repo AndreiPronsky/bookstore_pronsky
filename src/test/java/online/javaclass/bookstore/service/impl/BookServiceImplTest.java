@@ -26,22 +26,22 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class BookServiceImplTest {
-    public static final long NOT_EXISTING_ID = 10000L;
-    public static final long EXISTING_ID = 1L;
-    public static final String EXISTING_ISBN = "3-0666-8990-3";
-    public static final String NOT_EXISTING_ISBN = "1-1111-1111-1";
-    public static final String EXISTING_PARTIAL_TITLE = "Pot";
-    public static final String EXISTING_TITLE = "Harry Potter and the Half-Blood Prince";
-    public static final String NOT_EXISTING_PARTIAL_TITLE = "123";
-    public static final String NOT_EXISTING_TITLE = "Rick And Morty";
-    public static final String EXISTING_PARTIAL_AUTHOR = "J.K";
-    public static final String EXISTING_AUTHOR = "Noviolet Bulawayo";
-    public static final String NOT_EXISTING_PARTIAL_AUTHOR = "Dostoyevsky";
-    public static final String NOT_EXISTING_AUTHOR = "Aleksandr Sergeevich Pushkin";
+    private static final long NOT_EXISTING_ID = 10000L;
+    private static final long EXISTING_ID = 1L;
+    private static final String EXISTING_ISBN = "3-0666-8990-3";
+    private static final String NOT_EXISTING_ISBN = "1-1111-1111-1";
+    private static final String EXISTING_PARTIAL_TITLE = "Pot";
+    private static final String EXISTING_TITLE = "Harry Potter and the Half-Blood Prince";
+    private static final String NOT_EXISTING_PARTIAL_TITLE = "123";
+    private static final String NOT_EXISTING_TITLE = "Rick And Morty";
+    private static final String EXISTING_PARTIAL_AUTHOR = "J.K";
+    private static final String EXISTING_AUTHOR = "Noviolet Bulawayo";
+    private static final String NOT_EXISTING_PARTIAL_AUTHOR = "Dostoyevsky";
+    private static final String NOT_EXISTING_AUTHOR = "Aleksandr Sergeevich Pushkin";
 
-    public static PageableDto pageableDto;
-    public static EntityDtoMapperService mapper;
-    public static MessageManager messageManager = MessageManager.INSTANCE;
+    private static PageableDto pageableDto;
+    private static EntityDtoMapperService mapper;
+    private static MessageManager messageManager = MessageManager.INSTANCE;
     private static BookService bookService;
     private static BookRepository bookRepositoryMock;
     private static Book existingEntity;
@@ -54,7 +54,7 @@ class BookServiceImplTest {
     private static BookDto createdDto;
     private static BookDto updatedDto;
     private static List<Book> existingEntities;
-    private static List<BookDto> expectedBookDtos;
+    private static List<BookDto> expectedBookDtoList;
 
 
     @BeforeAll
@@ -65,7 +65,7 @@ class BookServiceImplTest {
         bookService = new BookServiceImpl(bookRepositoryMock, mapper);
 
         existingEntity = new Book();
-        existingEntity.setId(1L);
+        existingEntity.setId(EXISTING_ID);
         existingEntity.setTitle("Test title");
         existingEntity.setAuthor("Test author");
         existingEntity.setPrice(BigDecimal.TEN);
@@ -73,6 +73,7 @@ class BookServiceImplTest {
         existingEntity.setGenre(Book.Genre.ART);
         existingEntity.setCover(Book.Cover.HARD);
         existingEntity.setPages(100);
+        existingEntity.setRating(BigDecimal.ONE);
 
         anotherExistingEntity = new Book();
         anotherExistingEntity.setId(2L);
@@ -83,9 +84,10 @@ class BookServiceImplTest {
         anotherExistingEntity.setGenre(Book.Genre.FLORISTICS);
         anotherExistingEntity.setCover(Book.Cover.SPECIAL);
         anotherExistingEntity.setPages(500);
+        anotherExistingEntity.setRating(BigDecimal.ONE);
 
         updatedEntity = new Book();
-        updatedEntity.setId(1L);
+        updatedEntity.setId(EXISTING_ID);
         updatedEntity.setTitle("Test update title");
         updatedEntity.setAuthor("Test update author");
         updatedEntity.setPrice(BigDecimal.ONE);
@@ -106,6 +108,7 @@ class BookServiceImplTest {
         expectedBookDto.setGenre(BookDto.Genre.ART);
         expectedBookDto.setCover(BookDto.Cover.HARD);
         expectedBookDto.setPages(100);
+        expectedBookDto.setRating(BigDecimal.ONE);
 
         notExistingEntity = new Book();
         notExistingEntity.setTitle("Test create");
@@ -136,97 +139,34 @@ class BookServiceImplTest {
         existingEntities.add(existingEntity);
         existingEntities.add(anotherExistingEntity);
 
-        expectedBookDtos = new ArrayList<>();
-        expectedBookDtos = existingEntities.stream().map(mapper::toDto).toList();
+        expectedBookDtoList = new ArrayList<>();
+        expectedBookDtoList = existingEntities.stream().map(mapper::toDto).toList();
 
         pageableDto = new PageableDto(1, 5);
     }
 
-    public static Stream<Arguments> provideValidBookDtos() {
-        return Stream.of(Arguments.of(expectedBookDtos.get(0)),
-                Arguments.of(expectedBookDtos.get(1)));
-    }
-    public static Stream<Arguments> provideInvalidBookDtos() {
-        BookDto invalidTitleDto = new BookDto();
-        invalidTitleDto.setTitle("");
-        invalidTitleDto.setAuthor("Test author for create");
-        invalidTitleDto.setPrice(BigDecimal.TEN);
-        invalidTitleDto.setIsbn("1-1111-1111-1");
-        invalidTitleDto.setGenre(BookDto.Genre.ART);
-        invalidTitleDto.setCover(BookDto.Cover.HARD);
-        invalidTitleDto.setRating(BigDecimal.ONE);
-        invalidTitleDto.setPages(100);
-
-        BookDto invalidAuthorDto = new BookDto();
-        invalidAuthorDto.setTitle("Test create");
-        invalidAuthorDto.setAuthor("");
-        invalidAuthorDto.setPrice(BigDecimal.TEN);
-        invalidAuthorDto.setIsbn("1-1111-1111-1");
-        invalidAuthorDto.setGenre(BookDto.Genre.ART);
-        invalidAuthorDto.setCover(BookDto.Cover.HARD);
-        invalidAuthorDto.setRating(BigDecimal.ONE);
-        invalidAuthorDto.setPages(100);
-
-        BookDto invalidPriceDto = new BookDto();
-        invalidPriceDto.setTitle("Test create");
-        invalidPriceDto.setAuthor("Test author for create");
-        invalidPriceDto.setPrice(new BigDecimal(-1));
-        invalidPriceDto.setIsbn("1-1111-1111-1");
-        invalidPriceDto.setGenre(BookDto.Genre.ART);
-        invalidPriceDto.setCover(BookDto.Cover.HARD);
-        invalidPriceDto.setRating(BigDecimal.ONE);
-        invalidPriceDto.setPages(100);
-
-        BookDto invalidIsbnDto = new BookDto();
-        invalidIsbnDto.setTitle("Test create");
-        invalidIsbnDto.setAuthor("Test author for create");
-        invalidIsbnDto.setPrice(BigDecimal.TEN);
-        invalidIsbnDto.setIsbn("222222");
-        invalidIsbnDto.setGenre(BookDto.Genre.ART);
-        invalidIsbnDto.setCover(BookDto.Cover.HARD);
-        invalidIsbnDto.setRating(BigDecimal.ONE);
-        invalidIsbnDto.setPages(100);
-
-        BookDto invalidRatingDto = new BookDto();
-        invalidRatingDto.setTitle("Test create");
-        invalidRatingDto.setAuthor("Test author for create");
-        invalidRatingDto.setPrice(BigDecimal.TEN);
-        invalidRatingDto.setIsbn("1-1111-1111-1");
-        invalidRatingDto.setGenre(BookDto.Genre.THRILLER);
-        invalidRatingDto.setCover(BookDto.Cover.HARD);
-        invalidRatingDto.setRating(new BigDecimal(-1));
-        invalidRatingDto.setPages(100);
-
-        BookDto invalidPagesDto = new BookDto();
-        invalidPagesDto.setTitle("Test create");
-        invalidPagesDto.setAuthor("Test author for create");
-        invalidPagesDto.setPrice(BigDecimal.TEN);
-        invalidPagesDto.setIsbn("1-1111-1111-1");
-        invalidPagesDto.setGenre(BookDto.Genre.HISTORICAL);
-        invalidPagesDto.setCover(BookDto.Cover.HARD);
-        invalidPagesDto.setRating(BigDecimal.ONE);
-        invalidPagesDto.setPages(-1);
-
-        return Stream.of(Arguments.of(invalidTitleDto),
-                Arguments.of(invalidAuthorDto),
-                Arguments.of(invalidIsbnDto),
-                Arguments.of(invalidPriceDto),
-                Arguments.of(invalidRatingDto),
-                Arguments.of(invalidPagesDto));
-    }
-
-    public static Stream<Arguments> provideValidSearchInput() {
+    private static Stream<Arguments> provideValidSearchInput() {
         return Stream.of(Arguments.of(EXISTING_TITLE),
                 Arguments.of(EXISTING_PARTIAL_TITLE),
                 Arguments.of(EXISTING_AUTHOR),
                 Arguments.of(EXISTING_PARTIAL_AUTHOR));
     }
 
-    public static Stream<Arguments> provideInvalidSearchInput() {
+    private static Stream<Arguments> provideInvalidSearchInput() {
         return Stream.of(Arguments.of(NOT_EXISTING_TITLE),
                 Arguments.of(NOT_EXISTING_PARTIAL_TITLE),
                 Arguments.of(NOT_EXISTING_AUTHOR),
                 Arguments.of(NOT_EXISTING_PARTIAL_AUTHOR));
+    }
+
+    private static Stream<Arguments> provideValidAuthors() {
+        return Stream.of(Arguments.of(EXISTING_AUTHOR),
+                Arguments.of("J.K. Rowling"));
+    }
+
+    private static Stream<Arguments> provideInvalidAuthors() {
+        return Stream.of(Arguments.of(NOT_EXISTING_AUTHOR),
+                Arguments.of("Gorky"));
     }
 
     @BeforeEach
@@ -241,13 +181,6 @@ class BookServiceImplTest {
         assertEquals(created, createdDto);
     }
 
-    @ParameterizedTest
-    @MethodSource("provideInvalidBookDtos")
-    void createValidationFailTest(BookDto invalidBookDto) {
-        when(bookRepositoryMock.create(mapper.toEntity(invalidBookDto))).thenThrow(AppException.class);
-        assertThrows(AppException.class, () -> bookService.create(invalidBookDto));
-    }
-
     @Test
     void updatePositiveTest() {
         when(bookRepositoryMock.update(updatedEntity)).thenReturn(updatedEntity);
@@ -255,12 +188,10 @@ class BookServiceImplTest {
         assertEquals(updated, updatedDto);
     }
 
-    @ParameterizedTest
-    @MethodSource("provideInvalidBookDtos")
-    void updateValidationFailTest(BookDto invalidBookDto) {
-        invalidBookDto.setId(1L);
-        when(bookRepositoryMock.update(mapper.toEntity(invalidBookDto))).thenThrow(AppException.class);
-        assertThrows(AppException.class, () -> bookService.create(invalidBookDto));
+    @Test
+    void updateNegativeTest() {
+        when(bookRepositoryMock.update(notExistingEntity)).thenThrow(AppException.class);
+        assertThrows(AppException.class, () -> bookService.update(notExistingDto));
     }
 
     @Test
@@ -293,8 +224,8 @@ class BookServiceImplTest {
     @MethodSource("provideValidSearchInput")
     void searchPositiveTest(String searchInput) {
         when(bookRepositoryMock.search(searchInput)).thenReturn(existingEntities);
-        List<BookDto> bookDtos = bookService.search(searchInput);
-        assertEquals(bookDtos, expectedBookDtos);
+        List<BookDto> bookDtoList = bookService.search(searchInput);
+        assertEquals(bookDtoList, expectedBookDtoList);
     }
 
     @ParameterizedTest
@@ -305,15 +236,15 @@ class BookServiceImplTest {
     }
 
     @ParameterizedTest
-    @MethodSource("provideValidSearchInput")
+    @MethodSource("provideValidAuthors")
     void getByAuthorPositiveTest(String searchInput) {
         when(bookRepositoryMock.search(searchInput)).thenReturn(existingEntities);
-        List<BookDto> bookDtos = bookService.search(searchInput);
-        assertEquals(bookDtos, expectedBookDtos);
+        List<BookDto> bookDtoList = bookService.search(searchInput);
+        assertEquals(bookDtoList, expectedBookDtoList);
     }
 
     @ParameterizedTest
-    @MethodSource("provideInvalidSearchInput")
+    @MethodSource("provideInvalidAuthors")
     void getByAuthorNegativeTest(String searchInput) {
         when(bookRepositoryMock.search(searchInput)).thenReturn(new ArrayList<>());
         assertThrows(AppException.class, () -> bookService.search(searchInput));
@@ -324,8 +255,8 @@ class BookServiceImplTest {
         int limit = pageableDto.getLimit();
         int offset = pageableDto.getOffset();
         when(bookRepositoryMock.getAll(limit, offset)).thenReturn(existingEntities);
-        List<BookDto> bookDtos = bookService.getAll(pageableDto);
-        assertEquals(bookDtos, expectedBookDtos);
+        List<BookDto> bookDtoList = bookService.getAll(pageableDto);
+        assertEquals(bookDtoList, expectedBookDtoList);
     }
 
     @Test
@@ -347,16 +278,5 @@ class BookServiceImplTest {
     void deleteByIdNegativeTest() {
         when(bookRepositoryMock.deleteById(NOT_EXISTING_ID)).thenReturn(false);
         assertThrows(AppException.class, () -> bookService.deleteById(NOT_EXISTING_ID));
-    }
-
-    @Test
-    void validatePositiveTest() {
-    }
-
-
-    @ParameterizedTest
-    @MethodSource("provideInvalidBookDtos")
-    void validateNegativeTest(BookDto bookDto) {
-        assertThrows(AppException.class, () -> bookService.validate(bookDto));
     }
 }
