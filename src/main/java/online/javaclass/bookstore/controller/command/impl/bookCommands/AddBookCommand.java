@@ -19,11 +19,10 @@ public class AddBookCommand implements Command {
     @Override
     public String execute(HttpServletRequest req) {
         String page;
-        BookDto book;
         HttpSession session = req.getSession();
         session.removeAttribute("validationMessages");
         try {
-        book = commandUtils.setBookParameters(req);
+            BookDto book = commandUtils.setBookParameters(req);
         BookDto newBook = bookService.create(book);
             req.setAttribute("book", newBook);
             page = "controller?command=book&id=" + newBook.getId();

@@ -46,10 +46,12 @@ class BookRepositoryImplTest {
     private static Book anotherExistingEntity;
     private static Book notExistingEntity;
     private static Book expectedEntity;
+    private static Book entityForCreation;
     private static BookDto existingDto;
     private static BookDto anotherExistingDto;
     private static BookDto notExistingDto;
     private static BookDto expectedDto;
+    private static BookDto dtoForCreation;
     private static List<BookDto> existingDtoList;
 
     @BeforeAll
@@ -114,6 +116,17 @@ class BookRepositoryImplTest {
 
         notExistingDto = mapper.toDto(notExistingEntity);
 
+        entityForCreation = new Book();
+        entityForCreation.setTitle("Existing title");
+        entityForCreation.setAuthor("Existing author");
+        entityForCreation.setPrice(BigDecimal.TEN);
+        entityForCreation.setIsbn("0-0000-0000-0");
+        entityForCreation.setGenre(Book.Genre.ART);
+        entityForCreation.setCover(Book.Cover.HARD);
+        entityForCreation.setPages(100);
+        entityForCreation.setRating(BigDecimal.ONE);
+
+        dtoForCreation = mapper.toDto(entityForCreation);
     }
 
     private static Stream<Arguments> provideValidSearchInput() {
@@ -221,8 +234,8 @@ class BookRepositoryImplTest {
 
     @Test
     void createPositiveTest() {
-        when(bookDaoMock.create(notExistingDto)).thenReturn(expectedDto);
-        Book created = bookRepo.create(notExistingEntity);
+        when(bookDaoMock.create(dtoForCreation)).thenReturn(expectedDto);
+        Book created = bookRepo.create(entityForCreation);
         assertEquals(created, expectedEntity);
     }
 
