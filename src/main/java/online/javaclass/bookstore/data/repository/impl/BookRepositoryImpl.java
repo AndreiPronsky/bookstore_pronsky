@@ -28,20 +28,10 @@ public class BookRepositoryImpl implements BookRepository {
     }
 
     @Override
-    public List<Book> getByAuthor(String author) {
-        List<BookDto> bookDtos = bookDao.getByAuthor(author);
-        List<Book> books = new ArrayList<>();
-        for (BookDto bookDto : bookDtos) {
-            books.add(mapper.toEntity(bookDto));
-        }
-        return books;
-    }
-
-    @Override
     public List<Book> search(String input) {
-        List<BookDto> bookDtos = bookDao.search(input);
+        List<BookDto> bookDtoList = bookDao.search(input);
         List<Book> books = new ArrayList<>();
-        for (BookDto bookDto : bookDtos) {
+        for (BookDto bookDto : bookDtoList) {
             books.add(mapper.toEntity(bookDto));
         }
         return books;
@@ -49,19 +39,9 @@ public class BookRepositoryImpl implements BookRepository {
 
     @Override
     public List<Book> getByAuthor(String author, int limit, int offset) {
-        List<BookDto> bookDtos = bookDao.getByAuthor(author, limit, offset);
+        List<BookDto> bookDtoList = bookDao.getByAuthor(author, limit, offset);
         List<Book> books = new ArrayList<>();
-        for (BookDto bookDto : bookDtos) {
-            books.add(mapper.toEntity(bookDto));
-        }
-        return books;
-    }
-
-    @Override
-    public List<Book> getAll() {
-        List<BookDto> bookDtos = bookDao.getAll();
-        List<Book> books = new ArrayList<>();
-        for (BookDto bookDto : bookDtos) {
+        for (BookDto bookDto : bookDtoList) {
             books.add(mapper.toEntity(bookDto));
         }
         return books;
@@ -69,9 +49,9 @@ public class BookRepositoryImpl implements BookRepository {
 
     @Override
     public List<Book> getAll(int limit, int offset) {
-        List<BookDto> bookDtos = bookDao.getAll(limit, offset);
+        List<BookDto> bookDtoList = bookDao.getAll(limit, offset);
         List<Book> books = new ArrayList<>();
-        for (BookDto bookDto : bookDtos) {
+        for (BookDto bookDto : bookDtoList) {
             books.add(mapper.toEntity(bookDto));
         }
         return books;

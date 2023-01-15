@@ -21,7 +21,7 @@
   <label><fmt:message key="title"/><input type="text" name="title" minlength="1"></label>
     </li>
     <li class="form-row">
-  <label><fmt:message key="author"/><input type="text" name="author" minlength="1"></label>
+  <label><fmt:message key="author"/><input type="text" name="author" minlength="2"></label>
     </li>
     <li class="form-row">
   <label><fmt:message key="isbn"/><input type="text" name="isbn" minlength="13"></label>
@@ -30,7 +30,7 @@
   <label><fmt:message key="price"/><input type="number" name="price" step="0.01" min="0.01"></label>
     </li>
     <li class="form-row">
-      <label><fmt:message key="genre"/>
+      <label ><fmt:message key="genre"/>
         <select name="genre" required="required">
           <option value=""><fmt:message key="book.select_genre"/></option>
           <option value="FICTION"><fmt:message key="genre.fiction"/></option>
@@ -65,12 +65,19 @@
       <label><fmt:message key="pages"/><input type="number" name="pages" step="1" min="1"></label>
     </li>
     <li class="form-row">
-      <label><fmt:message key="rating"/><input type="number" name="rating" step="0.01" min="0.01"></label>
+      <label><fmt:message key="rating"/><input type="number" name="rating" step="0.01" min="0.01" max="5.0"></label>
     </li>
     <li class="form-row">
       <input type="submit" name="Create">
     </li>
   </ul>
 </form>
+<table>
+<c:forEach items="${sessionScope.validationMessages}" var="message">
+    <tr>
+        <td><c:out value="${message}"/></td>
+    </tr>
+</c:forEach>
+</table>
 </body>
 </html>

@@ -7,8 +7,6 @@ import java.util.List;
 public interface BookDao extends AbstractDao<Long, BookDto> {
     BookDto getByIsbn(String isbn);
 
-    List<BookDto> getByAuthor(String author);
-
     List<BookDto> getByAuthor(String author, int limit, int offset);
 
     Long count();

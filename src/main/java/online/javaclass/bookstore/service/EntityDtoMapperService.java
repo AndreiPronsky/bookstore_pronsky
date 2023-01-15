@@ -26,6 +26,9 @@ public class EntityDtoMapperService {
     }
 
     public UserDto toDto(User user) {
+        if (user == null) {
+            return null;
+        }
         UserDto userDto = new UserDto();
         userDto.setId(user.getId());
         userDto.setFirstName(user.getFirstName());
@@ -54,9 +57,13 @@ public class EntityDtoMapperService {
     }
 
     public OrderDto toDto(Order order) {
+        if (order == null) {
+            return null;
+        }
         OrderDto orderDto = new OrderDto();
         orderDto.setId(order.getId());
-        orderDto.setUser(toDto(order.getUser()));
+        UserDto userDto = toDto(order.getUser());
+        orderDto.setUser(userDto);
         orderDto.setOrderStatus(OrderDto.OrderStatus.valueOf(order.getOrderStatus().toString()));
         orderDto.setPaymentMethod(OrderDto.PaymentMethod.valueOf(order.getPaymentMethod().toString()));
         orderDto.setPaymentStatus(OrderDto.PaymentStatus.valueOf(order.getPaymentStatus().toString()));
@@ -85,6 +92,9 @@ public class EntityDtoMapperService {
     }
 
     public BookDto toDto(Book book) {
+        if (book == null) {
+            return null;
+        }
         BookDto bookDto = new BookDto();
         bookDto.setId(book.getId());
         bookDto.setTitle(book.getTitle());
@@ -99,6 +109,9 @@ public class EntityDtoMapperService {
     }
 
     public OrderItemDto toDto(OrderItem item) {
+        if (item == null) {
+            return null;
+        }
         OrderItemDto itemDto = new OrderItemDto();
         itemDto.setOrderId(item.getOrderId());
         itemDto.setQuantity(item.getQuantity());

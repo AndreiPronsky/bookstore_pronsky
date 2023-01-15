@@ -22,8 +22,7 @@ public class OrderItemDaoImpl implements OrderItemDao {
             " WHERE order_id = ?";
     private static final String FIND_ITEM_BY_ID = "SELECT id, order_id, book_id, quantity, price FROM order_items " +
             "WHERE id = ?";
-    private static final String FIND_ALL = "SELECT id, order_id, book_id, quantity, price FROM order_items";
-    private static final String FIND_ALL_PAGED = "SELECT id, order_id, book_id, quantity, price FROM order_items " +
+        private static final String FIND_ALL_PAGED = "SELECT id, order_id, book_id, quantity, price FROM order_items " +
             "LIMIT ? OFFSET ?";
     private static final String CREATE_ITEM = "INSERT INTO order_items (order_id, book_id, quantity, price) " +
             "VALUES (?, ?, ?, ?)";
@@ -63,17 +62,6 @@ public class OrderItemDaoImpl implements OrderItemDao {
              PreparedStatement statement = connection.prepareStatement(FIND_ITEM_BY_ID)) {
             statement.setLong(1, id);
             return extractedFromStatement(statement);
-        } catch (SQLException e) {
-            log.error(e.getMessage() + e);
-            throw new UnableToFindException(messageManager.getMessage("items.not_found"));
-        }
-    }
-
-    @Override
-    public List<OrderItemDto> getAll() {
-        try (Connection connection = dataBaseManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(FIND_ALL)) {
-            return createItemList(statement);
         } catch (SQLException e) {
             log.error(e.getMessage() + e);
             throw new UnableToFindException(messageManager.getMessage("items.not_found"));

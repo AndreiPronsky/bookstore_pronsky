@@ -8,8 +8,6 @@ import java.util.List;
 public interface AbstractService<K, T> {
     T getById(K id);
 
-    List<T> getAll();
-
     List<T> getAll(PageableDto pageable);
 
     T create(T entity) throws ValidationException;
@@ -19,6 +17,4 @@ public interface AbstractService<K, T> {
     void deleteById(K id);
 
     Long count();
-
-    void validate(T entity) ;
 }

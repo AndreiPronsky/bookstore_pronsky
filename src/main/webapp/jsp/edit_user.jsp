@@ -48,7 +48,7 @@
         </li>
         <li class="form-row">
             <label><fmt:message key="rating"/>
-                <input type="number" name="rating" step="0.01" min="0.01" value="${requestScope.user.rating}">
+                <input type="number" name="rating" step="0.01" min="0.01" max="5.0" value="${requestScope.user.rating}">
             </label>
         </li>
         <li class="form-row">

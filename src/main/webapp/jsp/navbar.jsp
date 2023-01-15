@@ -13,7 +13,9 @@
     </a>
     <ul class="main-nav">
         <li><a href="controller?command=books&page=1"><fmt:message key="books"/></a></li>
-        <li><a href="controller?command=cart"><fmt:message key="cart"/></a></li>
+        <c:if test="${sessionScope.user.role.toString() != 'ADMIN' && sessionScope.user.role.toString() != 'MANAGER'}">
+            <li><a href="controller?command=cart"><fmt:message key="cart"/></a></li>
+        </c:if>
         <c:if test="${sessionScope.user == null}">
             <li><a href="controller?command=login_form"><fmt:message key="login"/></a></li>
             <li><a href="controller?command=register_form"><fmt:message key="register"/></a></li>
@@ -27,6 +29,7 @@
         <c:if test="${sessionScope.user.role.toString() == 'ADMIN'}">
             <li><a href="controller?command=users"><fmt:message key="users"/></a></li>
             <li><a href="controller?command=add_user_form"><fmt:message key="add.user"/></a></li>
+            <li><a href="controller?command=orders&page=1"><fmt:message key="orders"/></a></li>
         </c:if>
         <c:if test="${sessionScope.user.role.toString() == 'MANAGER'}">
             <li><a href="controller?command=add_book_form"><fmt:message key="add.book"/></a></li>

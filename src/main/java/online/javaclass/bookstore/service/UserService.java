@@ -7,8 +7,6 @@ import java.util.List;
 
 public interface UserService extends AbstractService<Long, UserDto> {
 
-    List<UserDto> getByLastName(String lastname);
-
     List<UserDto> getByLastName(String lastname, PageableDto pageable);
 
     Long count();

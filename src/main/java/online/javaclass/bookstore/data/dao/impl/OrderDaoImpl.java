@@ -30,20 +30,13 @@ public class OrderDaoImpl implements OrderDao {
             "JOIN payment_method pm on o.payment_method_id = pm.id " +
             "JOIN payment_status ps on o.payment_status_id = ps.id " +
             "WHERE o.user_id = ? ORDER BY o.id";
-    private static final String FIND_ALL_ORDERS = "SELECT o.id, o.user_id, os.name AS status, " +
-            "pm.name AS payment_method, ps.name AS payment_status, dt.name AS delivery_type, cost FROM orders o " +
-            "JOIN order_status os ON o.status_id = os.id " +
-            "JOIN delivery_type dt on dt.id = o.delivery_type_id " +
-            "JOIN payment_method pm on o.payment_method_id = pm.id " +
-            "JOIN payment_status ps on o.payment_status_id = ps.id ";
-
     private static final String FIND_ALL_ORDERS_PAGED = "SELECT o.id, o.user_id, os.name AS status, " +
             "pm.name AS payment_method, ps.name AS payment_status, dt.name AS delivery_type, cost FROM orders o " +
             "JOIN order_status os ON o.status_id = os.id " +
             "JOIN delivery_type dt on dt.id = o.delivery_type_id " +
             "JOIN payment_method pm on o.payment_method_id = pm.id " +
             "JOIN payment_status ps on o.payment_status_id = ps.id " +
-            "LIMIT ? OFFSET ?";
+            "ORDER BY o.id LIMIT ? OFFSET ?";
     private static final String CREATE_ORDER = "INSERT INTO orders (user_id, status_id, payment_method_id, payment_status_id," +
             "delivery_type_id, cost) VALUES (?, " +
             "(SELECT os.id FROM order_status os WHERE os.name = ?), " +
@@ -106,17 +99,6 @@ public class OrderDaoImpl implements OrderDao {
         } catch (SQLException e) {
             log.error(e.getMessage() + e);
             throw new AppException(messageManager.getMessage("count_failed"));
-        }
-    }
-
-    @Override
-    public List<OrderDto> getAll() {
-        try (Connection connection = dataBaseManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement(FIND_ALL_ORDERS)) {
-            return createOrderList(statement);
-        } catch (SQLException e) {
-            log.error(e.getMessage() + e);
-            throw new UnableToFindException(messageManager.getMessage("orders.unable_to_find"));
         }
     }
 

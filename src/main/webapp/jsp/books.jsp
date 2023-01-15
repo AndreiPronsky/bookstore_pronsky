@@ -35,6 +35,7 @@
             <a href="controller?command=books&page=${requestScope.total_pages}"><fmt:message key="last"/></a>
         </c:if>
     </div>
+</c:if>
     <table>
         <caption><fmt:message key="books"/></caption>
         <thead>
@@ -69,7 +70,7 @@
                     <c:if test="${sessionScope.user.role.toString() == 'MANAGER'}">
                         <a href="controller?command=edit_book_form&id=${book.id}"><fmt:message key="edit_book"/></a>
                     </c:if>
-                    <c:if test="${sessionScope.user.role.toString() != 'MANAGER'}">
+                    <c:if test="${sessionScope.user.role.toString() == 'USER' || sessionScope.user == null}">
                     <a href="controller?command=add_to_cart&id=${book.id}&page=${requestScope.page}">
                         <img height="30" src="css/serviceImages/cart.png" alt=<fmt:message key="add_to_cart"/>></a>
                 </c:if>
@@ -78,6 +79,5 @@
         </c:forEach>
         </tbody>
     </table>
-</c:if>
 </body>
 </html>
