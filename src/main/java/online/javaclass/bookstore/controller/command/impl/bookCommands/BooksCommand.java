@@ -10,12 +10,22 @@ import online.javaclass.bookstore.service.dto.BookDto;
 import online.javaclass.bookstore.service.dto.PageableDto;
 
 import java.util.List;
-
+/**
+ * The command is used to set books as attribute of HttpServletRequest for further creation of book catalogue
+ * page on clients side.
+ * @author Andrei Pronsky
+ *  * {@link Command}  invokes method execute() with the request , response  and return jsp
+ */
 @Log4j2
 @RequiredArgsConstructor
 public class BooksCommand implements Command {
     private final BookService bookService;
-
+    /**
+     * Takes input parameters from the HttpServletRequest, and sends it to service layer to get all existing books
+     * meeting the requirements of number of current page in the catalogue.
+     * @param req - request from client to get page information for pagination.
+     * @return jsp page with pre-set books according to a page size and page number
+     */
     @Override
     public String execute(HttpServletRequest req) {
         List<BookDto> books;
