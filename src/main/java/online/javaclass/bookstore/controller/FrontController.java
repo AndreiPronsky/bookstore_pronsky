@@ -24,8 +24,7 @@ import java.util.List;
 public class FrontController extends HttpServlet {
 
     public static final String REDIRECT = "REDIRECT:";
-    private static final String DEFAULT_CLIENT_MESSAGE = "Ooops... Something went wrong";
-    private static final String DEFAULT_SERVER_MESSAGE = "We are already working on the problem, we will soon solve this issue!";
+    private final MessageManager messageManager = MessageManager.INSTANCE;
 
     @Override
     public void init() {
@@ -95,11 +94,11 @@ public class FrontController extends HttpServlet {
             req.setAttribute("message", message);
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         } else if (e instanceof NumberFormatException) {
-            message = DEFAULT_CLIENT_MESSAGE;
+            message = messageManager.getMessage("error.default_client");
             req.setAttribute("message", message);
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         } else {
-            message = DEFAULT_SERVER_MESSAGE;
+            message = messageManager.getMessage("error.default_server");
             req.setAttribute("message", message);
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
