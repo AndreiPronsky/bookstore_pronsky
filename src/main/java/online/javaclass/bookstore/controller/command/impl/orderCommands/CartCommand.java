@@ -12,7 +12,7 @@ public class CartCommand implements Command {
     public String execute(HttpServletRequest req) {
         HttpSession session = req.getSession();
         if (session.getAttribute("cart") == null) {
-            return "jsp/cart.jsp";
+            return "jsp/confirm_order.jsp";
         }
         if (session.getAttribute("user") == null) {
             return "jsp/login.jsp";

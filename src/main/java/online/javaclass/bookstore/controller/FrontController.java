@@ -1,6 +1,7 @@
 package online.javaclass.bookstore.controller;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,6 +20,7 @@ import java.util.List;
 
 @Log4j2
 @WebServlet("/controller")
+@MultipartConfig(maxFileSize = 1024 * 1024 * 10)
 public class FrontController extends HttpServlet {
 
     public static final String REDIRECT = "REDIRECT:";
