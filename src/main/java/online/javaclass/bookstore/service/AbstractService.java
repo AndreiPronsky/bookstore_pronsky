@@ -1,6 +1,5 @@
 package online.javaclass.bookstore.service;
 
-import online.javaclass.bookstore.exceptions.ValidationException;
 import online.javaclass.bookstore.service.dto.PageableDto;
 
 import java.util.List;
@@ -10,9 +9,9 @@ public interface AbstractService<K, T> {
 
     List<T> getAll(PageableDto pageable);
 
-    T create(T entity) throws ValidationException;
+    T create(T entity);
 
-    T update(T entity) throws ValidationException;
+    T update(T entity);
 
     void deleteById(K id);
 
