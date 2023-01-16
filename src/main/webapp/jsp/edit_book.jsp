@@ -13,7 +13,7 @@
 <body>
 <jsp:include page="navbar.jsp"/>
 <h1><fmt:message key="edit_book"/></h1>
-<form action="controller?command=edit_book" method="post">
+<form action="controller?command=edit_book&id=${requestScope.book.id}" method="post">
     <ul class="wrapper">
         <li class="form-row">
             <label><fmt:message key="id"/>

@@ -6,23 +6,26 @@
 </c:if>
 <fmt:setBundle basename="messages"/>
 <html>
-    <head>
-        <title><fmt:message key="book"/></title>
-        <link rel="stylesheet" href="css/style.css">
-    </head>
-    <body>
-    <jsp:include page="navbar.jsp"/>
-        <header></header>
-        <article>
-         <h1><fmt:message key="book"/> : </h1>
-         <h3><fmt:message key="id"/> : </h3>
-         <p><c:out value="${requestScope.book.id}"/></p>
-         <h3><fmt:message key="author"/> : </h3>
-         <p><c:out value="${requestScope.book.author}"/></p>
-         <h3><fmt:message key="title"/> : </h3>
-         <p><c:out value="${requestScope.book.title}"/></p>
-            <p><a href="controller?command=add_to_cart&id=${requestScope.book.id}"><fmt:message key="add_to_cart"/></a></p>
-        </article>
-        <footer></footer>
-     </body>
- </html>
+<head>
+    <title><fmt:message key="book"/></title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<jsp:include page="navbar.jsp"/>
+<header></header>
+<article>
+    <h1><fmt:message key="book"/> : </h1>
+    <h3><fmt:message key="id"/> : </h3>
+    <p><c:out value="${requestScope.book.id}"/></p>
+    <h3><fmt:message key="author"/> : </h3>
+    <p><c:out value="${requestScope.book.author}"/></p>
+    <h3><fmt:message key="title"/> : </h3>
+    <p><c:out value="${requestScope.book.title}"/></p>
+    <c:if test="${sessionScope.user.role == null || sessionScope.user.role == 'USER'}">
+        <p><a href="controller?command=add_to_cart&id=${requestScope.book.id}">
+            <fmt:message key="add_to_cart"/></a></p>
+    </c:if>
+</article>
+<footer></footer>
+</body>
+</html>
