@@ -14,7 +14,6 @@ import online.javaclass.bookstore.service.dto.BookDto;
  * The command is used to create a new book
  *
  * @author Andrei Pronsky
- * {@link Command}  invokes method execute() with the request , response  and returns jsp
  */
 @Log4j2
 @RequiredArgsConstructor

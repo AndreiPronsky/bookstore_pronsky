@@ -14,7 +14,6 @@ import java.util.List;
  * The command is used to set books as attribute of HttpServletRequest for further creation of book catalogue
  * page on clients side.
  * @author Andrei Pronsky
- *  * {@link Command}  invokes method execute() with the request , response  and return jsp
  */
 @Log4j2
 @RequiredArgsConstructor

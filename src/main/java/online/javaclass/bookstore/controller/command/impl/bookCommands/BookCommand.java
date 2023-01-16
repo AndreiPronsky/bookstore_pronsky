@@ -9,7 +9,6 @@ import online.javaclass.bookstore.service.dto.BookDto;
 /**
  * The command is used to set book parameters to HttpServletRequest for further creation of book page on clients side
  * @author Andrei Pronsky
- *  * {@link Command}  invokes method execute() with the request , response  and return jsp
  */
 @Log4j2
 @RequiredArgsConstructor
