@@ -36,7 +36,7 @@ public class BookServiceImpl implements BookService {
      * Takes input parameters from data transfer object, maps it to entity and invokes a create method of a repository
      * layer.
      *
-     * @param bookDto is a data transfer object.
+     * @param bookDto is a data transfer object got from client side to be created.
      * @return Object returned from repository layer mapped to data transfer object.
      */
     @Override
@@ -119,7 +119,8 @@ public class BookServiceImpl implements BookService {
     }
 
     /**
-     * Takes input parameter and invokes getByAuthor method of a repository layer.
+     * Takes input parameter and invokes getByAuthor method of a repository layer using extracted from
+     * PageableDto object values of limit and offset.
      *
      * @param author String value of complete value of a book author.
      * @param pageable PageableDto object containing information about the current page size and page number
@@ -141,7 +142,8 @@ public class BookServiceImpl implements BookService {
     }
 
     /**
-     * Takes input parameter and invokes getAll method of a repository layer.
+     * Invokes getAll method of a repository layer using extracted from
+     * PageableDto object values of limit and offset.
      *
      * @param pageable PageableDto object containing information about the current page size and page number
      *                on client side.
