@@ -1,6 +1,7 @@
 package online.javaclass.bookstore.controller.command.impl.bookCommands;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.log4j.Log4j2;
 import online.javaclass.bookstore.controller.command.Command;
 /**
@@ -11,6 +12,8 @@ import online.javaclass.bookstore.controller.command.Command;
 public class AddBookFormCommand implements Command {
     @Override
     public String execute(HttpServletRequest req) {
+        HttpSession session = req.getSession();
+        session.removeAttribute("validationMessages");
         return "jsp/add_book.jsp";
     }
 }

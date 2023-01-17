@@ -82,5 +82,12 @@
         </li>
     </ul>
 </form>
+<table>
+    <c:forEach items="${sessionScope.validationMessages}" var="message">
+        <tr>
+            <td><c:out value="${message}"/></td>
+        </tr>
+    </c:forEach>
+</table>
 </body>
 </html>

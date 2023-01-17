@@ -37,15 +37,16 @@ public class EditBookCommand implements Command {
         String page;
         HttpSession session = req.getSession();
         session.removeAttribute("validationMessages");
+        long id = Long.parseLong(req.getParameter("id"));
         try {
             BookDto book = commandUtils.setBookParameters(req);
-            book.setId(Long.parseLong(req.getParameter("id")));
+            book.setId(id);
             BookDto updatedBook = bookService.update(book);
             req.setAttribute("book", updatedBook);
             page = "controller?command=book&id=" + updatedBook.getId();
         } catch (ValidationException e) {
             session.setAttribute("validationMessages", e.getMessages());
-            page = "controller?command=edit_book_form";
+            page = "controller?command=edit_book_form&id=" + id;
         }
         return FrontController.REDIRECT + page;
     }
