@@ -1,9 +1,9 @@
 package online.javaclass.bookstore.service.dto;
 
 public class PageableDto {
-    private final int page;
+    private int page;
     private final int pageSize;
-    private final int offset;
+    private int offset;
 
     private Long totalItems;
 
@@ -12,7 +12,6 @@ public class PageableDto {
     public PageableDto(int page, int pageSize) {
         this.page = page;
         this.pageSize = pageSize;
-        this.offset = calculateOffset();
     }
 
     private int calculateOffset() {
@@ -32,7 +31,7 @@ public class PageableDto {
     }
 
     public int getOffset() {
-        return offset;
+        return calculateOffset();
     }
 
     public Long getTotalItems() {
@@ -49,5 +48,9 @@ public class PageableDto {
 
     public void setTotalPages(Long totalPages) {
         this.totalPages = totalPages;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
     }
 }
