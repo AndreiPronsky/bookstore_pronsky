@@ -25,12 +25,13 @@ public class EditOrderFormCommand implements Command {
     @Override
     public String execute(HttpServletRequest req) {
         HttpSession session = req.getSession();
-        if (session.getAttribute("user") == null ||
-                !((UserDto)session.getAttribute("user")).getRole().equals(UserDto.Role.ADMIN)) {
+        UserDto user = (UserDto) session.getAttribute("user");
+        OrderDto order = orderService.getById(Long.parseLong(req.getParameter("id")));
+        if (session.getAttribute("user") == null || notMatchingUserIgnoreAdmin(user, order)) {
+            return FrontController.REDIRECT + "index.jsp";
+        } else if (notAdminRole(user) && notOpenStatus(order)) {
             return FrontController.REDIRECT + "index.jsp";
         }
-        Long orderId = Long.parseLong(req.getParameter("id"));
-        OrderDto order = orderService.getById(orderId);
         Map<BookDto, Integer> itemMap = new HashMap<>();
         for (OrderItemDto item : order.getItems()) {
             BookDto book = bookService.getById(item.getBookId());
@@ -39,5 +40,17 @@ public class EditOrderFormCommand implements Command {
         session.setAttribute("items", itemMap);
         session.setAttribute("order", order);
         return "jsp/edit_order.jsp";
+    }
+
+    private boolean notMatchingUserIgnoreAdmin(UserDto user, OrderDto order) {
+        return (!(user.getId().equals(order.getUser().getId())) && !(user.getRole().equals(UserDto.Role.ADMIN)));
+    }
+
+    private boolean notAdminRole(UserDto user) {
+        return !user.getRole().equals(UserDto.Role.ADMIN);
+    }
+
+    private boolean notOpenStatus(OrderDto order) {
+        return !order.getOrderStatus().equals(OrderDto.OrderStatus.OPEN);
     }
 }

@@ -153,16 +153,19 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<BookDto> getAll(PageableDto pageable) {
         log.debug("get all books");
+        Long totalItems = bookRepo.count();
+        Long totalPages = PagingUtil.getTotalPages(totalItems, pageable);
+        pageable.setTotalItems(bookRepo.count());
+        pageable.setTotalPages(totalPages);
+        if (pageable.getPage() > totalPages) {
+            pageable.setPage(1);
+        }
         List<BookDto> books = bookRepo.getAll(pageable.getLimit(), pageable.getOffset()).stream()
                 .map(mapper::toDto)
                 .toList();
         if (books.isEmpty()) {
             throw new UnableToFindException(messageManager.getMessage("books.not_found"));
         } else {
-            Long totalItems = bookRepo.count();
-            Long totalPages = PagingUtil.getTotalPages(totalItems, pageable);
-            pageable.setTotalItems(bookRepo.count());
-            pageable.setTotalPages(totalPages);
             return books;
         }
     }

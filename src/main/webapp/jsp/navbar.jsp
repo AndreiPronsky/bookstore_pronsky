@@ -8,7 +8,7 @@
 <header class="header">
     <a href="controller?command=home">
         <div class="logo-image">
-            <img height="75" src="css/serviceImages/logo.png" class="img-fluid" alt="logo">
+            <img height="75" src="serviceImages/logo.png" class="img-fluid" alt="logo">
         </div>
     </a>
     <ul class="main-nav">
@@ -35,8 +35,8 @@
             <li><a href="controller?command=add_book_form"><fmt:message key="add.book"/></a></li>
         </c:if>
         <li><a href="controller?command=change_lang&lang=ru">
-            <img height="30" src="css/serviceImages/RU.png" alt="Русский"></a></li>
+            <img height="30" src="serviceImages/RU.png" alt="Русский"></a></li>
         <li><a href="controller?command=change_lang&lang=en">
-            <img height="30" src="css/serviceImages/UK.png" alt="English"></a></li>
+            <img height="30" src="serviceImages/UK.png" alt="English"></a></li>
     </ul>
 </header>

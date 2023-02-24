@@ -37,10 +37,10 @@ class UserServiceImplTest {
     private static final String NOT_EXISTING_LASTNAME = "Lastname";
     private static PageableDto pageableDto;
     private static EntityDtoMapperService mapper;
-    private static MessageManager messageManager = MessageManager.INSTANCE;
+    private static final MessageManager messageManager = MessageManager.INSTANCE;
     private static UserService userService;
     private static UserRepository userRepositoryMock;
-    private static DigestService digest = new DigestServiceImpl();
+    private static final DigestService digest = new DigestServiceImpl();
     private static User existingEntity;
     private static User anotherExistingEntity;
     private static User notExistingEntity;

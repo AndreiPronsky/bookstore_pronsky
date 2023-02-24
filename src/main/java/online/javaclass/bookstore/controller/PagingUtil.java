@@ -21,7 +21,11 @@ public class PagingUtil {
     }
 
     private static int getPage(HttpServletRequest req) {
-        return extractParameters(req, "page", DEFAULT_PAGE);
+        int page = extractParameters(req, "page", DEFAULT_PAGE);
+        if (page < 1) {
+            return DEFAULT_PAGE;
+        }
+        return page;
     }
 
     private static int getPageSize(HttpServletRequest req) {

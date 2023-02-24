@@ -25,6 +25,7 @@
             <th><fmt:message key="order"/></th>
             <th><fmt:message key="title"/> <fmt:message key="price"/> <fmt:message key="quantity"/></th>
             <th><fmt:message key="cost"/></th>
+            <th><fmt:message key="order_status"/></th>
             <th></th>
         </tr>
         </thead>
@@ -44,6 +45,7 @@
                     </c:forEach>
                 </td>
                 <td><c:out value="${order.key.cost}"/></td>
+                <td><c:out value="${order.key.orderStatus}"/></td>
                 <td>
                     <c:if test="${order.key.orderStatus == 'OPEN'}">
                         <a href="controller?command=edit_order_form&id=${order.key.id}">
