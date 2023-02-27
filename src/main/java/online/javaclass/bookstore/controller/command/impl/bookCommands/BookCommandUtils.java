@@ -5,19 +5,20 @@ import online.javaclass.bookstore.MessageManager;
 import online.javaclass.bookstore.exceptions.ValidationException;
 import online.javaclass.bookstore.service.dto.BookDto;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+@Component
 public class BookCommandUtils {
     private static final String AUTHOR_VALIDATION_REGEX = "^[\\w'\\-,.][^0-9_!¡?÷?¿\\/+=@#$%ˆ&*(){}|~<>;:]{2,}$";
     private static final String ISBN_VALIDATION_REGEX = "^(?=(?:\\D*\\d){10}(?:(?:\\D*\\d){3})?$)[\\d-]+$";
     private static final String TITLE_VALIDATION_REGEX = "^[A-Za-z0-9\\s\\-_,.:#;()'\"]+$";
     private static final String PUNCTUATION_MARKS_SEQUENCE = "[.,\\/#!$%^&*;:{}=_`~()-<>]{2,}";
-    MessageManager messageManager = MessageManager.INSTANCE;
+    MessageManager messageManager;
 
     BookDto setBookParameters(HttpServletRequest req) throws ValidationException {
         Map<String, String> params = validate(req);

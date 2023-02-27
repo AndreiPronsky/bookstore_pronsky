@@ -7,11 +7,13 @@ import online.javaclass.bookstore.controller.FrontController;
 import online.javaclass.bookstore.controller.command.Command;
 import online.javaclass.bookstore.service.BookService;
 import online.javaclass.bookstore.service.dto.BookDto;
+import org.springframework.stereotype.Controller;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @RequiredArgsConstructor
+@Controller("add_to_cart")
 public class AddToCartCommand implements Command {
 
     private final BookService bookService;

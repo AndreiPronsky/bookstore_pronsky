@@ -1,11 +1,13 @@
 package online.javaclass.bookstore.service.impl;
 
 import online.javaclass.bookstore.service.DigestService;
+import org.springframework.stereotype.Component;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+@Component
 public class DigestServiceImpl implements DigestService {
     @Override
     public String hashPassword(String originalPassword) {

@@ -2,7 +2,9 @@ package online.javaclass.bookstore.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import online.javaclass.bookstore.service.dto.PageableDto;
+import org.springframework.stereotype.Component;
 
+@Component
 public class PagingUtil {
 
     private static final int DEFAULT_PAGE = 1;

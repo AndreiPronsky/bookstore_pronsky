@@ -2,6 +2,9 @@ package online.javaclass.bookstore.data.connection;
 
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,13 +12,15 @@ import java.util.Properties;
 
 @Log4j2
 @Data
+@Component
 public class ConnectionPropertyManager {
     private final String url;
     private final String user;
     private final String password;
     private final String driver;
 
-    public ConnectionPropertyManager(String PATH_TO_PROPS) {
+    @Autowired
+    public ConnectionPropertyManager(@Value("/connection-config.properties") String PATH_TO_PROPS) {
         Properties properties = getProperties(PATH_TO_PROPS);
         driver = properties.getProperty("db.driver");
 

@@ -10,6 +10,7 @@ import online.javaclass.bookstore.service.UserService;
 import online.javaclass.bookstore.service.dto.OrderDto;
 import online.javaclass.bookstore.service.dto.PageableDto;
 import online.javaclass.bookstore.service.dto.UserDto;
+import org.springframework.stereotype.Controller;
 
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.Map;
 
 @Log4j2
 @RequiredArgsConstructor
+@Controller("orders")
 public class OrdersCommand implements Command {
     private final OrderService orderService;
     private final UserService userService;

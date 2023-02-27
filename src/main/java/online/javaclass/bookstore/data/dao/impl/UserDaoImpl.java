@@ -7,6 +7,7 @@ import online.javaclass.bookstore.data.connection.DataBaseManager;
 import online.javaclass.bookstore.data.dao.UserDao;
 import online.javaclass.bookstore.data.dto.UserDto;
 import online.javaclass.bookstore.exceptions.*;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @Log4j2
 @RequiredArgsConstructor
+@Repository
 public class UserDaoImpl implements UserDao {
     private static final String CREATE_USER = "INSERT INTO users (firstname, lastname, email, password, role_id, " +
             "rating) VALUES (?, ?, ?, ?, (SELECT r.id FROM roles r WHERE r.name = ?), ?)";
@@ -40,7 +42,7 @@ public class UserDaoImpl implements UserDao {
     private static final String COL_RATING = "rating";
 
     private final DataBaseManager dataBaseManager;
-    private final MessageManager messageManager = MessageManager.INSTANCE;
+    private final MessageManager messageManager;
 
     @Override
     public UserDto create(UserDto user) {

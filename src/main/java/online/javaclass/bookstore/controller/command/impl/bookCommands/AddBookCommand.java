@@ -9,12 +9,14 @@ import online.javaclass.bookstore.controller.command.Command;
 import online.javaclass.bookstore.exceptions.ValidationException;
 import online.javaclass.bookstore.service.BookService;
 import online.javaclass.bookstore.service.dto.BookDto;
+import org.springframework.stereotype.Controller;
 
 @Log4j2
 @RequiredArgsConstructor
+@Controller("add_book")
 public class AddBookCommand implements Command {
     private final BookService bookService;
-    private final BookCommandUtils commandUtils = new BookCommandUtils();
+    private final BookCommandUtils commandUtils;
 
     @Override
     public String execute(HttpServletRequest req) {

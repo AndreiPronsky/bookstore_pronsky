@@ -6,11 +6,13 @@ import online.javaclass.bookstore.data.dao.BookDao;
 import online.javaclass.bookstore.data.dto.BookDto;
 import online.javaclass.bookstore.data.entities.Book;
 import online.javaclass.bookstore.data.repository.BookRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
+@Repository
 public class BookRepositoryImpl implements BookRepository {
     private final BookDao bookDao;
     private final EntityDtoMapperData mapper;

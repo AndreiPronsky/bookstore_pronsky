@@ -1,14 +1,15 @@
 package online.javaclass.bookstore.service.impl;
 
 import online.javaclass.bookstore.service.dto.UserDto;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public enum RestrictedCommandList {
-    INSTANCE;
+@Component
+public class RestrictedCommandList {
 
-    private final Map<String, UserDto.Role> accessConfig = new HashMap<>();
+    private static final Map<String, UserDto.Role> accessConfig = new HashMap<>();
 
     RestrictedCommandList() {
         accessConfig.put("logout", UserDto.Role.USER);
@@ -26,31 +27,28 @@ public enum RestrictedCommandList {
         accessConfig.put("edit_order_admin", UserDto.Role.ADMIN);
     }
 
-    private UserDto.Role getRole(String command) {
+    private static UserDto.Role getRole(String command) {
         return accessConfig.get(command);
     }
 
-    public boolean isUserCommand(String command) {
+    public static boolean isUserCommand(String command) {
         return getRole(command) == UserDto.Role.USER;
     }
 
-    public boolean isAdminCommand(String command) {
+    public static boolean isAdminCommand(String command) {
         return getRole(command) == UserDto.Role.ADMIN;
     }
 
-    public boolean isManagerCommand(String command) {
+    public static boolean isManagerCommand(String command) {
         return getRole(command) == UserDto.Role.MANAGER;
     }
 
     public static boolean requiresAuthentication(String command) {
-        return (RestrictedCommandList.INSTANCE.isUserCommand(command)
-                || RestrictedCommandList.INSTANCE.isManagerCommand(command)
-                || RestrictedCommandList.INSTANCE.isAdminCommand(command));
+        return (isUserCommand(command) || isManagerCommand(command) || isAdminCommand(command));
     }
 
     public static boolean requiresAuthorisation(String command) {
-        return (RestrictedCommandList.INSTANCE.isAdminCommand(command)
-                || RestrictedCommandList.INSTANCE.isManagerCommand(command));
+        return (isAdminCommand(command) || isManagerCommand(command));
     }
 }
 

@@ -7,6 +7,8 @@ import online.javaclass.bookstore.data.connection.DataBaseManager;
 import online.javaclass.bookstore.data.dao.BookDao;
 import online.javaclass.bookstore.data.dto.BookDto;
 import online.javaclass.bookstore.exceptions.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -14,6 +16,7 @@ import java.util.List;
 
 @Log4j2
 @RequiredArgsConstructor
+@Repository
 public class BookDaoImpl implements BookDao {
 
     private static final String CREATE_BOOK = "INSERT INTO books (title, author, isbn, genre_id, cover_id, pages, price, rating) " +
@@ -57,7 +60,7 @@ public class BookDaoImpl implements BookDao {
     private static final String COL_PRICE = "price";
     private static final String COL_RATING = "rating";
     private final DataBaseManager dataBaseManager;
-    private final MessageManager messageManager = MessageManager.INSTANCE;
+    private final MessageManager messageManager;
 
     @Override
     public List<BookDto> search(String input) {

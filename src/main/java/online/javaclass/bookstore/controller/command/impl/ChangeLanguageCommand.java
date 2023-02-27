@@ -3,7 +3,9 @@ package online.javaclass.bookstore.controller.command.impl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import online.javaclass.bookstore.controller.command.Command;
+import org.springframework.stereotype.Controller;
 
+@Controller("change_lang")
 public class ChangeLanguageCommand implements Command {
     @Override
     public String execute(HttpServletRequest req) {

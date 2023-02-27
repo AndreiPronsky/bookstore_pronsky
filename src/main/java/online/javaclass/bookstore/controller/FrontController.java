@@ -7,18 +7,21 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.log4j.Log4j2;
+import online.javaclass.bookstore.AppContextListener;
 import online.javaclass.bookstore.MessageManager;
 import online.javaclass.bookstore.controller.command.Command;
-import online.javaclass.bookstore.controller.command.CommandFactory;
-import online.javaclass.bookstore.data.connection.DataBaseManager;
 import online.javaclass.bookstore.exceptions.AppException;
 import online.javaclass.bookstore.exceptions.ValidationException;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
 import java.util.List;
 
 @Log4j2
 @WebServlet("/controller")
+@Controller
+@Scope("prototype")
 public class FrontController extends HttpServlet {
 
     public static final String REDIRECT = "REDIRECT:";
@@ -32,7 +35,7 @@ public class FrontController extends HttpServlet {
 
     @Override
     public void destroy() {
-        DataBaseManager.INSTANCE.close();
+        //DataBaseManager.close();
         log.info("FRONT CONTROLLER DESTROYED");
     }
 
@@ -52,9 +55,9 @@ public class FrontController extends HttpServlet {
         if (session.getAttribute("lang") != null) {
             lang = (String)session.getAttribute("lang");
         }
-        MessageManager.INSTANCE.setLocale(lang);
+        MessageManager.setLocale(lang);
         String commandParameter = req.getParameter("command");
-        Command command = CommandFactory.INSTANCE.getCommand(commandParameter);
+        Command command = AppContextListener.getContext().getBean(commandParameter, Command.class);
         log.debug("Got command from factory " + commandParameter);
         String page;
         try {
@@ -79,7 +82,7 @@ public class FrontController extends HttpServlet {
 
     private String processError(HttpServletRequest req, HttpServletResponse resp, Exception e) {
         verifyErrorAndSetMessage(req, resp, e);
-        return CommandFactory.INSTANCE.getCommand("error").execute(req);
+        return AppContextListener.getContext().getBean("error", Command.class).execute(req);
     }
 
     private void verifyErrorAndSetMessage(HttpServletRequest req, HttpServletResponse resp, Exception e) {

@@ -10,12 +10,14 @@ import online.javaclass.bookstore.service.OrderService;
 import online.javaclass.bookstore.service.dto.BookDto;
 import online.javaclass.bookstore.service.dto.OrderDto;
 import online.javaclass.bookstore.service.dto.OrderItemDto;
+import org.springframework.stereotype.Controller;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Log4j2
 @RequiredArgsConstructor
+@Controller("edit_order_form")
 public class EditOrderFormCommand implements Command {
     private final OrderService orderService;
     private final BookService bookService;

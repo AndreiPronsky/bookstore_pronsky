@@ -8,11 +8,13 @@ import online.javaclass.bookstore.controller.command.Command;
 import online.javaclass.bookstore.service.UserService;
 import online.javaclass.bookstore.service.dto.PageableDto;
 import online.javaclass.bookstore.service.dto.UserDto;
+import org.springframework.stereotype.Controller;
 
 import java.util.List;
 
 @Log4j2
 @RequiredArgsConstructor
+@Controller("users")
 public class UsersCommand implements Command {
     private final UserService userService;
 

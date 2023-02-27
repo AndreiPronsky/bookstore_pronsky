@@ -10,12 +10,14 @@ import online.javaclass.bookstore.data.dto.OrderItemDto;
 import online.javaclass.bookstore.data.dto.UserDto;
 import online.javaclass.bookstore.data.entities.Order;
 import online.javaclass.bookstore.data.repository.OrderRepository;
+import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
+@Repository
 public class OrderRepositoryImpl implements OrderRepository {
     private final OrderDao orderDao;
     private final OrderItemDao orderItemDao;

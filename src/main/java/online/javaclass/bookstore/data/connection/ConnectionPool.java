@@ -1,6 +1,9 @@
 package online.javaclass.bookstore.data.connection;
 
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -14,12 +17,13 @@ import java.util.concurrent.LinkedBlockingDeque;
 public class ConnectionPool {
     private final BlockingDeque<ProxyConnection> freeConnections;
     private final Queue<ProxyConnection> givenAwayConnections;
-    public static final int POOL_SIZE = 4;
+    public static final int POOL_SIZE = 8;
 
     ConnectionPool(String driver, String url, String user, String password) {
 
         freeConnections = new LinkedBlockingDeque<>(POOL_SIZE);
         givenAwayConnections = new ArrayDeque<>();
+
         try {
             Class.forName(driver);
             log.info("DB driver loaded");
