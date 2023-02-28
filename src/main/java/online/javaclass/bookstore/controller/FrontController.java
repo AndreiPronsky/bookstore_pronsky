@@ -35,7 +35,6 @@ public class FrontController extends HttpServlet {
 
     @Override
     public void destroy() {
-        //DataBaseManager.close();
         log.info("FRONT CONTROLLER DESTROYED");
     }
 
