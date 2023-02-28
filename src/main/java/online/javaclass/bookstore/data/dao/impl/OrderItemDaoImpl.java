@@ -3,7 +3,7 @@ package online.javaclass.bookstore.data.dao.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import online.javaclass.bookstore.MessageManager;
-import online.javaclass.bookstore.data.connection.DataBaseManager;
+import online.javaclass.bookstore.data.dao.connection.DataSource;
 import online.javaclass.bookstore.data.dao.OrderItemDao;
 import online.javaclass.bookstore.data.dto.OrderItemDto;
 import online.javaclass.bookstore.exceptions.UnableToCreateException;
@@ -36,12 +36,12 @@ public class OrderItemDaoImpl implements OrderItemDao {
     private static final String COL_BOOK_ID = "book_id";
     private static final String COL_QUANTITY = "quantity";
     private static final String COL_PRICE = "price";
-    private final DataBaseManager dataBaseManager;
+    private final DataSource dataSource;
     private final MessageManager messageManager;
 
     @Override
     public List<OrderItemDto> getAllByOrderId(Long orderId) {
-        try (Connection connection = dataBaseManager.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_ITEMS_BY_ORDER_ID)) {
             statement.setLong(1, orderId);
             return createItemList(statement);
@@ -60,7 +60,7 @@ public class OrderItemDaoImpl implements OrderItemDao {
 
     @Override
     public OrderItemDto getById(Long id) {
-        try (Connection connection = dataBaseManager.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_ITEM_BY_ID)) {
             statement.setLong(1, id);
             return extractedFromStatement(statement);
@@ -73,7 +73,7 @@ public class OrderItemDaoImpl implements OrderItemDao {
     @Override
     public List<OrderItemDto> getAll(int limit, int offset) {
         List<OrderItemDto> orderItems = new ArrayList<>();
-        try (Connection connection = dataBaseManager.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_ALL_PAGED)) {
             statement.setInt(1, limit);
             statement.setInt(2, offset);
@@ -88,7 +88,7 @@ public class OrderItemDaoImpl implements OrderItemDao {
 
     @Override
     public OrderItemDto create(OrderItemDto item) {
-        try (Connection connection = dataBaseManager.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(CREATE_ITEM, Statement.RETURN_GENERATED_KEYS)) {
             prepareStatementForCreate(item, statement);
             statement.executeUpdate();
@@ -107,7 +107,7 @@ public class OrderItemDaoImpl implements OrderItemDao {
 
     @Override
     public OrderItemDto update(OrderItemDto item) {
-        try (Connection connection = dataBaseManager.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(UPDATE_ITEM)) {
             prepareStatementForUpdate(item, statement);
             statement.executeUpdate();
@@ -122,7 +122,7 @@ public class OrderItemDaoImpl implements OrderItemDao {
 
     @Override
     public boolean deleteById(Long id) {
-        try (Connection connection = dataBaseManager.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(DELETE_ITEM_BY_ID)) {
             statement.setLong(1, id);
             int affectedRows = statement.executeUpdate();

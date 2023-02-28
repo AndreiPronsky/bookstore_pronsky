@@ -3,7 +3,7 @@ package online.javaclass.bookstore.data.dao.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import online.javaclass.bookstore.MessageManager;
-import online.javaclass.bookstore.data.connection.DataBaseManager;
+import online.javaclass.bookstore.data.dao.connection.DataSource;
 import online.javaclass.bookstore.data.dao.OrderDao;
 import online.javaclass.bookstore.data.dto.OrderDto;
 import online.javaclass.bookstore.exceptions.*;
@@ -59,12 +59,12 @@ public class OrderDaoImpl implements OrderDao {
     private static final String COL_USER_ID = "user_id";
     private static final String COL_ID = "id";
     private static final String COL_COST = "cost";
-    private final DataBaseManager dataBaseManager;
+    private final DataSource dataSource;
     private final MessageManager messageManager;
 
     @Override
     public List<OrderDto> getAllByUserId(Long userId) {
-        try (Connection connection = dataBaseManager.getConnection()) {
+        try (Connection connection = dataSource.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(FIND_ORDERS_BY_USER_ID);
             statement.setLong(1, userId);
             return createOrderList(statement);
@@ -76,7 +76,7 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public OrderDto getById(Long id) {
-        try (Connection connection = dataBaseManager.getConnection()) {
+        try (Connection connection = dataSource.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(FIND_ORDER_BY_ID);
             statement.setLong(1, id);
             return extractedFromStatement(statement);
@@ -89,7 +89,7 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public Long count() {
-        try (Connection connection = dataBaseManager.getConnection();
+        try (Connection connection = dataSource.getConnection();
              Statement statement = connection.createStatement()) {
             ResultSet result = statement.executeQuery(COUNT_ORDERS);
             log.debug("DB query completed");
@@ -106,7 +106,7 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public List<OrderDto> getAll(int limit, int offset) {
-        try (Connection connection = dataBaseManager.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_ALL_ORDERS_PAGED)) {
             statement.setInt(1, limit);
             statement.setInt(2, offset);
@@ -119,7 +119,7 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public OrderDto create(OrderDto order) {
-        try (Connection connection = dataBaseManager.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(CREATE_ORDER, Statement.RETURN_GENERATED_KEYS)) {
             prepareStatementForCreate(order, statement);
             statement.executeUpdate();
@@ -138,7 +138,7 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public OrderDto update(OrderDto order) {
-        try (Connection connection = dataBaseManager.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(UPDATE_ORDER)) {
             prepareStatementForUpdate(order, statement);
             statement.executeUpdate();
@@ -152,7 +152,7 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public boolean deleteById(Long id) {
-        try (Connection connection = dataBaseManager.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(DELETE_ORDER_BY_ID)) {
             statement.setLong(1, id);
             int affectedRows = statement.executeUpdate();

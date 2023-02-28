@@ -1,22 +1,20 @@
-package online.javaclass.bookstore.data.connection;
+package online.javaclass.bookstore.data.dao.connection;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import java.sql.Connection;
 
 @Log4j2
 @Component
-public class DataBaseManager implements AutoCloseable {
+public class DataSource implements AutoCloseable {
     private final String driver;
     private final String url;
     private final String user;
     private final String password;
     private ConnectionPool pool;
 
-       private DataBaseManager(ConnectionPropertyManager propertyManager) {
+       private DataSource(ConnectionPropertyManager propertyManager) {
         driver = propertyManager.getDriver();
         url = propertyManager.getUrl();
         user = propertyManager.getUser();

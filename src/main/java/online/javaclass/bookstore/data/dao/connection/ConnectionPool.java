@@ -1,9 +1,6 @@
-package online.javaclass.bookstore.data.connection;
+package online.javaclass.bookstore.data.dao.connection;
 
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

@@ -1,4 +1,4 @@
-package online.javaclass.bookstore.data.connection;
+package online.javaclass.bookstore.data.dao.connection;
 
 import java.sql.*;
 import java.util.Map;

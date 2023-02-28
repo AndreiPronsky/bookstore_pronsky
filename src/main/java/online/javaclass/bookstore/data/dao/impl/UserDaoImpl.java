@@ -3,7 +3,7 @@ package online.javaclass.bookstore.data.dao.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import online.javaclass.bookstore.MessageManager;
-import online.javaclass.bookstore.data.connection.DataBaseManager;
+import online.javaclass.bookstore.data.dao.connection.DataSource;
 import online.javaclass.bookstore.data.dao.UserDao;
 import online.javaclass.bookstore.data.dto.UserDto;
 import online.javaclass.bookstore.exceptions.*;
@@ -41,12 +41,12 @@ public class UserDaoImpl implements UserDao {
     private static final String COL_ROLE = "role";
     private static final String COL_RATING = "rating";
 
-    private final DataBaseManager dataBaseManager;
+    private final DataSource dataSource;
     private final MessageManager messageManager;
 
     @Override
     public UserDto create(UserDto user) {
-        try (Connection connection = dataBaseManager.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(CREATE_USER, Statement.RETURN_GENERATED_KEYS)) {
             prepareStatementForCreate(user, statement);
             statement.executeUpdate();
@@ -68,7 +68,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public UserDto update(UserDto user) {
-        try (Connection connection = dataBaseManager.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(UPDATE_USER)) {
             prepareStatementForUpdate(user, statement);
             statement.executeUpdate();
@@ -82,7 +82,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public UserDto getById(Long id) {
-        try (Connection connection = dataBaseManager.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_USER_BY_ID)) {
             statement.setLong(1, id);
             return extractedFromStatement(statement);
@@ -94,7 +94,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public UserDto getByEmail(String email) {
-        try (Connection connection = dataBaseManager.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_USER_BY_EMAIL)) {
             statement.setString(1, email);
             return extractedFromStatement(statement);
@@ -106,7 +106,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public List<UserDto> getByLastName(String lastName, int limit, int offset) {
-        try (Connection connection = dataBaseManager.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_USERS_BY_LASTNAME_PAGED)) {
             statement.setString(1, lastName);
             statement.setInt(2, limit);
@@ -120,7 +120,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public List<UserDto> getAll(int limit, int offset) {
-        try (Connection connection = dataBaseManager.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_ALL_USERS_PAGED)) {
             statement.setInt(1, limit);
             statement.setInt(2, offset);
@@ -133,7 +133,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public boolean deleteById(Long id) {
-        try (Connection connection = dataBaseManager.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(DELETE_USER_BY_ID)) {
             statement.setLong(1, id);
             int affectedRows = statement.executeUpdate();
@@ -147,7 +147,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Long count() {
-        try (Connection connection = dataBaseManager.getConnection();
+        try (Connection connection = dataSource.getConnection();
              Statement statement = connection.createStatement()) {
             ResultSet result = statement.executeQuery(COUNT_USERS);
             log.debug("DB query completed");
