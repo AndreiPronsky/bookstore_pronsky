@@ -16,7 +16,7 @@
 <jsp:include page="searchbar.jsp"/>
 <header></header>
 <c:if test="${requestScope.books.isEmpty()}">
-    <h2><fmt:message key="no_books_found"/></h2>
+    <h2><fmt:message key="books.not_found"/></h2>
 </c:if>
 <c:if test="${!requestScope.books.isEmpty()}">
     <div class="paging">
@@ -52,7 +52,7 @@
         <c:forEach items="${requestScope.books}" var="book">
             <tr>
                 <td>
-                    <img height="100" src="css/coverImages/${book.id}.png" alt="book-image">
+                    <img height="100" src="coverImages/${book.id}.png" alt="book-image">
                 </td>
                 <td>
                     <h5><c:out value="${book.author}"/></h5>
@@ -72,7 +72,7 @@
                     </c:if>
                     <c:if test="${sessionScope.user.role.toString() == 'USER' || sessionScope.user == null}">
                     <a href="controller?command=add_to_cart&id=${book.id}&page=${requestScope.page}">
-                        <img height="30" src="css/serviceImages/cart.png" alt=<fmt:message key="add_to_cart"/>></a>
+                        <img height="30" src="serviceImages/cart.png" alt=<fmt:message key="add_to_cart"/>></a>
                 </c:if>
                 </td>
             </tr>

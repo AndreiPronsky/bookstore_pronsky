@@ -109,6 +109,9 @@ public class BookDaoImpl implements BookDao {
             return book;
         } catch (SQLException e) {
             log.error(e.getMessage() + e);
+            if (e.getMessage().startsWith("ERROR: duplicate key value violates unique constraint")) {
+                throw new UnableToCreateException(messageManager.getMessage("error.isbn_in_use"));
+            }
             throw new UnableToCreateException(messageManager.getMessage("book.unable_to_create"));
         }
     }

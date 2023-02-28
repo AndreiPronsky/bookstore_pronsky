@@ -40,12 +40,6 @@ public class UserCommandUtils {
         if (req.getParameter("password") == null || (req.getParameter("password").length() < 8)) {
             messages.add(messageManager.getMessage("error.invalid_password"));
         }
-        if (BigDecimal.valueOf(Double.parseDouble(req.getParameter("rating")))
-                .compareTo(BigDecimal.ZERO) < 0 ||
-                BigDecimal.valueOf(Double.parseDouble(req.getParameter("rating")))
-                        .compareTo(BigDecimal.valueOf(5)) > 0) {
-            messages.add(messageManager.getMessage("error.invalid rating"));
-        }
         if (!messages.isEmpty()) {
             throw new ValidationException(messages);
         }

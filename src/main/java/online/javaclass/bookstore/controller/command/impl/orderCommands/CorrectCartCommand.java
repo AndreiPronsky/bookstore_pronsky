@@ -1,6 +1,7 @@
 package online.javaclass.bookstore.controller.command.impl.orderCommands;
 
 import jakarta.servlet.http.HttpServletRequest;
+import online.javaclass.bookstore.controller.FrontController;
 import online.javaclass.bookstore.controller.command.Command;
 import org.springframework.stereotype.Controller;
 
@@ -10,6 +11,6 @@ public class CorrectCartCommand implements Command {
     public String execute(HttpServletRequest req) {
         String attributeName = "cart";
         OrderCommandUtils.correctItemQuantity(req, attributeName);
-        return "jsp/confirm_order.jsp";
+        return FrontController.REDIRECT + "controller?command=cart";
     }
 }

@@ -16,12 +16,12 @@ ul {
 }
 
 h2,
-h3,
-a {
+h3 {
     color: #34495e;
 }
 
 a {
+    color: #34495e;
     text-decoration: none;
 }
 
@@ -105,6 +105,6 @@ a {
 }
 
 td {
-    border: #34495e solid 2px;
+    border: #34495e solid 1px;
     align-items: center;
 }

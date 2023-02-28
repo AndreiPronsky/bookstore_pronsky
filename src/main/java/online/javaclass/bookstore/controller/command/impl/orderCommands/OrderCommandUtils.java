@@ -59,7 +59,7 @@ public class OrderCommandUtils {
             Long itemId = item.getKey().getId();
             Integer quantity = item.getValue();
             if (itemId == id) {
-                if (action.equals("dec")) {
+                if (action.equals("dec") && quantity > 1) {
                     items.put(item.getKey(), quantity - 1);
                     break;
                 }
