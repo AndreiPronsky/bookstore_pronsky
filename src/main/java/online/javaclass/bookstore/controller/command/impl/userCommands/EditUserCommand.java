@@ -6,14 +6,16 @@ import lombok.extern.log4j.Log4j2;
 import online.javaclass.bookstore.controller.command.Command;
 import online.javaclass.bookstore.service.UserService;
 import online.javaclass.bookstore.service.dto.UserDto;
+import org.springframework.stereotype.Controller;
 
 import java.math.BigDecimal;
 
 @Log4j2
 @RequiredArgsConstructor
+@Controller("edit_user")
 public class EditUserCommand implements Command {
     private final UserService userService;
-    private static UserCommandUtils userCommandUtils = new UserCommandUtils();
+    private final UserCommandUtils userCommandUtils;
 
     @Override
     public String execute(HttpServletRequest req) {

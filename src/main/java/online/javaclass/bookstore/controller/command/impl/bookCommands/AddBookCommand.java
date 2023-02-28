@@ -12,6 +12,7 @@ import online.javaclass.bookstore.controller.command.Command;
 import online.javaclass.bookstore.exceptions.ValidationException;
 import online.javaclass.bookstore.service.BookService;
 import online.javaclass.bookstore.service.dto.BookDto;
+import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
 
@@ -22,12 +23,13 @@ import java.io.IOException;
  */
 @Log4j2
 @RequiredArgsConstructor
+@Controller("add_book")
 @MultipartConfig(maxFileSize = 1024 * 1024 * 10)
 public class AddBookCommand implements Command {
     private static final String COVER_UPLOAD_DIR =
             "C:\\Repository\\bookstore\\bookstore_pronsky\\src\\main\\webapp\\css\\coverImages\\";
     private final BookService bookService;
-    private final BookCommandUtils commandUtils = new BookCommandUtils();
+    private final BookCommandUtils commandUtils;
 
     /**
      * Takes input parameters from the HttpServletRequest, and sends it to service layer if validation is passed.

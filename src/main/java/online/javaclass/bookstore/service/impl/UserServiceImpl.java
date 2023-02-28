@@ -14,24 +14,26 @@ import online.javaclass.bookstore.service.EntityDtoMapperService;
 import online.javaclass.bookstore.service.UserService;
 import online.javaclass.bookstore.service.dto.PageableDto;
 import online.javaclass.bookstore.service.dto.UserDto;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 
 @Log4j2
 @RequiredArgsConstructor
+@Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepo;
     private final EntityDtoMapperService mapper;
     DigestService digest = new DigestServiceImpl();
-    MessageManager messageManager = MessageManager.INSTANCE;
+    private final MessageManager messageManager;
 
     @Override
     public UserDto login(String email, String password) {
         User user = userRepo.getByEmail(email);
         if (user == null || !user.getPassword().equals((digest.hashPassword(password)))) {
-            throw new LoginException("Wrong email or password!");
+            throw new LoginException(messageManager.getMessage("error.wrong_email_or_password"));
         }
         return mapper.toDto(user);
     }

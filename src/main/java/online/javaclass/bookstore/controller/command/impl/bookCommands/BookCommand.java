@@ -6,12 +6,16 @@ import lombok.extern.log4j.Log4j2;
 import online.javaclass.bookstore.controller.command.Command;
 import online.javaclass.bookstore.service.BookService;
 import online.javaclass.bookstore.service.dto.BookDto;
+import org.springframework.stereotype.Controller;
+
 /**
  * The command is used to set book parameters to HttpServletRequest for further creation of book page on clients side
  * @author Andrei Pronsky
  */
+
 @Log4j2
 @RequiredArgsConstructor
+@Controller("book")
 public class BookCommand implements Command {
     private final BookService bookService;
     /**

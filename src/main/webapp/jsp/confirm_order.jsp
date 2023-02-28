@@ -27,7 +27,7 @@
                     <td><c:out value="${cartItem.key.price}"/></td>
                     <td>
                         <label><fmt:message key="quantity"/>
-                        <a href="controller?command=corr_cart&action=dec&id=${cartItem.key.id }">-</a>
+                            <a href="controller?command=corr_cart&action=dec&id=${cartItem.key.id }">-</a>
                             <input type="number" name="quantity" step="1" min="0" value="${cartItem.value}">
                         </label>
                         <a href="controller?command=corr_cart&action=inc&id=${cartItem.key.id }">+</a>

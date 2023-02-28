@@ -9,6 +9,7 @@ import online.javaclass.bookstore.controller.command.Command;
 import online.javaclass.bookstore.exceptions.ValidationException;
 import online.javaclass.bookstore.service.BookService;
 import online.javaclass.bookstore.service.dto.BookDto;
+import org.springframework.stereotype.Controller;
 
 /**
  * The command is used to edit existing book
@@ -17,9 +18,10 @@ import online.javaclass.bookstore.service.dto.BookDto;
  */
 @Log4j2
 @RequiredArgsConstructor
+@Controller("edit_book")
 public class EditBookCommand implements Command {
     private final BookService bookService;
-    private final BookCommandUtils commandUtils = new BookCommandUtils();
+    private final BookCommandUtils commandUtils;
 
     /**
      * Takes input parameters from the HttpServletRequest, and sends it to service layer if validation is passed.

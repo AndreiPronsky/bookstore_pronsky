@@ -5,8 +5,10 @@ import lombok.RequiredArgsConstructor;
 import online.javaclass.bookstore.controller.command.Command;
 import online.javaclass.bookstore.service.OrderService;
 import online.javaclass.bookstore.service.dto.OrderDto;
+import org.springframework.stereotype.Controller;
 
 @RequiredArgsConstructor
+@Controller("search_orders")
 public class SearchOrdersCommand implements Command {
     private final OrderService orderService;
 

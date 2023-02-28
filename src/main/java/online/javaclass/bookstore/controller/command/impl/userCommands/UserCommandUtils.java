@@ -4,15 +4,16 @@ import jakarta.servlet.http.HttpServletRequest;
 import online.javaclass.bookstore.MessageManager;
 import online.javaclass.bookstore.exceptions.ValidationException;
 import online.javaclass.bookstore.service.dto.UserDto;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-
+@Component
 public class UserCommandUtils {
 
     public static final String VALID_EMAIL_REGEX = "^[\\w\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
-    MessageManager messageManager = MessageManager.INSTANCE;
+    MessageManager messageManager;
     UserDto setUserParameters(HttpServletRequest req, UserDto.Role role, BigDecimal rating) throws ValidationException {
         validate(req);
         UserDto user = new UserDto();

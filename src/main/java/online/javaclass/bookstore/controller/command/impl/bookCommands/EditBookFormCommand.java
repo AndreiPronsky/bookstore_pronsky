@@ -6,12 +6,16 @@ import lombok.extern.log4j.Log4j2;
 import online.javaclass.bookstore.controller.command.Command;
 import online.javaclass.bookstore.service.BookService;
 import online.javaclass.bookstore.service.dto.BookDto;
+import org.springframework.stereotype.Controller;
+
 /**
  * The command is used just to redirect user to form for editing existing book
  * @author Andrei Pronsky
  */
+
 @Log4j2
 @RequiredArgsConstructor
+@Controller("edit_book_form")
 public class EditBookFormCommand implements Command {
     private final BookService bookService;
     /**

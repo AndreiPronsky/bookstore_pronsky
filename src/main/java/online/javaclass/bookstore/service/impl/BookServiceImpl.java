@@ -12,16 +12,18 @@ import online.javaclass.bookstore.service.BookService;
 import online.javaclass.bookstore.service.EntityDtoMapperService;
 import online.javaclass.bookstore.service.dto.BookDto;
 import online.javaclass.bookstore.service.dto.PageableDto;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @RequiredArgsConstructor
 @Log4j2
+@Service
 public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepo;
     private final EntityDtoMapperService mapper;
-    private final MessageManager messageManager = MessageManager.INSTANCE;
+    private final MessageManager messageManager;
 
     /**
      * Invokes count method of a repository layer

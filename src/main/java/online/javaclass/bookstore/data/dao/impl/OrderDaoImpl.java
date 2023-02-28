@@ -7,6 +7,7 @@ import online.javaclass.bookstore.data.connection.DataBaseManager;
 import online.javaclass.bookstore.data.dao.OrderDao;
 import online.javaclass.bookstore.data.dto.OrderDto;
 import online.javaclass.bookstore.exceptions.*;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @Log4j2
 @RequiredArgsConstructor
+@Repository
 public class OrderDaoImpl implements OrderDao {
     private static final String FIND_ORDER_BY_ID = "SELECT o.id, o.user_id, os.name AS status, " +
             "pm.name AS payment_method, ps.name AS payment_status, dt.name AS delivery_type, cost FROM orders o " +
@@ -58,7 +60,7 @@ public class OrderDaoImpl implements OrderDao {
     private static final String COL_ID = "id";
     private static final String COL_COST = "cost";
     private final DataBaseManager dataBaseManager;
-    private final MessageManager messageManager = MessageManager.INSTANCE;
+    private final MessageManager messageManager;
 
     @Override
     public List<OrderDto> getAllByUserId(Long userId) {

@@ -14,6 +14,7 @@ import online.javaclass.bookstore.service.OrderService;
 import online.javaclass.bookstore.service.dto.OrderDto;
 import online.javaclass.bookstore.service.dto.OrderItemDto;
 import online.javaclass.bookstore.service.dto.PageableDto;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -21,10 +22,11 @@ import java.util.List;
 
 @Log4j2
 @RequiredArgsConstructor
+@Service
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepo;
     private final EntityDtoMapperService mapper;
-    private final MessageManager messageManager = MessageManager.INSTANCE;
+    private final MessageManager messageManager;
 
     @Override
     public List<OrderDto> getOrdersByUserId(Long userId) {

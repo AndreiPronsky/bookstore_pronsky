@@ -10,6 +10,7 @@ import online.javaclass.bookstore.exceptions.UnableToCreateException;
 import online.javaclass.bookstore.exceptions.UnableToDeleteException;
 import online.javaclass.bookstore.exceptions.UnableToFindException;
 import online.javaclass.bookstore.exceptions.UnableToUpdateException;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Log4j2
+@Repository
 public class OrderItemDaoImpl implements OrderItemDao {
     private static final String FIND_ITEMS_BY_ORDER_ID = "SELECT id, order_id, book_id, quantity, price FROM order_items" +
             " WHERE order_id = ?";
@@ -35,7 +37,7 @@ public class OrderItemDaoImpl implements OrderItemDao {
     private static final String COL_QUANTITY = "quantity";
     private static final String COL_PRICE = "price";
     private final DataBaseManager dataBaseManager;
-    private final MessageManager messageManager = MessageManager.INSTANCE;
+    private final MessageManager messageManager;
 
     @Override
     public List<OrderItemDto> getAllByOrderId(Long orderId) {

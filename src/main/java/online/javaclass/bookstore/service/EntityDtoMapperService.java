@@ -8,7 +8,9 @@ import online.javaclass.bookstore.service.dto.UserDto;
 import online.javaclass.bookstore.data.entities.Book;
 import online.javaclass.bookstore.data.entities.Order;
 import online.javaclass.bookstore.data.entities.User;
+import org.springframework.stereotype.Component;
 
+@Component
 public class EntityDtoMapperService {
     public User toEntity(UserDto userDto) {
         if (userDto == null) {

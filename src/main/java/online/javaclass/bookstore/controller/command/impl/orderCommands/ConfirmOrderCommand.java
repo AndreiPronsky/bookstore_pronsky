@@ -6,8 +6,10 @@ import lombok.RequiredArgsConstructor;
 import online.javaclass.bookstore.controller.command.Command;
 import online.javaclass.bookstore.service.OrderService;
 import online.javaclass.bookstore.service.dto.OrderDto;
+import org.springframework.stereotype.Controller;
 
 @RequiredArgsConstructor
+@Controller("confirm_order")
 public class ConfirmOrderCommand implements Command {
     private final OrderService orderService;
 
