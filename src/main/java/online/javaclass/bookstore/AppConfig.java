@@ -18,7 +18,7 @@ public class AppConfig {
 
     @Value("${db.remote.url}")
     private String url;
-    @Value("${db.remote.username}")
+    @Value("${db.remote.user}")
     private String username;
     @Value("${db.remote.password}")
     private String password;

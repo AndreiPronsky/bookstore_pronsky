@@ -7,14 +7,14 @@ import java.sql.Connection;
 
 @Log4j2
 @Component
-public class DataSource implements AutoCloseable {
+public class DataBaseManager implements AutoCloseable {
     private final String driver;
     private final String url;
     private final String user;
     private final String password;
     private ConnectionPool pool;
 
-       private DataSource(ConnectionPropertyManager propertyManager) {
+       private DataBaseManager(ConnectionPropertyManager propertyManager) {
         driver = propertyManager.getDriver();
         url = propertyManager.getUrl();
         user = propertyManager.getUser();

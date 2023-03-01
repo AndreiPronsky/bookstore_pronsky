@@ -42,17 +42,17 @@ public class BookDaoImpl implements BookDao {
             "c.name AS cover, b.pages, b.price, b.rating FROM books b " +
             "JOIN genres g ON b.genre_id = g.id " +
             "JOIN covers c on b.cover_id = c.id " +
-            "ORDER BY b.id LIMIT ? OFFSET ? ";
+            "ORDER BY b.id LIMIT :limit OFFSET :offset ";
     private static final String FIND_BOOKS_BY_AUTHOR_PAGED = "SELECT b.id, b.title, b.author, b.isbn, g.name AS genre, " +
             "c.name AS cover, b.pages, b.price, b.rating FROM books b" +
             "JOIN genres g ON b.genre_id = g.id " +
-            "JOIN covers c ON b.cover_id = c.id WHERE author = ?" +
-            "ORDER BY b.id LIMIT ? OFFSET ?";
+            "JOIN covers c ON b.cover_id = c.id WHERE author = :author " +
+            "ORDER BY b.id LIMIT :limit OFFSET :offset";
 
     private static final String SEARCH = "SELECT b.id, b.title, b.author, b.isbn, g.name AS genre," +
             "c.name AS cover, b.pages, b.price, b.rating FROM books b " +
             "JOIN genres g ON b.genre_id = g.id " +
-            "JOIN covers c ON b.cover_id = c.id WHERE b.title LIKE ? OR b.author LIKE ?";
+            "JOIN covers c ON b.cover_id = c.id WHERE b.title LIKE :input OR b.author LIKE :input";
     private static final String DELETE_BOOK_BY_ID = "DELETE FROM books WHERE id = ?";
     private static final String COUNT_BOOKS = "SELECT count(*) FROM books";
     private static final String COL_ID = "id";
@@ -70,13 +70,11 @@ public class BookDaoImpl implements BookDao {
 
     @Override
     public List<BookDto> search(String input) {
-        try (Connection connection = jdbcTemplate.getConnection();
-             PreparedStatement statement = connection.prepareStatement(SEARCH)) {
-            String reformattedForSearchInput = "%" + input + "%";
-            statement.setString(1, reformattedForSearchInput);
-            statement.setString(2, reformattedForSearchInput);
-            return createBookList(statement);
-        } catch (SQLException e) {
+        try {
+            Map<String, String> params = new HashMap<>();
+            params.put("input", input);
+            return namedParameterJdbcTemplate.query(SEARCH, params, this::process);
+        } catch (DataAccessException e) {
             log.error(e.getMessage() + e);
             throw new UnableToFindException(messageManager.getMessage("books.unable_to_find_containing")
                     + " " + input + messageManager.getMessage("in_title"));
@@ -85,16 +83,9 @@ public class BookDaoImpl implements BookDao {
 
     @Override
     public Long count() {
-        try (Connection connection = jdbcTemplate.getConnection();
-             Statement statement = connection.createStatement()) {
-            ResultSet result = statement.executeQuery(COUNT_BOOKS);
-            log.debug("DB query completed");
-            Long count = null;
-            if (result.next()) {
-                count = result.getLong("count");
-            }
-            return count;
-        } catch (SQLException e) {
+        try {
+            return jdbcTemplate.queryForObject(COUNT_BOOKS, Long.class);
+        } catch (DataAccessException e) {
             log.error(e.getMessage() + e);
             throw new AppException(messageManager.getMessage("count_failed"));
         }
@@ -163,19 +154,13 @@ public class BookDaoImpl implements BookDao {
 
     @Override
     public List<BookDto> getByAuthor(String author, int limit, int offset) {
-        try (Connection connection = jdbcTemplate.getConnection();
-             PreparedStatement statement = connection.prepareStatement(FIND_BOOKS_BY_AUTHOR_PAGED)) {
-            statement.setString(1, author);
-            statement.setInt(2, limit);
-            statement.setInt(3, offset);
-
-            //!!!!!
-
-            return null;
-
-            //!!!!!
-            
-        } catch (SQLException e) {
+        try {
+            Map<String, Object> params = new HashMap<>();
+            params.put("author", author);
+            params.put("limit", limit);
+            params.put("offset", offset);
+            return namedParameterJdbcTemplate.query(FIND_BOOKS_BY_AUTHOR_PAGED, params, this::process);
+        } catch (DataAccessException e) {
             log.error(e.getMessage() + e);
             throw new UnableToFindException(messageManager.getMessage("books.unable_to_find_author"));
         }
@@ -184,7 +169,10 @@ public class BookDaoImpl implements BookDao {
     @Override
     public List<BookDto> getAll(int limit, int offset) {
         try {
-            return jdbcTemplate.query(FIND_ALL_BOOKS_PAGED, this::process);
+            Map<String, Integer> params = new HashMap<>();
+            params.put("limit", limit);
+            params.put("offset", offset);
+            return namedParameterJdbcTemplate.query(FIND_ALL_BOOKS_PAGED, params, this::process);
         } catch (DataAccessException e) {
             log.error(e.getMessage() + e);
             throw new UnableToFindException(messageManager.getMessage("books.unable_to_find"));
