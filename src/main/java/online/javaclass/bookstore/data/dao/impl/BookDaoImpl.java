@@ -95,24 +95,13 @@ public class BookDaoImpl implements BookDao {
     public BookDto create(BookDto book) {
         try {
             KeyHolder keyHolder = new GeneratedKeyHolder();
-            jdbcTemplate.update(connection -> {
-                PreparedStatement ps = connection.prepareStatement(CREATE_BOOK, Statement.RETURN_GENERATED_KEYS);
-                ps.setString(1, book.getTitle());
-                ps.setString(2, book.getAuthor());
-                ps.setString(3, book.getIsbn());
-                ps.setString(4, book.getGenre().toString());
-                ps.setString(5, book.getCover().toString());
-                ps.setInt(6, book.getPages());
-                ps.setBigDecimal(7, book.getPrice());
-                ps.setBigDecimal(8, book.getRating());
-                return ps;
-            }, keyHolder);
+            jdbcTemplate.update(connection -> getPreparedStatement(book, connection), keyHolder);
             if (keyHolder.getKey() != null) {
-                return getById((Long)(keyHolder.getKey()));
+                return getById((Long) keyHolder.getKey());
             } else {
                 return null;
             }
-        } catch (RuntimeException e) {
+        } catch (DataAccessException e) {
             log.error(e.getMessage() + e);
 //            if (e.getMessage().startsWith("ERROR: duplicate key value violates unique constraint")) {
 //                throw new UnableToCreateException(messageManager.getMessage("error.isbn_in_use"));
@@ -189,7 +178,20 @@ public class BookDaoImpl implements BookDao {
         }
     }
 
-    public BookDto process(ResultSet rs, int rowNum) throws SQLException {
+    private PreparedStatement getPreparedStatement(BookDto book, Connection connection) throws SQLException {
+        PreparedStatement ps = connection.prepareStatement(CREATE_BOOK, Statement.RETURN_GENERATED_KEYS);
+        ps.setString(1, book.getTitle());
+        ps.setString(2, book.getAuthor());
+        ps.setString(3, book.getIsbn());
+        ps.setString(4, book.getGenre().toString());
+        ps.setString(5, book.getCover().toString());
+        ps.setInt(6, book.getPages());
+        ps.setBigDecimal(7, book.getPrice());
+        ps.setBigDecimal(8, book.getRating());
+        return ps;
+    }
+
+    private BookDto process(ResultSet rs, int rowNum) throws SQLException {
         BookDto book = new BookDto();
         book.setId(rs.getLong(COL_ID));
         book.setTitle(rs.getString(COL_TITLE));
