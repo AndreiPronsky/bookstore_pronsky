@@ -17,6 +17,7 @@ import java.sql.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Log4j2
 @RequiredArgsConstructor
@@ -71,8 +72,9 @@ public class BookDaoImpl implements BookDao {
     @Override
     public List<BookDto> search(String input) {
         try {
+            String reformattedForSearchInput = "%" + input + "%";
             Map<String, String> params = new HashMap<>();
-            params.put("input", input);
+            params.put("input", reformattedForSearchInput);
             return namedParameterJdbcTemplate.query(SEARCH, params, this::process);
         } catch (DataAccessException e) {
             log.error(e.getMessage() + e);
@@ -96,16 +98,10 @@ public class BookDaoImpl implements BookDao {
         try {
             KeyHolder keyHolder = new GeneratedKeyHolder();
             jdbcTemplate.update(connection -> getPreparedStatement(book, connection), keyHolder);
-            if (keyHolder.getKey() != null) {
-                return getById((Long) keyHolder.getKey());
-            } else {
-                return null;
-            }
+            long id = (long) Objects.requireNonNull(keyHolder.getKeys()).get("id");
+            return getById(id);
         } catch (DataAccessException e) {
             log.error(e.getMessage() + e);
-//            if (e.getMessage().startsWith("ERROR: duplicate key value violates unique constraint")) {
-//                throw new UnableToCreateException(messageManager.getMessage("error.isbn_in_use"));
-//            }
             throw new UnableToCreateException(messageManager.getMessage("book.unable_to_create"));
         }
     }

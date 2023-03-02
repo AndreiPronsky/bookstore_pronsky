@@ -17,6 +17,7 @@ import java.sql.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Log4j2
 @RequiredArgsConstructor
@@ -54,16 +55,10 @@ public class UserDaoImpl implements UserDao {
         try {
             KeyHolder keyHolder = new GeneratedKeyHolder();
             jdbcTemplate.update(connection -> getPreparedStatement(user, connection), keyHolder);
-            if (keyHolder.getKey() != null) {
-                return getById((Long) keyHolder.getKey());
-            } else {
-                return null;
-            }
+            long id = (long) Objects.requireNonNull(keyHolder.getKeys()).get("id");
+            return getById(id);
         } catch (DataAccessException e) {
             log.error(e.getMessage() + e);
-//            if (e.getMessage().startsWith("ERROR: duplicate key value violates unique constraint")) {
-//                throw new LoginException(messageManager.getMessage("error.email_in_use"));
-//            }
             throw new UnableToCreateException(messageManager.getMessage("user.unable_to_create"));
         }
     }

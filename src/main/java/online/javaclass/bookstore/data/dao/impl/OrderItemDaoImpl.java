@@ -20,6 +20,7 @@ import java.sql.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @Log4j2
@@ -91,11 +92,8 @@ public class OrderItemDaoImpl implements OrderItemDao {
         try {
             KeyHolder keyHolder = new GeneratedKeyHolder();
             jdbcTemplate.update(connection -> getPreparedStatement(item, connection), keyHolder);
-            if (keyHolder.getKey() != null) {
-                return getById((Long) keyHolder.getKey());
-            } else {
-                return null;
-            }
+            long id = (long) Objects.requireNonNull(keyHolder.getKeys()).get("id");
+            return getById(id);
         } catch (DataAccessException e) {
             log.error(e.getMessage() + e);
             throw new UnableToCreateException(messageManager.getMessage("item.unable_to_create"));
