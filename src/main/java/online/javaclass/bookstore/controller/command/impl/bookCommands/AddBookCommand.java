@@ -27,7 +27,7 @@ import java.io.IOException;
 @MultipartConfig(maxFileSize = 1024 * 1024 * 10)
 public class AddBookCommand implements Command {
     private static final String COVER_UPLOAD_DIR =
-            "C:\\Repository\\bookstore\\bookstore_pronsky\\src\\main\\webapp\\css\\coverImages\\";
+            "C:\\Repository\\bookstore\\bookstore_pronsky\\src\\main\\webapp\\coverImages\\";
     private final BookService bookService;
     private final BookCommandUtils commandUtils;
 
@@ -49,8 +49,10 @@ public class AddBookCommand implements Command {
             BookDto createdBook = bookService.create(book);
             req.setAttribute("book", createdBook);
             Part filePart = req.getPart("image");
-            String fileName = createdBook.getId().toString() + ".png";
-            filePart.write(COVER_UPLOAD_DIR + fileName);
+            if (filePart != null) {
+                String fileName = createdBook.getId().toString() + ".png";
+                filePart.write(COVER_UPLOAD_DIR + fileName);
+            }
             page = "controller?command=book&id=" + createdBook.getId();
         } catch (ValidationException e) {
             session.setAttribute("validationMessages", e.getMessages());

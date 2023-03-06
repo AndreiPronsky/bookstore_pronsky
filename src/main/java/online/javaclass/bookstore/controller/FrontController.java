@@ -13,21 +13,18 @@ import online.javaclass.bookstore.MessageManager;
 import online.javaclass.bookstore.controller.command.Command;
 import online.javaclass.bookstore.exceptions.AppException;
 import online.javaclass.bookstore.exceptions.ValidationException;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
 import java.util.List;
 
 @Log4j2
 @WebServlet("/controller")
-@Controller
-@Scope("prototype")
 @MultipartConfig(maxFileSize = 1024 * 1024 * 10)
 public class FrontController extends HttpServlet {
 
     public static final String REDIRECT = "REDIRECT:";
-    private final MessageManager messageManager = MessageManager.INSTANCE;
+    private final MessageManager messageManager = AppContextListener.getContext().getBean("messageManager", MessageManager.class);
+
 
     @Override
     public void init() {
