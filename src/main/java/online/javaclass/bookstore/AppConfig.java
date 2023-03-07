@@ -14,6 +14,7 @@ import javax.sql.DataSource;
 @ComponentScan
 @PropertySource("classpath:/application.properties")
 @PropertySource("classpath:/connection-config.properties")
+@EnableAspectJAutoProxy
 public class AppConfig {
 
     @Value("${db.remote.url}")

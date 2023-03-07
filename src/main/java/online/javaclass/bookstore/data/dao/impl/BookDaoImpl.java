@@ -1,7 +1,7 @@
 package online.javaclass.bookstore.data.dao.impl;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import online.javaclass.bookstore.LogInvocation;
 import online.javaclass.bookstore.MessageManager;
 import online.javaclass.bookstore.data.dao.BookDao;
 import online.javaclass.bookstore.data.dto.BookDto;
@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-@Log4j2
 @RequiredArgsConstructor
 @Repository
 public class BookDaoImpl implements BookDao {
@@ -69,6 +68,7 @@ public class BookDaoImpl implements BookDao {
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private final MessageManager messageManager;
 
+    @LogInvocation
     @Override
     public List<BookDto> search(String input) {
         try {
@@ -77,7 +77,6 @@ public class BookDaoImpl implements BookDao {
             params.put("input", reformattedForSearchInput);
             return namedParameterJdbcTemplate.query(SEARCH, params, this::process);
         } catch (DataAccessException e) {
-            log.error(e.getMessage() + e);
             throw new UnableToFindException(messageManager.getMessage("books.unable_to_find_containing")
                     + " " + input + messageManager.getMessage("in_title"));
         }
@@ -88,11 +87,11 @@ public class BookDaoImpl implements BookDao {
         try {
             return jdbcTemplate.queryForObject(COUNT_BOOKS, Long.class);
         } catch (DataAccessException e) {
-            log.error(e.getMessage() + e);
             throw new AppException(messageManager.getMessage("count_failed"));
         }
     }
 
+    @LogInvocation
     @Override
     public BookDto create(BookDto book) {
         try {
@@ -101,42 +100,42 @@ public class BookDaoImpl implements BookDao {
             long id = (long) Objects.requireNonNull(keyHolder.getKeys()).get("id");
             return getById(id);
         } catch (DataAccessException e) {
-            log.error(e.getMessage() + e);
             throw new UnableToCreateException(messageManager.getMessage("book.unable_to_create"));
         }
     }
 
+    @LogInvocation
     @Override
     public BookDto update(BookDto book) {
         try {
             namedParameterJdbcTemplate.update(UPDATE_BOOK, getParamMap(book));
             return getById(book.getId());
         } catch (DataAccessException e) {
-            log.error(e.getMessage() + e);
             throw new UnableToUpdateException(messageManager.getMessage("book.unable_to_update"));
         }
     }
 
+    @LogInvocation
     @Override
     public BookDto getById(Long id) {
         try {
             return jdbcTemplate.queryForObject(FIND_BOOK_BY_ID, this::process, id);
         } catch (DataAccessException e) {
-            log.error(e.getMessage() + e);
             throw new UnableToFindException(messageManager.getMessage("book.unable_to_find_id"));
         }
     }
 
+    @LogInvocation
     @Override
     public BookDto getByIsbn(String isbn) {
         try {
             return jdbcTemplate.queryForObject(FIND_BOOK_BY_ISBN, this::process, isbn);
         } catch (DataAccessException e) {
-            log.error(e.getMessage() + e);
             throw new UnableToFindException(messageManager.getMessage("book.unable_to_find_isbn"));
         }
     }
 
+    @LogInvocation
     @Override
     public List<BookDto> getByAuthor(String author, int limit, int offset) {
         try {
@@ -146,11 +145,11 @@ public class BookDaoImpl implements BookDao {
             params.put("offset", offset);
             return namedParameterJdbcTemplate.query(FIND_BOOKS_BY_AUTHOR_PAGED, params, this::process);
         } catch (DataAccessException e) {
-            log.error(e.getMessage() + e);
             throw new UnableToFindException(messageManager.getMessage("books.unable_to_find_author"));
         }
     }
 
+    @LogInvocation
     @Override
     public List<BookDto> getAll(int limit, int offset) {
         try {
@@ -159,17 +158,16 @@ public class BookDaoImpl implements BookDao {
             params.put("offset", offset);
             return namedParameterJdbcTemplate.query(FIND_ALL_BOOKS_PAGED, params, this::process);
         } catch (DataAccessException e) {
-            log.error(e.getMessage() + e);
             throw new UnableToFindException(messageManager.getMessage("books.unable_to_find"));
         }
     }
 
+    @LogInvocation
     @Override
     public boolean deleteById(Long id) {
         try {
             return 1 == jdbcTemplate.update(DELETE_BOOK_BY_ID, id);
         } catch (DataAccessException e) {
-            log.error(e.getMessage() + e);
             throw new UnableToDeleteException(messageManager.getMessage("book.unable_to_delete") + id);
         }
     }

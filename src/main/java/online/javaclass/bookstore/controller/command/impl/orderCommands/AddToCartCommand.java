@@ -34,7 +34,11 @@ public class AddToCartCommand implements Command {
         } else {
             cartItems.put(book, 1);
         }
-        long pageNumber = Long.parseLong(req.getParameter("page"));
+        String rawPageNumber = req.getParameter("page");
+        long pageNumber = 1L;
+        if (rawPageNumber != null) {
+            pageNumber = Long.parseLong(rawPageNumber);
+        }
         String page = "controller?command=books&page=" + pageNumber;
         return FrontController.REDIRECT + page;
     }

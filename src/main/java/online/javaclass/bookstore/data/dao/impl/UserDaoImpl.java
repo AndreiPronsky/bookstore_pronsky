@@ -1,7 +1,7 @@
 package online.javaclass.bookstore.data.dao.impl;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import online.javaclass.bookstore.LogInvocation;
 import online.javaclass.bookstore.MessageManager;
 import online.javaclass.bookstore.data.dao.UserDao;
 import online.javaclass.bookstore.data.dto.UserDto;
@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-@Log4j2
 @RequiredArgsConstructor
 @Repository
 public class UserDaoImpl implements UserDao {
@@ -50,6 +49,7 @@ public class UserDaoImpl implements UserDao {
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private final MessageManager messageManager;
 
+    @LogInvocation
     @Override
     public UserDto create(UserDto user) {
         try {
@@ -58,42 +58,42 @@ public class UserDaoImpl implements UserDao {
             long id = (long) Objects.requireNonNull(keyHolder.getKeys()).get("id");
             return getById(id);
         } catch (DataAccessException e) {
-            log.error(e.getMessage() + e);
             throw new UnableToCreateException(messageManager.getMessage("user.unable_to_create"));
         }
     }
 
+    @LogInvocation
     @Override
     public UserDto update(UserDto user) {
         try {
             namedParameterJdbcTemplate.update(UPDATE_USER, getParamMap(user));
             return getById(user.getId());
         } catch (DataAccessException e) {
-            log.error(e.getMessage() + e);
             throw new UnableToUpdateException(messageManager.getMessage("user.unable_to_update"));
         }
     }
 
+    @LogInvocation
     @Override
     public UserDto getById(Long id) {
         try {
             return jdbcTemplate.queryForObject(FIND_USER_BY_ID, this::process, id);
         } catch (DataAccessException e) {
-            log.error(e.getMessage() + e);
             throw new UnableToFindException(messageManager.getMessage("user.unable_to_find_id") + id);
         }
     }
 
+    @LogInvocation
     @Override
     public UserDto getByEmail(String email) {
         try {
             return jdbcTemplate.queryForObject(FIND_USER_BY_EMAIL, this::process, email);
         } catch (DataAccessException e) {
-            log.error(e.getMessage());
             return null;
         }
     }
 
+    @LogInvocation
     @Override
     public List<UserDto> getByLastName(String lastName, int limit, int offset) {
         try {
@@ -103,11 +103,11 @@ public class UserDaoImpl implements UserDao {
             params.put("offset", offset);
             return namedParameterJdbcTemplate.query(FIND_USERS_BY_LASTNAME_PAGED, params, this::process);
         } catch (DataAccessException e) {
-            log.error(e.getMessage() + e);
             throw new UnableToFindException(messageManager.getMessage("users.unable_to_find_lastname") + lastName);
         }
     }
 
+    @LogInvocation
     @Override
     public List<UserDto> getAll(int limit, int offset) {
         try {
@@ -116,17 +116,16 @@ public class UserDaoImpl implements UserDao {
             params.put("offset", offset);
             return namedParameterJdbcTemplate.query(FIND_ALL_USERS_PAGED, params, this::process);
         } catch (DataAccessException e) {
-            log.error(e.getMessage() + e);
             throw new UnableToFindException(messageManager.getMessage("users.not_found"));
         }
     }
 
+    @LogInvocation
     @Override
     public boolean deleteById(Long id) {
         try {
             return 1 == jdbcTemplate.update(DELETE_USER_BY_ID, id);
         } catch (DataAccessException e) {
-            log.error(e.getMessage() + e);
             throw new UnableToDeleteException(messageManager.getMessage("user.unable_to_delete"));
         }
     }
@@ -136,7 +135,6 @@ public class UserDaoImpl implements UserDao {
         try {
             return jdbcTemplate.queryForObject(COUNT_USERS, Long.class);
         } catch (DataAccessException e) {
-            log.error(e.getMessage() + e);
             throw new AppException(messageManager.getMessage("count_failed"));
         }
     }
