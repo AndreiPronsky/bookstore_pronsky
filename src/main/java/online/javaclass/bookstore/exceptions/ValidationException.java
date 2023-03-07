@@ -4,6 +4,7 @@ import java.util.List;
 
 public class ValidationException extends AppException {
     List<String> messages;
+
     public ValidationException(String message) {
         super(message);
     }

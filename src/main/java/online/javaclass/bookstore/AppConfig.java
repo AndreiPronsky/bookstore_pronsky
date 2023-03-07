@@ -41,6 +41,7 @@ public class AppConfig {
         dataSource.setPassword(password);
         return dataSource;
     }
+
     @Bean
     public JdbcTemplate jdbcTemplate(DataSource dataSource) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate();

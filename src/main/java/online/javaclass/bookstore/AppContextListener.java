@@ -10,6 +10,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 @WebListener
 public class AppContextListener implements ServletContextListener {
     private static AnnotationConfigApplicationContext context;
+
     public static AnnotationConfigApplicationContext getContext() {
         return context;
     }

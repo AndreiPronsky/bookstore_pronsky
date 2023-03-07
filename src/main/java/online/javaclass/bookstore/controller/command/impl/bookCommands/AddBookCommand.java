@@ -6,7 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import online.javaclass.bookstore.LogInvocation;
 import online.javaclass.bookstore.controller.FrontController;
 import online.javaclass.bookstore.controller.command.Command;
 import online.javaclass.bookstore.exceptions.ValidationException;
@@ -21,7 +21,6 @@ import java.io.IOException;
  *
  * @author Andrei Pronsky
  */
-@Log4j2
 @RequiredArgsConstructor
 @Controller("add_book")
 @MultipartConfig(maxFileSize = 1024 * 1024 * 10)
@@ -37,8 +36,9 @@ public class AddBookCommand implements Command {
      * @param req - request from client to get parameters to work with
      * @return If input parameters match the requirements sends user to a created book page.
      * If input parameters don't match requirements, redirects user to add_book.jsp with description of what exactly
-     *went wrong.
+     * went wrong.
      */
+    @LogInvocation
     @Override
     public String execute(HttpServletRequest req) {
         String page;

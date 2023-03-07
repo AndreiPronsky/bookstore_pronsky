@@ -7,6 +7,7 @@ import java.util.List;
 public interface OrderService extends AbstractService<Long, OrderDto> {
 
     List<OrderDto> getOrdersByUserId(Long userId);
-    void validate (OrderDto orderDto);
+
+    void validate(OrderDto orderDto);
 
 }

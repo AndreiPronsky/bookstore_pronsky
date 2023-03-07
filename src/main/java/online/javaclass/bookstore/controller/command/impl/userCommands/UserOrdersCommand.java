@@ -3,7 +3,7 @@ package online.javaclass.bookstore.controller.command.impl.userCommands;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import online.javaclass.bookstore.LogInvocation;
 import online.javaclass.bookstore.controller.command.Command;
 import online.javaclass.bookstore.exceptions.AppException;
 import online.javaclass.bookstore.service.BookService;
@@ -19,12 +19,12 @@ import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
-@Log4j2
 @Controller("my_orders")
 public class UserOrdersCommand implements Command {
     private final OrderService orderService;
     private final BookService bookService;
 
+    @LogInvocation
     @Override
     public String execute(HttpServletRequest req) {
         try {
@@ -35,7 +35,6 @@ public class UserOrdersCommand implements Command {
             req.setAttribute("orders", orders);
             return "jsp/my_orders.jsp";
         } catch (AppException e) {
-            log.error(e.getMessage());
             return "jsp/error.jsp";
         }
     }

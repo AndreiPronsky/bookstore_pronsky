@@ -121,7 +121,7 @@ public class BookDaoImpl implements BookDao {
         try {
             return jdbcTemplate.queryForObject(FIND_BOOK_BY_ID, this::process, id);
         } catch (DataAccessException e) {
-            throw new UnableToFindException(messageManager.getMessage("book.unable_to_find_id"));
+            throw new UnableToFindException(messageManager.getMessage("book.unable_to_find_id") + " " + id);
         }
     }
 

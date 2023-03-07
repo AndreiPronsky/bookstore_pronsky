@@ -2,6 +2,7 @@ package online.javaclass.bookstore.controller.command.impl;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import online.javaclass.bookstore.LogInvocation;
 import online.javaclass.bookstore.controller.command.Command;
 import online.javaclass.bookstore.service.BookService;
 import online.javaclass.bookstore.service.dto.BookDto;
@@ -14,6 +15,7 @@ import java.util.List;
 public class SearchCommand implements Command {
     private final BookService bookService;
 
+    @LogInvocation
     @Override
     public String execute(HttpServletRequest req) {
         String input = req.getParameter("search");

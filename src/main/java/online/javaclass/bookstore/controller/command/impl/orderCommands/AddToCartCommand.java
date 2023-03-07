@@ -3,6 +3,7 @@ package online.javaclass.bookstore.controller.command.impl.orderCommands;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import online.javaclass.bookstore.LogInvocation;
 import online.javaclass.bookstore.controller.FrontController;
 import online.javaclass.bookstore.controller.command.Command;
 import online.javaclass.bookstore.service.BookService;
@@ -18,6 +19,7 @@ public class AddToCartCommand implements Command {
 
     private final BookService bookService;
 
+    @LogInvocation
     @Override
     public String execute(HttpServletRequest req) {
         Long bookId = Long.parseLong(req.getParameter("id"));

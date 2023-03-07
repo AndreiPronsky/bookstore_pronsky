@@ -1,6 +1,7 @@
 package online.javaclass.bookstore.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import online.javaclass.bookstore.LogInvocation;
 import online.javaclass.bookstore.MessageManager;
 import online.javaclass.bookstore.controller.PagingUtil;
 import online.javaclass.bookstore.data.entities.Book;
@@ -9,7 +10,6 @@ import online.javaclass.bookstore.exceptions.UnableToDeleteException;
 import online.javaclass.bookstore.exceptions.UnableToFindException;
 import online.javaclass.bookstore.service.BookService;
 import online.javaclass.bookstore.service.EntityDtoMapperService;
-import online.javaclass.bookstore.LogInvocation;
 import online.javaclass.bookstore.service.dto.BookDto;
 import online.javaclass.bookstore.service.dto.PageableDto;
 import org.springframework.stereotype.Service;

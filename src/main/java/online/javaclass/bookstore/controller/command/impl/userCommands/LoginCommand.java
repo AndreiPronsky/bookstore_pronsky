@@ -3,18 +3,18 @@ package online.javaclass.bookstore.controller.command.impl.userCommands;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import online.javaclass.bookstore.LogInvocation;
 import online.javaclass.bookstore.controller.command.Command;
 import online.javaclass.bookstore.service.UserService;
 import online.javaclass.bookstore.service.dto.UserDto;
 import org.springframework.stereotype.Controller;
 
-@Log4j2
 @RequiredArgsConstructor
 @Controller("login")
 public class LoginCommand implements Command {
     private final UserService userService;
 
+    @LogInvocation
     @Override
     public String execute(HttpServletRequest req) {
         String email = req.getParameter("email").toLowerCase();

@@ -73,9 +73,9 @@ public class OrderDaoImpl implements OrderDao {
     @Override
     public List<OrderDto> getAllByUserId(Long userId) {
         try {
-        Map<String, Object> params = new HashMap<>();
-        params.put("userId", userId);
-        return namedParameterJdbcTemplate.query(FIND_ORDERS_BY_USER_ID, params, this::process);
+            Map<String, Object> params = new HashMap<>();
+            params.put("userId", userId);
+            return namedParameterJdbcTemplate.query(FIND_ORDERS_BY_USER_ID, params, this::process);
         } catch (DataAccessException e) {
             throw new UnableToFindException(messageManager.getMessage("orders.unable_to_find"));
         }
@@ -120,7 +120,7 @@ public class OrderDaoImpl implements OrderDao {
         try {
             KeyHolder keyHolder = new GeneratedKeyHolder();
             jdbcTemplate.update(connection -> getPreparedStatement(order, connection), keyHolder);
-            long id = (long)Objects.requireNonNull(keyHolder.getKeys()).get("id");
+            long id = (long) Objects.requireNonNull(keyHolder.getKeys()).get("id");
             return getById(id);
         } catch (DataAccessException e) {
             throw new UnableToCreateException(messageManager.getMessage("order.unable_to_create"));

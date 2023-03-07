@@ -1,13 +1,13 @@
 package online.javaclass.bookstore.service;
 
+import online.javaclass.bookstore.data.entities.Book;
+import online.javaclass.bookstore.data.entities.Order;
 import online.javaclass.bookstore.data.entities.OrderItem;
+import online.javaclass.bookstore.data.entities.User;
 import online.javaclass.bookstore.service.dto.BookDto;
 import online.javaclass.bookstore.service.dto.OrderDto;
 import online.javaclass.bookstore.service.dto.OrderItemDto;
 import online.javaclass.bookstore.service.dto.UserDto;
-import online.javaclass.bookstore.data.entities.Book;
-import online.javaclass.bookstore.data.entities.Order;
-import online.javaclass.bookstore.data.entities.User;
 import org.springframework.stereotype.Component;
 
 @Component
