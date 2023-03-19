@@ -3,7 +3,7 @@ package online.javaclass.bookstore.controller.command.impl.userCommands;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import online.javaclass.bookstore.LogInvocation;
 import online.javaclass.bookstore.controller.command.Command;
 import online.javaclass.bookstore.service.UserService;
 import online.javaclass.bookstore.service.dto.UserDto;
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Controller;
 
 import java.math.BigDecimal;
 
-@Log4j2
 @RequiredArgsConstructor
 @Controller("register")
 public class RegisterCommand implements Command {
@@ -21,6 +20,7 @@ public class RegisterCommand implements Command {
     private final BigDecimal defaultRating = BigDecimal.ZERO;
     private final UserCommandUtils userCommandUtils;
 
+    @LogInvocation
     @Override
     public String execute(HttpServletRequest req) {
         UserDto user = userCommandUtils.setUserParameters(req, defaultRole, defaultRating);

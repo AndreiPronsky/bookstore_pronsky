@@ -14,6 +14,7 @@ import javax.sql.DataSource;
 @ComponentScan
 @PropertySource("classpath:/application.properties")
 @PropertySource("classpath:/connection-config.properties")
+@EnableAspectJAutoProxy
 public class AppConfig {
 
     @Value("${db.remote.url}")
@@ -40,6 +41,7 @@ public class AppConfig {
         dataSource.setPassword(password);
         return dataSource;
     }
+
     @Bean
     public JdbcTemplate jdbcTemplate(DataSource dataSource) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate();

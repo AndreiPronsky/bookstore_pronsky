@@ -3,7 +3,7 @@ package online.javaclass.bookstore.controller.command.impl.bookCommands;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import online.javaclass.bookstore.LogInvocation;
 import online.javaclass.bookstore.controller.FrontController;
 import online.javaclass.bookstore.controller.command.Command;
 import online.javaclass.bookstore.exceptions.ValidationException;
@@ -16,7 +16,6 @@ import org.springframework.stereotype.Controller;
  *
  * @author Andrei Pronsky
  */
-@Log4j2
 @RequiredArgsConstructor
 @Controller("edit_book")
 public class EditBookCommand implements Command {
@@ -34,6 +33,7 @@ public class EditBookCommand implements Command {
      * If input parameters don't match requirements, redirects user to edit_book.jsp with description of what exactly
      * went wrong
      */
+    @LogInvocation
     @Override
     public String execute(HttpServletRequest req) {
         String page;

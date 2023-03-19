@@ -1,7 +1,7 @@
 package online.javaclass.bookstore.data.dao.impl;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import online.javaclass.bookstore.LogInvocation;
 import online.javaclass.bookstore.MessageManager;
 import online.javaclass.bookstore.data.dao.OrderItemDao;
 import online.javaclass.bookstore.data.dto.OrderItemDto;
@@ -23,7 +23,6 @@ import java.util.Map;
 import java.util.Objects;
 
 @RequiredArgsConstructor
-@Log4j2
 @Repository
 public class OrderItemDaoImpl implements OrderItemDao {
     private static final String FIND_ITEMS_BY_ORDER_ID = "SELECT id, order_id, book_id, quantity, price FROM order_items" +
@@ -46,16 +45,17 @@ public class OrderItemDaoImpl implements OrderItemDao {
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private final MessageManager messageManager;
 
+    @LogInvocation
     @Override
     public List<OrderItemDto> getAllByOrderId(Long orderId) {
         try {
             return jdbcTemplate.query(FIND_ITEMS_BY_ORDER_ID, this::process, orderId);
         } catch (DataAccessException e) {
-            log.error(e.getMessage() + e);
             throw new UnableToFindException(messageManager.getMessage("items.not_found"));
         }
     }
 
+    @LogInvocation
     @Override
     public void deleteAllByOrderId(Long orderId) {
         for (OrderItemDto item : getAllByOrderId(orderId)) {
@@ -63,16 +63,17 @@ public class OrderItemDaoImpl implements OrderItemDao {
         }
     }
 
+    @LogInvocation
     @Override
     public OrderItemDto getById(Long id) {
         try {
             return jdbcTemplate.queryForObject(FIND_ITEM_BY_ID, this::process, id);
         } catch (DataAccessException e) {
-            log.error(e.getMessage() + e);
             throw new UnableToFindException(messageManager.getMessage("items.not_found"));
         }
     }
 
+    @LogInvocation
     @Override
     public List<OrderItemDto> getAll(int limit, int offset) {
         try {
@@ -81,12 +82,12 @@ public class OrderItemDaoImpl implements OrderItemDao {
             params.put("offset", offset);
             return namedParameterJdbcTemplate.query(FIND_ALL_PAGED, params, this::process);
         } catch (DataAccessException e) {
-            log.error(e.getMessage() + e);
             throw new UnableToFindException(messageManager.getMessage("items.not_found"));
         }
 
     }
 
+    @LogInvocation
     @Override
     public OrderItemDto create(OrderItemDto item) {
         try {
@@ -95,29 +96,28 @@ public class OrderItemDaoImpl implements OrderItemDao {
             long id = (long) Objects.requireNonNull(keyHolder.getKeys()).get("id");
             return getById(id);
         } catch (DataAccessException e) {
-            log.error(e.getMessage() + e);
             throw new UnableToCreateException(messageManager.getMessage("item.unable_to_create"));
         }
     }
 
+    @LogInvocation
     @Override
     public OrderItemDto update(OrderItemDto item) {
         try {
             namedParameterJdbcTemplate.update(UPDATE_ITEM, getParamMap(item));
             return getById(item.getId());
         } catch (DataAccessException e) {
-            log.error(e.getMessage() + e);
             throw new UnableToUpdateException(messageManager.getMessage("item.unable_to_update"));
         }
 
     }
 
+    @LogInvocation
     @Override
     public boolean deleteById(Long id) {
         try {
             return 1 == jdbcTemplate.update(DELETE_ITEM_BY_ID, id);
         } catch (DataAccessException e) {
-            log.error(e.getMessage() + e);
             throw new UnableToDeleteException(messageManager.getMessage("item.unable_to_delete"));
         }
     }

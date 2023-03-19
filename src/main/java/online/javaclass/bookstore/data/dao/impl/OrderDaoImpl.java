@@ -1,7 +1,7 @@
 package online.javaclass.bookstore.data.dao.impl;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import online.javaclass.bookstore.LogInvocation;
 import online.javaclass.bookstore.MessageManager;
 import online.javaclass.bookstore.data.dao.OrderDao;
 import online.javaclass.bookstore.data.dto.OrderDto;
@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-@Log4j2
 @RequiredArgsConstructor
 @Repository
 public class OrderDaoImpl implements OrderDao {
@@ -70,39 +69,39 @@ public class OrderDaoImpl implements OrderDao {
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private final MessageManager messageManager;
 
+    @LogInvocation
     @Override
     public List<OrderDto> getAllByUserId(Long userId) {
         try {
-        Map<String, Object> params = new HashMap<>();
-        params.put("userId", userId);
-        return namedParameterJdbcTemplate.query(FIND_ORDERS_BY_USER_ID, params, this::process);
+            Map<String, Object> params = new HashMap<>();
+            params.put("userId", userId);
+            return namedParameterJdbcTemplate.query(FIND_ORDERS_BY_USER_ID, params, this::process);
         } catch (DataAccessException e) {
-            log.error(e.getMessage() + e);
             throw new UnableToFindException(messageManager.getMessage("orders.unable_to_find"));
         }
     }
 
+    @LogInvocation
     @Override
     public OrderDto getById(Long id) {
         try {
             return jdbcTemplate.queryForObject(FIND_ORDER_BY_ID, this::process, id);
         } catch (DataAccessException e) {
-            log.error(e.getMessage() + e);
             throw new UnableToFindException(messageManager.getMessage("order.unable_to_find_id") + id);
         }
     }
 
-
+    @LogInvocation
     @Override
     public Long count() {
         try {
             return jdbcTemplate.queryForObject(COUNT_ORDERS, Long.class);
         } catch (DataAccessException e) {
-            log.error(e.getMessage() + e);
             throw new AppException(messageManager.getMessage("count_failed"));
         }
     }
 
+    @LogInvocation
     @Override
     public List<OrderDto> getAll(int limit, int offset) {
         try {
@@ -111,41 +110,40 @@ public class OrderDaoImpl implements OrderDao {
             params.put("offset", offset);
             return namedParameterJdbcTemplate.query(FIND_ALL_ORDERS_PAGED, params, this::process);
         } catch (DataAccessException e) {
-            log.error(e.getMessage() + e);
             throw new UnableToFindException(messageManager.getMessage("orders.unable_to_find"));
         }
     }
 
+    @LogInvocation
     @Override
     public OrderDto create(OrderDto order) {
         try {
             KeyHolder keyHolder = new GeneratedKeyHolder();
             jdbcTemplate.update(connection -> getPreparedStatement(order, connection), keyHolder);
-            long id = (long)Objects.requireNonNull(keyHolder.getKeys()).get("id");
+            long id = (long) Objects.requireNonNull(keyHolder.getKeys()).get("id");
             return getById(id);
         } catch (DataAccessException e) {
-            log.error(e.getMessage() + e);
             throw new UnableToCreateException(messageManager.getMessage("order.unable_to_create"));
         }
     }
 
+    @LogInvocation
     @Override
     public OrderDto update(OrderDto order) {
         try {
             namedParameterJdbcTemplate.update(UPDATE_ORDER, getParamMap(order));
             return getById(order.getId());
         } catch (DataAccessException e) {
-            log.error(e.getMessage() + e);
             throw new UnableToUpdateException(messageManager.getMessage("order.unable_to_update"));
         }
     }
 
+    @LogInvocation
     @Override
     public boolean deleteById(Long id) {
         try {
             return 1 == jdbcTemplate.update(DELETE_ORDER_BY_ID, id);
         } catch (DataAccessException e) {
-            log.error(e.getMessage() + e);
             throw new UnableToDeleteException(messageManager.getMessage("order.unable_to_delete"));
         }
 

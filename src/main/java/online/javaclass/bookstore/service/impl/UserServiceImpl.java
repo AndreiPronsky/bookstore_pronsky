@@ -1,7 +1,7 @@
 package online.javaclass.bookstore.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import online.javaclass.bookstore.LogInvocation;
 import online.javaclass.bookstore.MessageManager;
 import online.javaclass.bookstore.controller.PagingUtil;
 import online.javaclass.bookstore.data.entities.User;
@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 
-@Log4j2
 @RequiredArgsConstructor
 @Service
 public class UserServiceImpl implements UserService {
@@ -29,6 +28,7 @@ public class UserServiceImpl implements UserService {
     DigestService digest = new DigestServiceImpl();
     private final MessageManager messageManager;
 
+    @LogInvocation
     @Override
     public UserDto login(String email, String password) {
         User user = userRepo.getByEmail(email);
@@ -38,26 +38,26 @@ public class UserServiceImpl implements UserService {
         return mapper.toDto(user);
     }
 
+    @LogInvocation
     @Override
     public UserDto create(UserDto userDto) {
-        log.debug("create user" + userDto);
         userDto.setPassword(digest.hashPassword(userDto.getPassword()));
         User user = mapper.toEntity(userDto);
         User created = userRepo.create(user);
         return mapper.toDto(created);
     }
 
+    @LogInvocation
     @Override
     public UserDto update(UserDto userDto) {
-        log.debug("update user");
         User user = mapper.toEntity(userDto);
         User updated = userRepo.update(user);
         return mapper.toDto(updated);
     }
 
+    @LogInvocation
     @Override
     public UserDto getById(Long id) {
-        log.debug("get user by id");
         User user = userRepo.getById(id);
         if (user == null) {
             throw new UnableToFindException(messageManager.getMessage("user.unable_to_find_id"));
@@ -66,9 +66,9 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @LogInvocation
     @Override
     public List<UserDto> getByLastName(String lastname, PageableDto pageable) {
-        log.debug("get user(s) by lastname");
         List<UserDto> users = userRepo.getByLastName(lastname, pageable.getLimit(), pageable.getOffset()).stream()
                 .map(mapper::toDto)
                 .toList();
@@ -79,9 +79,9 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @LogInvocation
     @Override
     public List<UserDto> getAll(PageableDto pageable) {
-        log.debug("get all users");
         List<UserDto> users = userRepo.getAll(pageable.getLimit(), pageable.getOffset()).stream()
                 .map(mapper::toDto)
                 .toList();
@@ -96,20 +96,17 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-
+    @LogInvocation
     @Override
     public void deleteById(Long id) {
-        log.debug("delete user by id");
         boolean deleted = userRepo.deleteById(id);
         if (!deleted) {
-            log.error("Unable to delete user with id : " + id);
             throw new UnableToDeleteException(messageManager.getMessage("user.unable_to_delete_id") + " " + id);
         }
     }
 
     @Override
     public Long count() {
-        log.debug("count users");
         return userRepo.count();
     }
 }

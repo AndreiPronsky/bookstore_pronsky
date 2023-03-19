@@ -1,7 +1,7 @@
 package online.javaclass.bookstore.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import online.javaclass.bookstore.LogInvocation;
 import online.javaclass.bookstore.MessageManager;
 import online.javaclass.bookstore.controller.PagingUtil;
 import online.javaclass.bookstore.data.entities.Order;
@@ -20,7 +20,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-@Log4j2
 @RequiredArgsConstructor
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -28,9 +27,9 @@ public class OrderServiceImpl implements OrderService {
     private final EntityDtoMapperService mapper;
     private final MessageManager messageManager;
 
+    @LogInvocation
     @Override
     public List<OrderDto> getOrdersByUserId(Long userId) {
-        log.debug("get orders by user id");
         List<OrderDto> orders = orderRepo.getAllByUserId(userId).stream()
                 .map(mapper::toDto)
                 .toList();
@@ -46,9 +45,9 @@ public class OrderServiceImpl implements OrderService {
         return orderRepo.count();
     }
 
+    @LogInvocation
     @Override
     public OrderDto getById(Long id) {
-        log.debug("get order by id");
         Order order = orderRepo.getById(id);
         if (order == null) {
             throw new UnableToFindException(messageManager.getMessage("order.unable_to_find_id"));
@@ -56,9 +55,9 @@ public class OrderServiceImpl implements OrderService {
         return mapper.toDto(order);
     }
 
+    @LogInvocation
     @Override
     public List<OrderDto> getAll(PageableDto pageable) {
-        log.debug("get all orders");
         List<OrderDto> orders = orderRepo.getAll(pageable.getLimit(), pageable.getOffset()).stream()
                 .map(mapper::toDto)
                 .toList();
@@ -73,34 +72,34 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
+    @LogInvocation
     @Override
     public OrderDto create(OrderDto orderDto) throws ValidationException {
-        log.debug("create order");
         validate(orderDto);
         Order order = mapper.toEntity(orderDto);
         Order created = orderRepo.create(order);
         return mapper.toDto(created);
     }
 
+    @LogInvocation
     @Override
     public OrderDto update(OrderDto orderDto) throws ValidationException {
-        log.debug("update order");
         validate(orderDto);
         Order order = mapper.toEntity(orderDto);
         Order updated = orderRepo.update(order);
         return mapper.toDto(updated);
     }
 
+    @LogInvocation
     @Override
     public void deleteById(Long id) {
-        log.debug("delete order by id");
         boolean deleted = orderRepo.deleteById(id);
         if (!deleted) {
-            log.error("Unable to delete order with id : " + id);
-            throw new UnableToDeleteException(messageManager.getMessage("order.unable_to delete"));
+            throw new UnableToDeleteException(messageManager.getMessage("order.unable_to delete" + " id:" + id));
         }
     }
 
+    @LogInvocation
     @Override
     public void validate(OrderDto order) throws ValidationException {
         List<String> messages = new ArrayList<>();

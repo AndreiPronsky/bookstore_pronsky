@@ -3,6 +3,7 @@ package online.javaclass.bookstore.controller.command.impl.orderCommands;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import online.javaclass.bookstore.LogInvocation;
 import online.javaclass.bookstore.controller.command.Command;
 import org.springframework.stereotype.Controller;
 
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Controller;
 @Controller("cart")
 public class CartCommand implements Command {
 
+    @LogInvocation
     @Override
     public String execute(HttpServletRequest req) {
         HttpSession session = req.getSession();

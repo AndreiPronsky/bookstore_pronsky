@@ -2,6 +2,7 @@ package online.javaclass.bookstore.controller.command.impl.orderCommands;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import online.javaclass.bookstore.LogInvocation;
 import online.javaclass.bookstore.controller.command.Command;
 import online.javaclass.bookstore.service.OrderService;
 import online.javaclass.bookstore.service.dto.OrderDto;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Controller;
 @Controller("order")
 public class OrderCommand implements Command {
     private final OrderService orderService;
+
+    @LogInvocation
     @Override
     public String execute(HttpServletRequest req) {
         Long id = Long.parseLong(req.getParameter("id"));

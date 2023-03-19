@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 @Component
 public class BookCommandUtils {
     private static final String AUTHOR_VALIDATION_REGEX = "^[\\w'\\-,.][^0-9_!¡?÷?¿\\/+=@#$%ˆ&*(){}|~<>;:]{2,}$";
@@ -53,7 +54,7 @@ public class BookCommandUtils {
 
     String validateAndReformatTitle(String rawTitle, List<String> messages) {
         if (rawTitle == null || rawTitle.isBlank() || !rawTitle.matches(TITLE_VALIDATION_REGEX)
-        || (rawTitle.matches(PUNCTUATION_MARKS_SEQUENCE) && !rawTitle.matches("[\\d.,]+"))) {
+                || (rawTitle.matches(PUNCTUATION_MARKS_SEQUENCE) && !rawTitle.matches("[\\d.,]+"))) {
             messages.add(messageManager.getMessage("error.invalid_title"));
             return null;
         } else {
@@ -68,7 +69,7 @@ public class BookCommandUtils {
     String validateAndReformatAuthor(String rawAuthor, List<String> messages) {
         String author;
         if (rawAuthor == null || rawAuthor.isBlank() || !rawAuthor.matches(AUTHOR_VALIDATION_REGEX)
-        || rawAuthor.matches(PUNCTUATION_MARKS_SEQUENCE)) {
+                || rawAuthor.matches(PUNCTUATION_MARKS_SEQUENCE)) {
             messages.add(messageManager.getMessage("error.invalid_author"));
             author = null;
         } else {
@@ -145,7 +146,7 @@ public class BookCommandUtils {
             } else {
                 return rawPages;
             }
-        } catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             messages.add(messageManager.getMessage("error.invalid_pages"));
             return null;
         }
