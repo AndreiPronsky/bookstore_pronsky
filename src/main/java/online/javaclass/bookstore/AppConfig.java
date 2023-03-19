@@ -7,6 +7,9 @@ import org.springframework.context.annotation.*;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.sql.DataSource;
 
 @Log4j2
@@ -14,18 +17,18 @@ import javax.sql.DataSource;
 @ComponentScan
 @PropertySource("classpath:/application.properties")
 @PropertySource("classpath:/connection-config.properties")
+@PropertySource("classpath:/META-INF/persistence.xml")
 @EnableAspectJAutoProxy
 public class AppConfig {
 
-    @Value("${db.remote.url}")
+    @Value("${jakarta.persistence.jdbc.url}")
     private String url;
-    @Value("${db.remote.user}")
+    @Value("${jakarta.persistence.jdbc.user}")
     private String username;
-    @Value("${db.remote.password}")
+    @Value("${jakarta.persistence.jdbc.password}")
     private String password;
-    @Value("${db.driver}")
+    @Value("${jakarta.persistence.jdbc.driver}")
     private String driver;
-
     @Bean
     public DataSource dataSource() {
         HikariDataSource dataSource = new HikariDataSource();
@@ -52,5 +55,15 @@ public class AppConfig {
     @Bean
     public NamedParameterJdbcTemplate namedParameterJdbcTemplate(DataSource dataSource) {
         return new NamedParameterJdbcTemplate(dataSource);
+    }
+
+    @Bean
+    public EntityManagerFactory entityManagerFactory() {
+        return Persistence.createEntityManagerFactory("bookstore");
+    }
+
+    @Bean
+    public EntityManager entityManager(EntityManagerFactory entityManagerFactory) {
+        return entityManagerFactory.createEntityManager();
     }
 }
