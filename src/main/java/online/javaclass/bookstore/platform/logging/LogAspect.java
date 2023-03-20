@@ -1,4 +1,4 @@
-package online.javaclass.bookstore;
+package online.javaclass.bookstore.platform.logging;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
@@ -15,9 +15,9 @@ import java.util.Date;
 @Component
 public class LogAspect {
 
-    DateFormat df = new SimpleDateFormat("HH:mm:ss");
+    private final DateFormat df = new SimpleDateFormat("HH:mm:ss");
 
-    @Before("@annotation(online.javaclass.bookstore.LogInvocation)")
+    @Before("@annotation(online.javaclass.bookstore.platform.logging.LogInvocation)")
     public void logMethodInvocation(JoinPoint jp) {
         Object[] args = jp.getArgs();
         Date date = new Date();
@@ -25,7 +25,7 @@ public class LogAspect {
                 + jp.getSignature().getName() + " is called with args: " + Arrays.toString(args));
     }
 
-    @AfterThrowing(value = "@annotation(online.javaclass.bookstore.LogInvocation)", throwing = "exception")
+    @AfterThrowing(value = "@annotation(online.javaclass.bookstore.platform.logging.LogInvocation)", throwing = "exception")
     public void logExceptions(JoinPoint jp, Exception exception) {
         Date date = new Date();
         System.out.println(df.format(date) + " [EXCEPTION OCCURRED] " + jp.getTarget() + " " + exception);

@@ -2,7 +2,7 @@ package online.javaclass.bookstore.controller.command.impl.bookCommands;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import online.javaclass.bookstore.LogInvocation;
+import online.javaclass.bookstore.platform.logging.LogInvocation;
 import online.javaclass.bookstore.controller.PagingUtil;
 import online.javaclass.bookstore.controller.command.Command;
 import online.javaclass.bookstore.service.BookService;
@@ -22,6 +22,7 @@ import java.util.List;
 @Controller("books")
 public class BooksCommand implements Command {
     private final BookService bookService;
+    private final PagingUtil pagingUtil;
 
     /**
      * Takes input parameters from the HttpServletRequest, and sends it to service layer to get all existing books
@@ -34,7 +35,7 @@ public class BooksCommand implements Command {
     @Override
     public String execute(HttpServletRequest req) {
         List<BookDto> books;
-        PageableDto pageable = PagingUtil.getPageable(req);
+        PageableDto pageable = pagingUtil.getPageable(req);
         books = bookService.getAll(pageable);
         req.setAttribute("page", pageable.getPage());
         req.setAttribute("total_pages", pageable.getTotalPages());

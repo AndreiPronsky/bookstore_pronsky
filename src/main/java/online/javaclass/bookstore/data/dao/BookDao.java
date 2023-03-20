@@ -1,17 +1,17 @@
 package online.javaclass.bookstore.data.dao;
 
-import online.javaclass.bookstore.data.dto.BookDto;
+import online.javaclass.bookstore.data.entities.Book;
 
 import java.util.List;
 
-public interface BookDao extends AbstractDao<Long, BookDto> {
-    BookDto getByIsbn(String isbn);
+public interface BookDao extends AbstractDao<Long, Book> {
+    Book getByIsbn(String isbn);
 
-    List<BookDto> getByAuthor(String author, int limit, int offset);
+    List<Book> getByAuthor(String author, int limit, int offset);
 
     Long count();
 
-    List<BookDto> getAll(int limit, int offset);
+    List<Book> getAll(int limit, int offset);
 
-    List<BookDto> search(String input);
+    List<Book> search(String input);
 }

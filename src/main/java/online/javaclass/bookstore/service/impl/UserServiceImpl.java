@@ -1,8 +1,8 @@
 package online.javaclass.bookstore.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import online.javaclass.bookstore.LogInvocation;
-import online.javaclass.bookstore.MessageManager;
+import online.javaclass.bookstore.platform.logging.LogInvocation;
+import online.javaclass.bookstore.platform.MessageManager;
 import online.javaclass.bookstore.controller.PagingUtil;
 import online.javaclass.bookstore.data.entities.User;
 import online.javaclass.bookstore.data.repository.UserRepository;
@@ -25,8 +25,9 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepo;
     private final EntityDtoMapperService mapper;
-    DigestService digest = new DigestServiceImpl();
+    private final DigestService digest;
     private final MessageManager messageManager;
+    private final PagingUtil pagingUtil;
 
     @LogInvocation
     @Override
@@ -89,7 +90,7 @@ public class UserServiceImpl implements UserService {
             throw new UnableToFindException(messageManager.getMessage("users.not_found"));
         } else {
             Long totalItems = userRepo.count();
-            Long totalPages = PagingUtil.getTotalPages(totalItems, pageable);
+            Long totalPages = pagingUtil.getTotalPages(totalItems, pageable);
             pageable.setTotalItems(userRepo.count());
             pageable.setTotalPages(totalPages);
             return users;

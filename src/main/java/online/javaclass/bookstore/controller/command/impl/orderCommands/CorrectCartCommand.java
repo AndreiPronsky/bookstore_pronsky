@@ -1,7 +1,7 @@
 package online.javaclass.bookstore.controller.command.impl.orderCommands;
 
 import jakarta.servlet.http.HttpServletRequest;
-import online.javaclass.bookstore.LogInvocation;
+import online.javaclass.bookstore.platform.logging.LogInvocation;
 import online.javaclass.bookstore.controller.FrontController;
 import online.javaclass.bookstore.controller.command.Command;
 import org.springframework.stereotype.Controller;

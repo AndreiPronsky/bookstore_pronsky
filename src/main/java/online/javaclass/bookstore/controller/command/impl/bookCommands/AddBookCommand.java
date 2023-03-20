@@ -6,7 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import lombok.RequiredArgsConstructor;
-import online.javaclass.bookstore.LogInvocation;
+import online.javaclass.bookstore.platform.logging.LogInvocation;
 import online.javaclass.bookstore.controller.FrontController;
 import online.javaclass.bookstore.controller.command.Command;
 import online.javaclass.bookstore.exceptions.ValidationException;

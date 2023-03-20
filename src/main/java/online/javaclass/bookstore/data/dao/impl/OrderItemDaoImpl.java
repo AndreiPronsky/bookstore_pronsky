@@ -1,10 +1,10 @@
 package online.javaclass.bookstore.data.dao.impl;
 
 import lombok.RequiredArgsConstructor;
-import online.javaclass.bookstore.LogInvocation;
-import online.javaclass.bookstore.MessageManager;
+import online.javaclass.bookstore.platform.logging.LogInvocation;
+import online.javaclass.bookstore.platform.MessageManager;
 import online.javaclass.bookstore.data.dao.OrderItemDao;
-import online.javaclass.bookstore.data.dto.OrderItemDto;
+import online.javaclass.bookstore.data.entities.OrderItem;
 import online.javaclass.bookstore.exceptions.UnableToCreateException;
 import online.javaclass.bookstore.exceptions.UnableToDeleteException;
 import online.javaclass.bookstore.exceptions.UnableToFindException;
@@ -47,7 +47,7 @@ public class OrderItemDaoImpl implements OrderItemDao {
 
     @LogInvocation
     @Override
-    public List<OrderItemDto> getAllByOrderId(Long orderId) {
+    public List<OrderItem> getAllByOrderId(Long orderId) {
         try {
             return jdbcTemplate.query(FIND_ITEMS_BY_ORDER_ID, this::process, orderId);
         } catch (DataAccessException e) {
@@ -58,14 +58,14 @@ public class OrderItemDaoImpl implements OrderItemDao {
     @LogInvocation
     @Override
     public void deleteAllByOrderId(Long orderId) {
-        for (OrderItemDto item : getAllByOrderId(orderId)) {
+        for (OrderItem item : getAllByOrderId(orderId)) {
             deleteById(item.getId());
         }
     }
 
     @LogInvocation
     @Override
-    public OrderItemDto getById(Long id) {
+    public OrderItem getById(Long id) {
         try {
             return jdbcTemplate.queryForObject(FIND_ITEM_BY_ID, this::process, id);
         } catch (DataAccessException e) {
@@ -75,7 +75,7 @@ public class OrderItemDaoImpl implements OrderItemDao {
 
     @LogInvocation
     @Override
-    public List<OrderItemDto> getAll(int limit, int offset) {
+    public List<OrderItem> getAll(int limit, int offset) {
         try {
             Map<String, Integer> params = new HashMap<>();
             params.put("limit", limit);
@@ -89,7 +89,7 @@ public class OrderItemDaoImpl implements OrderItemDao {
 
     @LogInvocation
     @Override
-    public OrderItemDto create(OrderItemDto item) {
+    public OrderItem create(OrderItem item) {
         try {
             KeyHolder keyHolder = new GeneratedKeyHolder();
             jdbcTemplate.update(connection -> getPreparedStatement(item, connection), keyHolder);
@@ -102,7 +102,7 @@ public class OrderItemDaoImpl implements OrderItemDao {
 
     @LogInvocation
     @Override
-    public OrderItemDto update(OrderItemDto item) {
+    public OrderItem update(OrderItem item) {
         try {
             namedParameterJdbcTemplate.update(UPDATE_ITEM, getParamMap(item));
             return getById(item.getId());
@@ -122,8 +122,8 @@ public class OrderItemDaoImpl implements OrderItemDao {
         }
     }
 
-    private OrderItemDto process(ResultSet rs, int rowNum) throws SQLException {
-        OrderItemDto item = new OrderItemDto();
+    private OrderItem process(ResultSet rs, int rowNum) throws SQLException {
+        OrderItem item = new OrderItem();
         item.setId(rs.getLong(COL_ID));
         item.setOrderId(rs.getLong(COL_ORDER_ID));
         item.setBookId(rs.getLong(COL_BOOK_ID));
@@ -132,7 +132,7 @@ public class OrderItemDaoImpl implements OrderItemDao {
         return item;
     }
 
-    private PreparedStatement getPreparedStatement(OrderItemDto item, Connection connection) throws SQLException {
+    private PreparedStatement getPreparedStatement(OrderItem item, Connection connection) throws SQLException {
         PreparedStatement ps = connection.prepareStatement(CREATE_ITEM, Statement.RETURN_GENERATED_KEYS);
         ps.setLong(1, item.getOrderId());
         ps.setLong(2, item.getBookId());
@@ -141,7 +141,7 @@ public class OrderItemDaoImpl implements OrderItemDao {
         return ps;
     }
 
-    private Map<String, Object> getParamMap(OrderItemDto item) {
+    private Map<String, Object> getParamMap(OrderItem item) {
         Map<String, Object> params = new HashMap<>();
         params.put("id", item.getId());
         params.put("orderId", item.getOrderId());

@@ -1,10 +1,10 @@
 package online.javaclass.bookstore.data.dao.impl;
 
 import lombok.RequiredArgsConstructor;
-import online.javaclass.bookstore.LogInvocation;
-import online.javaclass.bookstore.MessageManager;
+import online.javaclass.bookstore.platform.logging.LogInvocation;
+import online.javaclass.bookstore.platform.MessageManager;
 import online.javaclass.bookstore.data.dao.OrderDao;
-import online.javaclass.bookstore.data.dto.OrderDto;
+import online.javaclass.bookstore.data.entities.Order;
 import online.javaclass.bookstore.exceptions.*;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -71,7 +71,7 @@ public class OrderDaoImpl implements OrderDao {
 
     @LogInvocation
     @Override
-    public List<OrderDto> getAllByUserId(Long userId) {
+    public List<Order> getAllByUserId(Long userId) {
         try {
             Map<String, Object> params = new HashMap<>();
             params.put("userId", userId);
@@ -83,7 +83,7 @@ public class OrderDaoImpl implements OrderDao {
 
     @LogInvocation
     @Override
-    public OrderDto getById(Long id) {
+    public Order getById(Long id) {
         try {
             return jdbcTemplate.queryForObject(FIND_ORDER_BY_ID, this::process, id);
         } catch (DataAccessException e) {
@@ -103,7 +103,7 @@ public class OrderDaoImpl implements OrderDao {
 
     @LogInvocation
     @Override
-    public List<OrderDto> getAll(int limit, int offset) {
+    public List<Order> getAll(int limit, int offset) {
         try {
             Map<String, Object> params = new HashMap<>();
             params.put("limit", limit);
@@ -116,7 +116,7 @@ public class OrderDaoImpl implements OrderDao {
 
     @LogInvocation
     @Override
-    public OrderDto create(OrderDto order) {
+    public Order create(Order order) {
         try {
             KeyHolder keyHolder = new GeneratedKeyHolder();
             jdbcTemplate.update(connection -> getPreparedStatement(order, connection), keyHolder);
@@ -129,7 +129,7 @@ public class OrderDaoImpl implements OrderDao {
 
     @LogInvocation
     @Override
-    public OrderDto update(OrderDto order) {
+    public Order update(Order order) {
         try {
             namedParameterJdbcTemplate.update(UPDATE_ORDER, getParamMap(order));
             return getById(order.getId());
@@ -149,21 +149,21 @@ public class OrderDaoImpl implements OrderDao {
 
     }
 
-    private OrderDto process(ResultSet rs, int rowNum) throws SQLException {
-        OrderDto order = new OrderDto();
+    private Order process(ResultSet rs, int rowNum) throws SQLException {
+        Order order = new Order();
         order.setId(rs.getLong(COL_ID));
-        order.setUserId(rs.getLong(COL_USER_ID));
-        order.setOrderStatus(OrderDto.OrderStatus.valueOf(rs.getString(COL_STATUS)));
-        order.setPaymentMethod(OrderDto.PaymentMethod.valueOf(rs.getString(COL_PAYMENT_METHOD)));
-        order.setPaymentStatus(OrderDto.PaymentStatus.valueOf(rs.getString(COL_PAYMENT_STATUS)));
-        order.setDeliveryType(OrderDto.DeliveryType.valueOf(rs.getString(COL_DELIVERY_TYPE)));
+//        order.setUser(rs.getLong(COL_USER_ID));
+        order.setOrderStatus(Order.OrderStatus.valueOf(rs.getString(COL_STATUS)));
+        order.setPaymentMethod(Order.PaymentMethod.valueOf(rs.getString(COL_PAYMENT_METHOD)));
+        order.setPaymentStatus(Order.PaymentStatus.valueOf(rs.getString(COL_PAYMENT_STATUS)));
+        order.setDeliveryType(Order.DeliveryType.valueOf(rs.getString(COL_DELIVERY_TYPE)));
         order.setCost(rs.getBigDecimal(COL_COST));
         return order;
     }
 
-    private PreparedStatement getPreparedStatement(OrderDto order, Connection connection) throws SQLException {
+    private PreparedStatement getPreparedStatement(Order order, Connection connection) throws SQLException {
         PreparedStatement ps = connection.prepareStatement(CREATE_ORDER, Statement.RETURN_GENERATED_KEYS);
-        ps.setLong(1, order.getUserId());
+//        ps.setLong(1, order.getUserId());
         ps.setString(2, order.getOrderStatus().toString());
         ps.setString(3, order.getPaymentMethod().toString());
         ps.setString(4, order.getPaymentStatus().toString());
@@ -172,10 +172,10 @@ public class OrderDaoImpl implements OrderDao {
         return ps;
     }
 
-    private Map<String, Object> getParamMap(OrderDto order) {
+    private Map<String, Object> getParamMap(Order order) {
         Map<String, Object> params = new HashMap<>();
         params.put("id", order.getId());
-        params.put("userId", order.getUserId());
+//        params.put("userId", order.getUserId());
         params.put("status", order.getOrderStatus());
         params.put("paymentMethod", order.getPaymentMethod().toString());
         params.put("paymentStatus", order.getPaymentStatus());

@@ -1,6 +1,6 @@
 //package online.javaclass.bookstore.controller.command.impl.bookCommands;
 //
-//import online.javaclass.bookstore.MessageManager;
+//import online.javaclass.bookstore.platform.MessageManager;
 //import org.junit.jupiter.api.BeforeAll;
 //import org.junit.jupiter.params.ParameterizedTest;
 //import org.junit.jupiter.params.provider.Arguments;

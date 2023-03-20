@@ -2,7 +2,7 @@ package online.javaclass.bookstore.controller.command.impl.orderCommands;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import online.javaclass.bookstore.LogInvocation;
+import online.javaclass.bookstore.platform.logging.LogInvocation;
 import online.javaclass.bookstore.controller.PagingUtil;
 import online.javaclass.bookstore.controller.command.Command;
 import online.javaclass.bookstore.service.OrderService;
@@ -21,11 +21,12 @@ import java.util.Map;
 public class OrdersCommand implements Command {
     private final OrderService orderService;
     private final UserService userService;
+    private final PagingUtil pagingUtil;
 
     @LogInvocation
     @Override
     public String execute(HttpServletRequest req) {
-        PageableDto pageable = PagingUtil.getPageable(req);
+        PageableDto pageable = pagingUtil.getPageable(req);
         List<OrderDto> orders = orderService.getAll(pageable);
         Map<OrderDto, UserDto> ordersMap = mapOrders(orders);
         req.setAttribute("page", pageable.getPage());

@@ -1,19 +1,16 @@
 package online.javaclass.bookstore.data.repository.impl;
 
 import lombok.RequiredArgsConstructor;
-import online.javaclass.bookstore.data.EntityDtoMapperData;
 import online.javaclass.bookstore.data.dao.OrderDao;
 import online.javaclass.bookstore.data.dao.OrderItemDao;
 import online.javaclass.bookstore.data.dao.UserDao;
-import online.javaclass.bookstore.data.dto.OrderDto;
-import online.javaclass.bookstore.data.dto.OrderItemDto;
-import online.javaclass.bookstore.data.dto.UserDto;
 import online.javaclass.bookstore.data.entities.Order;
+import online.javaclass.bookstore.data.entities.OrderItem;
+import online.javaclass.bookstore.data.entities.User;
 import online.javaclass.bookstore.data.repository.OrderRepository;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -22,7 +19,6 @@ public class OrderRepositoryImpl implements OrderRepository {
     private final OrderDao orderDao;
     private final OrderItemDao orderItemDao;
     private final UserDao userDao;
-    private final EntityDtoMapperData mapper;
 
     @Override
     public Long count() {
@@ -31,63 +27,54 @@ public class OrderRepositoryImpl implements OrderRepository {
 
     @Override
     public List<Order> getAllByUserId(Long userId) {
-        List<Order> orders = new ArrayList<>();
-        List<OrderDto> orderDtos = orderDao.getAllByUserId(userId);
-        UserDto user = userDao.getById(userId);
-        for (OrderDto orderDto : orderDtos) {
-            List<OrderItemDto> itemDtos = orderItemDao.getAllByOrderId(orderDto.getId());
-            orderDto.setItems(itemDtos);
-            orderDto.setCost(calculateCost(itemDtos));
-            Order order = mapper.toEntity(orderDto);
-            order.setUser(mapper.toEntity(user));
-            orders.add(order);
+        List<Order> orderList = orderDao.getAllByUserId(userId);
+        User user = userDao.getById(userId);
+        for (Order order : orderList) {
+            List<OrderItem> items = orderItemDao.getAllByOrderId(order.getId());
+            order.setItems(items);
+            order.setCost(calculateCost(items));
+            order.setUser(user);
         }
-        return orders;
+        return orderList;
     }
 
     @Override
     public Order getById(Long id) {
-        OrderDto orderDto = orderDao.getById(id);
-        return buildOrder(orderDto);
+        return buildOrder(orderDao.getById(id));
     }
 
     @Override
     public List<Order> getAll(int limit, int offset) {
-        List<Order> orders = new ArrayList<>();
-        List<OrderDto> orderDtoList = orderDao.getAll(limit, offset);
-        for (OrderDto orderDto : orderDtoList) {
-            Order order = buildOrder(orderDto);
-            order.setUser(mapper.toEntity(userDao.getById(orderDto.getUserId())));
-            orders.add(order);
+        List<Order> orderList = orderDao.getAll(limit, offset);
+        for (Order order: orderList) {
+            buildOrder(order);
         }
-        return orders;
+        return orderList;
     }
 
     @Override
     public Order create(Order order) {
-        OrderDto orderDto = mapper.toDto(order);
-        OrderDto createdOrder = orderDao.create(orderDto);
-        List<OrderItemDto> items = orderDto.getItems();
-        for (OrderItemDto item : items) {
+        Order createdOrder = orderDao.create(order);
+        List<OrderItem> itemList = order.getItems();
+        for (OrderItem item : itemList) {
             item.setOrderId(createdOrder.getId());
         }
-        items.forEach(orderItemDao::create);
-        createdOrder.setItems(items);
-        return mapper.toEntity(createdOrder);
+        itemList.forEach(orderItemDao::create);
+        createdOrder.setItems(itemList);
+        return createdOrder;
     }
 
     @Override
     public Order update(Order order) {
-        OrderDto orderDto = mapper.toDto(order);
-        OrderDto updatedOrder = orderDao.update(orderDto);
-        List<OrderItemDto> itemDtos = orderDto.getItems();
+        Order updatedOrder = orderDao.update(order);
+        List<OrderItem> itemList = order.getItems();
         orderItemDao.deleteAllByOrderId(order.getId());
-        for (OrderItemDto item : itemDtos) {
+        for (OrderItem item : itemList) {
             orderItemDao.create(item);
         }
-        updatedOrder.setItems(itemDtos);
-        updatedOrder.setUserId(order.getUser().getId());
-        return mapper.toEntity(updatedOrder);
+        updatedOrder.setItems(itemList);
+        updatedOrder.setUser(order.getUser());
+        return updatedOrder;
     }
 
     @Override
@@ -95,17 +82,16 @@ public class OrderRepositoryImpl implements OrderRepository {
         return orderDao.deleteById(id);
     }
 
-    private Order buildOrder(OrderDto orderDto) {
-        List<OrderItemDto> orderItemDtos = orderItemDao.getAllByOrderId(orderDto.getId());
-        orderDto.setItems(orderItemDtos);
-        Order order = mapper.toEntity(orderDto);
-        order.setUser(mapper.toEntity(userDao.getById(orderDto.getUserId())));
+    private Order buildOrder(Order order) {
+        List<OrderItem> orderItems = orderItemDao.getAllByOrderId(order.getId());
+        order.setItems(orderItems);
+        order.setUser(userDao.getById(order.getUser().getId()));
         return order;
     }
 
-    private BigDecimal calculateCost(List<OrderItemDto> items) {
+    private BigDecimal calculateCost(List<OrderItem> items) {
         BigDecimal totalCost = BigDecimal.ZERO;
-        for (OrderItemDto item : items) {
+        for (OrderItem item : items) {
             BigDecimal itemCost = item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity()));
             totalCost = totalCost.add(itemCost);
         }

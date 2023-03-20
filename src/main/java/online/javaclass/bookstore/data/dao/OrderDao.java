@@ -1,11 +1,11 @@
 package online.javaclass.bookstore.data.dao;
 
-import online.javaclass.bookstore.data.dto.OrderDto;
+import online.javaclass.bookstore.data.entities.Order;
 
 import java.util.List;
 
-public interface OrderDao extends AbstractDao<Long, OrderDto> {
+public interface OrderDao extends AbstractDao<Long, Order> {
     Long count();
 
-    List<OrderDto> getAllByUserId(Long userId);
+    List<Order> getAllByUserId(Long userId);
 }

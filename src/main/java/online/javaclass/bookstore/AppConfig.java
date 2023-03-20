@@ -17,17 +17,16 @@ import javax.sql.DataSource;
 @ComponentScan
 @PropertySource("classpath:/application.properties")
 @PropertySource("classpath:/connection-config.properties")
-@PropertySource("classpath:/META-INF/persistence.xml")
 @EnableAspectJAutoProxy
 public class AppConfig {
 
-    @Value("${jakarta.persistence.jdbc.url}")
+    @Value("${db.local.url}")
     private String url;
-    @Value("${jakarta.persistence.jdbc.user}")
+    @Value("${db.local.user}")
     private String username;
-    @Value("${jakarta.persistence.jdbc.password}")
+    @Value("${db.local.password}")
     private String password;
-    @Value("${jakarta.persistence.jdbc.driver}")
+    @Value("${db.local.driver}")
     private String driver;
     @Bean
     public DataSource dataSource() {

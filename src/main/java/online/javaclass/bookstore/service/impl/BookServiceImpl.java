@@ -1,8 +1,8 @@
 package online.javaclass.bookstore.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import online.javaclass.bookstore.LogInvocation;
-import online.javaclass.bookstore.MessageManager;
+import online.javaclass.bookstore.platform.logging.LogInvocation;
+import online.javaclass.bookstore.platform.MessageManager;
 import online.javaclass.bookstore.controller.PagingUtil;
 import online.javaclass.bookstore.data.entities.Book;
 import online.javaclass.bookstore.data.repository.BookRepository;
@@ -23,7 +23,7 @@ public class BookServiceImpl implements BookService {
     private final BookRepository bookRepo;
     private final EntityDtoMapperService mapper;
     private final MessageManager messageManager;
-
+    private final PagingUtil pagingUtil;
     /**
      * Invokes count method of a repository layer
      *
@@ -156,7 +156,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<BookDto> getAll(PageableDto pageable) {
         Long totalItems = bookRepo.count();
-        Long totalPages = PagingUtil.getTotalPages(totalItems, pageable);
+        Long totalPages = pagingUtil.getTotalPages(totalItems, pageable);
         pageable.setTotalItems(bookRepo.count());
         pageable.setTotalPages(totalPages);
         if (pageable.getPage() > totalPages) {

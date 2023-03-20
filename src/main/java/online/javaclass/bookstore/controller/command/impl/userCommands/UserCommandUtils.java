@@ -1,7 +1,7 @@
 package online.javaclass.bookstore.controller.command.impl.userCommands;
 
 import jakarta.servlet.http.HttpServletRequest;
-import online.javaclass.bookstore.MessageManager;
+import online.javaclass.bookstore.platform.MessageManager;
 import online.javaclass.bookstore.exceptions.ValidationException;
 import online.javaclass.bookstore.service.dto.UserDto;
 import org.springframework.stereotype.Component;

@@ -1,7 +1,7 @@
 package online.javaclass.bookstore.controller.command.impl.bookCommands;
 
 import jakarta.servlet.http.HttpServletRequest;
-import online.javaclass.bookstore.MessageManager;
+import online.javaclass.bookstore.platform.MessageManager;
 import online.javaclass.bookstore.exceptions.ValidationException;
 import online.javaclass.bookstore.service.dto.BookDto;
 import org.apache.commons.lang3.StringUtils;

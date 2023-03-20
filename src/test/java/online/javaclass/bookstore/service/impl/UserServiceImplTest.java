@@ -1,6 +1,6 @@
 //package online.javaclass.bookstore.service.impl;
 //
-//import online.javaclass.bookstore.MessageManager;
+//import online.javaclass.bookstore.platform.MessageManager;
 //import online.javaclass.bookstore.data.entities.User;
 //import online.javaclass.bookstore.data.repository.UserRepository;
 //import online.javaclass.bookstore.data.repository.impl.UserRepositoryImpl;

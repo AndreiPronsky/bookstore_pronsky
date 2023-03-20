@@ -1,18 +1,15 @@
 package online.javaclass.bookstore.data.dao.impl;
 
 import lombok.RequiredArgsConstructor;
-import online.javaclass.bookstore.LogInvocation;
-import online.javaclass.bookstore.MessageManager;
+import online.javaclass.bookstore.platform.logging.LogInvocation;
+import online.javaclass.bookstore.platform.MessageManager;
 import online.javaclass.bookstore.data.dao.BookDao;
-import online.javaclass.bookstore.data.dto.BookDto;
-import online.javaclass.bookstore.exceptions.AppException;
-import online.javaclass.bookstore.exceptions.UnableToCreateException;
-import online.javaclass.bookstore.exceptions.UnableToFindException;
-import online.javaclass.bookstore.exceptions.UnableToUpdateException;
-import org.springframework.dao.DataAccessException;
+import online.javaclass.bookstore.data.entities.Book;
+import online.javaclass.bookstore.exceptions.*;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import java.util.List;
 
@@ -25,107 +22,116 @@ public class BookDaoImpl implements BookDao {
 
     @LogInvocation
     @Override
-    public List<BookDto> search(String input) {
+    public List<Book> search(String input) {
         try {
             String reformattedForSearchInput = "%" + input + "%";
             return entityManager
-                    .createQuery("from BookDto where author like : input or title like :input", BookDto.class)
+                    .createQuery("from Book where author like : input or title like :input", Book.class)
                     .setParameter("input", reformattedForSearchInput)
                     .getResultList();
-        } catch (DataAccessException e) {
+        } catch (PersistenceException e) {
             throw new UnableToFindException(messageManager.getMessage("books.unable_to_find_containing")
-                    + " " + input + messageManager.getMessage("in_title"));
+                    + " " + input + messageManager.getMessage("in_title"), e);
         }
     }
 
     @Override
     public Long count() {
         try {
-            Query query = entityManager.createQuery("SELECT COUNT(bD) FROM BookDto bD ");
+            Query query = entityManager.createQuery("SELECT COUNT(*) FROM Book");
             return (Long)query.getSingleResult();
-        } catch (DataAccessException e) {
-            throw new AppException(messageManager.getMessage("count_failed"));
+        } catch (PersistenceException e) {
+            throw new AppException(messageManager.getMessage("count_failed"), e);
         }
     }
 
     @LogInvocation
     @Override
-    public BookDto create(BookDto book) {
+    public Book create(Book book) {
         try {
             entityManager.persist(book);
             return book;
-        } catch (DataAccessException e) {
-            throw new UnableToCreateException(messageManager.getMessage("book.unable_to_create"));
+        } catch (PersistenceException e) {
+            throw new UnableToCreateException(messageManager.getMessage("book.unable_to_create"), e);
         }
     }
 
     @LogInvocation
     @Override
-    public BookDto update(BookDto book) {
+    public Book update(Book book) {
         try {
             entityManager.detach(book);
             entityManager.merge(book);
             return getById(book.getId());
-        } catch (DataAccessException e) {
-            throw new UnableToUpdateException(messageManager.getMessage("book.unable_to_update"));
+        } catch (PersistenceException e) {
+            throw new UnableToUpdateException(messageManager.getMessage("book.unable_to_update"), e);
         }
     }
 
     @LogInvocation
     @Override
-    public BookDto getById(Long id) {
+    public Book getById(Long id) {
         try {
-            return entityManager.find(BookDto.class, id);
-        } catch (DataAccessException e) {
-            throw new UnableToFindException(messageManager.getMessage("book.unable_to_find_id") + " " + id);
+            return entityManager.find(Book.class, id);
+        } catch (PersistenceException e) {
+            throw new UnableToFindException(messageManager.getMessage("book.unable_to_find_id") + " " + id, e);
         }
     }
 
     @LogInvocation
     @Override
-    public BookDto getByIsbn(String isbn) {
+    public Book getByIsbn(String isbn) {
         try {
-            return entityManager.find(BookDto.class, isbn);
-        } catch (DataAccessException e) {
-            throw new UnableToFindException(messageManager.getMessage("book.unable_to_find_isbn"));
+            return entityManager.find(Book.class, isbn);
+        } catch (PersistenceException e) {
+            throw new UnableToFindException(messageManager.getMessage("book.unable_to_find_isbn"), e);
         }
     }
 
     @LogInvocation
     @Override
-    public List<BookDto> getByAuthor(String author, int limit, int offset) {
+    public List<Book> getByAuthor(String author, int limit, int offset) {
         try {
             return entityManager
-                    .createQuery("from BookDto where author = :author order by id", BookDto.class)
+                    .createQuery("from Book where author = :author order by id", Book.class)
                     .setParameter("author", author)
                     .setMaxResults(limit)
+                    .setFirstResult(offset)
                     .getResultList();
-        } catch (DataAccessException e) {
-            throw new UnableToFindException(messageManager.getMessage("books.unable_to_find_author"));
+        } catch (PersistenceException e) {
+            throw new UnableToFindException(messageManager.getMessage("books.unable_to_find_author"), e);
         }
     }
 
     @LogInvocation
     @Override
-    public List<BookDto> getAll(int limit, int offset) {
+    public List<Book> getAll(int limit, int offset) {
         try {
-            return entityManager.createQuery("from BookDto", BookDto.class).getResultList();
-        } catch (DataAccessException e) {
-            throw new UnableToFindException(messageManager.getMessage("books.unable_to_find"));
+            return entityManager.createQuery("from Book", Book.class)
+                    .setMaxResults(limit)
+                    .setFirstResult(offset)
+                    .getResultList();
+        } catch (PersistenceException e) {
+            throw new RuntimeException(e);
+            //throw new UnableToFindException(messageManager.getMessage("books.unable_to_find"), e);
         }
     }
 
     @LogInvocation
     @Override
     public boolean deleteById(Long id) {
-        boolean deleted = false;
-        entityManager.getTransaction().begin();
-        BookDto toDelete = entityManager.find(BookDto.class, id);
-        if (toDelete != null) {
-            entityManager.remove(toDelete);
-            deleted = true;
+        try {
+            boolean deleted = false;
+            entityManager.getTransaction().begin();
+            Book toDelete = entityManager.find(Book.class, id);
+            if (toDelete != null) {
+                entityManager.remove(toDelete);
+                deleted = true;
+            }
+            entityManager.getTransaction().commit();
+            return deleted;
+        } catch (PersistenceException e) {
+            throw new UnableToDeleteException(messageManager.getMessage("book.unable_to_delete_id"), e);
         }
-        entityManager.getTransaction().commit();
-        return deleted;
     }
 }

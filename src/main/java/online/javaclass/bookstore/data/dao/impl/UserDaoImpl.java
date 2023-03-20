@@ -1,10 +1,10 @@
 package online.javaclass.bookstore.data.dao.impl;
 
 import lombok.RequiredArgsConstructor;
-import online.javaclass.bookstore.LogInvocation;
-import online.javaclass.bookstore.MessageManager;
+import online.javaclass.bookstore.platform.logging.LogInvocation;
+import online.javaclass.bookstore.platform.MessageManager;
 import online.javaclass.bookstore.data.dao.UserDao;
-import online.javaclass.bookstore.data.dto.UserDto;
+import online.javaclass.bookstore.data.entities.User;
 import online.javaclass.bookstore.exceptions.*;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -51,7 +51,7 @@ public class UserDaoImpl implements UserDao {
 
     @LogInvocation
     @Override
-    public UserDto create(UserDto user) {
+    public User create(User user) {
         try {
             KeyHolder keyHolder = new GeneratedKeyHolder();
             jdbcTemplate.update(connection -> getPreparedStatement(user, connection), keyHolder);
@@ -64,7 +64,7 @@ public class UserDaoImpl implements UserDao {
 
     @LogInvocation
     @Override
-    public UserDto update(UserDto user) {
+    public User update(User user) {
         try {
             namedParameterJdbcTemplate.update(UPDATE_USER, getParamMap(user));
             return getById(user.getId());
@@ -75,7 +75,7 @@ public class UserDaoImpl implements UserDao {
 
     @LogInvocation
     @Override
-    public UserDto getById(Long id) {
+    public User getById(Long id) {
         try {
             return jdbcTemplate.queryForObject(FIND_USER_BY_ID, this::process, id);
         } catch (DataAccessException e) {
@@ -85,7 +85,7 @@ public class UserDaoImpl implements UserDao {
 
     @LogInvocation
     @Override
-    public UserDto getByEmail(String email) {
+    public User getByEmail(String email) {
         try {
             return jdbcTemplate.queryForObject(FIND_USER_BY_EMAIL, this::process, email);
         } catch (DataAccessException e) {
@@ -95,7 +95,7 @@ public class UserDaoImpl implements UserDao {
 
     @LogInvocation
     @Override
-    public List<UserDto> getByLastName(String lastName, int limit, int offset) {
+    public List<User> getByLastName(String lastName, int limit, int offset) {
         try {
             Map<String, Object> params = new HashMap<>();
             params.put("lastname", lastName);
@@ -109,7 +109,7 @@ public class UserDaoImpl implements UserDao {
 
     @LogInvocation
     @Override
-    public List<UserDto> getAll(int limit, int offset) {
+    public List<User> getAll(int limit, int offset) {
         try {
             Map<String, Object> params = new HashMap<>();
             params.put("limit", limit);
@@ -139,7 +139,7 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
-    private PreparedStatement getPreparedStatement(UserDto user, Connection connection) throws SQLException {
+    private PreparedStatement getPreparedStatement(User user, Connection connection) throws SQLException {
         PreparedStatement ps = connection.prepareStatement(CREATE_USER, Statement.RETURN_GENERATED_KEYS);
         ps.setString(1, user.getFirstName());
         ps.setString(2, user.getLastName());
@@ -150,19 +150,19 @@ public class UserDaoImpl implements UserDao {
         return ps;
     }
 
-    private UserDto process(ResultSet rs, int rowNum) throws SQLException {
-        UserDto user = new UserDto();
+    private User process(ResultSet rs, int rowNum) throws SQLException {
+        User user = new User();
         user.setId(rs.getLong(COL_ID));
         user.setFirstName(rs.getString(COL_FIRSTNAME));
         user.setLastName(rs.getString(COL_LASTNAME));
         user.setEmail(rs.getString(COL_EMAIL));
         user.setPassword(rs.getString(COL_PASSWORD));
-        user.setRole(UserDto.Role.valueOf(rs.getString(COL_ROLE)));
+        user.setRole(User.Role.valueOf(rs.getString(COL_ROLE)));
         user.setRating(rs.getBigDecimal(COL_RATING));
         return user;
     }
 
-    private Map<String, Object> getParamMap(UserDto user) {
+    private Map<String, Object> getParamMap(User user) {
         Map<String, Object> params = new HashMap<>();
         params.put("id", user.getId());
         params.put("email", user.getEmail());

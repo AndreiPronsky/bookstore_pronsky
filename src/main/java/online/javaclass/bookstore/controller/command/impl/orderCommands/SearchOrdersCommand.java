@@ -2,7 +2,7 @@ package online.javaclass.bookstore.controller.command.impl.orderCommands;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import online.javaclass.bookstore.LogInvocation;
+import online.javaclass.bookstore.platform.logging.LogInvocation;
 import online.javaclass.bookstore.controller.command.Command;
 import online.javaclass.bookstore.service.OrderService;
 import online.javaclass.bookstore.service.dto.OrderDto;

@@ -1,8 +1,8 @@
 package online.javaclass.bookstore.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import online.javaclass.bookstore.LogInvocation;
-import online.javaclass.bookstore.MessageManager;
+import online.javaclass.bookstore.platform.logging.LogInvocation;
+import online.javaclass.bookstore.platform.MessageManager;
 import online.javaclass.bookstore.controller.PagingUtil;
 import online.javaclass.bookstore.data.entities.Order;
 import online.javaclass.bookstore.data.repository.OrderRepository;
@@ -26,6 +26,8 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepo;
     private final EntityDtoMapperService mapper;
     private final MessageManager messageManager;
+
+    private final PagingUtil pagingUtil;
 
     @LogInvocation
     @Override
@@ -65,7 +67,7 @@ public class OrderServiceImpl implements OrderService {
             throw new UnableToFindException(messageManager.getMessage("orders.unable_to_find"));
         } else {
             Long totalItems = orderRepo.count();
-            Long totalPages = PagingUtil.getTotalPages(totalItems, pageable);
+            Long totalPages = pagingUtil.getTotalPages(totalItems, pageable);
             pageable.setTotalItems(orderRepo.count());
             pageable.setTotalPages(totalPages);
             return orders;
