@@ -1,7 +1,7 @@
 package online.javaclass.bookstore.data.entities;
 
-import online.javaclass.bookstore.data.converters.CoverConverter;
-import online.javaclass.bookstore.data.converters.GenreConverter;
+import online.javaclass.bookstore.data.converters.bookConverters.CoverConverter;
+import online.javaclass.bookstore.data.converters.bookConverters.GenreConverter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -9,7 +9,6 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "books")
-@Inheritance(strategy = InheritanceType.JOINED)
 public class Book {
     @Id
     @Column(name = "id")

@@ -3,9 +3,9 @@ package online.javaclass.bookstore.data.repository;
 import java.util.List;
 
 public interface AbstractRepository<K, T> {
-    T getById(K id);
+    T findById(K id);
 
-    List<T> getAll(int limit, int offset);
+    List<T> findAll(int limit, int offset);
 
     T create(T entity);
 

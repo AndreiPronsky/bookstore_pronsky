@@ -1,101 +1,73 @@
 package online.javaclass.bookstore.data.repository.impl;
 
 import lombok.RequiredArgsConstructor;
-import online.javaclass.bookstore.data.dao.OrderDao;
-import online.javaclass.bookstore.data.dao.OrderItemDao;
-import online.javaclass.bookstore.data.dao.UserDao;
 import online.javaclass.bookstore.data.entities.Order;
-import online.javaclass.bookstore.data.entities.OrderItem;
-import online.javaclass.bookstore.data.entities.User;
 import online.javaclass.bookstore.data.repository.OrderRepository;
 import org.springframework.stereotype.Repository;
 
-import java.math.BigDecimal;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.transaction.Transactional;
 import java.util.List;
 
 @RequiredArgsConstructor
 @Repository
+@Transactional
 public class OrderRepositoryImpl implements OrderRepository {
-    private final OrderDao orderDao;
-    private final OrderItemDao orderItemDao;
-    private final UserDao userDao;
+
+    @PersistenceContext
+    private final EntityManager entityManager;
 
     @Override
     public Long count() {
-        return orderDao.count();
+        Query query = entityManager.createQuery("SELECT COUNT (*) FROM Order");
+        return (Long) query.getSingleResult();
     }
 
     @Override
-    public List<Order> getAllByUserId(Long userId) {
-        List<Order> orderList = orderDao.getAllByUserId(userId);
-        User user = userDao.getById(userId);
-        for (Order order : orderList) {
-            List<OrderItem> items = orderItemDao.getAllByOrderId(order.getId());
-            order.setItems(items);
-            order.setCost(calculateCost(items));
-            order.setUser(user);
-        }
-        return orderList;
+    public List<Order> findAllByUserId(Long userId) {
+        return entityManager
+                .createQuery("FROM Order WHERE user = :user_id ORDER BY id", Order.class)
+                .setParameter("user_id", userId)
+                .getResultList();
     }
 
     @Override
-    public Order getById(Long id) {
-        return buildOrder(orderDao.getById(id));
+    public Order findById(Long id) {
+        return entityManager.find(Order.class, id);
     }
 
     @Override
-    public List<Order> getAll(int limit, int offset) {
-        List<Order> orderList = orderDao.getAll(limit, offset);
-        for (Order order: orderList) {
-            buildOrder(order);
-        }
-        return orderList;
+    public List<Order> findAll(int limit, int offset) {
+        return entityManager
+                .createQuery("FROM Order", Order.class)
+                .setMaxResults(limit)
+                .setFirstResult(offset)
+                .getResultList();
     }
 
     @Override
     public Order create(Order order) {
-        Order createdOrder = orderDao.create(order);
-        List<OrderItem> itemList = order.getItems();
-        for (OrderItem item : itemList) {
-            item.setOrderId(createdOrder.getId());
-        }
-        itemList.forEach(orderItemDao::create);
-        createdOrder.setItems(itemList);
-        return createdOrder;
+        entityManager.persist(order);
+        return order;
     }
 
     @Override
     public Order update(Order order) {
-        Order updatedOrder = orderDao.update(order);
-        List<OrderItem> itemList = order.getItems();
-        orderItemDao.deleteAllByOrderId(order.getId());
-        for (OrderItem item : itemList) {
-            orderItemDao.create(item);
-        }
-        updatedOrder.setItems(itemList);
-        updatedOrder.setUser(order.getUser());
-        return updatedOrder;
+        entityManager.detach(order);
+        entityManager.merge(order);
+        return order;
     }
 
     @Override
     public boolean deleteById(Long id) {
-        return orderDao.deleteById(id);
-    }
-
-    private Order buildOrder(Order order) {
-        List<OrderItem> orderItems = orderItemDao.getAllByOrderId(order.getId());
-        order.setItems(orderItems);
-        order.setUser(userDao.getById(order.getUser().getId()));
-        return order;
-    }
-
-    private BigDecimal calculateCost(List<OrderItem> items) {
-        BigDecimal totalCost = BigDecimal.ZERO;
-        for (OrderItem item : items) {
-            BigDecimal itemCost = item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity()));
-            totalCost = totalCost.add(itemCost);
+        boolean deleted = false;
+        Order toDelete = entityManager.find(Order.class, id);
+        if (toDelete != null) {
+            entityManager.remove(toDelete);
+            deleted = true;
         }
-        return totalCost;
+        return deleted;
     }
-
 }

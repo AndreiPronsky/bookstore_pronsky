@@ -1,4 +1,4 @@
-package online.javaclass.bookstore.data.converters;
+package online.javaclass.bookstore.data.converters.bookConverters;
 
 import online.javaclass.bookstore.data.entities.Book;
 
@@ -9,7 +9,7 @@ import static online.javaclass.bookstore.data.entities.Book.Genre.*;
 public class GenreConverter implements AttributeConverter<Book.Genre, Integer> {
     @Override
     public Integer convertToDatabaseColumn(Book.Genre genre) {
-        int genreId = 0;
+        Integer genreId = null;
         switch (genre) {
             case FICTION -> genreId = 1;
             case MYSTERY -> genreId = 2;

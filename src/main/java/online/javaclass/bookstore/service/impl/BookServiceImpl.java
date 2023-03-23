@@ -1,13 +1,13 @@
 package online.javaclass.bookstore.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import online.javaclass.bookstore.platform.logging.LogInvocation;
-import online.javaclass.bookstore.platform.MessageManager;
 import online.javaclass.bookstore.controller.PagingUtil;
 import online.javaclass.bookstore.data.entities.Book;
 import online.javaclass.bookstore.data.repository.BookRepository;
 import online.javaclass.bookstore.exceptions.UnableToDeleteException;
 import online.javaclass.bookstore.exceptions.UnableToFindException;
+import online.javaclass.bookstore.platform.MessageManager;
+import online.javaclass.bookstore.platform.logging.LogInvocation;
 import online.javaclass.bookstore.service.BookService;
 import online.javaclass.bookstore.service.EntityDtoMapperService;
 import online.javaclass.bookstore.service.dto.BookDto;
@@ -24,6 +24,7 @@ public class BookServiceImpl implements BookService {
     private final EntityDtoMapperService mapper;
     private final MessageManager messageManager;
     private final PagingUtil pagingUtil;
+
     /**
      * Invokes count method of a repository layer
      *
@@ -74,7 +75,7 @@ public class BookServiceImpl implements BookService {
     @LogInvocation
     @Override
     public BookDto getById(Long id) {
-        Book book = bookRepo.getById(id);
+        Book book = bookRepo.findById(id);
         if (book == null) {
             throw new UnableToFindException(messageManager.getMessage("book.unable_to_find_id") + " " + id);
         } else {
@@ -92,7 +93,7 @@ public class BookServiceImpl implements BookService {
     @LogInvocation
     @Override
     public BookDto getByIsbn(String isbn) {
-        Book book = bookRepo.getByIsbn(isbn);
+        Book book = bookRepo.findByIsbn(isbn);
         if (book == null) {
             throw new UnableToFindException(messageManager.getMessage("book.unable_to_find_isbn") + " " + isbn);
         } else {
@@ -133,7 +134,7 @@ public class BookServiceImpl implements BookService {
     @LogInvocation
     @Override
     public List<BookDto> getByAuthor(String author, PageableDto pageable) {
-        List<BookDto> books = bookRepo.getByAuthor(author, pageable.getLimit(), pageable.getOffset()).stream()
+        List<BookDto> books = bookRepo.findByAuthor(author, pageable.getLimit(), pageable.getOffset()).stream()
                 .map(mapper::toDto)
                 .toList();
         if (books.isEmpty()) {
@@ -162,7 +163,7 @@ public class BookServiceImpl implements BookService {
         if (pageable.getPage() > totalPages) {
             pageable.setPage(1);
         }
-        List<BookDto> books = bookRepo.getAll(pageable.getLimit(), pageable.getOffset()).stream()
+        List<BookDto> books = bookRepo.findAll(pageable.getLimit(), pageable.getOffset()).stream()
                 .map(mapper::toDto)
                 .toList();
         if (books.isEmpty()) {

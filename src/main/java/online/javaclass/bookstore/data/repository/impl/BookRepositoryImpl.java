@@ -1,118 +1,96 @@
 package online.javaclass.bookstore.data.repository.impl;
 
 import lombok.RequiredArgsConstructor;
-import online.javaclass.bookstore.data.dao.BookDao;
 import online.javaclass.bookstore.data.entities.Book;
 import online.javaclass.bookstore.data.repository.BookRepository;
+import online.javaclass.bookstore.platform.logging.LogInvocation;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.transaction.Transactional;
 import java.util.List;
 
 @RequiredArgsConstructor
 @Repository
+@Transactional
 public class BookRepositoryImpl implements BookRepository {
-    private final BookDao bookDao;
+    @PersistenceContext
+    private final EntityManager entityManager;
 
-    /**
-     * Takes input parameter and invokes getById method of a DAO layer.
-     *
-     * @param id Long value of book id to find existing book.
-     * @return Object returned from DAO layer mapped to an entity object.
-     */
-    @Override
-    public Book getById(Long id) {
-        return bookDao.getById(id);
-    }
-
-    /**
-     * Takes input parameter and invokes getByIsbn method of a DAO layer.
-     *
-     * @param isbn String value of book id to find existing book.
-     * @return Object returned from DAO layer mapped to an entity object.
-     */
-    @Override
-    public Book getByIsbn(String isbn) {
-        return bookDao.getByIsbn(isbn);
-    }
-
-    /**
-     * Takes input parameter and invokes search method of a DAO layer.
-     *
-     * @param input String value of complete or partial value of a book title or author.
-     * @return List of objects returned from DAO layer mapped to an entity objects.
-     */
+    @LogInvocation
     @Override
     public List<Book> search(String input) {
-        return bookDao.search(input);
+        String reformattedForSearchInput = "%" + input + "%";
+        return entityManager
+                .createQuery("FROM Book WHERE author LIKE : input OR title LIKE :input", Book.class)
+                .setParameter("input", reformattedForSearchInput)
+                .getResultList();
     }
 
-    /**
-     * Takes input parameter and invokes getByAuthor method of a DAO layer.
-     *
-     * @param author String value of complete value of a book author.
-     * @param limit  Integer value of number of entities to be extracted from database.
-     * @param offset Integer value of number of first entities in a list to be skipped
-     * @return List of objects returned from DAO layer mapped to an entity objects.
-     */
-    @Override
-    public List<Book> getByAuthor(String author, int limit, int offset) {
-        return bookDao.getByAuthor(author, limit, offset);
-    }
-
-    /**
-     * Invokes getAll method of a DAO layer.
-     *
-     * @param limit  Integer value of number of entities to be extracted from database.
-     * @param offset Integer value of number of first entities in a list to be skipped
-     * @return List of objects returned from DAO layer mapped to an entity objects.
-     */
-    @Override
-    public List<Book> getAll(int limit, int offset) {
-        return bookDao.getAll(limit, offset);
-    }
-
-    /**
-     * Takes input parameters from entity object, maps it to data transfer object and invokes a create method
-     * of a DAO layer.
-     *
-     * @param book is an entity object to be created.
-     * @return Object returned from DAO layer mapped to an entity object.
-     */
-    @Override
-    public Book create(Book book) {
-        return bookDao.create(book);
-    }
-
-    /**
-     * Takes input parameters from entity object, maps it to data transfer object and invokes an update method
-     * of a DAO layer.
-     *
-     * @param book is an entity object to be updated.
-     * @return Object returned from DAO layer mapped to an entity object.
-     */
-    @Override
-    public Book update(Book book) {
-        return bookDao.update(book);
-    }
-
-    /**
-     * Takes input parameter and invokes deleteById method of a DAO layer.
-     *
-     * @param id Long value of book id to delete existing book.
-     * @return boolean value got from DAO layer indicating if book was deleted.
-     */
-    @Override
-    public boolean deleteById(Long id) {
-        return bookDao.deleteById(id);
-    }
-
-    /**
-     * Invokes count method of a DAO layer.
-     *
-     * @return Long value of existing items in the database got from DAO layer
-     */
     @Override
     public Long count() {
-        return bookDao.count();
+        Query query = entityManager.createQuery("SELECT COUNT(*) FROM Book");
+        return (Long) query.getSingleResult();
+    }
+
+    @LogInvocation
+    @Override
+    public Book create(Book book) {
+        entityManager.persist(book);
+        return book;
+    }
+
+    @LogInvocation
+    @Override
+    public Book update(Book book) {
+        entityManager.detach(book);
+        entityManager.merge(book);
+        return findById(book.getId());
+    }
+
+    @LogInvocation
+    @Override
+    public Book findById(Long id) {
+        return entityManager.find(Book.class, id);
+    }
+
+    @LogInvocation
+    @Override
+    public Book findByIsbn(String isbn) {
+        return entityManager.find(Book.class, isbn);
+    }
+
+    @LogInvocation
+    @Override
+    public List<Book> findByAuthor(String author, int limit, int offset) {
+        return entityManager
+                .createQuery("FROM Book WHERE author = :author ORDER BY id", Book.class)
+                .setParameter("author", author)
+                .setMaxResults(limit)
+                .setFirstResult(offset)
+                .getResultList();
+    }
+
+    @LogInvocation
+    @Override
+    public List<Book> findAll(int limit, int offset) {
+        return entityManager.createQuery("FROM Book", Book.class)
+                .setMaxResults(limit)
+                .setFirstResult(offset)
+                .getResultList();
+    }
+
+    @LogInvocation
+    @Override
+    public boolean deleteById(Long id) {
+        boolean deleted = false;
+        Book toDelete = entityManager.find(Book.class, id);
+        if (toDelete != null) {
+            entityManager.remove(toDelete);
+            deleted = true;
+        }
+        return deleted;
     }
 }

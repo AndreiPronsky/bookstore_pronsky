@@ -1,14 +1,14 @@
 package online.javaclass.bookstore.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import online.javaclass.bookstore.platform.logging.LogInvocation;
-import online.javaclass.bookstore.platform.MessageManager;
 import online.javaclass.bookstore.controller.PagingUtil;
 import online.javaclass.bookstore.data.entities.Order;
 import online.javaclass.bookstore.data.repository.OrderRepository;
 import online.javaclass.bookstore.exceptions.UnableToDeleteException;
 import online.javaclass.bookstore.exceptions.UnableToFindException;
 import online.javaclass.bookstore.exceptions.ValidationException;
+import online.javaclass.bookstore.platform.MessageManager;
+import online.javaclass.bookstore.platform.logging.LogInvocation;
 import online.javaclass.bookstore.service.EntityDtoMapperService;
 import online.javaclass.bookstore.service.OrderService;
 import online.javaclass.bookstore.service.dto.OrderDto;
@@ -32,7 +32,7 @@ public class OrderServiceImpl implements OrderService {
     @LogInvocation
     @Override
     public List<OrderDto> getOrdersByUserId(Long userId) {
-        List<OrderDto> orders = orderRepo.getAllByUserId(userId).stream()
+        List<OrderDto> orders = orderRepo.findAllByUserId(userId).stream()
                 .map(mapper::toDto)
                 .toList();
         if (orders.isEmpty()) {
@@ -50,7 +50,7 @@ public class OrderServiceImpl implements OrderService {
     @LogInvocation
     @Override
     public OrderDto getById(Long id) {
-        Order order = orderRepo.getById(id);
+        Order order = orderRepo.findById(id);
         if (order == null) {
             throw new UnableToFindException(messageManager.getMessage("order.unable_to_find_id"));
         }
@@ -60,7 +60,7 @@ public class OrderServiceImpl implements OrderService {
     @LogInvocation
     @Override
     public List<OrderDto> getAll(PageableDto pageable) {
-        List<OrderDto> orders = orderRepo.getAll(pageable.getLimit(), pageable.getOffset()).stream()
+        List<OrderDto> orders = orderRepo.findAll(pageable.getLimit(), pageable.getOffset()).stream()
                 .map(mapper::toDto)
                 .toList();
         if (orders.isEmpty()) {

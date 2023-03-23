@@ -1,59 +1,79 @@
 package online.javaclass.bookstore.data.repository.impl;
 
 import lombok.RequiredArgsConstructor;
-import online.javaclass.bookstore.data.dao.UserDao;
 import online.javaclass.bookstore.data.entities.User;
 import online.javaclass.bookstore.data.repository.UserRepository;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.transaction.Transactional;
 import java.util.List;
 
 @RequiredArgsConstructor
 @Repository
+@Transactional
 public class UserRepositoryImpl implements UserRepository {
-    private final UserDao userDao;
+    @PersistenceContext
+    private final EntityManager entityManager;
 
     @Override
-    public User getById(Long id) {
-        return userDao.getById(id);
+    public User findById(Long id) {
+        return entityManager.find(User.class, id);
     }
 
     @Override
-    public List<User> getAll(int limit, int offset) {
-        return userDao.getAll(limit, offset);
+    public List<User> findAll(int limit, int offset) {
+        return entityManager
+                .createQuery("FROM User", User.class)
+                .setMaxResults(limit)
+                .setFirstResult(offset)
+                .getResultList();
     }
 
     @Override
     public User create(User user) {
-        return userDao.create(user);
+        entityManager.persist(user);
+        return user;
     }
 
     @Override
     public User update(User user) {
-        return userDao.update(user);
+        entityManager.detach(user);
+        entityManager.merge(user);
+        return user;
     }
 
     @Override
     public boolean deleteById(Long id) {
-        return userDao.deleteById(id);
-    }
-
-    @Override
-    public User getByEmail(String email) {
-        if (userDao.getByEmail(email) == null) {
-            return null;
-        } else {
-            return userDao.getByEmail(email);
+        boolean deleted = false;
+        User toDelete = entityManager.find(User.class, id);
+        if (toDelete != null) {
+            entityManager.remove(toDelete);
+            deleted = true;
         }
+        return deleted;
     }
 
     @Override
-    public List<User> getByLastName(String lastname, int limit, int offset) {
-        return userDao.getByLastName(lastname, limit, offset);
+    public User findByEmail(String email) {
+        return entityManager.find(User.class, email);
+    }
+
+    @Override
+    public List<User> findByLastName(String lastname, int limit, int offset) {
+        return entityManager
+                .createQuery("FROM User WHERE lastName = :lastname ORDER BY id", User.class)
+                .setParameter("lastname", lastname)
+                .setMaxResults(limit)
+                .setFirstResult(offset)
+                .getResultList();
     }
 
     @Override
     public Long count() {
-        return userDao.count();
+        Query query = entityManager.createQuery("SELECT COUNT(*) FROM User");
+        return (Long) query.getSingleResult();
     }
 }

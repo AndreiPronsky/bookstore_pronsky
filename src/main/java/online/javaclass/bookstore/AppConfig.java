@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.transaction.TransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.sql.DataSource;
@@ -15,6 +17,7 @@ import javax.sql.DataSource;
 @Log4j2
 @Configuration
 @ComponentScan
+@EnableTransactionManagement
 @PropertySource("classpath:/application.properties")
 @PropertySource("classpath:/connection-config.properties")
 @EnableAspectJAutoProxy
@@ -28,6 +31,7 @@ public class AppConfig {
     private String password;
     @Value("${db.local.driver}")
     private String driver;
+
     @Bean
     public DataSource dataSource() {
         HikariDataSource dataSource = new HikariDataSource();
@@ -62,7 +66,7 @@ public class AppConfig {
     }
 
     @Bean
-    public EntityManager entityManager(EntityManagerFactory entityManagerFactory) {
-        return entityManagerFactory.createEntityManager();
+    public TransactionManager transactionManager(EntityManagerFactory factory) {
+        return new JpaTransactionManager(factory);
     }
 }

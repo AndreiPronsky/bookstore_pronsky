@@ -6,9 +6,7 @@ import java.util.List;
 
 public interface UserRepository extends AbstractRepository<Long, User> {
 
-    User getByEmail(String email);
+    User findByEmail(String email);
 
-    List<User> getByLastName(String lastname, int limit, int offset);
-
-    Long count();
+    List<User> findByLastName(String lastname, int limit, int offset);
 }
