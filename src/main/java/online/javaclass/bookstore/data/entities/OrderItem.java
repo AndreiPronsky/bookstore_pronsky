@@ -13,12 +13,11 @@ public class OrderItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST,
-            CascadeType.REFRESH})
+    @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "order_id")
     private Order order;
 
-    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @OneToOne()
     @JoinColumn(name = "book_id")
     private Book book;
 
@@ -88,7 +87,7 @@ public class OrderItem {
     public String toString() {
         return "OrderItem{" +
                 "id=" + id +
-                ", order=" + order +
+                ", order=" + order.getId() +
                 ", book=" + book +
                 ", quantity=" + quantity +
                 ", price=" + price +

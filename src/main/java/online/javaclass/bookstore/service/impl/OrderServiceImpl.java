@@ -1,6 +1,5 @@
 package online.javaclass.bookstore.service.impl;
 
-import lombok.RequiredArgsConstructor;
 import online.javaclass.bookstore.controller.PagingUtil;
 import online.javaclass.bookstore.data.entities.Order;
 import online.javaclass.bookstore.data.repository.OrderRepository;
@@ -16,18 +15,26 @@ import online.javaclass.bookstore.service.dto.OrderItemDto;
 import online.javaclass.bookstore.service.dto.PageableDto;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-@RequiredArgsConstructor
 @Service
+@Transactional
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepo;
     private final EntityDtoMapperService mapper;
     private final MessageManager messageManager;
 
     private final PagingUtil pagingUtil;
+
+    public OrderServiceImpl(OrderRepository orderRepo, EntityDtoMapperService mapper, MessageManager messageManager, PagingUtil pagingUtil) {
+        this.orderRepo = orderRepo;
+        this.mapper = mapper;
+        this.messageManager = messageManager;
+        this.pagingUtil = pagingUtil;
+    }
 
     @LogInvocation
     @Override

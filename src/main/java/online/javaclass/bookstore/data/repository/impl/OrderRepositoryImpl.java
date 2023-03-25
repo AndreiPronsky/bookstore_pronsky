@@ -57,7 +57,6 @@ public class OrderRepositoryImpl implements OrderRepository {
 
     @Override
     public Order update(Order order) {
-        entityManager.detach(order);
         entityManager.merge(order);
         return order;
     }

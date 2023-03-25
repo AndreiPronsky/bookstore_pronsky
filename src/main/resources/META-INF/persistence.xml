@@ -4,9 +4,9 @@
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <properties>
             <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
-            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://127.0.0.1:5432/bookstore_pronsky"/>
-            <property name="jakarta.persistence.jdbc.user" value="postgres"/>
-            <property name="jakarta.persistence.jdbc.password" value="root"/>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://mouse.db.elephantsql.com/lpmlhcys"/>
+            <property name="jakarta.persistence.jdbc.user" value="lpmlhcys"/>
+            <property name="jakarta.persistence.jdbc.password" value="X7rZKCkySJ4i6x4AsEG9n0ypB9G98KYF"/>
             <property name="hbm2ddl.auto" value="update"/>
             <property name="hibernate.transaction.manager_lookup_class"
                       value="org.hibernate.engine.transaction.jta.platform.internal.JBossStandAloneJtaPlatform"/>

@@ -1,9 +1,8 @@
 package online.javaclass.bookstore.service;
 
-import online.javaclass.bookstore.data.entities.Book;
-import online.javaclass.bookstore.data.entities.Order;
-import online.javaclass.bookstore.data.entities.OrderItem;
-import online.javaclass.bookstore.data.entities.User;
+import lombok.RequiredArgsConstructor;
+import online.javaclass.bookstore.data.entities.*;
+import online.javaclass.bookstore.data.repository.OrderRepository;
 import online.javaclass.bookstore.service.dto.BookDto;
 import online.javaclass.bookstore.service.dto.OrderDto;
 import online.javaclass.bookstore.service.dto.OrderItemDto;
@@ -11,7 +10,10 @@ import online.javaclass.bookstore.service.dto.UserDto;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class EntityDtoMapperService {
+    private final OrderRepository orderRepo;
+
     public User toEntity(UserDto userDto) {
         if (userDto == null) {
             return null;
@@ -47,7 +49,9 @@ public class EntityDtoMapperService {
             return null;
         }
         Order order = new Order();
-        order.setId(orderDto.getId());
+        if (orderDto.getId() != null) {
+            order.setId(orderDto.getId());
+        }
         order.setUser(toEntity(orderDto.getUser()));
         order.setOrderStatus(Order.OrderStatus.valueOf(orderDto.getOrderStatus().toString()));
         order.setPaymentMethod(Order.PaymentMethod.valueOf(orderDto.getPaymentMethod().toString()));
@@ -70,6 +74,9 @@ public class EntityDtoMapperService {
         orderDto.setPaymentMethod(OrderDto.PaymentMethod.valueOf(order.getPaymentMethod().toString()));
         orderDto.setPaymentStatus(OrderDto.PaymentStatus.valueOf(order.getPaymentStatus().toString()));
         orderDto.setDeliveryType(OrderDto.DeliveryType.valueOf(order.getDeliveryType().toString()));
+        for (OrderItem item : order.getItems()) {
+            item.setOrder(order);
+        }
         orderDto.setItems(order.getItems().stream().map(this::toDto).toList());
         orderDto.setCost(order.getCost());
         return orderDto;
@@ -115,7 +122,7 @@ public class EntityDtoMapperService {
             return null;
         }
         OrderItemDto itemDto = new OrderItemDto();
-        itemDto.setOrder(this.toDto(item.getOrder()));
+        itemDto.setOrderId(item.getOrder().getId());
         itemDto.setQuantity(item.getQuantity());
         itemDto.setPrice(item.getPrice());
         itemDto.setBook(this.toDto(item.getBook()));
@@ -131,7 +138,11 @@ public class EntityDtoMapperService {
         orderItem.setBook(this.toEntity(itemDto.getBook()));
         orderItem.setPrice(itemDto.getPrice());
         orderItem.setId(itemDto.getId());
-        orderItem.setOrder(this.toEntity(itemDto.getOrder()));
+        Order order = null;
+        if (itemDto.getOrderId() != null) {
+            order = orderRepo.findById(itemDto.getOrderId());
+        }
+        orderItem.setOrder(order);
         orderItem.setQuantity(itemDto.getQuantity());
         return orderItem;
     }
