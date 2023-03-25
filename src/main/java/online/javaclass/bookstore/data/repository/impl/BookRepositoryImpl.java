@@ -17,7 +17,7 @@ import java.util.List;
 @Transactional
 public class BookRepositoryImpl implements BookRepository {
     @PersistenceContext
-    private final EntityManager entityManager;
+    private EntityManager entityManager;
 
     @LogInvocation
     @Override
@@ -45,9 +45,8 @@ public class BookRepositoryImpl implements BookRepository {
     @LogInvocation
     @Override
     public Book update(Book book) {
-        entityManager.detach(book);
         entityManager.merge(book);
-        return findById(book.getId());
+        return book;
     }
 
     @LogInvocation

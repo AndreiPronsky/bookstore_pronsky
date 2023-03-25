@@ -1,15 +1,12 @@
 package online.javaclass.bookstore.service.dto;
 
-import online.javaclass.bookstore.data.entities.Book;
-import online.javaclass.bookstore.data.entities.Order;
-
 import java.math.BigDecimal;
 import java.util.Objects;
 
 public class OrderItemDto {
     private Long id;
-    private Order order;
-    private Book book;
+    private OrderDto order;
+    private BookDto book;
     private Integer quantity;
     private BigDecimal price;
 
@@ -21,19 +18,19 @@ public class OrderItemDto {
         this.id = id;
     }
 
-    public Order getOrder() {
+    public OrderDto getOrder() {
         return order;
     }
 
-    public void setOrder(Order order) {
+    public void setOrder(OrderDto order) {
         this.order = order;
     }
 
-    public Book getBook() {
+    public BookDto getBook() {
         return book;
     }
 
-    public void setBook(Book book) {
+    public void setBook(BookDto book) {
         this.book = book;
     }
 

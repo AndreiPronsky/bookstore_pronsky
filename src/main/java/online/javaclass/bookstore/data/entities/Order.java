@@ -18,9 +18,7 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = {CascadeType.MERGE,
-            CascadeType.REFRESH,
-            CascadeType.PERSIST})
+    @ManyToOne()
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -72,6 +70,9 @@ public class Order {
         CAR,
         MAIL,
         SELF_PICKUP
+    }
+
+    public Order() {
     }
 
     public Long getId() {

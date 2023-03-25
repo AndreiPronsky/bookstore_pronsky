@@ -13,8 +13,7 @@ public class OrderItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = {CascadeType.MERGE,
-            CascadeType.PERSIST,
+    @ManyToOne(cascade = {CascadeType.PERSIST,
             CascadeType.REFRESH})
     @JoinColumn(name = "order_id")
     private Order order;

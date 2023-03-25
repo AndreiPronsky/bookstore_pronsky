@@ -16,7 +16,7 @@ import java.util.List;
 @Transactional
 public class UserRepositoryImpl implements UserRepository {
     @PersistenceContext
-    private final EntityManager entityManager;
+    private EntityManager entityManager;
 
     @Override
     public User findById(Long id) {
@@ -58,7 +58,10 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User findByEmail(String email) {
-        return entityManager.find(User.class, email);
+        Query query = entityManager
+                .createQuery("FROM User WHERE email = :email")
+                .setParameter("email", email);
+        return (User) query.getSingleResult();
     }
 
     @Override

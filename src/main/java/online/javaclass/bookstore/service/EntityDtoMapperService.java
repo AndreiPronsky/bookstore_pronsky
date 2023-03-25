@@ -115,10 +115,10 @@ public class EntityDtoMapperService {
             return null;
         }
         OrderItemDto itemDto = new OrderItemDto();
-        itemDto.setOrder(item.getOrder());
+        itemDto.setOrder(this.toDto(item.getOrder()));
         itemDto.setQuantity(item.getQuantity());
         itemDto.setPrice(item.getPrice());
-        itemDto.setBook(item.getBook());
+        itemDto.setBook(this.toDto(item.getBook()));
         itemDto.setId(item.getId());
         return itemDto;
     }
@@ -128,10 +128,10 @@ public class EntityDtoMapperService {
             return null;
         }
         OrderItem orderItem = new OrderItem();
-        orderItem.setBook(itemDto.getBook());
+        orderItem.setBook(this.toEntity(itemDto.getBook()));
         orderItem.setPrice(itemDto.getPrice());
         orderItem.setId(itemDto.getId());
-        orderItem.setOrder(itemDto.getOrder());
+        orderItem.setOrder(this.toEntity(itemDto.getOrder()));
         orderItem.setQuantity(itemDto.getQuantity());
         return orderItem;
     }

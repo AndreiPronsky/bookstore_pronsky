@@ -44,7 +44,7 @@ public class OrderCommandUtils {
         for (Map.Entry<BookDto, Integer> entry : itemMap.entrySet()) {
             OrderItemDto itemDto = new OrderItemDto();
             itemDto.setQuantity(entry.getValue());
-            itemDto.setBookId(entry.getKey().getId());
+            itemDto.setBook(entry.getKey());
             itemDto.setPrice(entry.getKey().getPrice());
             items.add(itemDto);
         }

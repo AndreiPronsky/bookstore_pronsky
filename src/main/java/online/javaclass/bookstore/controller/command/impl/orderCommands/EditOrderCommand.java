@@ -24,7 +24,7 @@ public class EditOrderCommand implements Command {
         Long orderId = Long.parseLong(req.getParameter("id"));
         order.setId(orderId);
         for (OrderItemDto item : order.getItems()) {
-            item.setOrder(orderId);
+            item.setOrder(order);
         }
         OrderDto updatedOrder = orderService.update(order);
         req.setAttribute("order_id", updatedOrder.getId());

@@ -2,8 +2,8 @@ package online.javaclass.bookstore.controller.command.impl;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import online.javaclass.bookstore.platform.logging.LogInvocation;
 import online.javaclass.bookstore.controller.command.Command;
+import online.javaclass.bookstore.platform.logging.LogInvocation;
 import org.springframework.stereotype.Controller;
 
 @Controller("change_lang")

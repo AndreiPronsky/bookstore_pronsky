@@ -2,6 +2,7 @@ package online.javaclass.bookstore.data.repository.impl;
 
 import lombok.RequiredArgsConstructor;
 import online.javaclass.bookstore.data.entities.Order;
+import online.javaclass.bookstore.data.entities.User;
 import online.javaclass.bookstore.data.repository.OrderRepository;
 import org.springframework.stereotype.Repository;
 
@@ -17,7 +18,7 @@ import java.util.List;
 public class OrderRepositoryImpl implements OrderRepository {
 
     @PersistenceContext
-    private final EntityManager entityManager;
+    private EntityManager entityManager;
 
     @Override
     public Long count() {
@@ -27,9 +28,10 @@ public class OrderRepositoryImpl implements OrderRepository {
 
     @Override
     public List<Order> findAllByUserId(Long userId) {
+        User user = entityManager.find(User.class, userId);
         return entityManager
-                .createQuery("FROM Order WHERE user = :user_id ORDER BY id", Order.class)
-                .setParameter("user_id", userId)
+                .createQuery("FROM Order WHERE user = :user ORDER BY id", Order.class)
+                .setParameter("user", user)
                 .getResultList();
     }
 
