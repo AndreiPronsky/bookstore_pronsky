@@ -1,8 +1,9 @@
 package online.javaclass.bookstore.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import online.javaclass.bookstore.service.dto.PageableDto;
 import org.springframework.stereotype.Component;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Component
 public class PagingUtil {

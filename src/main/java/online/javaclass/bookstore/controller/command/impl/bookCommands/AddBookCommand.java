@@ -1,19 +1,19 @@
 package online.javaclass.bookstore.controller.command.impl.bookCommands;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.MultipartConfig;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
-import jakarta.servlet.http.Part;
 import lombok.RequiredArgsConstructor;
 import online.javaclass.bookstore.controller.FrontController;
 import online.javaclass.bookstore.controller.command.Command;
+import online.javaclass.bookstore.controller.utils.BookControllerUtils;
 import online.javaclass.bookstore.exceptions.ValidationException;
 import online.javaclass.bookstore.platform.logging.LogInvocation;
 import online.javaclass.bookstore.service.BookService;
 import online.javaclass.bookstore.service.dto.BookDto;
-import org.springframework.stereotype.Controller;
 
+import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 import java.io.IOException;
 
 /**
@@ -22,13 +22,13 @@ import java.io.IOException;
  * @author Andrei Pronsky
  */
 @RequiredArgsConstructor
-@Controller("add_book")
+//@Controller("add_book")
 @MultipartConfig(maxFileSize = 1024 * 1024 * 10)
 public class AddBookCommand implements Command {
     private static final String COVER_UPLOAD_DIR =
             "C:\\Repository\\bookstore\\bookstore_pronsky\\src\\main\\webapp\\coverImages\\";
     private final BookService bookService;
-    private final BookCommandUtils commandUtils;
+    private final BookControllerUtils commandUtils;
 
     /**
      * Takes input parameters from the HttpServletRequest, and sends it to service layer if validation is passed.

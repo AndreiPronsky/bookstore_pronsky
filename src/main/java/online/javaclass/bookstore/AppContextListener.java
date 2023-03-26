@@ -1,13 +1,13 @@
 package online.javaclass.bookstore;
 
-import jakarta.servlet.ServletContextEvent;
-import jakarta.servlet.ServletContextListener;
-import jakarta.servlet.annotation.WebListener;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+
 @Log4j2
-@WebListener
+//@WebListener
 public class AppContextListener implements ServletContextListener {
     private static AnnotationConfigApplicationContext context;
 

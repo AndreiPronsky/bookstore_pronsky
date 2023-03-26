@@ -21,7 +21,8 @@
         </li>
         <li class="form-row">
             <label><fmt:message key="title"/>
-                <input id="input_title" type="text" name="title" minlength="1" value="${requestScope.book.title}"></label>
+                <input id="input_title" type="text" name="title" minlength="1"
+                       value="${requestScope.book.title}"></label>
         </li>
         <li class="form-row">
             <label><fmt:message key="author"/>
@@ -37,7 +38,7 @@
         </li>
         <li class="form-row">
             <label><fmt:message key="genre"/>
-                <select name="genre" required="required" >
+                <select name="genre" required="required">
                     <option value=""><fmt:message key="book.select_genre"/></option>
                     <option value="FICTION"><fmt:message key="genre.fiction"/></option>
                     <option value="MYSTERY"><fmt:message key="genre.mystery"/></option>

@@ -1,7 +1,10 @@
 package online.javaclass.bookstore.service;
 
 import lombok.RequiredArgsConstructor;
-import online.javaclass.bookstore.data.entities.*;
+import online.javaclass.bookstore.data.entities.Book;
+import online.javaclass.bookstore.data.entities.Order;
+import online.javaclass.bookstore.data.entities.OrderItem;
+import online.javaclass.bookstore.data.entities.User;
 import online.javaclass.bookstore.data.repository.OrderRepository;
 import online.javaclass.bookstore.service.dto.BookDto;
 import online.javaclass.bookstore.service.dto.OrderDto;

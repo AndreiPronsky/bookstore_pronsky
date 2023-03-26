@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<jsp:include page="jsp/navbar.jsp"/>
-<jsp:include page="jsp/searchbar.jsp"/>
+<jsp:include page="navbar.jsp"/>
+<jsp:include page="searchbar.jsp"/>
 </body>
 </html>

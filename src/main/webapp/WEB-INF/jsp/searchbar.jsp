@@ -7,9 +7,9 @@
 <fmt:setBundle basename="messages"/>
 <html>
 <div class="search">
-<form action="controller?command=search" method="post">
+    <form action="controller?command=search" method="post">
         <input type="text" name="search" class="search" placeholder="<fmt:message key="search"/>">
-    <input type="submit" name="submit" class="submit" value="<fmt:message key="search"/>">
-</form>
+        <input type="submit" name="submit" class="submit" value="<fmt:message key="search"/>">
+    </form>
 </div>
 </html>

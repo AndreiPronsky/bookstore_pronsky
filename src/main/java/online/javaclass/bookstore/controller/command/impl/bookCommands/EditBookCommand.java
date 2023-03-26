@@ -1,15 +1,16 @@
 package online.javaclass.bookstore.controller.command.impl.bookCommands;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import online.javaclass.bookstore.controller.FrontController;
 import online.javaclass.bookstore.controller.command.Command;
+import online.javaclass.bookstore.controller.utils.BookControllerUtils;
 import online.javaclass.bookstore.exceptions.ValidationException;
 import online.javaclass.bookstore.platform.logging.LogInvocation;
 import online.javaclass.bookstore.service.BookService;
 import online.javaclass.bookstore.service.dto.BookDto;
-import org.springframework.stereotype.Controller;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 /**
  * The command is used to edit existing book
@@ -17,10 +18,10 @@ import org.springframework.stereotype.Controller;
  * @author Andrei Pronsky
  */
 @RequiredArgsConstructor
-@Controller("edit_book")
+//@Controller("edit_book")
 public class EditBookCommand implements Command {
     private final BookService bookService;
-    private final BookCommandUtils commandUtils;
+    private final BookControllerUtils commandUtils;
 
     /**
      * Takes input parameters from the HttpServletRequest, and sends it to service layer if validation is passed.

@@ -1,6 +1,5 @@
 package online.javaclass.bookstore.controller.command.impl.bookCommands;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import online.javaclass.bookstore.controller.PagingUtil;
 import online.javaclass.bookstore.controller.command.Command;
@@ -8,8 +7,8 @@ import online.javaclass.bookstore.platform.logging.LogInvocation;
 import online.javaclass.bookstore.service.BookService;
 import online.javaclass.bookstore.service.dto.BookDto;
 import online.javaclass.bookstore.service.dto.PageableDto;
-import org.springframework.stereotype.Controller;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -19,7 +18,7 @@ import java.util.List;
  * @author Andrei Pronsky
  */
 @RequiredArgsConstructor
-@Controller("books")
+//@Controller("books")
 public class BooksCommand implements Command {
     private final BookService bookService;
     private final PagingUtil pagingUtil;

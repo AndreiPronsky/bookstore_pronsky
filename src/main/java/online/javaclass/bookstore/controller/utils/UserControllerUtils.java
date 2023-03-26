@@ -1,22 +1,22 @@
-package online.javaclass.bookstore.controller.command.impl.userCommands;
+package online.javaclass.bookstore.controller.utils;
 
-import jakarta.servlet.http.HttpServletRequest;
 import online.javaclass.bookstore.exceptions.ValidationException;
 import online.javaclass.bookstore.platform.MessageManager;
 import online.javaclass.bookstore.service.dto.UserDto;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class UserCommandUtils {
+public class UserControllerUtils {
 
     public static final String VALID_EMAIL_REGEX = "^[\\w\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
     MessageManager messageManager;
 
-    UserDto setUserParameters(HttpServletRequest req, UserDto.Role role, BigDecimal rating) throws ValidationException {
+    public UserDto setUserParameters(HttpServletRequest req, UserDto.Role role, BigDecimal rating) throws ValidationException {
         validate(req);
         UserDto user = new UserDto();
         user.setFirstName(req.getParameter("firstname"));

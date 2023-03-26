@@ -1,12 +1,13 @@
 package online.javaclass.bookstore.controller.command.impl.bookCommands;
 
-import jakarta.servlet.http.HttpServletRequest;
+
 import lombok.RequiredArgsConstructor;
 import online.javaclass.bookstore.controller.command.Command;
 import online.javaclass.bookstore.platform.logging.LogInvocation;
 import online.javaclass.bookstore.service.BookService;
 import online.javaclass.bookstore.service.dto.BookDto;
-import org.springframework.stereotype.Controller;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * The command is used just to redirect user to form for editing existing book
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Controller;
  */
 
 @RequiredArgsConstructor
-@Controller("edit_book_form")
+//@Controller("edit_book_form")
 public class EditBookFormCommand implements Command {
     private final BookService bookService;
 

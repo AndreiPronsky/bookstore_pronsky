@@ -36,33 +36,33 @@
         </c:if>
     </div>
 </c:if>
-    <table>
-        <thead>
+<table>
+    <thead>
+    <tr>
+        <th><fmt:message key="id"/></th>
+        <th><fmt:message key="user"/></th>
+        <th><fmt:message key="order_status"/></th>
+        <th><fmt:message key="payment_method"/></th>
+        <th><fmt:message key="payment_status"/></th>
+        <th><fmt:message key="delivery_type"/></th>
+    </tr>
+    </thead>
+    <tbody>
+    <c:forEach items="${requestScope.orders}" var="order">
         <tr>
-            <th><fmt:message key="id"/></th>
-            <th><fmt:message key="user"/></th>
-            <th><fmt:message key="order_status"/></th>
-            <th><fmt:message key="payment_method"/></th>
-            <th><fmt:message key="payment_status"/></th>
-            <th><fmt:message key="delivery_type"/></th>
+            <td><c:out value="${order.key.id}"/></td>
+            <td><c:out value="${order.value.firstName}"/> <c:out value="${order.value.lastName}"/></td>
+            <td><c:out value="${order.key.orderStatus}"/></td>
+            <td><c:out value="${order.key.paymentMethod}"/></td>
+            <td><c:out value="${order.key.paymentStatus}"/></td>
+            <td><c:out value="${order.key.deliveryType}"/></td>
+            <td>
+                <a href="controller?command=edit_order_form&id=${order.key.id}">
+                    <fmt:message key="edit_order"/></a>
+            </td>
         </tr>
-        </thead>
-        <tbody>
-        <c:forEach items="${requestScope.orders}" var="order">
-            <tr>
-                <td><c:out value="${order.key.id}"/></td>
-                <td><c:out value="${order.value.firstName}"/> <c:out value="${order.value.lastName}"/></td>
-                <td><c:out value="${order.key.orderStatus}"/></td>
-                <td><c:out value="${order.key.paymentMethod}"/></td>
-                <td><c:out value="${order.key.paymentStatus}"/></td>
-                <td><c:out value="${order.key.deliveryType}"/></td>
-                <td>
-                    <a href="controller?command=edit_order_form&id=${order.key.id}">
-                        <fmt:message key="edit_order"/></a>
-                </td>
-            </tr>
-        </c:forEach>
-        </tbody>
-    </table>
+    </c:forEach>
+    </tbody>
+</table>
 </body>
 </html>

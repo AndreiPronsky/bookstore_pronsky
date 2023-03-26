@@ -1,21 +1,24 @@
-package online.javaclass.bookstore.controller.command.impl.orderCommands;
+package online.javaclass.bookstore.controller.utils;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import online.javaclass.bookstore.service.dto.BookDto;
 import online.javaclass.bookstore.service.dto.OrderDto;
 import online.javaclass.bookstore.service.dto.OrderItemDto;
 import online.javaclass.bookstore.service.dto.UserDto;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 @Component
-public class OrderCommandUtils {
-    static OrderDto setOrderParameters(HttpServletRequest req, String attributeName) {
+public class OrderControllerUtils {
+    public OrderControllerUtils() {
+    }
+
+    public OrderDto setOrderParameters(HttpServletRequest req, String attributeName) {
         HttpSession session = req.getSession();
         OrderDto order = new OrderDto();
         String rawId = req.getParameter("id");
@@ -35,7 +38,7 @@ public class OrderCommandUtils {
         return order;
     }
 
-    private static BigDecimal calculateCost(HttpSession session, String attributeName) {
+    private BigDecimal calculateCost(HttpSession session, String attributeName) {
         Map<BookDto, Integer> cartItemMap = (Map) session.getAttribute(attributeName);
         BigDecimal cost = BigDecimal.ZERO;
         for (Map.Entry<BookDto, Integer> entry : cartItemMap.entrySet()) {
@@ -44,7 +47,7 @@ public class OrderCommandUtils {
         return cost;
     }
 
-    private static List<OrderItemDto> listItems(HttpSession session, String attributeName) {
+    private List<OrderItemDto> listItems(HttpSession session, String attributeName) {
         Map<BookDto, Integer> itemMap = (Map) session.getAttribute(attributeName);
         List<OrderItemDto> items = new ArrayList<>();
         for (Map.Entry<BookDto, Integer> entry : itemMap.entrySet()) {
@@ -57,7 +60,7 @@ public class OrderCommandUtils {
         return items;
     }
 
-    static void correctItemQuantity(HttpServletRequest req, String attributeName) {
+    public void correctItemQuantity(HttpServletRequest req, String attributeName) {
         long id = Long.parseLong(req.getParameter("id"));
         String action = req.getParameter("action");
         HttpSession session = req.getSession();

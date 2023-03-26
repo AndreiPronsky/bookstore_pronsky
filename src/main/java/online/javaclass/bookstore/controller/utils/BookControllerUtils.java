@@ -1,27 +1,45 @@
-package online.javaclass.bookstore.controller.command.impl.bookCommands;
+package online.javaclass.bookstore.controller.utils;
 
-import jakarta.servlet.http.HttpServletRequest;
 import online.javaclass.bookstore.exceptions.ValidationException;
 import online.javaclass.bookstore.platform.MessageManager;
 import online.javaclass.bookstore.service.dto.BookDto;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-@Component
-public class BookCommandUtils {
-    private static final String AUTHOR_VALIDATION_REGEX = "^[\\w'\\-,.][^0-9_!¡?÷?¿\\/+=@#$%ˆ&*(){}|~<>;:]{2,}$";
-    private static final String ISBN_VALIDATION_REGEX = "^(?=(?:\\D*\\d){10}(?:(?:\\D*\\d){3})?$)[\\d-]+$";
-    private static final String TITLE_VALIDATION_REGEX = "^[A-Za-z0-9\\s\\-_,.:#;()'\"]+$";
-    private static final String PUNCTUATION_MARKS_SEQUENCE = "[.,\\/#!$%^&*;:{}=_`~()-<>]{2,}";
+//@Component
+public class BookControllerUtils {
+    private static final String PATH_TO_PROPS = "/static/application.properties";
+    private final String authorValidationRegex;
+    private final String isbnValidationRegex;
+    private final String titleValidationRegex;
+    private final String punctuationMarksSequence;
+    private final String coverImageUploadDir;
     MessageManager messageManager;
 
-    BookDto setBookParameters(HttpServletRequest req) throws ValidationException {
+    public String getCoverImageUploadDir() {
+        return coverImageUploadDir;
+    }
+
+    public BookControllerUtils() {
+        Properties properties = new Properties();
+        try (InputStream input = this.getClass().getResourceAsStream(PATH_TO_PROPS)) {
+            properties.load(input);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        authorValidationRegex = properties.getProperty("author.validation.regexp");
+        isbnValidationRegex = properties.getProperty("isbn.validation.regexp");
+        titleValidationRegex = properties.getProperty("title.validation.regexp");
+        punctuationMarksSequence = properties.getProperty("punctuation.marks.sequence.regexp");
+        coverImageUploadDir = properties.getProperty("cover.upload.dir");
+    }
+
+    public BookDto setBookParameters(HttpServletRequest req) throws ValidationException {
         Map<String, String> params = validate(req);
         BookDto book = new BookDto();
         book.setTitle(params.get("title"));
@@ -35,7 +53,7 @@ public class BookCommandUtils {
         return book;
     }
 
-    Map<String, String> validate(HttpServletRequest req) throws ValidationException {
+    public Map<String, String> validate(HttpServletRequest req) throws ValidationException {
         List<String> messages = new ArrayList<>();
         Map<String, String> params = new HashMap<>();
         params.put("title", validateAndReformatTitle(req.getParameter("title"), messages));
@@ -52,9 +70,9 @@ public class BookCommandUtils {
         return params;
     }
 
-    String validateAndReformatTitle(String rawTitle, List<String> messages) {
-        if (rawTitle == null || rawTitle.isBlank() || !rawTitle.matches(TITLE_VALIDATION_REGEX)
-                || (rawTitle.matches(PUNCTUATION_MARKS_SEQUENCE) && !rawTitle.matches("[\\d.,]+"))) {
+    public String validateAndReformatTitle(String rawTitle, List<String> messages) {
+        if (rawTitle == null || rawTitle.isBlank() || !rawTitle.matches(titleValidationRegex)
+                || (rawTitle.matches(punctuationMarksSequence) && !rawTitle.matches("[\\d.,]+"))) {
             messages.add(messageManager.getMessage("error.invalid_title"));
             return null;
         } else {
@@ -66,10 +84,10 @@ public class BookCommandUtils {
         }
     }
 
-    String validateAndReformatAuthor(String rawAuthor, List<String> messages) {
+    public String validateAndReformatAuthor(String rawAuthor, List<String> messages) {
         String author;
-        if (rawAuthor == null || rawAuthor.isBlank() || !rawAuthor.matches(AUTHOR_VALIDATION_REGEX)
-                || rawAuthor.matches(PUNCTUATION_MARKS_SEQUENCE)) {
+        if (rawAuthor == null || rawAuthor.isBlank() || !rawAuthor.matches(authorValidationRegex)
+                || rawAuthor.matches(punctuationMarksSequence)) {
             messages.add(messageManager.getMessage("error.invalid_author"));
             author = null;
         } else {
@@ -80,10 +98,10 @@ public class BookCommandUtils {
         return author;
     }
 
-    String validateAndReformatIsbn(String rawIsbn, List<String> messages) {
+    public String validateAndReformatIsbn(String rawIsbn, List<String> messages) {
         String isbn;
         rawIsbn = StringUtils.replace(rawIsbn, " ", "");
-        if (rawIsbn == null || !rawIsbn.matches(ISBN_VALIDATION_REGEX)) {
+        if (rawIsbn == null || !rawIsbn.matches(isbnValidationRegex)) {
             messages.add(messageManager.getMessage("error.invalid_isbn"));
             isbn = null;
         } else {
@@ -92,7 +110,7 @@ public class BookCommandUtils {
         return isbn;
     }
 
-    String validateAndReformatGenre(String rawGenre, List<String> messages) {
+    public String validateAndReformatGenre(String rawGenre, List<String> messages) {
         if (rawGenre == null) {
             messages.add(messageManager.getMessage("error.invalid_genre"));
         } else {
@@ -106,7 +124,7 @@ public class BookCommandUtils {
         return rawGenre;
     }
 
-    String validateAndReformatCover(String rawCover, List<String> messages) {
+    public String validateAndReformatCover(String rawCover, List<String> messages) {
         if (rawCover == null) {
             messages.add(messageManager.getMessage("error.invalid_cover"));
         } else {
@@ -120,7 +138,7 @@ public class BookCommandUtils {
         return rawCover;
     }
 
-    String validateAndReformatRating(String rawRating, List<String> messages) {
+    public String validateAndReformatRating(String rawRating, List<String> messages) {
         rawRating = StringUtils.replace(rawRating, ",", ".");
         try {
             BigDecimal rating = BigDecimal.valueOf(Double.parseDouble(rawRating));
@@ -137,7 +155,7 @@ public class BookCommandUtils {
         }
     }
 
-    String validateAndReformatPages(String rawPages, List<String> messages) {
+    public String validateAndReformatPages(String rawPages, List<String> messages) {
         rawPages = StringUtils.replace(rawPages, " ", "");
         try {
             int pages = Integer.parseInt(rawPages);
@@ -152,7 +170,7 @@ public class BookCommandUtils {
         }
     }
 
-    String validateAndReformatPrice(String rawPrice, List<String> messages) {
+    public String validateAndReformatPrice(String rawPrice, List<String> messages) {
         rawPrice = StringUtils.replace(rawPrice, ",", ".");
         try {
             BigDecimal price = BigDecimal.valueOf(Double.parseDouble(rawPrice));

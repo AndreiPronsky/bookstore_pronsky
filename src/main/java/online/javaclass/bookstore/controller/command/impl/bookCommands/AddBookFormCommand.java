@@ -1,10 +1,10 @@
 package online.javaclass.bookstore.controller.command.impl.bookCommands;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import online.javaclass.bookstore.controller.command.Command;
 import online.javaclass.bookstore.platform.logging.LogInvocation;
-import org.springframework.stereotype.Controller;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 /**
  * The command is used just to redirect user to form for adding new book
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Controller;
  * @author Andrei Pronsky
  */
 
-@Controller("add_book_form")
+//@Controller("add_book_form")
 public class AddBookFormCommand implements Command {
     @LogInvocation
     @Override
