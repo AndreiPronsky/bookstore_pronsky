@@ -18,6 +18,12 @@ public class OrderCommandUtils {
     static OrderDto setOrderParameters(HttpServletRequest req, String attributeName) {
         HttpSession session = req.getSession();
         OrderDto order = new OrderDto();
+        String rawId = req.getParameter("id");
+        Long id = null;
+        if (rawId != null) {
+            id = Long.parseLong(rawId);
+        }
+        order.setId(id);
         order.setDeliveryType(OrderDto.DeliveryType.valueOf(req.getParameter("delivery_type")));
         order.setOrderStatus(OrderDto.OrderStatus.OPEN);
         order.setPaymentMethod(OrderDto.PaymentMethod.valueOf(req.getParameter("payment_method")));
@@ -44,7 +50,7 @@ public class OrderCommandUtils {
         for (Map.Entry<BookDto, Integer> entry : itemMap.entrySet()) {
             OrderItemDto itemDto = new OrderItemDto();
             itemDto.setQuantity(entry.getValue());
-            itemDto.setBookId(entry.getKey().getId());
+            itemDto.setBook(entry.getKey());
             itemDto.setPrice(entry.getKey().getPrice());
             items.add(itemDto);
         }

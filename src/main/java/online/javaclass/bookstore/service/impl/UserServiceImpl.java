@@ -1,14 +1,14 @@
 package online.javaclass.bookstore.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import online.javaclass.bookstore.LogInvocation;
-import online.javaclass.bookstore.MessageManager;
 import online.javaclass.bookstore.controller.PagingUtil;
 import online.javaclass.bookstore.data.entities.User;
 import online.javaclass.bookstore.data.repository.UserRepository;
 import online.javaclass.bookstore.exceptions.LoginException;
 import online.javaclass.bookstore.exceptions.UnableToDeleteException;
 import online.javaclass.bookstore.exceptions.UnableToFindException;
+import online.javaclass.bookstore.platform.MessageManager;
+import online.javaclass.bookstore.platform.logging.LogInvocation;
 import online.javaclass.bookstore.service.DigestService;
 import online.javaclass.bookstore.service.EntityDtoMapperService;
 import online.javaclass.bookstore.service.UserService;
@@ -25,13 +25,14 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepo;
     private final EntityDtoMapperService mapper;
-    DigestService digest = new DigestServiceImpl();
+    private final DigestService digest;
     private final MessageManager messageManager;
+    private final PagingUtil pagingUtil;
 
     @LogInvocation
     @Override
     public UserDto login(String email, String password) {
-        User user = userRepo.getByEmail(email);
+        User user = userRepo.findByEmail(email);
         if (user == null || !user.getPassword().equals((digest.hashPassword(password)))) {
             throw new LoginException(messageManager.getMessage("error.wrong_email_or_password"));
         }
@@ -58,7 +59,7 @@ public class UserServiceImpl implements UserService {
     @LogInvocation
     @Override
     public UserDto getById(Long id) {
-        User user = userRepo.getById(id);
+        User user = userRepo.findById(id);
         if (user == null) {
             throw new UnableToFindException(messageManager.getMessage("user.unable_to_find_id"));
         } else {
@@ -69,7 +70,7 @@ public class UserServiceImpl implements UserService {
     @LogInvocation
     @Override
     public List<UserDto> getByLastName(String lastname, PageableDto pageable) {
-        List<UserDto> users = userRepo.getByLastName(lastname, pageable.getLimit(), pageable.getOffset()).stream()
+        List<UserDto> users = userRepo.findByLastName(lastname, pageable.getLimit(), pageable.getOffset()).stream()
                 .map(mapper::toDto)
                 .toList();
         if (users.isEmpty()) {
@@ -82,14 +83,14 @@ public class UserServiceImpl implements UserService {
     @LogInvocation
     @Override
     public List<UserDto> getAll(PageableDto pageable) {
-        List<UserDto> users = userRepo.getAll(pageable.getLimit(), pageable.getOffset()).stream()
+        List<UserDto> users = userRepo.findAll(pageable.getLimit(), pageable.getOffset()).stream()
                 .map(mapper::toDto)
                 .toList();
         if (users.isEmpty()) {
             throw new UnableToFindException(messageManager.getMessage("users.not_found"));
         } else {
             Long totalItems = userRepo.count();
-            Long totalPages = PagingUtil.getTotalPages(totalItems, pageable);
+            Long totalPages = pagingUtil.getTotalPages(totalItems, pageable);
             pageable.setTotalItems(userRepo.count());
             pageable.setTotalPages(totalPages);
             return users;

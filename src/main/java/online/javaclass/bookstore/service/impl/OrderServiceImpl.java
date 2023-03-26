@@ -1,14 +1,13 @@
 package online.javaclass.bookstore.service.impl;
 
-import lombok.RequiredArgsConstructor;
-import online.javaclass.bookstore.LogInvocation;
-import online.javaclass.bookstore.MessageManager;
 import online.javaclass.bookstore.controller.PagingUtil;
 import online.javaclass.bookstore.data.entities.Order;
 import online.javaclass.bookstore.data.repository.OrderRepository;
 import online.javaclass.bookstore.exceptions.UnableToDeleteException;
 import online.javaclass.bookstore.exceptions.UnableToFindException;
 import online.javaclass.bookstore.exceptions.ValidationException;
+import online.javaclass.bookstore.platform.MessageManager;
+import online.javaclass.bookstore.platform.logging.LogInvocation;
 import online.javaclass.bookstore.service.EntityDtoMapperService;
 import online.javaclass.bookstore.service.OrderService;
 import online.javaclass.bookstore.service.dto.OrderDto;
@@ -16,21 +15,31 @@ import online.javaclass.bookstore.service.dto.OrderItemDto;
 import online.javaclass.bookstore.service.dto.PageableDto;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-@RequiredArgsConstructor
 @Service
+@Transactional
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepo;
     private final EntityDtoMapperService mapper;
     private final MessageManager messageManager;
 
+    private final PagingUtil pagingUtil;
+
+    public OrderServiceImpl(OrderRepository orderRepo, EntityDtoMapperService mapper, MessageManager messageManager, PagingUtil pagingUtil) {
+        this.orderRepo = orderRepo;
+        this.mapper = mapper;
+        this.messageManager = messageManager;
+        this.pagingUtil = pagingUtil;
+    }
+
     @LogInvocation
     @Override
     public List<OrderDto> getOrdersByUserId(Long userId) {
-        List<OrderDto> orders = orderRepo.getAllByUserId(userId).stream()
+        List<OrderDto> orders = orderRepo.findAllByUserId(userId).stream()
                 .map(mapper::toDto)
                 .toList();
         if (orders.isEmpty()) {
@@ -48,7 +57,7 @@ public class OrderServiceImpl implements OrderService {
     @LogInvocation
     @Override
     public OrderDto getById(Long id) {
-        Order order = orderRepo.getById(id);
+        Order order = orderRepo.findById(id);
         if (order == null) {
             throw new UnableToFindException(messageManager.getMessage("order.unable_to_find_id"));
         }
@@ -58,14 +67,14 @@ public class OrderServiceImpl implements OrderService {
     @LogInvocation
     @Override
     public List<OrderDto> getAll(PageableDto pageable) {
-        List<OrderDto> orders = orderRepo.getAll(pageable.getLimit(), pageable.getOffset()).stream()
+        List<OrderDto> orders = orderRepo.findAll(pageable.getLimit(), pageable.getOffset()).stream()
                 .map(mapper::toDto)
                 .toList();
         if (orders.isEmpty()) {
             throw new UnableToFindException(messageManager.getMessage("orders.unable_to_find"));
         } else {
             Long totalItems = orderRepo.count();
-            Long totalPages = PagingUtil.getTotalPages(totalItems, pageable);
+            Long totalPages = pagingUtil.getTotalPages(totalItems, pageable);
             pageable.setTotalItems(orderRepo.count());
             pageable.setTotalPages(totalPages);
             return orders;

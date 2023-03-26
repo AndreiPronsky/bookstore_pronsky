@@ -2,9 +2,9 @@ package online.javaclass.bookstore.controller.command.impl.userCommands;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import online.javaclass.bookstore.LogInvocation;
 import online.javaclass.bookstore.controller.PagingUtil;
 import online.javaclass.bookstore.controller.command.Command;
+import online.javaclass.bookstore.platform.logging.LogInvocation;
 import online.javaclass.bookstore.service.UserService;
 import online.javaclass.bookstore.service.dto.PageableDto;
 import online.javaclass.bookstore.service.dto.UserDto;
@@ -16,11 +16,12 @@ import java.util.List;
 @Controller("users")
 public class UsersCommand implements Command {
     private final UserService userService;
+    private final PagingUtil pagingUtil;
 
     @LogInvocation
     @Override
     public String execute(HttpServletRequest req) {
-        PageableDto pageable = PagingUtil.getPageable(req);
+        PageableDto pageable = pagingUtil.getPageable(req);
         List<UserDto> users;
         users = userService.getAll(pageable);
         req.setAttribute("page", pageable.getPage());

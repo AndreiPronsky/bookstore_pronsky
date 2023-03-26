@@ -8,11 +8,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import online.javaclass.bookstore.AppContextListener;
-import online.javaclass.bookstore.LogInvocation;
-import online.javaclass.bookstore.MessageManager;
 import online.javaclass.bookstore.controller.command.Command;
 import online.javaclass.bookstore.exceptions.AppException;
 import online.javaclass.bookstore.exceptions.ValidationException;
+import online.javaclass.bookstore.platform.MessageManager;
+import online.javaclass.bookstore.platform.logging.LogInvocation;
 
 import java.io.IOException;
 import java.util.List;

@@ -6,24 +6,30 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.transaction.TransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.sql.DataSource;
 
 @Log4j2
 @Configuration
 @ComponentScan
+@EnableTransactionManagement
 @PropertySource("classpath:/application.properties")
 @PropertySource("classpath:/connection-config.properties")
 @EnableAspectJAutoProxy
 public class AppConfig {
 
-    @Value("${db.remote.url}")
+    @Value("${db.local.url}")
     private String url;
-    @Value("${db.remote.user}")
+    @Value("${db.local.user}")
     private String username;
-    @Value("${db.remote.password}")
+    @Value("${db.local.password}")
     private String password;
-    @Value("${db.driver}")
+    @Value("${db.local.driver}")
     private String driver;
 
     @Bean
@@ -52,5 +58,15 @@ public class AppConfig {
     @Bean
     public NamedParameterJdbcTemplate namedParameterJdbcTemplate(DataSource dataSource) {
         return new NamedParameterJdbcTemplate(dataSource);
+    }
+
+    @Bean
+    public EntityManagerFactory entityManagerFactory() {
+        return Persistence.createEntityManagerFactory("bookstore");
+    }
+
+    @Bean
+    public TransactionManager transactionManager(EntityManagerFactory factory) {
+        return new JpaTransactionManager(factory);
     }
 }

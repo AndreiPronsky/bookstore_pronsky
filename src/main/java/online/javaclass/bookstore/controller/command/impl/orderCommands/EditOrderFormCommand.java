@@ -3,9 +3,9 @@ package online.javaclass.bookstore.controller.command.impl.orderCommands;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import online.javaclass.bookstore.LogInvocation;
 import online.javaclass.bookstore.controller.FrontController;
 import online.javaclass.bookstore.controller.command.Command;
+import online.javaclass.bookstore.platform.logging.LogInvocation;
 import online.javaclass.bookstore.service.BookService;
 import online.javaclass.bookstore.service.OrderService;
 import online.javaclass.bookstore.service.dto.BookDto;
@@ -36,7 +36,7 @@ public class EditOrderFormCommand implements Command {
         }
         Map<BookDto, Integer> itemMap = new HashMap<>();
         for (OrderItemDto item : order.getItems()) {
-            BookDto book = bookService.getById(item.getBookId());
+            BookDto book = bookService.getById(item.getBook().getId());
             itemMap.put(book, item.getQuantity());
         }
         session.setAttribute("items", itemMap);

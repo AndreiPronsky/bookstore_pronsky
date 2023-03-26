@@ -2,8 +2,8 @@ package online.javaclass.bookstore.controller.command.impl;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import online.javaclass.bookstore.LogInvocation;
 import online.javaclass.bookstore.controller.command.Command;
+import online.javaclass.bookstore.platform.logging.LogInvocation;
 import online.javaclass.bookstore.service.BookService;
 import online.javaclass.bookstore.service.dto.BookDto;
 import org.springframework.stereotype.Controller;
