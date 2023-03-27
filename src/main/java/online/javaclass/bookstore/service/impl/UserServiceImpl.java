@@ -14,6 +14,7 @@ import online.javaclass.bookstore.service.EntityDtoMapperService;
 import online.javaclass.bookstore.service.UserService;
 import online.javaclass.bookstore.service.dto.PageableDto;
 import online.javaclass.bookstore.service.dto.UserDto;
+import online.javaclass.bookstore.service.dto.UserLoginDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,9 +32,9 @@ public class UserServiceImpl implements UserService {
 
     @LogInvocation
     @Override
-    public UserDto login(String email, String password) {
-        User user = userRepo.findByEmail(email);
-        if (user == null || !user.getPassword().equals((digest.hashPassword(password)))) {
+    public UserDto login(UserLoginDto userLoginDto) {
+        User user = userRepo.findByEmail(userLoginDto.getEmail());
+        if (user == null || !user.getPassword().equals((digest.hashPassword(userLoginDto.getPassword())))) {
             throw new LoginException(messageManager.getMessage("error.wrong_email_or_password"));
         }
         return mapper.toDto(user);

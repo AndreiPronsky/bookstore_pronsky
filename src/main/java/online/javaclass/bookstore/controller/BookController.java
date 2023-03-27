@@ -1,7 +1,6 @@
 package online.javaclass.bookstore.controller;
 
 import lombok.RequiredArgsConstructor;
-import online.javaclass.bookstore.controller.utils.BookControllerUtils;
 import online.javaclass.bookstore.controller.utils.PagingUtil;
 import online.javaclass.bookstore.exceptions.ValidationException;
 import online.javaclass.bookstore.platform.logging.LogInvocation;
@@ -25,7 +24,6 @@ public class BookController {
 
     private static final String PATH_TO_PROPS = "application.properties";
     private final BookService service;
-//    private final BookControllerUtils bookControllerUtils;
     private final PagingUtil pagingUtil;
 
     @LogInvocation
@@ -39,9 +37,8 @@ public class BookController {
     @LogInvocation
     @GetMapping(path = "/all")
     public String getAll(Model model) {
-        List<BookDto> books;
         PageableDto pageable = pagingUtil.getPageable(model);
-        books = service.getAll(pageable);
+        List<BookDto> books = service.getAll(pageable);
         model.addAttribute("page", pageable.getPage());
         model.addAttribute("total_pages", pageable.getTotalPages());
         model.addAttribute("books", books);
@@ -50,41 +47,31 @@ public class BookController {
 
     @LogInvocation
     @PostMapping(path = "/add")
-    public String create(@ModelAttribute BookDto book, @RequestPart Part image, Model model) {
+    public String add(@ModelAttribute BookDto book, @RequestPart Part image, Model model) {
         String page;
         try {
-            BookDto createdBook = service.create(book);
-            if (image != null) {
-                Properties properties = new Properties();
-                try (InputStream input = this.getClass().getResourceAsStream(PATH_TO_PROPS)) {
-                    properties.load(input);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                String coverImageUploadDir = properties.getProperty("cover.upload.dir");
-                String fileName = createdBook.getId().toString() + ".png";
-                image.write(coverImageUploadDir + fileName);
-            }
-            page = "/books/" + createdBook.getId();
+            BookDto created = service.create(book);
+            uploadImage(image, created.getId());
+            page = "/books/" + created.getId();
         } catch (ValidationException e) {
             model.addAttribute("validationMessages", e.getMessages());
             page = "add_book";
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException("Unable to upload image");
         }
-        return FrontController.REDIRECT + page;
+        return "redirect:" + page;
     }
+
 
     @LogInvocation
     @GetMapping(path = "/add")
-    public String createForm() {
+    public String addForm() {
         return "add_book";
     }
 
     @LogInvocation
     @PostMapping(path = "/edit/{id}")
-    public String updateBook(@ModelAttribute BookDto book, Model model) {
+    public String edit(@ModelAttribute BookDto book, Model model) {
         String page;
         try {
             BookDto updatedBook = service.update(book);
@@ -93,14 +80,28 @@ public class BookController {
             model.addAttribute("validationMessages", e.getMessages());
             page = "/edit_book/" + book.getId();
         }
-        return FrontController.REDIRECT + page;
+        return "redirect:" + page;
     }
 
     @LogInvocation
     @GetMapping(path = "/edit/{id}")
-    public String updateBookForm(@PathVariable Long id, Model model) {
+    public String editForm(@PathVariable Long id, Model model) {
         BookDto book = service.getById(id);
         model.addAttribute("book", book);
         return "edit_book";
+    }
+
+    private void uploadImage(Part image, Long bookId) throws IOException {
+        if (image != null) {
+            Properties properties = new Properties();
+            try (InputStream input = this.getClass().getResourceAsStream(PATH_TO_PROPS)) {
+                properties.load(input);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            String coverImageUploadDir = properties.getProperty("cover.upload.dir");
+            String fileName = bookId + ".png";
+            image.write(coverImageUploadDir + fileName);
+        }
     }
 }
