@@ -2,7 +2,6 @@ package online.javaclass.bookstore.controller;
 
 import lombok.RequiredArgsConstructor;
 import online.javaclass.bookstore.controller.utils.PagingUtil;
-import online.javaclass.bookstore.exceptions.ValidationException;
 import online.javaclass.bookstore.platform.logging.LogInvocation;
 import online.javaclass.bookstore.service.BookService;
 import online.javaclass.bookstore.service.dto.BookDto;
@@ -27,15 +26,15 @@ public class BookController {
     private final PagingUtil pagingUtil;
 
     @LogInvocation
-    @GetMapping(path = "/{id}")
-    public String getById(@PathVariable Long id, Model model) {
+    @GetMapping("/{id}")
+    public String getOne(@PathVariable Long id, Model model) {
         BookDto book = service.getById(id);
         model.addAttribute("book", book);
         return "book";
     }
 
     @LogInvocation
-    @GetMapping(path = "/all")
+    @GetMapping("/all")
     public String getAll(Model model) {
         PageableDto pageable = pagingUtil.getPageable(model);
         List<BookDto> books = service.getAll(pageable);
@@ -46,45 +45,35 @@ public class BookController {
     }
 
     @LogInvocation
-    @PostMapping(path = "/add")
+    @PostMapping("/add")
     public String add(@ModelAttribute BookDto book, @RequestPart Part image, Model model) {
-        String page;
         try {
             BookDto created = service.create(book);
+            model.addAttribute("book", created);
             uploadImage(image, created.getId());
-            page = "/books/" + created.getId();
-        } catch (ValidationException e) {
-            model.addAttribute("validationMessages", e.getMessages());
-            page = "add_book";
+            return "redirect: /" + created.getId();
         } catch (IOException e) {
             throw new RuntimeException("Unable to upload image");
         }
-        return "redirect:" + page;
     }
 
 
     @LogInvocation
-    @GetMapping(path = "/add")
+    @GetMapping("/add")
     public String addForm() {
         return "add_book";
     }
 
     @LogInvocation
-    @PostMapping(path = "/edit/{id}")
+    @PostMapping("/edit/{id}")
     public String edit(@ModelAttribute BookDto book, Model model) {
-        String page;
-        try {
-            BookDto updatedBook = service.update(book);
-            page = "/books/" + updatedBook.getId();
-        } catch (ValidationException e) {
-            model.addAttribute("validationMessages", e.getMessages());
-            page = "/edit_book/" + book.getId();
-        }
-        return "redirect:" + page;
+        BookDto updated = service.update(book);
+        model.addAttribute("book", updated);
+        return "redirect: edit_book";
     }
 
     @LogInvocation
-    @GetMapping(path = "/edit/{id}")
+    @GetMapping("/edit/{id}")
     public String editForm(@PathVariable Long id, Model model) {
         BookDto book = service.getById(id);
         model.addAttribute("book", book);
