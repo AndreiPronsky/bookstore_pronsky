@@ -1,7 +1,7 @@
 package online.javaclass.bookstore.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import online.javaclass.bookstore.controller.PagingUtil;
+import online.javaclass.bookstore.controller.utils.PagingUtil;
 import online.javaclass.bookstore.data.entities.User;
 import online.javaclass.bookstore.data.repository.UserRepository;
 import online.javaclass.bookstore.exceptions.LoginException;

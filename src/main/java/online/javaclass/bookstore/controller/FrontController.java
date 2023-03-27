@@ -17,7 +17,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/controller")
+//@WebServlet("/controller")
 @MultipartConfig(maxFileSize = 1024 * 1024 * 10)
 public class FrontController extends HttpServlet {
 

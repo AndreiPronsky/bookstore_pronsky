@@ -1,7 +1,7 @@
 package online.javaclass.bookstore.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import online.javaclass.bookstore.controller.PagingUtil;
+import online.javaclass.bookstore.controller.utils.PagingUtil;
 import online.javaclass.bookstore.data.entities.Book;
 import online.javaclass.bookstore.data.repository.BookRepository;
 import online.javaclass.bookstore.exceptions.UnableToDeleteException;

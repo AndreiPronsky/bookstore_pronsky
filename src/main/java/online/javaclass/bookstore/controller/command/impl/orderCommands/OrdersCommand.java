@@ -1,13 +1,12 @@
 package online.javaclass.bookstore.controller.command.impl.orderCommands;
 
 import lombok.RequiredArgsConstructor;
-import online.javaclass.bookstore.controller.PagingUtil;
+import online.javaclass.bookstore.controller.utils.PagingUtil;
 import online.javaclass.bookstore.controller.command.Command;
 import online.javaclass.bookstore.platform.logging.LogInvocation;
 import online.javaclass.bookstore.service.OrderService;
 import online.javaclass.bookstore.service.UserService;
 import online.javaclass.bookstore.service.dto.OrderDto;
-import online.javaclass.bookstore.service.dto.PageableDto;
 import online.javaclass.bookstore.service.dto.UserDto;
 import org.springframework.stereotype.Controller;
 
@@ -26,12 +25,12 @@ public class OrdersCommand implements Command {
     @LogInvocation
     @Override
     public String execute(HttpServletRequest req) {
-        PageableDto pageable = pagingUtil.getPageable(req);
-        List<OrderDto> orders = orderService.getAll(pageable);
-        Map<OrderDto, UserDto> ordersMap = mapOrders(orders);
-        req.setAttribute("page", pageable.getPage());
-        req.setAttribute("total_pages", pageable.getTotalPages());
-        req.setAttribute("orders", ordersMap);
+//        PageableDto pageable = pagingUtil.getPageable(req);
+//        List<OrderDto> orders = orderService.getAll(pageable);
+//        Map<OrderDto, UserDto> ordersMap = mapOrders(orders);
+//        req.setAttribute("page", pageable.getPage());
+//        req.setAttribute("total_pages", pageable.getTotalPages());
+//        req.setAttribute("orders", ordersMap);
         return "jsp/orders.jsp";
     }
 

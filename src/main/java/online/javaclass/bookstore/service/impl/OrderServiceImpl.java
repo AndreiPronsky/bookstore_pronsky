@@ -1,6 +1,6 @@
 package online.javaclass.bookstore.service.impl;
 
-import online.javaclass.bookstore.controller.PagingUtil;
+import online.javaclass.bookstore.controller.utils.PagingUtil;
 import online.javaclass.bookstore.data.entities.Order;
 import online.javaclass.bookstore.data.repository.OrderRepository;
 import online.javaclass.bookstore.exceptions.UnableToDeleteException;
