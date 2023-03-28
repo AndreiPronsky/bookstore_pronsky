@@ -22,7 +22,7 @@
     <h3><fmt:message key="title"/> : </h3>
     <p><c:out value="${requestScope.book.title}"/></p>
     <c:if test="${sessionScope.user.role == null || sessionScope.user.role == 'USER'}">
-        <p><a href="controller?command=add_to_cart&id=${requestScope.book.id}">
+        <p><a href="/bookstore_pronsky_war/cart/add">
             <fmt:message key="add_to_cart"/></a></p>
     </c:if>
 </article>

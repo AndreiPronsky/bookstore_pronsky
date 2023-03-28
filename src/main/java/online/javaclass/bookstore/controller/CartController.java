@@ -37,9 +37,10 @@ public class CartController {
 
     @LogInvocation
     @RequestMapping("")
-    public String cart(@SessionAttribute UserDto user) {
+    public String cart(HttpSession session) {
+        UserDto user = (UserDto) session.getAttribute("user");
         if (user == null) {
-            return "login";
+            return "redirect: users/login";
         }
         return "confirm_order";
     }

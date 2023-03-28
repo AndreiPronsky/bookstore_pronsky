@@ -65,8 +65,8 @@ public class OrderController {
 
     @LogInvocation
     @GetMapping("/all")
-    public String getAll(Model model) {
-        PageableDto pageable = pagingUtil.getPageable(model);
+    public String getAll(@RequestParam String page, @RequestParam String page_size,Model model) {
+        PageableDto pageable = pagingUtil.getPageable(page, page_size);
         List<OrderDto> orders = orderService.getAll(pageable);
         model.addAttribute("page", pageable.getPage());
         model.addAttribute("total_pages", pageable.getTotalPages());

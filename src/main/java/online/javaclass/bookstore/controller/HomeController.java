@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class HomeController {
 
     @LogInvocation
-    @GetMapping(path = "/home")
+    @GetMapping({"/","/home"})
     public String execute() {
         return "index";
     }

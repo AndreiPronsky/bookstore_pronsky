@@ -37,7 +37,7 @@ public class UserController {
         }
         UserDto created = userService.create(userInModel);
         model.addAttribute("user", created);
-        return "/user";
+        return "user";
     }
 
     @LogInvocation
@@ -65,11 +65,11 @@ public class UserController {
 
     @LogInvocation
     @PostMapping("/login")
-    public String login(@RequestAttribute HttpSession session, @ModelAttribute UserLoginDto user) {
+    public String login(HttpSession session, @ModelAttribute UserLoginDto user) {
         UserDto loggedIn = userService.login(user);
         session.setMaxInactiveInterval(86400);
         session.setAttribute("user", loggedIn);
-        return "index";
+        return "redirect: index";
     }
 
     @LogInvocation
@@ -107,8 +107,8 @@ public class UserController {
 
     @LogInvocation
     @GetMapping("/all")
-    public String getAll(Model model) {
-        PageableDto pageable = pagingUtil.getPageable(model);
+    public String getAll(@RequestParam String page, @RequestParam String page_size,Model model) {
+        PageableDto pageable = pagingUtil.getPageable(page, page_size);
         List<UserDto> users = userService.getAll(pageable);
         model.addAttribute("page", pageable.getPage());
         model.addAttribute("total_pages", pageable.getTotalPages());

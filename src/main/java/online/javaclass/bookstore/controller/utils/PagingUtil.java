@@ -2,7 +2,6 @@ package online.javaclass.bookstore.controller.utils;
 
 import online.javaclass.bookstore.service.dto.PageableDto;
 import org.springframework.stereotype.Component;
-import org.springframework.ui.Model;
 
 @Component
 public class PagingUtil {
@@ -10,8 +9,8 @@ public class PagingUtil {
     private static final int DEFAULT_PAGE = 1;
     private static final int DEFAULT_PAGE_SIZE = 5;
 
-    public PageableDto getPageable(Model model) {
-        return new PageableDto(getPage(model), getPageSize(model));
+    public PageableDto getPageable(String pageNum, String pageSize) {
+        return new PageableDto(getPage(pageNum), getPageSize(pageSize));
     }
 
     public Long getTotalPages(Long totalItems, PageableDto pageable) {
@@ -22,28 +21,19 @@ public class PagingUtil {
         return pages;
     }
 
-    private int getPage(Model model) {
-        int page = extractParameters(model, "page", DEFAULT_PAGE);
-        if (page < 1) {
+    private int getPage(String pageNum) {
+        try {
+            return Integer.parseInt(pageNum);
+        } catch (NullPointerException | NumberFormatException e) {
             return DEFAULT_PAGE;
         }
-        return page;
     }
 
-    private int getPageSize(Model model) {
-        return extractParameters(model, "page_size", DEFAULT_PAGE_SIZE);
-    }
-
-    private int extractParameters(Model model, String param, int defaultValue) {
-        if (param == null) {
-            return defaultValue;
-        } else {
-            String page = model.getAttribute(param).toString();
-            try {
-                return Integer.parseInt(page);
-            } catch (NumberFormatException e) {
-                return defaultValue;
-            }
+    private int getPageSize(String pageSize) {
+        try {
+            return Integer.parseInt(pageSize);
+        } catch (NullPointerException | NumberFormatException e) {
+            return DEFAULT_PAGE_SIZE;
         }
     }
 }

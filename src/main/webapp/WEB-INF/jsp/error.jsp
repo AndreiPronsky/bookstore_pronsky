@@ -14,11 +14,7 @@
 <jsp:include page="navbar.jsp"/>
 <h1><fmt:message key="error"/></h1>
 <h1><fmt:message key="something_went_wrong"/></h1>
-<c:if test="${requestScope.messages.isEmpty()}">
-    <c:forEach items="${requestScope.messages}" var="message">
-        <p><c:out value="${message}"/></p>
-    </c:forEach>
-</c:if>
-<p>${requestScope.message}</p>
+<p>Status: ${status}</p>
+<p>Reason: ${reason}</p>
 </body>
 </html>

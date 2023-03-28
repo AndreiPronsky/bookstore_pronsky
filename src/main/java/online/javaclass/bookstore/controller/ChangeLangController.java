@@ -12,8 +12,9 @@ import javax.servlet.http.HttpSession;
 public class ChangeLangController {
 
     @LogInvocation
+    @RequestMapping("")
     public String execute(@RequestParam String lang, HttpSession session) {
         session.setAttribute("lang", lang);
-        return "index.jsp";
+        return "index";
     }
 }

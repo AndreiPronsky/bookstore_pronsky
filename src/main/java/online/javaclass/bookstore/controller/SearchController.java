@@ -18,7 +18,7 @@ public class SearchController {
     private final BookService bookService;
 
     @LogInvocation
-    public String execute(@RequestParam String search, Model model) {
+    public String search(@RequestParam String search, Model model) {
         List<BookDto> searchResult = bookService.search(search);
         model.addAttribute("books", searchResult);
         return "books";
