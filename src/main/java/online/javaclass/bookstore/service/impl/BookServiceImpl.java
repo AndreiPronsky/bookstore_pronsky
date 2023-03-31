@@ -9,7 +9,7 @@ import online.javaclass.bookstore.exceptions.UnableToFindException;
 import online.javaclass.bookstore.platform.MessageManager;
 import online.javaclass.bookstore.platform.logging.LogInvocation;
 import online.javaclass.bookstore.service.BookService;
-import online.javaclass.bookstore.service.EntityDtoMapperService;
+import online.javaclass.bookstore.service.EntityDtoMapper;
 import online.javaclass.bookstore.service.dto.BookDto;
 import online.javaclass.bookstore.service.dto.PageableDto;
 import org.springframework.stereotype.Service;
@@ -21,7 +21,7 @@ import java.util.List;
 public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepo;
-    private final EntityDtoMapperService mapper;
+    private final EntityDtoMapper mapper;
     private final MessageManager messageManager;
     private final PagingUtil pagingUtil;
 

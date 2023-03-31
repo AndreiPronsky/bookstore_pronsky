@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class EntityDtoMapperService {
+public class EntityDtoMapper {
     private final OrderRepository orderRepo;
 
     public User toEntity(UserDto userDto) {
@@ -95,8 +95,8 @@ public class EntityDtoMapperService {
         book.setTitle(bookDto.getTitle());
         book.setAuthor(bookDto.getAuthor());
         book.setIsbn(bookDto.getIsbn());
-        book.setGenre(Book.Genre.values()[(bookDto.getGenre().ordinal())]);
-        book.setCover(Book.Cover.values()[(bookDto.getCover().ordinal())]);
+        book.setGenre(Book.Genre.valueOf(bookDto.getGenre().toString()));
+        book.setCover(Book.Cover.valueOf(bookDto.getCover().toString()));
         book.setPages(bookDto.getPages());
         book.setPrice(bookDto.getPrice());
         book.setRating(bookDto.getRating());

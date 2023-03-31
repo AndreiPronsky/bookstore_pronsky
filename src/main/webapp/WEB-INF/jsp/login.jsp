@@ -13,8 +13,8 @@
 <body>
 <jsp:include page="navbar.jsp"/>
 <h1><fmt:message key="login"/></h1>
-<form method="post" action="login">
-    <input name="command" type="hidden" value="login">
+<form method="post" action="/users/login">
+    <input type="hidden" value="login">
     <label for="email-input"><fmt:message key="email"/> : </label>
     <input id="email-input" name="email" type="email">
     <br/>

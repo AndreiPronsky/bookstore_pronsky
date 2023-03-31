@@ -9,7 +9,7 @@
 <head>
     <meta charset="UTF-8">
     <title><fmt:message key="orders"/></title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 <jsp:include page="navbar.jsp"/>
@@ -21,18 +21,18 @@
 <c:if test="${!requestScope.orders.isEmpty()}">
     <div class="paging">
         <c:if test="${requestScope.total_pages > 1}">
-            <a href="controller?command=orders&page=1"><fmt:message key="first"/></a>
+            <a href="/orders/all?page=1"><fmt:message key="first"/></a>
             <c:if test="${requestScope.page <= 1} ">
                 <a><fmt:message key="previous"/></a>
             </c:if>
             <c:if test="${requestScope.page > 1}">
-                <a href="controller?command=orders&page=${requestScope.page - 1}"><fmt:message key="previous"/></a>
+                <a href="/orders/all?page=${requestScope.page - 1}"><fmt:message key="previous"/></a>
             </c:if>
             ${requestScope.page}
             <c:if test="${requestScope.page < requestScope.total_pages}">
-                <a href="controller?command=orders&page=${requestScope.page + 1}"><fmt:message key="next"/></a>
+                <a href="/orders/all?page=${requestScope.page + 1}"><fmt:message key="next"/></a>
             </c:if>
-            <a href="controller?command=orders&page=${requestScope.total_pages}"><fmt:message key="last"/></a>
+            <a href="/orders/all?page=${requestScope.total_pages}"><fmt:message key="last"/></a>
         </c:if>
     </div>
 </c:if>
@@ -57,7 +57,7 @@
             <td><c:out value="${order.key.paymentStatus}"/></td>
             <td><c:out value="${order.key.deliveryType}"/></td>
             <td>
-                <a href="controller?command=edit_order_form&id=${order.key.id}">
+                <a href="/orders/edit?id=${order.key.id}">
                     <fmt:message key="edit_order"/></a>
             </td>
         </tr>

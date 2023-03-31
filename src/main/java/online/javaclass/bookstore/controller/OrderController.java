@@ -9,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -21,22 +23,36 @@ public class OrderController {
     private final PagingUtil pagingUtil;
 
     @LogInvocation
-    @PostMapping("/confirm_order")
-    public String confirmOrder(@SessionAttribute Map<BookDto, Integer> cart,
-                               @ModelAttribute OrderDto order, Model model) {
-        order.setItems(listItems(cart));
+    @PostMapping("/confirm")
+    public String confirmOrder(HttpSession session, @ModelAttribute OrderDto order, Model model) {
+        Map<BookDto, Integer> cart = (Map) session.getAttribute("cart");
+        List<OrderItemDto> items = listItems(cart);
+        order.setItems(items);
+        BigDecimal cost = calculateCost(items);
+        order.setCost(cost);
+        UserDto user = (UserDto) session.getAttribute("user");
+        if (user.getRole() == UserDto.Role.USER) {
+            order.setUser(user);
+        }
         OrderDto created = orderService.create(order);
         model.addAttribute("order", created);
+        cart.clear();
         return "successful_order";
+    }
+
+    @LogInvocation
+    @GetMapping("/confirm")
+    public String confirmOrderForm(HttpSession session) {
+        UserDto user = (UserDto) session.getAttribute("user");
+        if (user == null) {
+            return "redirect: /users/login";
+        }
+        return "confirm_order";
     }
 
     @LogInvocation
     @PostMapping("/edit")
     public String editOrder(@ModelAttribute OrderDto order, Model model) {
-        if (order.getOrderStatus() == null && order.getPaymentStatus() == null) {
-            order.setOrderStatus(OrderDto.OrderStatus.OPEN);
-            order.setPaymentStatus(OrderDto.PaymentStatus.UNPAID);
-        }
         OrderDto updated = orderService.update(order);
         model.addAttribute("order", updated);
         return "successful_order";
@@ -65,13 +81,21 @@ public class OrderController {
 
     @LogInvocation
     @GetMapping("/all")
-    public String getAll(@RequestParam String page, @RequestParam String page_size,Model model) {
+    public String getAll(@RequestParam String page, @RequestParam String page_size, Model model) {
         PageableDto pageable = pagingUtil.getPageable(page, page_size);
         List<OrderDto> orders = orderService.getAll(pageable);
         model.addAttribute("page", pageable.getPage());
         model.addAttribute("total_pages", pageable.getTotalPages());
         model.addAttribute("orders", orders);
         return "orders";
+    }
+
+    @LogInvocation
+    @GetMapping("/all/${id}")
+    public String getAllByUserId(Model model, @PathVariable Long id) {
+        List<OrderDto> orders = orderService.getOrdersByUserId(id);
+        model.addAttribute("orders", orders);
+        return "my_orders";
     }
 
     private boolean notMatchingUserIgnoreAdmin(UserDto user, OrderDto order) {
@@ -96,5 +120,13 @@ public class OrderController {
             items.add(itemDto);
         }
         return items;
+    }
+
+    private BigDecimal calculateCost(List<OrderItemDto> items) {
+        BigDecimal cost = BigDecimal.ZERO;
+        for (OrderItemDto item : items) {
+            cost = cost.add(item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
+        }
+        return cost;
     }
 }

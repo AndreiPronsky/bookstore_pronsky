@@ -8,7 +8,7 @@
 <html>
 <head>
     <title><fmt:message key="error"/></title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 <jsp:include page="navbar.jsp"/>

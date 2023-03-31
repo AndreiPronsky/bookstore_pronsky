@@ -8,7 +8,7 @@
 <html>
 <head>
     <title><fmt:message key="book"/></title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 <jsp:include page="navbar.jsp"/>
@@ -22,7 +22,7 @@
     <h3><fmt:message key="title"/> : </h3>
     <p><c:out value="${requestScope.book.title}"/></p>
     <c:if test="${sessionScope.user.role == null || sessionScope.user.role == 'USER'}">
-        <p><a href="/bookstore_pronsky_war/cart/add">
+        <p><a href="/cart/add">
             <fmt:message key="add_to_cart"/></a></p>
     </c:if>
 </article>

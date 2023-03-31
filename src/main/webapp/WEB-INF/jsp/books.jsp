@@ -21,18 +21,18 @@
 <c:if test="${!requestScope.books.isEmpty()}">
     <div class="paging">
         <c:if test="${requestScope.total_pages > 1}">
-            <a href="all?page=1&page_size=${requestscope.pageSize}"><fmt:message key="first"/></a>
+            <a href="all?page=1&page_size=${requestScope.pageSize}"><fmt:message key="first"/></a>
             <c:if test="${requestScope.page <= 1} ">
                 <a><fmt:message key="previous"/></a>
             </c:if>
             <c:if test="${requestScope.page > 1}">
-                <a href="all?page=${requestScope.page - 1}&page_size=${requestscope.pageSize}"><fmt:message key="previous"/></a>
+                <a href="all?page=${requestScope.page - 1}&page_size=${requestScope.pageSize}"><fmt:message key="previous"/></a>
             </c:if>
             ${requestScope.page}
             <c:if test="${requestScope.page < requestScope.total_pages}">
-                <a href="all?page=${requestScope.page + 1}&page_size=${requestscope.pageSize}"><fmt:message key="next"/></a>
+                <a href="all?page=${requestScope.page + 1}&page_size=${requestScope.pageSize}"><fmt:message key="next"/></a>
             </c:if>
-            <a href="all?page=${requestScope.total_pages}&page_size=${requestscope.pageSize}"><fmt:message key="last"/></a>
+            <a href="all?page=${requestScope.total_pages}&page_size=${requestScope.pageSize}"><fmt:message key="last"/></a>
         </c:if>
     </div>
 </c:if>
@@ -68,10 +68,10 @@
             </td>
             <td>
                 <c:if test="${sessionScope.user.role.toString() == 'MANAGER'}">
-                    <a href="edit_form/${book.id}"><fmt:message key="edit_book"/></a>
+                    <a href="edit/${book.id}"><fmt:message key="edit_book"/></a>
                 </c:if>
                 <c:if test="${sessionScope.user.role.toString() == 'USER' || sessionScope.user == null}">
-                    <a href="/bookstore_pronsky_war/cart/add?page=${requestScope.page}">
+                    <a href="/cart/add?id=${book.id}&page=${requestScope.page}&page_size=${requestScope.pageSize}">
                         <img height="30" src="/serviceImages/cart.png" alt=<fmt:message key="add_to_cart"/>></a>
                 </c:if>
             </td>

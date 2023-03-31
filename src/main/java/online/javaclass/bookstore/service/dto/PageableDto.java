@@ -1,8 +1,8 @@
 package online.javaclass.bookstore.service.dto;
 
 public class PageableDto {
-    private int page;
-    private final int pageSize;
+    private Integer page;
+    private Integer pageSize;
     private int offset;
 
     private Long totalItems;
@@ -18,12 +18,16 @@ public class PageableDto {
         return pageSize * (page - 1);
     }
 
-    public int getPage() {
+    public Integer getPage() {
         return page;
     }
 
-    public int getPageSize() {
+    public Integer getPageSize() {
         return pageSize;
+    }
+
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
     }
 
     public int getLimit() {

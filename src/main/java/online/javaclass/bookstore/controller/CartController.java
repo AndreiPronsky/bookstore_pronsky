@@ -2,10 +2,11 @@ package online.javaclass.bookstore.controller;
 
 import lombok.RequiredArgsConstructor;
 import online.javaclass.bookstore.platform.logging.LogInvocation;
+import online.javaclass.bookstore.service.BookService;
 import online.javaclass.bookstore.service.dto.BookDto;
-import online.javaclass.bookstore.service.dto.UserDto;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
@@ -19,30 +20,31 @@ import java.util.Map;
 @RequestMapping("/cart")
 public class CartController {
 
+    private final BookService bookService;
+
     @LogInvocation
-    @RequestMapping("/add")
-    public String addToCart(HttpSession session, @ModelAttribute BookDto book, @RequestParam Long page) {
+    @GetMapping("/add")
+    public String addToCart(HttpSession session, @RequestParam Long id, @RequestParam String page, @RequestParam String page_size) {
         Map<BookDto, Integer> cart = (Map) session.getAttribute("cart");
         if (cart == null) {
             cart = new HashMap<>();
             session.setAttribute("cart", cart);
         }
+        BookDto book = bookService.getById(id);
         if (cart.containsKey(book)) {
             cart.put(book, cart.get(book) + 1);
         } else {
             cart.put(book, 1);
         }
-        return "redirect: /books/page=" + page;
+        return "redirect: /books/all?page=" + page + "&page_size=" + page_size;
     }
 
     @LogInvocation
     @RequestMapping("")
-    public String cart(HttpSession session) {
-        UserDto user = (UserDto) session.getAttribute("user");
-        if (user == null) {
-            return "redirect: users/login";
-        }
-        return "confirm_order";
+    public String cart(HttpSession session, Model model) {
+        Map<BookDto, Integer> cart = (Map) session.getAttribute("cart");
+        model.addAttribute("cart", cart);
+        return "/cart";
     }
 
     @LogInvocation
@@ -50,7 +52,7 @@ public class CartController {
     public String edit(@RequestParam Long id, @RequestParam String action,
                        @SessionAttribute Map<BookDto, Integer> cart) {
         correctItemQuantity(id, action, cart);
-        return "redirect: cart";
+        return "redirect: /cart";
     }
 
     private void correctItemQuantity(Long id, String action, Map<BookDto, Integer> cart) {

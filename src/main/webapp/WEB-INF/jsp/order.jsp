@@ -8,7 +8,7 @@
 <html>
 <head>
     <title><fmt:message key="book"/></title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 <jsp:include page="navbar.jsp"/>
@@ -23,7 +23,7 @@
     <h3><fmt:message key="payment_method"/> : <c:out value="${requestScope.order.paymentMethod}"/></h3>
     <h3><fmt:message key="delivery_type"/> : <c:out value="${requestScope.order.deliveryType}"/></h3>
     <h3><fmt:message key="payment_status"/> : <c:out value="${requestScope.order.paymentStatus}"/></h3>
-    <a href="controller?command=edit_order_form&id=${requestScope.order.id}"><fmt:message key="edit_order"/></a>
+    <a href="/orders/edit?id=${requestScope.order.id}"><fmt:message key="edit_order"/></a>
 </article>
 <footer></footer>
 </body>

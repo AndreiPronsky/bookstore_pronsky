@@ -28,10 +28,9 @@ public class UserController {
 
     @LogInvocation
     @PostMapping("/add")
-    public String add(@ModelAttribute UserDto userInModel,
-                      @SessionAttribute UserDto userInSession,
-                      Model model) {
-        if (userInSession.getRole() != UserDto.Role.ADMIN) {
+    public String add(@ModelAttribute UserDto userInModel, HttpSession session, Model model) {
+        UserDto userInSession = (UserDto) session.getAttribute("user");
+        if (userInSession == null || userInSession.getRole() != UserDto.Role.ADMIN) {
             userInModel.setRole(UserDto.Role.USER);
             userInModel.setRating(BigDecimal.ZERO);
         }
@@ -48,7 +47,7 @@ public class UserController {
 
 
     @LogInvocation
-    @PostMapping("/edit/{id}")
+    @PostMapping("/edit")
     public String edit(@ModelAttribute UserDto user, Model model) {
         UserDto edited = userService.update(user);
         model.addAttribute("user", edited);
@@ -69,7 +68,7 @@ public class UserController {
         UserDto loggedIn = userService.login(user);
         session.setMaxInactiveInterval(86400);
         session.setAttribute("user", loggedIn);
-        return "redirect: index";
+        return "redirect: /home";
     }
 
     @LogInvocation
@@ -79,10 +78,10 @@ public class UserController {
     }
 
     @LogInvocation
-    @PostMapping("/logout")
-    public String logout(@RequestParam HttpSession session) {
+    @RequestMapping("/logout")
+    public String logout(HttpSession session) {
         session.invalidate();
-        return "index";
+        return "redirect: /home";
     }
 
     @LogInvocation
@@ -107,7 +106,7 @@ public class UserController {
 
     @LogInvocation
     @GetMapping("/all")
-    public String getAll(@RequestParam String page, @RequestParam String page_size,Model model) {
+    public String getAll(@RequestParam String page, @RequestParam String page_size, Model model) {
         PageableDto pageable = pagingUtil.getPageable(page, page_size);
         List<UserDto> users = userService.getAll(pageable);
         model.addAttribute("page", pageable.getPage());

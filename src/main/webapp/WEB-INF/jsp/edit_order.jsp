@@ -8,42 +8,39 @@
 <html>
 <head>
     <title><fmt:message key="edit_order"/></title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 <jsp:include page="navbar.jsp"/>
 <h1><fmt:message key="edit_order"/></h1>
 <c:if test="${sessionScope.user.role.toString() == 'USER'}">
-<form action="controller?command=edit_order&id=${sessionScope.order.id}" method="post">
+<form action="/orders/edit&id=${order.id}" method="post">
     </c:if>
-    <c:if test="${sessionScope.user.role.toString() == 'ADMIN'}">
-    <form action="controller?command=edit_order_admin&id=${pageScope.order.id}" method="post">
-        </c:if>
         <table>
             <tbody>
             <c:if test="${sessionScope.user.role.toString() == 'USER'}">
-                <c:forEach items="${sessionScope.items}" var="item">
-                    <c:set var="total" value="${total + item.key.price * item.value }"/>
+                <c:forEach items="${order.items}" var="item">
+                    <c:set var="total" value="${total + item.book.price * item.quantity }"/>
                     <tr>
-                        <td><c:out value="${item.key.title}"/></td>
-                        <td><c:out value="${item.key.price}"/></td>
+                        <td><c:out value="${item.book.title}"/></td>
+                        <td><c:out value="${item.book.price}"/></td>
                         <td>
-                            <a href="controller?command=corr_order&action=dec&id=${item.key.id }">-</a>
+                            <a href="/cart/edit?action=dec&id=${item.id }">-</a>
                             <label><fmt:message key="quantity"/>
-                                <input type="number" name="quantity" step="1" min="0" value="${item.value}">
+                                <input type="number" name="quantity" step="1" min="0" value="${item.quantity}">
                             </label>
-                            <a href="controller?command=corr_order&action=inc&id=${item.key.id }">+</a>
-                            <a href="controller?command=corr_order&action=remove&id=${item.key.id }"><fmt:message
+                            <a href="/cart/edit?action=inc&id=${item.id }">+</a>
+                            <a href="/cart/edit?action=remove&id=${item.id }"><fmt:message
                                     key="remove"/></a>
                         </td>
-                        <td>${item.key.price * item.value }</td>
+                        <td>${item.book.price * item.quantity }</td>
                     </tr>
                 </c:forEach>
             </c:if>
             <tr>
                 <td>
                     <label><fmt:message key="delivery_type"/>
-                        <select name="delivery_type" required="required">
+                        <select name="deliveryType" required="required">
                             <option value=""><fmt:message key="select.delivery_type"/></option>
                             <option value="COURIER"><fmt:message key="delivery_type.courier"/></option>
                             <option value="BIKE"><fmt:message key="delivery_type.bike"/></option>
@@ -57,7 +54,7 @@
             <tr>
                 <td>
                     <label><fmt:message key="payment_method"/>
-                        <select name="payment_method" required="required">
+                        <select name="paymentMethod" required="required">
                             <option value=""><fmt:message key="select.payment_method"/></option>
                             <option value="CASH"><fmt:message key="payment_method.cash"/></option>
                             <option value="CARD"><fmt:message key="payment_method.card"/></option>
@@ -70,7 +67,7 @@
                 <tr>
                     <td>
                         <label><fmt:message key="order_status"/>
-                            <select name="order_status" required="required">
+                            <select name="orderStatus" required="required">
                                 <option value=""><fmt:message key="select.order_status"/></option>
                                 <option value="OPEN"><fmt:message key="order_status.open"/></option>
                                 <option value="CONFIRMED"><fmt:message key="order_status.confirmed"/></option>
@@ -83,7 +80,7 @@
                 <tr>
                     <td>
                         <label><fmt:message key="payment_status"/>
-                            <select name="payment_status" required="required">
+                            <select name="paymentStatus" required="required">
                                 <option value=""><fmt:message key="select.payment_status"/></option>
                                 <option value="UNPAID"><fmt:message key="payment_status.unpaid"/></option>
                                 <option value="PAID"><fmt:message key="payment_status.paid"/></option>

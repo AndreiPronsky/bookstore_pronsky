@@ -9,28 +9,28 @@
 <head>
     <meta charset="UTF-8">
     <title><fmt:message key="bookstore"/></title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 <jsp:include page="navbar.jsp"/>
 <header></header>
 <c:if test="${requestScope.users.isEmpty()}">
-    <h2><fmt:message key="no_users_found"/></h2>
+    <h2><fmt:message key="users.not_found"/></h2>
 </c:if>
 <c:if test="${!requestScope.users.isEmpty()}">
     <div class="paging">
-        <a href="controller?command=users&page=1"><fmt:message key="first"/></a>
+        <a href="/users/all?page=1&page_size=${requestScope.page_size}"><fmt:message key="first"/></a>
         <c:if test="${requestScope.page <= 1} ">
             <a><fmt:message key="previous"/></a>
         </c:if>
         <c:if test="${requestScope.page > 1}">
-            <a href="controller?command=users&page=${requestScope.page - 1}"><fmt:message key="previous"/></a>
+            <a href="/users/all?page=${requestScope.page - 1}&page_size=${requestScope.page_size}"><fmt:message key="previous"/></a>
         </c:if>
             ${requestScope.page}
         <c:if test="${requestScope.page < requestScope.total_pages}">
-            <a href="controller?command=users&page=${requestScope.page + 1}"><fmt:message key="next"/></a>
+            <a href="/users/all?page=${requestScope.page + 1}&page_size=${requestScope.page_size}"><fmt:message key="next"/></a>
         </c:if>
-        <a href="controller?command=users&page=${requestScope.total_pages}"><fmt:message key="last"/></a>
+        <a href="/users/all?page=${requestScope.total_pages}&page_size=${requestScope.page_size}"><fmt:message key="last"/></a>
     </div>
     <table>
         <caption><fmt:message key="users"/></caption>
@@ -52,7 +52,7 @@
                 <td><c:out value="${user.email}"/></td>
                 <td><c:out value="${user.role}"/></td>
                 <c:if test="${sessionScope.user.role.toString() == 'ADMIN'}">
-                    <td><a href="controller?command=edit_user_form&id=${user.id}"><fmt:message key="edit_user"/></a>
+                    <td><a href="/users/edit/${user.id}"><fmt:message key="edit_user"/></a>
                     </td>
                 </c:if>
             </tr>

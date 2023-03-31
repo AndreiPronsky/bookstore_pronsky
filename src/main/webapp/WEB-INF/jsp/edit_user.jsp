@@ -8,24 +8,24 @@
 <html>
 <head>
     <title><fmt:message key="edit_user"/></title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 <jsp:include page="navbar.jsp"/>
 <h1><fmt:message key="edit_user"/></h1>
-<form action="controller?command=edit_user" method="post">
+<form action="/users/edit" method="post">
     <ul class="wrapper">
         <li>
             <input type="hidden" name="id" value="${requestScope.user.id}">
         </li>
         <li class="form-row">
             <label><fmt:message key="firstname"/>
-                <input type="text" name="firstname" minlength="1" value="${requestScope.user.firstName}">
+                <input type="text" name="firstName" minlength="1" value="${requestScope.user.firstName}">
             </label>
         </li>
         <li class="form-row">
             <label><fmt:message key="lastname"/>
-                <input type="text" name="lastname" minlength="1" value="${requestScope.user.lastName}">
+                <input type="text" name="lastName" minlength="1" value="${requestScope.user.lastName}">
             </label>
         </li>
         <li class="form-row">

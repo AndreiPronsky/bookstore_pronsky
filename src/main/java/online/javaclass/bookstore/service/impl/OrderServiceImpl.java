@@ -8,7 +8,7 @@ import online.javaclass.bookstore.exceptions.UnableToFindException;
 import online.javaclass.bookstore.exceptions.ValidationException;
 import online.javaclass.bookstore.platform.MessageManager;
 import online.javaclass.bookstore.platform.logging.LogInvocation;
-import online.javaclass.bookstore.service.EntityDtoMapperService;
+import online.javaclass.bookstore.service.EntityDtoMapper;
 import online.javaclass.bookstore.service.OrderService;
 import online.javaclass.bookstore.service.dto.OrderDto;
 import online.javaclass.bookstore.service.dto.OrderItemDto;
@@ -24,12 +24,12 @@ import java.util.List;
 @Transactional
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepo;
-    private final EntityDtoMapperService mapper;
+    private final EntityDtoMapper mapper;
     private final MessageManager messageManager;
 
     private final PagingUtil pagingUtil;
 
-    public OrderServiceImpl(OrderRepository orderRepo, EntityDtoMapperService mapper, MessageManager messageManager, PagingUtil pagingUtil) {
+    public OrderServiceImpl(OrderRepository orderRepo, EntityDtoMapper mapper, MessageManager messageManager, PagingUtil pagingUtil) {
         this.orderRepo = orderRepo;
         this.mapper = mapper;
         this.messageManager = messageManager;
@@ -84,6 +84,10 @@ public class OrderServiceImpl implements OrderService {
     @LogInvocation
     @Override
     public OrderDto create(OrderDto orderDto) throws ValidationException {
+        if (orderDto.getOrderStatus() == null || orderDto.getPaymentStatus() == null) {
+            orderDto.setOrderStatus(OrderDto.OrderStatus.OPEN);
+            orderDto.setPaymentStatus(OrderDto.PaymentStatus.UNPAID);
+        }
         validate(orderDto);
         Order order = mapper.toEntity(orderDto);
         Order created = orderRepo.create(order);

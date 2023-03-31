@@ -46,17 +46,16 @@ public class BookController {
 
     @LogInvocation
     @PostMapping("/add")
-    public String add(@ModelAttribute BookDto book, @RequestPart Part image, Model model) {
-        try {
-            BookDto created = service.create(book);
-            model.addAttribute("book", created);
-            uploadImage(image, created.getId());
-            return "redirect: /" + created.getId();
-        } catch (IOException e) {
-            return "/error";
-        }
+    public String add(@ModelAttribute BookDto book, Model model) {
+//        try {
+        BookDto created = service.create(book);
+        model.addAttribute("book", created);
+        //           uploadImage(image, created.getId());
+        return "book";
+//        } catch (IOException e) {
+//            return "/error";
+//        }
     }
-
 
     @LogInvocation
     @GetMapping("/add")
@@ -65,11 +64,11 @@ public class BookController {
     }
 
     @LogInvocation
-    @PostMapping("/edit/{id}")
+    @PostMapping("/edit")
     public String edit(@ModelAttribute BookDto book, Model model) {
         BookDto updated = service.update(book);
         model.addAttribute("book", updated);
-        return "redirect: edit_book";
+        return "book";
     }
 
     @LogInvocation
@@ -81,13 +80,9 @@ public class BookController {
     }
 
     private void uploadImage(Part image, Long bookId) throws IOException {
-        if (image != null) {
-            Properties properties = new Properties();
-            try (InputStream input = this.getClass().getResourceAsStream(PATH_TO_PROPS)) {
-                properties.load(input);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+        Properties properties = new Properties();
+        try (InputStream input = this.getClass().getResourceAsStream(PATH_TO_PROPS)) {
+            properties.load(input);
             String coverImageUploadDir = properties.getProperty("cover.upload.dir");
             String fileName = bookId + ".png";
             image.write(coverImageUploadDir + fileName);

@@ -6,8 +6,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class PagingUtil {
 
-    private static final int DEFAULT_PAGE = 1;
-    private static final int DEFAULT_PAGE_SIZE = 5;
+    public static final Integer DEFAULT_PAGE = 1;
+    public static final Integer DEFAULT_PAGE_SIZE = 5;
 
     public PageableDto getPageable(String pageNum, String pageSize) {
         return new PageableDto(getPage(pageNum), getPageSize(pageSize));

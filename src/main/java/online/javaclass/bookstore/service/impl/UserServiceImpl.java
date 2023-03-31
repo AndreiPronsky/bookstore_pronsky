@@ -10,7 +10,7 @@ import online.javaclass.bookstore.exceptions.UnableToFindException;
 import online.javaclass.bookstore.platform.MessageManager;
 import online.javaclass.bookstore.platform.logging.LogInvocation;
 import online.javaclass.bookstore.service.DigestService;
-import online.javaclass.bookstore.service.EntityDtoMapperService;
+import online.javaclass.bookstore.service.EntityDtoMapper;
 import online.javaclass.bookstore.service.UserService;
 import online.javaclass.bookstore.service.dto.PageableDto;
 import online.javaclass.bookstore.service.dto.UserDto;
@@ -25,7 +25,7 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepo;
-    private final EntityDtoMapperService mapper;
+    private final EntityDtoMapper mapper;
     private final DigestService digest;
     private final MessageManager messageManager;
     private final PagingUtil pagingUtil;

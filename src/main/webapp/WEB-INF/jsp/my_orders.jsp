@@ -9,7 +9,7 @@
 <head>
     <meta charset="UTF-8">
     <title><fmt:message key="my_orders"/></title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 <jsp:include page="navbar.jsp"/>
@@ -32,23 +32,23 @@
         <tbody>
         <c:forEach items="${requestScope.orders}" var="order">
             <tr>
-                <td><c:out value="${order.key.id}"/></td>
+                <td><c:out value="${order.id}"/></td>
                 <td>
-                    <c:forEach items="${order.value}" var="item">
+                    <c:forEach items="${order.items}" var="item">
                         <table>
                             <tr>
-                                <td><c:out value="${item.value.title}"/></td>
-                                <td><c:out value="${item.key.price}"/></td>
-                                <td><c:out value="${item.key.quantity}"/></td>
+                                <td><c:out value="${item.book.title}"/></td>
+                                <td><c:out value="${item.price}"/></td>
+                                <td><c:out value="${item.quantity}"/></td>
                             </tr>
                         </table>
                     </c:forEach>
                 </td>
-                <td><c:out value="${order.key.cost}"/></td>
-                <td><c:out value="${order.key.orderStatus}"/></td>
+                <td><c:out value="${order.cost}"/></td>
+                <td><c:out value="${order.orderStatus}"/></td>
                 <td>
-                    <c:if test="${order.key.orderStatus == 'OPEN'}">
-                        <a href="controller?command=edit_order_form&id=${order.key.id}">
+                    <c:if test="${order.orderStatus == 'OPEN'}">
+                        <a href="/orders/edit?id=${order.id}">
                             <fmt:message key="edit_order"/></a>
                     </c:if>
                 </td>

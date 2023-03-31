@@ -8,18 +8,18 @@
 <html>
 <head>
     <title><fmt:message key="register"/></title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 <jsp:include page="navbar.jsp"/>
 <h1><fmt:message key="register"/></h1>
-<form action="controller?command=add_user" method="post">
+<form action="/users/add" method="post">
     <ul class="wrapper">
         <li class="form-row">
-            <label><fmt:message key="firstname"/><input type="text" name="firstname" minlength="1"></label>
+            <label><fmt:message key="firstname"/><input type="text" name="firstName" minlength="1"></label>
         </li>
         <li class="form-row">
-            <label><fmt:message key="lastname"/><input type="text" name="lastname" minlength="1"></label>
+            <label><fmt:message key="lastname"/><input type="text" name="lastName" minlength="1"></label>
         </li>
         <li class="form-row">
             <label><fmt:message key="email"/><input type="text" name="email" minlength="13"></label>

@@ -7,15 +7,13 @@
 <fmt:setBundle basename="messages"/>
 <html>
 <head>
-    <title>
-        <fmt:message key="add.book"/>
-    </title>
-    <link rel="stylesheet" href="css/style.css">
+    <title><fmt:message key="add.book"/></title>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 <jsp:include page="navbar.jsp"/>
 <h1><fmt:message key="add.book"/></h1>
-<form action="controller?command=add_book" enctype="multipart/form-data" method="post">
+<form action="/books/add" enctype="multipart/form-data" method="post">
     <ul class="wrapper">
         <li class="form-row">
             <label><fmt:message key="title"/><input type="text" name="title" minlength="1"></label>
@@ -76,12 +74,5 @@
         </li>
     </ul>
 </form>
-<table>
-    <c:forEach items="${sessionScope.validationMessages}" var="message">
-        <tr>
-            <td><c:out value="${message}"/></td>
-        </tr>
-    </c:forEach>
-</table>
 </body>
 </html>

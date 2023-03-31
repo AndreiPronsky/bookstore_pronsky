@@ -8,11 +8,11 @@
 <html>
 <head>
     <title><fmt:message key="successful_order"/></title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 <jsp:include page="navbar.jsp"/>
-<h1><fmt:message key="number_of_your_order_is"/> : <c:out value="${requestScope.order_id}"/>!
+<h1><fmt:message key="number_of_your_order_is"/> : <c:out value="${requestScope.order.id}"/>!
     <fmt:message key="our_manager_will_contact_you_soon"/></h1>
 </body>
 </html>
