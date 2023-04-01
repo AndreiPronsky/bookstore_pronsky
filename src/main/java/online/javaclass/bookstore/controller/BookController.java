@@ -6,6 +6,7 @@ import online.javaclass.bookstore.platform.logging.LogInvocation;
 import online.javaclass.bookstore.service.BookService;
 import online.javaclass.bookstore.service.dto.BookDto;
 import online.javaclass.bookstore.service.dto.PageableDto;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -46,6 +47,7 @@ public class BookController {
 
     @LogInvocation
     @PostMapping("/add")
+    @ResponseStatus(HttpStatus.CREATED)
     public String add(@ModelAttribute BookDto book, Model model) {
 //        try {
         BookDto created = service.create(book);
@@ -65,6 +67,7 @@ public class BookController {
 
     @LogInvocation
     @PostMapping("/edit")
+    @ResponseStatus(HttpStatus.ACCEPTED)
     public String edit(@ModelAttribute BookDto book, Model model) {
         BookDto updated = service.update(book);
         model.addAttribute("book", updated);

@@ -13,8 +13,7 @@
 <body>
 <jsp:include page="navbar.jsp"/>
 <h1><fmt:message key="error"/></h1>
-<h1><fmt:message key="something_went_wrong"/></h1>
-<p>Status: ${status}</p>
-<p>Reason: ${reason}</p>
+<p>Status: <c:out value="${requestScope['javax.servlet.error.status_code']}"/></p>
+<p>Message: ${requestScope.message}</p>
 </body>
 </html>

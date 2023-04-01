@@ -19,17 +19,9 @@ public class UserRepositoryImpl implements UserRepository {
     private EntityManager entityManager;
 
     @Override
-    public User findById(Long id) {
-        return entityManager.find(User.class, id);
-    }
-
-    @Override
-    public List<User> findAll(int limit, int offset) {
-        return entityManager
-                .createQuery("FROM User", User.class)
-                .setMaxResults(limit)
-                .setFirstResult(offset)
-                .getResultList();
+    public Long count() {
+        Query query = entityManager.createQuery("SELECT COUNT(*) FROM User");
+        return (Long) query.getSingleResult();
     }
 
     @Override
@@ -46,14 +38,8 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public boolean deleteById(Long id) {
-        boolean deleted = false;
-        User toDelete = entityManager.find(User.class, id);
-        if (toDelete != null) {
-            entityManager.remove(toDelete);
-            deleted = true;
-        }
-        return deleted;
+    public User findById(Long id) {
+        return entityManager.find(User.class, id);
     }
 
     @Override
@@ -62,6 +48,15 @@ public class UserRepositoryImpl implements UserRepository {
                 .createQuery("FROM User WHERE email = :email")
                 .setParameter("email", email);
         return (User) query.getSingleResult();
+    }
+
+    @Override
+    public List<User> findAll(int limit, int offset) {
+        return entityManager
+                .createQuery("FROM User", User.class)
+                .setMaxResults(limit)
+                .setFirstResult(offset)
+                .getResultList();
     }
 
     @Override
@@ -75,8 +70,8 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public Long count() {
-        Query query = entityManager.createQuery("SELECT COUNT(*) FROM User");
-        return (Long) query.getSingleResult();
+    public void deleteById(Long id) {
+        User toDelete = entityManager.find(User.class, id);
+        entityManager.remove(toDelete);
     }
 }

@@ -27,29 +27,6 @@ public class OrderRepositoryImpl implements OrderRepository {
     }
 
     @Override
-    public List<Order> findAllByUserId(Long userId) {
-        User user = entityManager.find(User.class, userId);
-        return entityManager
-                .createQuery("FROM Order WHERE user = :user ORDER BY id", Order.class)
-                .setParameter("user", user)
-                .getResultList();
-    }
-
-    @Override
-    public Order findById(Long id) {
-        return entityManager.find(Order.class, id);
-    }
-
-    @Override
-    public List<Order> findAll(int limit, int offset) {
-        return entityManager
-                .createQuery("FROM Order", Order.class)
-                .setMaxResults(limit)
-                .setFirstResult(offset)
-                .getResultList();
-    }
-
-    @Override
     public Order create(Order order) {
         entityManager.persist(order);
         return order;
@@ -62,13 +39,31 @@ public class OrderRepositoryImpl implements OrderRepository {
     }
 
     @Override
-    public boolean deleteById(Long id) {
-        boolean deleted = false;
+    public Order findById(Long id) {
+        return entityManager.find(Order.class, id);
+    }
+
+    @Override
+    public List<Order> findAllByUserId(Long userId) {
+        User user = entityManager.find(User.class, userId);
+        return entityManager
+                .createQuery("FROM Order WHERE user = :user ORDER BY id", Order.class)
+                .setParameter("user", user)
+                .getResultList();
+    }
+
+    @Override
+    public List<Order> findAll(int limit, int offset) {
+        return entityManager
+                .createQuery("FROM Order", Order.class)
+                .setMaxResults(limit)
+                .setFirstResult(offset)
+                .getResultList();
+    }
+
+    @Override
+    public void deleteById(Long id) {
         Order toDelete = entityManager.find(Order.class, id);
-        if (toDelete != null) {
-            entityManager.remove(toDelete);
-            deleted = true;
-        }
-        return deleted;
+        entityManager.remove(toDelete);
     }
 }

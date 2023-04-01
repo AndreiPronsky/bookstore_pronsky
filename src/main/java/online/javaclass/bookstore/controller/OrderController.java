@@ -5,6 +5,7 @@ import online.javaclass.bookstore.controller.utils.PagingUtil;
 import online.javaclass.bookstore.platform.logging.LogInvocation;
 import online.javaclass.bookstore.service.OrderService;
 import online.javaclass.bookstore.service.dto.*;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +25,7 @@ public class OrderController {
 
     @LogInvocation
     @PostMapping("/confirm")
+    @ResponseStatus(HttpStatus.CREATED)
     public String confirmOrder(HttpSession session, @ModelAttribute OrderDto order, Model model) {
         Map<BookDto, Integer> cart = (Map) session.getAttribute("cart");
         List<OrderItemDto> items = listItems(cart);
@@ -52,6 +54,7 @@ public class OrderController {
 
     @LogInvocation
     @PostMapping("/edit")
+    @ResponseStatus(HttpStatus.ACCEPTED)
     public String editOrder(@ModelAttribute OrderDto order, Model model) {
         OrderDto updated = orderService.update(order);
         model.addAttribute("order", updated);

@@ -19,16 +19,6 @@ public class BookRepositoryImpl implements BookRepository {
     @PersistenceContext
     private EntityManager entityManager;
 
-    @LogInvocation
-    @Override
-    public List<Book> search(String input) {
-        String reformattedForSearchInput = "%" + input + "%";
-        return entityManager
-                .createQuery("FROM Book WHERE author LIKE : input OR title LIKE :input", Book.class)
-                .setParameter("input", reformattedForSearchInput)
-                .getResultList();
-    }
-
     @Override
     public Long count() {
         Query query = entityManager.createQuery("SELECT COUNT(*) FROM Book");
@@ -74,6 +64,16 @@ public class BookRepositoryImpl implements BookRepository {
 
     @LogInvocation
     @Override
+    public List<Book> search(String input) {
+        String reformattedForSearchInput = "%" + input + "%";
+        return entityManager
+                .createQuery("FROM Book WHERE author LIKE : input OR title LIKE :input", Book.class)
+                .setParameter("input", reformattedForSearchInput)
+                .getResultList();
+    }
+
+    @LogInvocation
+    @Override
     public List<Book> findAll(int limit, int offset) {
         return entityManager.createQuery("FROM Book", Book.class)
                 .setMaxResults(limit)
@@ -83,13 +83,8 @@ public class BookRepositoryImpl implements BookRepository {
 
     @LogInvocation
     @Override
-    public boolean deleteById(Long id) {
-        boolean deleted = false;
+    public void deleteById(Long id) {
         Book toDelete = entityManager.find(Book.class, id);
-        if (toDelete != null) {
-            entityManager.remove(toDelete);
-            deleted = true;
-        }
-        return deleted;
+        entityManager.remove(toDelete);
     }
 }

@@ -10,6 +10,7 @@ import online.javaclass.bookstore.service.dto.OrderDto;
 import online.javaclass.bookstore.service.dto.PageableDto;
 import online.javaclass.bookstore.service.dto.UserDto;
 import online.javaclass.bookstore.service.dto.UserLoginDto;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +29,7 @@ public class UserController {
 
     @LogInvocation
     @PostMapping("/add")
+    @ResponseStatus(HttpStatus.CREATED)
     public String add(@ModelAttribute UserDto userInModel, HttpSession session, Model model) {
         UserDto userInSession = (UserDto) session.getAttribute("user");
         if (userInSession == null || userInSession.getRole() != UserDto.Role.ADMIN) {
@@ -48,6 +50,7 @@ public class UserController {
 
     @LogInvocation
     @PostMapping("/edit")
+    @ResponseStatus(HttpStatus.ACCEPTED)
     public String edit(@ModelAttribute UserDto user, Model model) {
         UserDto edited = userService.update(user);
         model.addAttribute("user", edited);

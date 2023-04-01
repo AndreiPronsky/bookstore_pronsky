@@ -5,8 +5,9 @@ import online.javaclass.bookstore.controller.utils.PagingUtil;
 import online.javaclass.bookstore.data.entities.User;
 import online.javaclass.bookstore.data.repository.UserRepository;
 import online.javaclass.bookstore.exceptions.LoginException;
-import online.javaclass.bookstore.exceptions.UnableToDeleteException;
+import online.javaclass.bookstore.exceptions.UnableToCreateException;
 import online.javaclass.bookstore.exceptions.UnableToFindException;
+import online.javaclass.bookstore.exceptions.UnableToUpdateException;
 import online.javaclass.bookstore.platform.MessageManager;
 import online.javaclass.bookstore.platform.logging.LogInvocation;
 import online.javaclass.bookstore.service.DigestService;
@@ -17,6 +18,7 @@ import online.javaclass.bookstore.service.dto.UserDto;
 import online.javaclass.bookstore.service.dto.UserLoginDto;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityExistsException;
 import java.util.List;
 
 
@@ -30,6 +32,46 @@ public class UserServiceImpl implements UserService {
     private final MessageManager messageManager;
     private final PagingUtil pagingUtil;
 
+    @Override
+    public Long count() {
+        return userRepo.count();
+    }
+
+    @LogInvocation
+    @Override
+    public UserDto create(UserDto userDto) {
+        userDto.setPassword(digest.hashPassword(userDto.getPassword()));
+        User user = mapper.toEntity(userDto);
+        try {
+            User created = userRepo.create(user);
+            return mapper.toDto(created);
+        } catch (EntityExistsException e) {
+            throw new UnableToCreateException(messageManager.getMessage("user.unable_to_create"));
+        }
+    }
+
+    @LogInvocation
+    @Override
+    public UserDto update(UserDto userDto) {
+        User user = mapper.toEntity(userDto);
+        try {
+            User updated = userRepo.update(user);
+            return mapper.toDto(updated);
+        } catch (IllegalArgumentException e) {
+            throw new UnableToUpdateException(messageManager.getMessage("user.unable_to_update"));
+        }
+    }
+
+    @LogInvocation
+    @Override
+    public UserDto getById(Long id) {
+        User user = userRepo.findById(id);
+        if (user == null) {
+            throw new UnableToFindException(messageManager.getMessage("user.unable_to_find_id"));
+        }
+        return mapper.toDto(user);
+    }
+
     @LogInvocation
     @Override
     public UserDto login(UserLoginDto userLoginDto) {
@@ -42,73 +84,35 @@ public class UserServiceImpl implements UserService {
 
     @LogInvocation
     @Override
-    public UserDto create(UserDto userDto) {
-        userDto.setPassword(digest.hashPassword(userDto.getPassword()));
-        User user = mapper.toEntity(userDto);
-        User created = userRepo.create(user);
-        return mapper.toDto(created);
-    }
-
-    @LogInvocation
-    @Override
-    public UserDto update(UserDto userDto) {
-        User user = mapper.toEntity(userDto);
-        User updated = userRepo.update(user);
-        return mapper.toDto(updated);
-    }
-
-    @LogInvocation
-    @Override
-    public UserDto getById(Long id) {
-        User user = userRepo.findById(id);
-        if (user == null) {
-            throw new UnableToFindException(messageManager.getMessage("user.unable_to_find_id"));
-        } else {
-            return mapper.toDto(user);
-        }
-    }
-
-    @LogInvocation
-    @Override
     public List<UserDto> getByLastName(String lastname, PageableDto pageable) {
         List<UserDto> users = userRepo.findByLastName(lastname, pageable.getLimit(), pageable.getOffset()).stream()
                 .map(mapper::toDto)
                 .toList();
         if (users.isEmpty()) {
             throw new UnableToFindException(messageManager.getMessage("users.unable_to_find_lastname" + " " + lastname));
-        } else {
-            return users;
         }
+        return users;
     }
 
     @LogInvocation
     @Override
     public List<UserDto> getAll(PageableDto pageable) {
+        Long totalItems = userRepo.count();
+        Long totalPages = pagingUtil.getTotalPages(totalItems, pageable);
+        pageable.setTotalItems(totalItems);
+        pageable.setTotalPages(totalPages);
         List<UserDto> users = userRepo.findAll(pageable.getLimit(), pageable.getOffset()).stream()
                 .map(mapper::toDto)
                 .toList();
         if (users.isEmpty()) {
             throw new UnableToFindException(messageManager.getMessage("users.not_found"));
-        } else {
-            Long totalItems = userRepo.count();
-            Long totalPages = pagingUtil.getTotalPages(totalItems, pageable);
-            pageable.setTotalItems(userRepo.count());
-            pageable.setTotalPages(totalPages);
-            return users;
         }
+        return users;
     }
 
     @LogInvocation
     @Override
     public void deleteById(Long id) {
-        boolean deleted = userRepo.deleteById(id);
-        if (!deleted) {
-            throw new UnableToDeleteException(messageManager.getMessage("user.unable_to_delete_id") + " " + id);
-        }
-    }
-
-    @Override
-    public Long count() {
-        return userRepo.count();
+        userRepo.deleteById(id);
     }
 }
