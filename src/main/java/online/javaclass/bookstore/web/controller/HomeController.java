@@ -1,4 +1,4 @@
-package online.javaclass.bookstore.controller;
+package online.javaclass.bookstore.web.controller;
 
 import online.javaclass.bookstore.platform.MessageManager;
 import online.javaclass.bookstore.platform.logging.LogInvocation;

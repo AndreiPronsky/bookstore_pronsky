@@ -1,8 +1,8 @@
-package online.javaclass.bookstore.controller;
+package online.javaclass.bookstore.web.controller;
 
 import lombok.RequiredArgsConstructor;
-import online.javaclass.bookstore.exceptions.AppException;
-import online.javaclass.bookstore.exceptions.LoginException;
+import online.javaclass.bookstore.service.exceptions.AppException;
+import online.javaclass.bookstore.service.exceptions.LoginException;
 import online.javaclass.bookstore.platform.MessageManager;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;

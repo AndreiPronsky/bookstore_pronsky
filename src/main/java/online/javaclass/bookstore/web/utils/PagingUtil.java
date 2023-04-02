@@ -1,4 +1,4 @@
-package online.javaclass.bookstore.controller.utils;
+package online.javaclass.bookstore.web.utils;
 
 import online.javaclass.bookstore.service.dto.PageableDto;
 import org.springframework.stereotype.Component;

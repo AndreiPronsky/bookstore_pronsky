@@ -1,4 +1,4 @@
-package online.javaclass.bookstore.controller.filter;
+package online.javaclass.bookstore.web.filter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;

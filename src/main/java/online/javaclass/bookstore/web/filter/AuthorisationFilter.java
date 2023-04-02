@@ -1,4 +1,4 @@
-package online.javaclass.bookstore.controller.filter;
+package online.javaclass.bookstore.web.filter;
 
 import online.javaclass.bookstore.service.dto.UserDto;
 

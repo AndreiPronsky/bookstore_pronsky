@@ -1,13 +1,13 @@
 package online.javaclass.bookstore.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import online.javaclass.bookstore.controller.utils.PagingUtil;
+import online.javaclass.bookstore.web.utils.PagingUtil;
 import online.javaclass.bookstore.data.entities.Order;
 import online.javaclass.bookstore.data.repository.OrderRepository;
-import online.javaclass.bookstore.exceptions.UnableToDeleteException;
-import online.javaclass.bookstore.exceptions.UnableToFindException;
-import online.javaclass.bookstore.exceptions.UnableToUpdateException;
-import online.javaclass.bookstore.exceptions.ValidationException;
+import online.javaclass.bookstore.service.exceptions.UnableToDeleteException;
+import online.javaclass.bookstore.service.exceptions.UnableToFindException;
+import online.javaclass.bookstore.service.exceptions.UnableToUpdateException;
+import online.javaclass.bookstore.service.exceptions.ValidationException;
 import online.javaclass.bookstore.platform.MessageManager;
 import online.javaclass.bookstore.platform.logging.LogInvocation;
 import online.javaclass.bookstore.service.EntityDtoMapper;

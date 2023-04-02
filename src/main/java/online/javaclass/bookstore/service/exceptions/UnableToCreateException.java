@@ -1,4 +1,4 @@
-package online.javaclass.bookstore.exceptions;
+package online.javaclass.bookstore.service.exceptions;
 
 public class UnableToCreateException extends AppException {
     public UnableToCreateException() {
