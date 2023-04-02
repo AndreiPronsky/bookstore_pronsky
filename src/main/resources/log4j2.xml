@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status = "info">
+<Configuration status="info">
     <Properties>
         <property name="LOG_DIR">logs</property>
         <property name="ARCHIVE_LOG_DIR">${LOG_DIR}/archive</property>
@@ -17,7 +17,7 @@
         </File>
     </Appenders>
     <Loggers>
-        <Root level = "trace">
+        <Root level="trace">
             <AppenderRef ref="Console" level="trace"/>
             <AppenderRef ref="File"/>
         </Root>
