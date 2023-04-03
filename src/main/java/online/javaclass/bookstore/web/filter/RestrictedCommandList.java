@@ -13,18 +13,12 @@ public class RestrictedCommandList {
 
     RestrictedCommandList() {
         accessConfig.put("logout", UserDto.Role.USER);
-        accessConfig.put("confirm_order", UserDto.Role.USER);
-        accessConfig.put("add_book", UserDto.Role.MANAGER);
-        accessConfig.put("add_book_form", UserDto.Role.MANAGER);
-        accessConfig.put("edit_book", UserDto.Role.MANAGER);
-        accessConfig.put("edit_book_form", UserDto.Role.MANAGER);
-        accessConfig.put("edit_user", UserDto.Role.ADMIN);
-        accessConfig.put("add_user", UserDto.Role.ADMIN);
-        accessConfig.put("edit_user_form", UserDto.Role.ADMIN);
-        accessConfig.put("user", UserDto.Role.ADMIN);
-        accessConfig.put("users", UserDto.Role.ADMIN);
-        accessConfig.put("orders", UserDto.Role.ADMIN);
-        accessConfig.put("edit_order_admin", UserDto.Role.ADMIN);
+        accessConfig.put("/orders/confirm", UserDto.Role.USER);
+        accessConfig.put("/books/add", UserDto.Role.MANAGER);
+        accessConfig.put("/books/edit", UserDto.Role.MANAGER);
+        accessConfig.put("/users/edit", UserDto.Role.ADMIN);
+        accessConfig.put("/users/all", UserDto.Role.ADMIN);
+        accessConfig.put("/orders/all", UserDto.Role.ADMIN);
     }
 
     private static UserDto.Role getRole(String command) {
