@@ -1,31 +1,50 @@
 package online.javaclass.bookstore.web.filter;
 
+import lombok.RequiredArgsConstructor;
 import online.javaclass.bookstore.service.dto.UserDto;
-import org.springframework.core.annotation.Order;
+import online.javaclass.bookstore.web.exceptions.AuthorisationException;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpFilter;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
-//@Component
-//@Order(2)
-public class AuthorisationFilter extends HttpFilter {
-    @Override
-    protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
-        String command = req.getParameter("command");
-        HttpSession session = req.getSession();
-        if (RestrictedCommandList.requiresAuthorisation(command)) {
-            UserDto user = (UserDto) session.getAttribute("user");
-            if (user.getRole().equals(UserDto.Role.USER)) {
-                req.getRequestDispatcher("jsp/error.jsp").forward(req, res);
-                return;
-            }
+@Aspect
+@Component
+@RequiredArgsConstructor
+public class AuthorisationFilter {
+    private final HttpSession session;
+
+    @Around(value = "@annotation(online.javaclass.bookstore.web.filter.SecurityCheck)")
+    public Object checkAuthorisation(ProceedingJoinPoint joinPoint) throws Throwable {
+        Object[] args = joinPoint.getArgs();
+        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+        List<UserDto.Role> allowedRoles = getAllowedRoles(signature);
+        UserDto.Role userRole = getUserRoleFromSession();
+        if (allowedRoles.contains(userRole)) {
+            return joinPoint.proceed(args);
+        } else {
+            throw new AuthorisationException("Access denied");
         }
-        chain.doFilter(req, res);
+    }
+
+    private UserDto.Role getUserRoleFromSession() {
+        UserDto userInSession = (UserDto) session.getAttribute("user");
+        UserDto.Role userRole = null;
+        if (userInSession != null) {
+            userRole = userInSession.getRole();
+        }
+        return userRole;
+    }
+
+    private static List<UserDto.Role> getAllowedRoles(MethodSignature signature) {
+        UserDto.Role[] allowedRoles = signature.getMethod()
+                .getAnnotation(SecurityCheck.class)
+                .allowed();
+        return Arrays.asList(allowedRoles);
     }
 }

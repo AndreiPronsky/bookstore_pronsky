@@ -39,10 +39,12 @@
         <li class="form-row">
             <label><fmt:message key="role"/>
                 <select name="role" required="required">
+                    <option value="${requestScope.user.role}" selected="selected">
+                        <fmt:message key="genre.${requestScope.user.role}"/></option>
                     <option value=""><fmt:message key="select.role"/></option>
-                    <option value="USER"><fmt:message key="role.user"/></option>
-                    <option value="ADMIN"><fmt:message key="role.admin"/></option>
-                    <option value="MANAGER"><fmt:message key="role.manager"/></option>
+                    <option value="USER"><fmt:message key="role.USER"/></option>
+                    <option value="ADMIN"><fmt:message key="role.ADMIN"/></option>
+                    <option value="MANAGER"><fmt:message key="role.MANAGER"/></option>
                 </select>
             </label>
         </li>

@@ -68,8 +68,8 @@ CREATE TABLE IF NOT EXISTS books
     title    VARCHAR(128)        NOT NULL,
     author   VARCHAR(128)        NOT NULL,
     isbn     VARCHAR(128) UNIQUE NOT NULL,
-    genre_id SMALLINT REFERENCES genres,
-    cover_id SMALLINT REFERENCES covers,
+    genre_id SERIAL2 REFERENCES genres,
+    cover_id SERIAL2 REFERENCES covers,
     pages    INTEGER,
     price    NUMERIC(5, 2)       NOT NULL,
     rating   NUMERIC(3, 2)
@@ -84,4 +84,4 @@ CREATE TABLE IF NOT EXISTS order_items
     price    NUMERIC(5, 2)
 );
 
--- DROP TABLE books CASCADE;
+-- DROP DATABASE bookstore_pronsky;

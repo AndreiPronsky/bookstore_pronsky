@@ -39,32 +39,36 @@
         <li class="form-row">
             <label><fmt:message key="genre"/>
                 <select name="genre" required="required">
+                    <option value="${requestScope.book.genre}" selected="selected">
+                        <fmt:message key="genre.${requestScope.book.genre}"/></option>
                     <option value=""><fmt:message key="book.select_genre"/></option>
-                    <option value="FICTION"><fmt:message key="genre.fiction"/></option>
-                    <option value="MYSTERY"><fmt:message key="genre.mystery"/></option>
-                    <option value="THRILLER"><fmt:message key="genre.thriller"/></option>
-                    <option value="HORROR"><fmt:message key="genre.horror"/></option>
-                    <option value="HISTORICAL"><fmt:message key="genre.historical"/></option>
-                    <option value="ROMANCE"><fmt:message key="genre.romance"/></option>
-                    <option value="WESTERN"><fmt:message key="genre.western"/></option>
-                    <option value="FLORISTICS"><fmt:message key="genre.floristics"/></option>
-                    <option value="SCIENCE_FICTION"><fmt:message key="genre.science_fiction"/></option>
-                    <option value="DYSTOPIAN"><fmt:message key="genre.dystopian"/></option>
-                    <option value="REALISM"><fmt:message key="genre.realism"/></option>
-                    <option value="RELIGION"><fmt:message key="genre.religion"/></option>
-                    <option value="MEDICINE"><fmt:message key="genre.medicine"/></option>
-                    <option value="ENGINEERING"><fmt:message key="genre.engineering"/></option>
-                    <option value="ART"><fmt:message key="genre.art"/></option>
+                    <option value="FICTION"><fmt:message key="genre.FICTION"/></option>
+                    <option value="MYSTERY"><fmt:message key="genre.MYSTERY"/></option>
+                    <option value="THRILLER"><fmt:message key="genre.THRILLER"/></option>
+                    <option value="HORROR"><fmt:message key="genre.HORROR"/></option>
+                    <option value="HISTORICAL"><fmt:message key="genre.HISTORICAL"/></option>
+                    <option value="ROMANCE"><fmt:message key="genre.ROMANCE"/></option>
+                    <option value="WESTERN"><fmt:message key="genre.WESTERN"/></option>
+                    <option value="FLORISTICS"><fmt:message key="genre.FLORISTICS"/></option>
+                    <option value="SCIENCE_FICTION"><fmt:message key="genre.SCIENCE_FICTION"/></option>
+                    <option value="DYSTOPIAN"><fmt:message key="genre.DYSTOPIAN"/></option>
+                    <option value="REALISM"><fmt:message key="genre.REALISM"/></option>
+                    <option value="RELIGION"><fmt:message key="genre.RELIGION"/></option>
+                    <option value="MEDICINE"><fmt:message key="genre.MEDICINE"/></option>
+                    <option value="ENGINEERING"><fmt:message key="genre.ENGINEERING"/></option>
+                    <option value="ART"><fmt:message key="genre.ART"/></option>
                 </select>
             </label>
         </li>
         <li class="form-row">
             <label><fmt:message key="cover"/>
                 <select name="cover" required="required">
+                    <option value="${requestScope.book.cover}" selected="selected">
+                        <fmt:message key="genre.${requestScope.book.cover}"/></option>
                     <option value=""><fmt:message key="book.select_cover"/></option>
-                    <option value="SOFT"><fmt:message key="cover.soft"/></option>
-                    <option value="HARD"><fmt:message key="cover.hard"/></option>
-                    <option value="SPECIAL"><fmt:message key="cover.special"/></option>
+                    <option value="SOFT"><fmt:message key="cover.SOFT"/></option>
+                    <option value="HARD"><fmt:message key="cover.HARD"/></option>
+                    <option value="SPECIAL"><fmt:message key="cover.SPECIAL"/></option>
                 </select>
             </label>
         </li>

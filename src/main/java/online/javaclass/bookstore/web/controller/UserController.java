@@ -9,6 +9,7 @@ import online.javaclass.bookstore.service.dto.PageableDto;
 import online.javaclass.bookstore.service.dto.UserDto;
 import online.javaclass.bookstore.service.dto.UserLoginDto;
 import online.javaclass.bookstore.service.exceptions.AppException;
+import online.javaclass.bookstore.web.filter.SecurityCheck;
 import online.javaclass.bookstore.web.utils.PagingUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -30,6 +31,7 @@ public class UserController {
     @LogInvocation
     @PostMapping("/add")
     @ResponseStatus(HttpStatus.CREATED)
+    @SecurityCheck(allowed = {UserDto.Role.ADMIN})
     public String add(@ModelAttribute UserDto userInModel, HttpSession session, Model model) {
         UserDto userInSession = (UserDto) session.getAttribute("user");
         if (userInSession == null || userInSession.getRole() != UserDto.Role.ADMIN) {
@@ -43,6 +45,7 @@ public class UserController {
 
     @LogInvocation
     @GetMapping("/add")
+    @SecurityCheck(allowed = {UserDto.Role.ADMIN})
     public String addForm() {
         return "add_user";
     }
@@ -51,6 +54,7 @@ public class UserController {
     @LogInvocation
     @PostMapping("/edit")
     @ResponseStatus(HttpStatus.ACCEPTED)
+    @SecurityCheck(allowed = {UserDto.Role.ADMIN})
     public String edit(@ModelAttribute UserDto user, Model model) {
         UserDto edited = userService.update(user);
         model.addAttribute("user", edited);
@@ -59,6 +63,7 @@ public class UserController {
 
     @LogInvocation
     @GetMapping("/edit/{id}")
+    @SecurityCheck(allowed = {UserDto.Role.ADMIN})
     public String editForm(@PathVariable Long id, Model model) {
         UserDto user = userService.getById(id);
         model.addAttribute("user", user);
@@ -71,7 +76,7 @@ public class UserController {
         UserDto loggedIn = userService.login(user);
         session.setMaxInactiveInterval(86400);
         session.setAttribute("user", loggedIn);
-        return "redirect: /home";
+        return "redirect:/home";
     }
 
     @LogInvocation
@@ -84,11 +89,12 @@ public class UserController {
     @RequestMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
-        return "redirect: /home";
+        return "redirect:/home";
     }
 
     @LogInvocation
     @PostMapping("/{id}")
+    @SecurityCheck(allowed = {UserDto.Role.ADMIN})
     public String getOne(@PathVariable Long id, Model model) {
         UserDto user = userService.getById(id);
         model.addAttribute("user", user);
@@ -97,6 +103,7 @@ public class UserController {
 
     @LogInvocation
     @GetMapping("my_orders")
+    @SecurityCheck(allowed = {UserDto.Role.USER, UserDto.Role.ADMIN})
     public String getOrdersByUserId(@SessionAttribute UserDto user, Model model) {
         try {
             List<OrderDto> orders = orderService.getOrdersByUserId(user.getId());
@@ -109,6 +116,7 @@ public class UserController {
 
     @LogInvocation
     @GetMapping("/all")
+    @SecurityCheck(allowed = {UserDto.Role.ADMIN})
     public String getAll(@RequestParam String page, @RequestParam String page_size, Model model) {
         PageableDto pageable = pagingUtil.getPageable(page, page_size);
         List<UserDto> users = userService.getAll(pageable);

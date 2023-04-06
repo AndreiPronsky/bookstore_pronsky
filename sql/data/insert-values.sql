@@ -141,15 +141,29 @@ VALUES ('Harry Potter and the Philosopher’s Stone', 'J. K. Rowling', '2-1234-5
         (SELECT g.id FROM genres g WHERE "name" = 'RELIGION'),
         (SELECT c.id FROM covers c WHERE "name" = 'HARD'), 379, 18.99);
 
-INSERT INTO orders (user_id, status_id, payment_method_id, payment_status_id, delivery_type_id)
-VALUES (1, 2, 1, 3, 5),
-       (2, 3, 4, 3, 2),
-       (3, 1, 4, 1, 4),
-       (4, 4, 5, 2, 2),
-       (5, 3, 2, 3, 5),
-       (6, 3, 3, 3, 1),
-       (7, 3, 2, 3, 3),
-       (8, 4, 5, 1, 5),
-       (9, 4, 1, 1, 5),
-       (10, 2, 2, 3, 4);
+INSERT INTO orders (user_id, status_id, payment_method_id, payment_status_id, delivery_type_id, cost)
+VALUES (1, 2, 1, 3, 5, 131.6),
+       (2, 3, 4, 3, 2, 32.9),
+       (3, 1, 4, 1, 4, 119.7),
+       (4, 4, 5, 2, 2, 97.8),
+       (5, 3, 2, 3, 5, 98.7),
+       (6, 3, 3, 3, 1, 65.8),
+       (7, 3, 2, 3, 3, 65.8),
+       (8, 4, 5, 1, 5, 65.8),
+       (9, 4, 1, 1, 5, 65.8),
+       (10, 2, 2, 3, 4, 171.5);
 
+INSERT INTO order_items (order_id, book_id, quantity, price)
+VALUES (1, 1, 2, 65.8),
+       (1, 2, 2, 65.8),
+       (2, 3, 1, 32.90),
+       (3, 4, 3, 119.7),
+       (4, 5, 2, 97.8),
+       (5, 1, 2, 65.8),
+       (6, 1, 2, 65.8),
+       (7, 1, 2, 65.8),
+       (8, 1, 2, 65.8),
+       (9, 1, 2, 65.8),
+       (10, 3, 2, 65.8),
+       (10, 4, 1, 39.9),
+       (5, 2, 1, 32.9);

@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import online.javaclass.bookstore.platform.logging.LogInvocation;
 import online.javaclass.bookstore.service.BookService;
 import online.javaclass.bookstore.service.dto.BookDto;
+import online.javaclass.bookstore.service.dto.UserDto;
+import online.javaclass.bookstore.web.filter.SecurityCheck;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,7 +38,7 @@ public class CartController {
         } else {
             cart.put(book, 1);
         }
-        return "redirect: /books/all?page=" + page + "&page_size=" + page_size;
+        return "redirect:/books/all?page=" + page + "&page_size=" + page_size;
     }
 
     @LogInvocation
@@ -49,10 +51,11 @@ public class CartController {
 
     @LogInvocation
     @RequestMapping("/edit")
+    @SecurityCheck(allowed = {UserDto.Role.USER})
     public String edit(@RequestParam Long id, @RequestParam String action,
                        @SessionAttribute Map<BookDto, Integer> cart) {
         correctItemQuantity(id, action, cart);
-        return "redirect: /cart";
+        return "redirect:/cart";
     }
 
     private void correctItemQuantity(Long id, String action, Map<BookDto, Integer> cart) {
