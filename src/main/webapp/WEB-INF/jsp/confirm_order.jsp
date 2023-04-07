@@ -41,11 +41,11 @@
                 <label><fmt:message key="delivery_type"/>
                     <select name="deliveryType" required="required">
                         <option value=""><fmt:message key="select.delivery_type"/></option>
-                        <option value="COURIER"><fmt:message key="delivery_type.courier"/></option>
-                        <option value="BIKE"><fmt:message key="delivery_type.bike"/></option>
-                        <option value="CAR"><fmt:message key="delivery_type.car"/></option>
-                        <option value="MAIL"><fmt:message key="delivery_type.mail"/></option>
-                        <option value="SELF_PICKUP"><fmt:message key="delivery_type.self_pickup"/></option>
+                        <option value="COURIER"><fmt:message key="delivery_type.COURIER"/></option>
+                        <option value="BIKE"><fmt:message key="delivery_type.BIKE"/></option>
+                        <option value="CAR"><fmt:message key="delivery_type.CAR"/></option>
+                        <option value="MAIL"><fmt:message key="delivery_type.MAIL"/></option>
+                        <option value="SELF_PICKUP"><fmt:message key="delivery_type.SELF_PICKUP"/></option>
                     </select>
                 </label>
             </td>
@@ -53,9 +53,9 @@
                 <label><fmt:message key="payment_method"/>
                     <select name="paymentMethod" required="required">
                         <option value=""><fmt:message key="select.payment_method"/></option>
-                        <option value="CASH"><fmt:message key="payment_method.cash"/></option>
-                        <option value="CARD"><fmt:message key="payment_method.card"/></option>
-                        <option value="BANK_TRANSFER"><fmt:message key="payment_method.bank_transfer"/></option>
+                        <option value="CASH"><fmt:message key="payment_method.CASH"/></option>
+                        <option value="CARD"><fmt:message key="payment_method.CARD"/></option>
+                        <option value="BANK_TRANSFER"><fmt:message key="payment_method.BANK_TRANSFER"/></option>
                     </select>
                 </label>
             </td>

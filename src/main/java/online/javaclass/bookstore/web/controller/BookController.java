@@ -1,11 +1,13 @@
 package online.javaclass.bookstore.web.controller;
 
 import lombok.RequiredArgsConstructor;
-import online.javaclass.bookstore.web.utils.PagingUtil;
 import online.javaclass.bookstore.platform.logging.LogInvocation;
 import online.javaclass.bookstore.service.BookService;
 import online.javaclass.bookstore.service.dto.BookDto;
 import online.javaclass.bookstore.service.dto.PageableDto;
+import online.javaclass.bookstore.service.dto.UserDto;
+import online.javaclass.bookstore.web.filter.SecurityCheck;
+import online.javaclass.bookstore.web.utils.PagingUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -48,6 +50,7 @@ public class BookController {
     @LogInvocation
     @PostMapping("/add")
     @ResponseStatus(HttpStatus.CREATED)
+    @SecurityCheck(allowed = {UserDto.Role.MANAGER})
     public String add(@ModelAttribute BookDto book, Model model) {
 //        try {
         BookDto created = service.create(book);
@@ -61,6 +64,7 @@ public class BookController {
 
     @LogInvocation
     @GetMapping("/add")
+    @SecurityCheck(allowed = {UserDto.Role.MANAGER})
     public String addForm() {
         return "add_book";
     }
@@ -68,6 +72,7 @@ public class BookController {
     @LogInvocation
     @PostMapping("/edit")
     @ResponseStatus(HttpStatus.ACCEPTED)
+    @SecurityCheck(allowed = {UserDto.Role.MANAGER})
     public String edit(@ModelAttribute BookDto book, Model model) {
         BookDto updated = service.update(book);
         model.addAttribute("book", updated);
@@ -76,6 +81,7 @@ public class BookController {
 
     @LogInvocation
     @GetMapping("/edit/{id}")
+    @SecurityCheck(allowed = {UserDto.Role.MANAGER})
     public String editForm(@PathVariable Long id, Model model) {
         BookDto book = service.getById(id);
         model.addAttribute("book", book);

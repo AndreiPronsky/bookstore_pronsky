@@ -1,10 +1,11 @@
 package online.javaclass.bookstore.web.controller;
 
 import lombok.RequiredArgsConstructor;
-import online.javaclass.bookstore.web.utils.PagingUtil;
 import online.javaclass.bookstore.platform.logging.LogInvocation;
 import online.javaclass.bookstore.service.OrderService;
 import online.javaclass.bookstore.service.dto.*;
+import online.javaclass.bookstore.web.filter.SecurityCheck;
+import online.javaclass.bookstore.web.utils.PagingUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +27,7 @@ public class OrderController {
     @LogInvocation
     @PostMapping("/confirm")
     @ResponseStatus(HttpStatus.CREATED)
+    @SecurityCheck(allowed = {UserDto.Role.USER})
     public String confirmOrder(HttpSession session, @ModelAttribute OrderDto order, Model model) {
         Map<BookDto, Integer> cart = (Map) session.getAttribute("cart");
         List<OrderItemDto> items = listItems(cart);
@@ -44,10 +46,11 @@ public class OrderController {
 
     @LogInvocation
     @GetMapping("/confirm")
+    @SecurityCheck(allowed = {UserDto.Role.USER})
     public String confirmOrderForm(HttpSession session) {
         UserDto user = (UserDto) session.getAttribute("user");
         if (user == null) {
-            return "redirect: /users/login";
+            return "redirect:/users/login";
         }
         return "confirm_order";
     }
@@ -55,6 +58,7 @@ public class OrderController {
     @LogInvocation
     @PostMapping("/edit")
     @ResponseStatus(HttpStatus.ACCEPTED)
+    @SecurityCheck(allowed = {UserDto.Role.USER, UserDto.Role.ADMIN})
     public String editOrder(@ModelAttribute OrderDto order, Model model) {
         OrderDto updated = orderService.update(order);
         model.addAttribute("order", updated);
@@ -63,12 +67,13 @@ public class OrderController {
 
     @LogInvocation
     @GetMapping("/edit/{id}")
+    @SecurityCheck(allowed = {UserDto.Role.USER, UserDto.Role.ADMIN})
     public String editOrderForm(@PathVariable Long id, Model model, @SessionAttribute UserDto user) {
         OrderDto order = orderService.getById(id);
         if (user == null || notMatchingUserIgnoreAdmin(user, order)) {
-            return "redirect: index";
+            return "redirect:index";
         } else if (notAdminRole(user) && notOpenStatus(order)) {
-            return "redirect: index";
+            return "redirect:index";
         }
         model.addAttribute("order", order);
         return "edit_order";
@@ -84,6 +89,7 @@ public class OrderController {
 
     @LogInvocation
     @GetMapping("/all")
+    @SecurityCheck(allowed = {UserDto.Role.ADMIN})
     public String getAll(@RequestParam String page, @RequestParam String page_size, Model model) {
         PageableDto pageable = pagingUtil.getPageable(page, page_size);
         List<OrderDto> orders = orderService.getAll(pageable);
@@ -94,7 +100,8 @@ public class OrderController {
     }
 
     @LogInvocation
-    @GetMapping("/all/${id}")
+    @GetMapping("/all/{id}")
+    @SecurityCheck(allowed = {UserDto.Role.USER, UserDto.Role.ADMIN})
     public String getAllByUserId(Model model, @PathVariable Long id) {
         List<OrderDto> orders = orderService.getOrdersByUserId(id);
         model.addAttribute("orders", orders);

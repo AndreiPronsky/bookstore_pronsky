@@ -18,6 +18,6 @@ public class ChangeLangController {
     @ResponseStatus(HttpStatus.ACCEPTED)
     public String execute(@RequestParam String lang, HttpSession session) {
         session.setAttribute("lang", lang);
-        return "index";
+        return "redirect:/home";
     }
 }

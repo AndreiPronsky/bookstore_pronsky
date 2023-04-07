@@ -41,12 +41,14 @@
                 <td>
                     <label><fmt:message key="delivery_type"/>
                         <select name="deliveryType" required="required">
+                            <option value="${requestScope.order.deliveryType}" selected="selected">
+                                <fmt:message key="genre.${requestScope.order.deliveryType}"/></option>
                             <option value=""><fmt:message key="select.delivery_type"/></option>
-                            <option value="COURIER"><fmt:message key="delivery_type.courier"/></option>
-                            <option value="BIKE"><fmt:message key="delivery_type.bike"/></option>
-                            <option value="CAR"><fmt:message key="delivery_type.car"/></option>
-                            <option value="MAIL"><fmt:message key="delivery_type.mail"/></option>
-                            <option value="SELF_PICKUP"><fmt:message key="delivery_type.self_pickup"/></option>
+                            <option value="COURIER"><fmt:message key="delivery_type.COURIER"/></option>
+                            <option value="BIKE"><fmt:message key="delivery_type.BIKE"/></option>
+                            <option value="CAR"><fmt:message key="delivery_type.CAR"/></option>
+                            <option value="MAIL"><fmt:message key="delivery_type.MAIL"/></option>
+                            <option value="SELF_PICKUP"><fmt:message key="delivery_type.SELF_PICKUP"/></option>
                         </select>
                     </label>
                 </td>
@@ -55,10 +57,12 @@
                 <td>
                     <label><fmt:message key="payment_method"/>
                         <select name="paymentMethod" required="required">
+                            <option value="${requestScope.order.paymentMethod}" selected="selected">
+                                <fmt:message key="genre.${requestScope.order.paymentMethod}"/></option>
                             <option value=""><fmt:message key="select.payment_method"/></option>
-                            <option value="CASH"><fmt:message key="payment_method.cash"/></option>
-                            <option value="CARD"><fmt:message key="payment_method.card"/></option>
-                            <option value="BANK_TRANSFER"><fmt:message key="payment_method.bank_transfer"/></option>
+                            <option value="CASH"><fmt:message key="payment_method.CASH"/></option>
+                            <option value="CARD"><fmt:message key="payment_method.CARD"/></option>
+                            <option value="BANK_TRANSFER"><fmt:message key="payment_method.BANK_TRANSFER"/></option>
                         </select>
                     </label>
                 </td>
@@ -68,11 +72,13 @@
                     <td>
                         <label><fmt:message key="order_status"/>
                             <select name="orderStatus" required="required">
+                                <option value="${requestScope.order.orderStatus}" selected="selected">
+                                    <fmt:message key="genre.${requestScope.order.orderStatus}"/></option>
                                 <option value=""><fmt:message key="select.order_status"/></option>
-                                <option value="OPEN"><fmt:message key="order_status.open"/></option>
-                                <option value="CONFIRMED"><fmt:message key="order_status.confirmed"/></option>
-                                <option value="COMPLETED"><fmt:message key="order_status.completed"/></option>
-                                <option value="CANCELLED"><fmt:message key="order_status.cancelled"/></option>
+                                <option value="OPEN"><fmt:message key="order_status.OPEN"/></option>
+                                <option value="CONFIRMED"><fmt:message key="order_status.CONFIRMED"/></option>
+                                <option value="COMPLETED"><fmt:message key="order_status.COMPLETED"/></option>
+                                <option value="CANCELLED"><fmt:message key="order_status.CANCELLED"/></option>
                             </select>
                         </label>
                     </td>
@@ -81,11 +87,13 @@
                     <td>
                         <label><fmt:message key="payment_status"/>
                             <select name="paymentStatus" required="required">
+                                <option value="${requestScope.order.paymentStatus}" selected="selected">
+                                    <fmt:message key="genre.${requestScope.order.paymentStatus}"/></option>
                                 <option value=""><fmt:message key="select.payment_status"/></option>
-                                <option value="UNPAID"><fmt:message key="payment_status.unpaid"/></option>
-                                <option value="PAID"><fmt:message key="payment_status.paid"/></option>
-                                <option value="FAILED"><fmt:message key="payment_status.failed"/></option>
-                                <option value="REFUNDED"><fmt:message key="payment_status.refunded"/></option>
+                                <option value="UNPAID"><fmt:message key="payment_status.UNPAID"/></option>
+                                <option value="PAID"><fmt:message key="payment_status.PAID"/></option>
+                                <option value="FAILED"><fmt:message key="payment_status.FAILED"/></option>
+                                <option value="REFUNDED"><fmt:message key="payment_status.REFUNDED"/></option>
                             </select>
                         </label>
                     </td>
