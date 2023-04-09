@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
     public UserDto login(UserLoginDto userLoginDto) {
         String email = userLoginDto.getEmail();
         String password = digest.hashPassword(userLoginDto.getPassword());
-        return mapper.toDto(userRepo.findByEmailAndPassword(email, password)
+        return mapper.toDto(userRepo.login(email, password)
                 .orElseThrow(() -> new LoginException("error.wrong_email_or_password")));
     }
 

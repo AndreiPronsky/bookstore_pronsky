@@ -48,7 +48,7 @@ public class BookServiceImpl implements BookService {
     @LogInvocation
     @Override
     public List<BookDto> search(String input) {
-        List<BookDto> books = bookRepo.findByAuthorLikeOrTitleLike(input)
+        List<BookDto> books = bookRepo.search(input)
                 .stream()
                 .map(mapper::toDto)
                 .toList();

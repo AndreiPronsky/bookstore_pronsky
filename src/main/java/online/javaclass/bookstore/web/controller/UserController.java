@@ -38,7 +38,7 @@ public class UserController {
             userInModel.setRole(UserDto.Role.USER);
             userInModel.setRating(BigDecimal.ZERO);
         }
-        UserDto created = userService.create(userInModel);
+        UserDto created = userService.save(userInModel);
         model.addAttribute("user", created);
         return "user";
     }
@@ -56,7 +56,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.ACCEPTED)
     @SecurityCheck(allowed = {UserDto.Role.ADMIN})
     public String edit(@ModelAttribute UserDto user, Model model) {
-        UserDto edited = userService.update(user);
+        UserDto edited = userService.save(user);
         model.addAttribute("user", edited);
         return "user";
     }
@@ -119,7 +119,7 @@ public class UserController {
     @SecurityCheck(allowed = {UserDto.Role.ADMIN})
     public String getAll(@RequestParam String page, @RequestParam String page_size, Model model) {
         PageableDto pageable = pagingUtil.getPageable(page, page_size);
-        List<UserDto> users = userService.getAll(pageable);
+        List<UserDto> users = userService.getAll();
         model.addAttribute("page", pageable.getPage());
         model.addAttribute("total_pages", pageable.getTotalPages());
         model.addAttribute("users", users);

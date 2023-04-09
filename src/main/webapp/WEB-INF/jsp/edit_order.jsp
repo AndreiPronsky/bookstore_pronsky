@@ -14,7 +14,7 @@
 <jsp:include page="navbar.jsp"/>
 <h1><fmt:message key="edit_order"/></h1>
 <c:if test="${sessionScope.user.role.toString() == 'USER'}">
-<form action="/orders/edit&id=${order.id}" method="post">
+<form action="/orders/edit?id=${order.id}" method="post">
     </c:if>
         <table>
             <tbody>

@@ -38,7 +38,7 @@ public class OrderController {
         if (user.getRole() == UserDto.Role.USER) {
             order.setUser(user);
         }
-        OrderDto created = orderService.create(order);
+        OrderDto created = orderService.save(order);
         model.addAttribute("order", created);
         cart.clear();
         return "successful_order";
@@ -60,7 +60,7 @@ public class OrderController {
     @ResponseStatus(HttpStatus.ACCEPTED)
     @SecurityCheck(allowed = {UserDto.Role.USER, UserDto.Role.ADMIN})
     public String editOrder(@ModelAttribute OrderDto order, Model model) {
-        OrderDto updated = orderService.update(order);
+        OrderDto updated = orderService.save(order);
         model.addAttribute("order", updated);
         return "successful_order";
     }
@@ -92,7 +92,7 @@ public class OrderController {
     @SecurityCheck(allowed = {UserDto.Role.ADMIN})
     public String getAll(@RequestParam String page, @RequestParam String page_size, Model model) {
         PageableDto pageable = pagingUtil.getPageable(page, page_size);
-        List<OrderDto> orders = orderService.getAll(pageable);
+        List<OrderDto> orders = orderService.getAll();
         model.addAttribute("page", pageable.getPage());
         model.addAttribute("total_pages", pageable.getTotalPages());
         model.addAttribute("orders", orders);
