@@ -12,7 +12,7 @@
         </div>
     </a>
     <ul class="main-nav">
-        <li><a href="/books/all?page=1&page_size=5"><fmt:message key="books"/></a></li>
+        <li><a href="/books/all?page=0&size=5&sort=asc"><fmt:message key="books"/></a></li>
         <c:if test="${sessionScope.user.role.toString() != 'ADMIN' && sessionScope.user.role.toString() != 'MANAGER'}">
             <li><a href="/cart"><fmt:message key="cart"/></a></li>
         </c:if>
@@ -27,7 +27,7 @@
             <li><a href="/users/my_orders"><fmt:message key="my_orders"/></a></li>
         </c:if>
         <c:if test="${sessionScope.user.role.toString() == 'ADMIN'}">
-            <li><a href="/users/all?page=1&page_size=5"><fmt:message key="users"/></a></li>
+            <li><a href="/users/all?page=1&size=5"><fmt:message key="users"/></a></li>
             <li><a href="/users/add"><fmt:message key="add.user"/></a></li>
             <li><a href="/orders/all"><fmt:message key="orders"/></a></li>
         </c:if>

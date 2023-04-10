@@ -3,9 +3,13 @@ package online.javaclass.bookstore.web.controller;
 import lombok.RequiredArgsConstructor;
 import online.javaclass.bookstore.platform.logging.LogInvocation;
 import online.javaclass.bookstore.service.OrderService;
-import online.javaclass.bookstore.service.dto.*;
+import online.javaclass.bookstore.service.dto.BookDto;
+import online.javaclass.bookstore.service.dto.OrderDto;
+import online.javaclass.bookstore.service.dto.OrderItemDto;
+import online.javaclass.bookstore.service.dto.UserDto;
 import online.javaclass.bookstore.web.filter.SecurityCheck;
-import online.javaclass.bookstore.web.utils.PagingUtil;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,7 +26,6 @@ import java.util.Map;
 @RequestMapping("/orders")
 public class OrderController {
     private final OrderService orderService;
-    private final PagingUtil pagingUtil;
 
     @LogInvocation
     @PostMapping("/confirm")
@@ -91,9 +94,11 @@ public class OrderController {
     @LogInvocation
     @GetMapping("/all")
     @SecurityCheck(allowed = {UserDto.Role.ADMIN})
-    public String getAll(Model model) {
-        List<OrderDto> orders = orderService.getAll();
-        model.addAttribute("orders", orders);
+    public String getAll(Pageable pageable, Model model) {
+        Page<OrderDto> page = orderService.getAll(pageable);
+        model.addAttribute("page", page.getNumber());
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("orders", page.stream().toList());
         return "orders";
     }
 
@@ -144,7 +149,7 @@ public class OrderController {
         OrderDto order = (OrderDto) session.getAttribute("order");
         List<OrderItemDto> items = order.getItems();
         for (OrderItemDto item : items) {
-            if (item.getId() == id) {
+            if (item.getId().equals(id)) {
                 Integer quantity = item.getQuantity();
                 if (action.equals("dec") && quantity > 1) {
                     item.setQuantity(quantity - 1);

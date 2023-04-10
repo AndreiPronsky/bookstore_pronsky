@@ -11,6 +11,8 @@ import online.javaclass.bookstore.service.dto.UserDto;
 import online.javaclass.bookstore.service.dto.UserLoginDto;
 import online.javaclass.bookstore.service.exceptions.LoginException;
 import online.javaclass.bookstore.service.exceptions.UnableToFindException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -61,10 +63,8 @@ public class UserServiceImpl implements UserService {
 
     @LogInvocation
     @Override
-    public List<UserDto> getAll() {
-        List<UserDto> users = userRepo.findAll().stream()
-                .map(mapper::toDto)
-                .toList();
+    public Page<UserDto> getAll(Pageable pageable) {
+        Page<UserDto> users = userRepo.findAll(pageable).map(mapper::toDto);
         if (users.isEmpty()) {
             throw new UnableToFindException("users.not_found");
         }

@@ -8,6 +8,8 @@ import online.javaclass.bookstore.service.BookService;
 import online.javaclass.bookstore.service.EntityDtoMapper;
 import online.javaclass.bookstore.service.dto.BookDto;
 import online.javaclass.bookstore.service.exceptions.UnableToFindException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -73,11 +75,9 @@ public class BookServiceImpl implements BookService {
 
     @LogInvocation
     @Override
-    public List<BookDto> getAll() {
-        List<BookDto> books = bookRepo.findAll()
-                .stream()
-                .map(mapper::toDto)
-                .toList();
+    public Page<BookDto> getAll(Pageable pageable) {
+        Page<BookDto> books = bookRepo.findAll(pageable)
+                .map(mapper::toDto);
         if (books.isEmpty()) {
             throw new UnableToFindException("books.not_found");
         }

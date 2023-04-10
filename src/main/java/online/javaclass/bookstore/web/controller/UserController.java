@@ -5,12 +5,12 @@ import online.javaclass.bookstore.platform.logging.LogInvocation;
 import online.javaclass.bookstore.service.OrderService;
 import online.javaclass.bookstore.service.UserService;
 import online.javaclass.bookstore.service.dto.OrderDto;
-import online.javaclass.bookstore.service.dto.PageableDto;
 import online.javaclass.bookstore.service.dto.UserDto;
 import online.javaclass.bookstore.service.dto.UserLoginDto;
 import online.javaclass.bookstore.service.exceptions.AppException;
 import online.javaclass.bookstore.web.filter.SecurityCheck;
-import online.javaclass.bookstore.web.utils.PagingUtil;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,7 +26,6 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
     private final OrderService orderService;
-    private final PagingUtil pagingUtil;
 
     @LogInvocation
     @PostMapping("/add")
@@ -117,12 +116,11 @@ public class UserController {
     @LogInvocation
     @GetMapping("/all")
     @SecurityCheck(allowed = {UserDto.Role.ADMIN})
-    public String getAll(@RequestParam String page, @RequestParam String page_size, Model model) {
-        PageableDto pageable = pagingUtil.getPageable(page, page_size);
-        List<UserDto> users = userService.getAll();
-        model.addAttribute("page", pageable.getPage());
-        model.addAttribute("total_pages", pageable.getTotalPages());
-        model.addAttribute("users", users);
+    public String getAll(Pageable pageable, Model model) {
+        Page<UserDto> page = userService.getAll(pageable);
+        model.addAttribute("page", page.getNumber());
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("users", page.stream().toList());
         return "users";
     }
 }

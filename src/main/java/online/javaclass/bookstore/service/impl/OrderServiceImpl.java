@@ -11,6 +11,8 @@ import online.javaclass.bookstore.service.dto.OrderDto;
 import online.javaclass.bookstore.service.dto.OrderItemDto;
 import online.javaclass.bookstore.service.exceptions.UnableToFindException;
 import online.javaclass.bookstore.service.exceptions.ValidationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -65,15 +67,12 @@ public class OrderServiceImpl implements OrderService {
 
     @LogInvocation
     @Override
-    public List<OrderDto> getAll() {
-        List<Order> orders = orderRepo.findAll();
-                List<OrderDto> orderDtoList = orders.stream()
-                .map(mapper::toDto)
-                .toList();
+    public Page<OrderDto> getAll(Pageable pageable) {
+        Page<OrderDto> orders = orderRepo.findAll(pageable).map(mapper::toDto);
         if (orders.isEmpty()) {
             throw new UnableToFindException(messageManager.getMessage("orders.unable_to_find"));
         }
-        return orderDtoList;
+        return orders;
     }
 
     @LogInvocation

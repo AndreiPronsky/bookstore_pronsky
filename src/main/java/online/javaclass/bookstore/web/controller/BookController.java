@@ -4,10 +4,10 @@ import lombok.RequiredArgsConstructor;
 import online.javaclass.bookstore.platform.logging.LogInvocation;
 import online.javaclass.bookstore.service.BookService;
 import online.javaclass.bookstore.service.dto.BookDto;
-import online.javaclass.bookstore.service.dto.PageableDto;
 import online.javaclass.bookstore.service.dto.UserDto;
 import online.javaclass.bookstore.web.filter.SecurityCheck;
-import online.javaclass.bookstore.web.utils.PagingUtil;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.Part;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 import java.util.Properties;
 
 @Controller
@@ -26,7 +25,6 @@ public class BookController {
 
     private static final String PATH_TO_PROPS = "application.properties";
     private final BookService service;
-    private final PagingUtil pagingUtil;
 
     @LogInvocation
     @GetMapping("/{id}")
@@ -38,12 +36,11 @@ public class BookController {
 
     @LogInvocation
     @GetMapping("/all")
-    public String getAll(@RequestParam String page, @RequestParam String page_size, Model model) {
-        PageableDto pageable = pagingUtil.getPageable(page, page_size);
-        List<BookDto> books = service.getAll();
-        model.addAttribute("page", pageable.getPage());
-        model.addAttribute("total_pages", pageable.getTotalPages());
-        model.addAttribute("books", books);
+    public String getAll(Pageable pageable, Model model) {
+        Page<BookDto> page = service.getAll(pageable);
+        model.addAttribute("page", page.getNumber());
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("books", page.stream().toList());
         return "books";
     }
 

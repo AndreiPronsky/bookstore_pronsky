@@ -20,19 +20,19 @@
 </c:if>
 <c:if test="${!requestScope.books.isEmpty()}">
     <div class="paging">
-        <c:if test="${requestScope.total_pages > 1}">
-            <a href="all?page=1&page_size=${requestScope.pageSize}"><fmt:message key="first"/></a>
-            <c:if test="${requestScope.page <= 1} ">
+        <c:if test="${totalPages > 0}">
+            <a href="/books/all?page=0&page_size=5&sort=asc"><fmt:message key="first"/></a>
+            <c:if test="${page <= 1} ">
                 <a><fmt:message key="previous"/></a>
             </c:if>
-            <c:if test="${requestScope.page > 1}">
-                <a href="all?page=${requestScope.page - 1}&page_size=${requestScope.pageSize}"><fmt:message key="previous"/></a>
+            <c:if test="${page > 0}">
+                <a href="/books/all?page=${page - 1}&size=${size}&sort=asc"><fmt:message key="previous"/></a>
             </c:if>
-            ${requestScope.page}
-            <c:if test="${requestScope.page < requestScope.total_pages}">
-                <a href="all?page=${requestScope.page + 1}&page_size=${requestScope.pageSize}"><fmt:message key="next"/></a>
+            ${page+1}
+            <c:if test="${page < totalPages-1}">
+                <a href="/books/all?page=${page + 1}&size=${size}&sort=asc"><fmt:message key="next"/></a>
             </c:if>
-            <a href="all?page=${requestScope.total_pages}&page_size=${requestScope.pageSize}"><fmt:message key="last"/></a>
+            <a href="/books/all?page=${totalPages-1}&size=${size}&sort=asc"><fmt:message key="last"/></a>
         </c:if>
     </div>
 </c:if>
@@ -49,7 +49,7 @@
     </tr>
     </thead>
     <tbody>
-    <c:forEach items="${requestScope.books}" var="book">
+    <c:forEach items="${books}" var="book">
         <tr>
             <td>
                 <img height="100" src="/coverImages/${book.id}.png" alt="book-image">
@@ -71,7 +71,7 @@
                     <a href="edit/${book.id}"><fmt:message key="edit_book"/></a>
                 </c:if>
                 <c:if test="${sessionScope.user.role.toString() == 'USER' || sessionScope.user == null}">
-                    <a href="/cart/add?id=${book.id}&page=${requestScope.page}&page_size=${requestScope.pageSize}">
+                    <a href="cart/add?id=${book.id}&page=${page}&page_size=${size}">
                         <img height="30" src="/serviceImages/cart.png" alt=<fmt:message key="add_to_cart"/>></a>
                 </c:if>
             </td>
