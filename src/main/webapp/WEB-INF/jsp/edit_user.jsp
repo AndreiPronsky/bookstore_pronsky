@@ -40,7 +40,7 @@
             <label><fmt:message key="role"/>
                 <select name="role" required="required">
                     <option value="${requestScope.user.role}" selected="selected">
-                        <fmt:message key="genre.${requestScope.user.role}"/></option>
+                        <fmt:message key="role.${requestScope.user.role}"/></option>
                     <option value=""><fmt:message key="select.role"/></option>
                     <option value="USER"><fmt:message key="role.USER"/></option>
                     <option value="ADMIN"><fmt:message key="role.ADMIN"/></option>

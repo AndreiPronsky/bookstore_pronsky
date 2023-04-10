@@ -64,7 +64,7 @@
             <label><fmt:message key="cover"/>
                 <select name="cover" required="required">
                     <option value="${requestScope.book.cover}" selected="selected">
-                        <fmt:message key="genre.${requestScope.book.cover}"/></option>
+                        <fmt:message key="cover.${requestScope.book.cover}"/></option>
                     <option value=""><fmt:message key="book.select_cover"/></option>
                     <option value="SOFT"><fmt:message key="cover.SOFT"/></option>
                     <option value="HARD"><fmt:message key="cover.HARD"/></option>

@@ -46,7 +46,6 @@ public class OrderController {
 
     @LogInvocation
     @GetMapping("/confirm")
-    @SecurityCheck(allowed = {UserDto.Role.USER})
     public String confirmOrderForm(HttpSession session) {
         UserDto user = (UserDto) session.getAttribute("user");
         if (user == null) {
@@ -59,23 +58,25 @@ public class OrderController {
     @PostMapping("/edit")
     @ResponseStatus(HttpStatus.ACCEPTED)
     @SecurityCheck(allowed = {UserDto.Role.USER, UserDto.Role.ADMIN})
-    public String editOrder(@ModelAttribute OrderDto order, Model model) {
+    public String editOrder(@SessionAttribute OrderDto order, Model model, @SessionAttribute UserDto user) {
         OrderDto updated = orderService.save(order);
         model.addAttribute("order", updated);
+        if (user.getRole() == UserDto.Role.ADMIN) {
+            return "order";
+        }
         return "successful_order";
     }
 
     @LogInvocation
     @GetMapping("/edit/{id}")
-    @SecurityCheck(allowed = {UserDto.Role.USER, UserDto.Role.ADMIN})
-    public String editOrderForm(@PathVariable Long id, Model model, @SessionAttribute UserDto user) {
+    public String editOrderForm(@PathVariable Long id, HttpSession session, @SessionAttribute UserDto user) {
         OrderDto order = orderService.getById(id);
         if (user == null || notMatchingUserIgnoreAdmin(user, order)) {
             return "redirect:index";
         } else if (notAdminRole(user) && notOpenStatus(order)) {
             return "redirect:index";
         }
-        model.addAttribute("order", order);
+        session.setAttribute("order", order);
         return "edit_order";
     }
 
@@ -90,11 +91,8 @@ public class OrderController {
     @LogInvocation
     @GetMapping("/all")
     @SecurityCheck(allowed = {UserDto.Role.ADMIN})
-    public String getAll(@RequestParam String page, @RequestParam String page_size, Model model) {
-        PageableDto pageable = pagingUtil.getPageable(page, page_size);
+    public String getAll(Model model) {
         List<OrderDto> orders = orderService.getAll();
-        model.addAttribute("page", pageable.getPage());
-        model.addAttribute("total_pages", pageable.getTotalPages());
         model.addAttribute("orders", orders);
         return "orders";
     }
@@ -139,4 +137,29 @@ public class OrderController {
         }
         return cost;
     }
+
+    @LogInvocation
+    @RequestMapping("/edit/edit_IQ")
+    public String correctItemQuantity(HttpSession session, @RequestParam String action, @RequestParam Long id) {
+        OrderDto order = (OrderDto) session.getAttribute("order");
+        List<OrderItemDto> items = order.getItems();
+        for (OrderItemDto item : items) {
+            if (item.getId() == id) {
+                Integer quantity = item.getQuantity();
+                if (action.equals("dec") && quantity > 1) {
+                    item.setQuantity(quantity - 1);
+                }
+                if (action.equals("inc")) {
+                    item.setQuantity(quantity + 1);
+                }
+                if (action.equals("remove")) {
+                    items.remove(item);
+                }
+            }
+        }
+        order.setCost(calculateCost(items));
+        orderService.save(order);
+        return "redirect:/orders/edit/" + order.getId();
+    }
 }
+

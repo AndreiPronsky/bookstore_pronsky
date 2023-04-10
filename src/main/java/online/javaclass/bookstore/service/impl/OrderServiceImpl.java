@@ -66,13 +66,14 @@ public class OrderServiceImpl implements OrderService {
     @LogInvocation
     @Override
     public List<OrderDto> getAll() {
-        List<OrderDto> orders = orderRepo.findAll().stream()
+        List<Order> orders = orderRepo.findAll();
+                List<OrderDto> orderDtoList = orders.stream()
                 .map(mapper::toDto)
                 .toList();
         if (orders.isEmpty()) {
             throw new UnableToFindException(messageManager.getMessage("orders.unable_to_find"));
         }
-        return orders;
+        return orderDtoList;
     }
 
     @LogInvocation

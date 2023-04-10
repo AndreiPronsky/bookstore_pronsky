@@ -29,7 +29,7 @@
         <c:if test="${sessionScope.user.role.toString() == 'ADMIN'}">
             <li><a href="/users/all?page=1&page_size=5"><fmt:message key="users"/></a></li>
             <li><a href="/users/add"><fmt:message key="add.user"/></a></li>
-            <li><a href="/orders/all?page=1"><fmt:message key="orders"/></a></li>
+            <li><a href="/orders/all"><fmt:message key="orders"/></a></li>
         </c:if>
         <c:if test="${sessionScope.user.role.toString() == 'MANAGER'}">
             <li><a href="/books/add"><fmt:message key="add.book"/></a></li>

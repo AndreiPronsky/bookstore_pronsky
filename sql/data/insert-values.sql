@@ -34,9 +34,8 @@ VALUES ('OPEN'),
 INSERT INTO payment_method ("name")
 VALUES ('CASH'),
        ('CARD'),
-       ('BANK_TRANSFER'),
-       ('CASH_TO_COURIER'),
-       ('CARD_TO_COURIER');
+       ('BANK_TRANSFER');
+
 
 INSERT INTO payment_status ("name")
 VALUES ('UNPAID'),
@@ -143,27 +142,27 @@ VALUES ('Harry Potter and the Philosopher’s Stone', 'J. K. Rowling', '2-1234-5
 
 INSERT INTO orders (user_id, status_id, payment_method_id, payment_status_id, delivery_type_id, cost)
 VALUES (1, 2, 1, 3, 5, 131.6),
-       (2, 3, 4, 3, 2, 32.9),
-       (3, 1, 4, 1, 4, 119.7),
-       (4, 4, 5, 2, 2, 97.8),
+       (2, 3, 2, 3, 2, 32.9),
+       (3, 1, 3, 1, 4, 119.7),
+       (4, 4, 2, 2, 2, 97.8),
        (5, 3, 2, 3, 5, 98.7),
        (6, 3, 3, 3, 1, 65.8),
        (7, 3, 2, 3, 3, 65.8),
-       (8, 4, 5, 1, 5, 65.8),
+       (8, 4, 1, 1, 5, 65.8),
        (9, 4, 1, 1, 5, 65.8),
        (10, 2, 2, 3, 4, 171.5);
 
 INSERT INTO order_items (order_id, book_id, quantity, price)
-VALUES (1, 1, 2, 65.8),
-       (1, 2, 2, 65.8),
+VALUES (1, 1, 2, 32.90),
+       (1, 2, 2, 32.90),
        (2, 3, 1, 32.90),
-       (3, 4, 3, 119.7),
-       (4, 5, 2, 97.8),
-       (5, 1, 2, 65.8),
-       (6, 1, 2, 65.8),
-       (7, 1, 2, 65.8),
-       (8, 1, 2, 65.8),
-       (9, 1, 2, 65.8),
-       (10, 3, 2, 65.8),
+       (3, 4, 3, 39.90),
+       (4, 5, 2, 48.90),
+       (5, 1, 2, 32.90),
+       (6, 1, 2, 32.90),
+       (7, 1, 2, 32.90),
+       (8, 1, 2, 32.90),
+       (9, 1, 2, 32.90),
+       (10, 3, 2, 32.90),
        (10, 4, 1, 39.9),
        (5, 2, 1, 32.9);
