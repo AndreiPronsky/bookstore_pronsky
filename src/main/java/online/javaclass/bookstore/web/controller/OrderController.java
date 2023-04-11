@@ -105,9 +105,11 @@ public class OrderController {
     @LogInvocation
     @GetMapping("/all/{id}")
     @SecurityCheck(allowed = {UserDto.Role.USER, UserDto.Role.ADMIN})
-    public String getAllByUserId(Model model, @PathVariable Long id) {
-        List<OrderDto> orders = orderService.getOrdersByUserId(id);
-        model.addAttribute("orders", orders);
+    public String getAllByUserId(Pageable pageable, Model model, @PathVariable Long id) {
+        Page<OrderDto> page = orderService.getAllByUserId(pageable, id);
+        model.addAttribute("page", page.getNumber());
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("orders", page.stream().toList());
         return "my_orders";
     }
 

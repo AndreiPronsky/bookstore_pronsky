@@ -28,11 +28,6 @@ public class OrderServiceImpl implements OrderService {
     private final EntityDtoMapper mapper;
     private final MessageManager messageManager;
 
-    @Override
-    public Long count() {
-        return orderRepo.count();
-    }
-
     @LogInvocation
     @Override
     public OrderDto save(OrderDto orderDto) throws ValidationException {
@@ -55,10 +50,8 @@ public class OrderServiceImpl implements OrderService {
 
     @LogInvocation
     @Override
-    public List<OrderDto> getOrdersByUserId(Long userId) {
-        List<OrderDto> orders = orderRepo.findAllByUserId(userId).stream()
-                .map(mapper::toDto)
-                .toList();
+    public Page<OrderDto> getAllByUserId(Pageable pageable, Long userId) {
+        Page<OrderDto> orders = orderRepo.findAllByUserId(pageable, userId).map(mapper::toDto);
         if (orders.isEmpty()) {
             throw new UnableToFindException(messageManager.getMessage("orders.unable_to_find_user_id" + " " + userId));
         }

@@ -21,11 +21,6 @@ public class BookServiceImpl implements BookService {
     private final BookRepository bookRepo;
     private final EntityDtoMapper mapper;
 
-    @Override
-    public Long count() {
-        return bookRepo.count();
-    }
-
     @LogInvocation
     @Override
     public BookDto save(BookDto bookDto) {
@@ -62,11 +57,8 @@ public class BookServiceImpl implements BookService {
 
     @LogInvocation
     @Override
-    public List<BookDto> getByAuthor(String author) {
-        List<BookDto> books = bookRepo.findByAuthor(author)
-                .stream()
-                .map(mapper::toDto)
-                .toList();
+    public Page<BookDto> getByAuthor(Pageable pageable, String author) {
+        Page<BookDto> books = bookRepo.findByAuthor(pageable, author).map(mapper::toDto);
         if (books.isEmpty()) {
             throw new UnableToFindException("books.unable_to_find_author" + " " + author);
         }

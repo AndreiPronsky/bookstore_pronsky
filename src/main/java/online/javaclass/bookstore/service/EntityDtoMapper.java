@@ -145,7 +145,7 @@ public class EntityDtoMapper {
         orderItem.setId(itemDto.getId());
         if (itemDto.getOrderId() != null) {
             Optional<Order> order = orderRepo.findById(itemDto.getOrderId());
-                orderItem.setOrder(order.orElseThrow(RuntimeException::new));
+            orderItem.setOrder(order.orElseThrow(RuntimeException::new));
         }
         orderItem.setQuantity(itemDto.getQuantity());
         return orderItem;

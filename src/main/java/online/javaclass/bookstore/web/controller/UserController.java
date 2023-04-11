@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -103,10 +102,12 @@ public class UserController {
     @LogInvocation
     @GetMapping("my_orders")
     @SecurityCheck(allowed = {UserDto.Role.USER, UserDto.Role.ADMIN})
-    public String getOrdersByUserId(@SessionAttribute UserDto user, Model model) {
+    public String getOrdersByUserId(Pageable pageable, @SessionAttribute UserDto user, Model model) {
         try {
-            List<OrderDto> orders = orderService.getOrdersByUserId(user.getId());
-            model.addAttribute("orders", orders);
+            Page<OrderDto> page = orderService.getAllByUserId(pageable, user.getId());
+            model.addAttribute("page", page.getNumber());
+            model.addAttribute("totalPages", page.getTotalPages());
+            model.addAttribute("orders", page.stream().toList());
             return "my_orders";
         } catch (AppException e) {
             return "error";

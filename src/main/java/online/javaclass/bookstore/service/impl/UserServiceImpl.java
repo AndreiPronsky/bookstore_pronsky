@@ -15,8 +15,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 
 @RequiredArgsConstructor
 @Service
@@ -25,12 +23,6 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepo;
     private final EntityDtoMapper mapper;
     private final DigestService digest;
-
-    @Override
-    public Long count() {
-        return userRepo.count();
-    }
-
 
     @LogInvocation
     @Override
@@ -50,11 +42,8 @@ public class UserServiceImpl implements UserService {
 
     @LogInvocation
     @Override
-    public List<UserDto> getByLastName(String lastname) {
-        List<UserDto> users = userRepo.findByLastName(lastname)
-                .stream()
-                .map(mapper::toDto)
-                .toList();
+    public Page<UserDto> getByLastName(Pageable pageable, String lastname) {
+        Page<UserDto> users = userRepo.findByLastName(pageable, lastname).map(mapper::toDto);
         if (users.isEmpty()) {
             throw new UnableToFindException("users.unable_to_find_lastname" + " " + lastname);
         }
