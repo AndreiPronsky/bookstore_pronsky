@@ -15,26 +15,11 @@
 <jsp:include page="navbar.jsp"/>
 <jsp:include page="searchbar.jsp"/>
 <header></header>
-<c:if test="${requestScope.books.isEmpty()}">
+<c:if test="${books.isEmpty()}">
     <h2><fmt:message key="books.not_found"/></h2>
 </c:if>
-<c:if test="${!requestScope.books.isEmpty()}">
-    <div class="paging">
-        <c:if test="${totalPages > 0}">
-            <a href="/books/all?page=0&page_size=5&sort=asc"><fmt:message key="first"/></a>
-            <c:if test="${page <= 1} ">
-                <a><fmt:message key="previous"/></a>
-            </c:if>
-            <c:if test="${page > 0}">
-                <a href="/books/all?page=${page - 1}&size=${size}&sort=asc"><fmt:message key="previous"/></a>
-            </c:if>
-            ${page+1}
-            <c:if test="${page < totalPages-1}">
-                <a href="/books/all?page=${page + 1}&size=${size}&sort=asc"><fmt:message key="next"/></a>
-            </c:if>
-            <a href="/books/all?page=${totalPages-1}&size=${size}&sort=asc"><fmt:message key="last"/></a>
-        </c:if>
-    </div>
+<c:if test="${!books.isEmpty()}">
+<jsp:include page="pagination.jsp"/>
 </c:if>
 <table>
     <caption><fmt:message key="books"/></caption>
@@ -71,7 +56,7 @@
                     <a href="edit/${book.id}"><fmt:message key="edit_book"/></a>
                 </c:if>
                 <c:if test="${sessionScope.user.role.toString() == 'USER' || sessionScope.user == null}">
-                    <a href="cart/add?id=${book.id}&page=${page}&page_size=${size}">
+                    <a href="cart/add?id=${book.id}&page=${page}&pageSize=${size}">
                         <img height="30" src="/serviceImages/cart.png" alt=<fmt:message key="add_to_cart"/>></a>
                 </c:if>
             </td>

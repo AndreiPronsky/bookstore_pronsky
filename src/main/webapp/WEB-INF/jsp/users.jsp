@@ -18,20 +18,7 @@
     <h2><fmt:message key="users.not_found"/></h2>
 </c:if>
 <c:if test="${!requestScope.users.isEmpty()}">
-    <div class="paging">
-        <a href="/users/all?page=1&page_size=${requestScope.page_size}"><fmt:message key="first"/></a>
-        <c:if test="${requestScope.page <= 1} ">
-            <a><fmt:message key="previous"/></a>
-        </c:if>
-        <c:if test="${requestScope.page > 1}">
-            <a href="/users/all?page=${requestScope.page - 1}&page_size=${requestScope.page_size}"><fmt:message key="previous"/></a>
-        </c:if>
-            ${requestScope.page}
-        <c:if test="${requestScope.page < requestScope.total_pages}">
-            <a href="/users/all?page=${requestScope.page + 1}&page_size=${requestScope.page_size}"><fmt:message key="next"/></a>
-        </c:if>
-        <a href="/users/all?page=${requestScope.total_pages}&page_size=${requestScope.page_size}"><fmt:message key="last"/></a>
-    </div>
+<jsp:include page="pagination.jsp"/>
     <table>
         <caption><fmt:message key="users"/></caption>
         <thead>

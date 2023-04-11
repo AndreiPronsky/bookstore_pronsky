@@ -49,14 +49,10 @@ public class BookController {
     @ResponseStatus(HttpStatus.CREATED)
     @SecurityCheck(allowed = {UserDto.Role.MANAGER})
     public String add(@ModelAttribute BookDto book, Model model) {
-//        try {
         BookDto created = service.save(book);
         model.addAttribute("book", created);
-        //           uploadImage(image, created.getId());
         return "book";
-//        } catch (IOException e) {
-//            return "/error";
-//        }
+
     }
 
     @LogInvocation

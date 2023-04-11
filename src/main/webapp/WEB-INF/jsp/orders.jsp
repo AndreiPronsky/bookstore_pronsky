@@ -19,22 +19,7 @@
     <h2><fmt:message key="orders.not_found"/></h2>
 </c:if>
 <c:if test="${!orders.isEmpty()}">
-<%--    <div class="paging">--%>
-<%--        <c:if test="${requestScope.total_pages > 1}">--%>
-<%--            <a href="/orders/all?page=1"><fmt:message key="first"/></a>--%>
-<%--            <c:if test="${requestScope.page <= 1} ">--%>
-<%--                <a><fmt:message key="previous"/></a>--%>
-<%--            </c:if>--%>
-<%--            <c:if test="${requestScope.page > 1}">--%>
-<%--                <a href="/orders/all?page=${requestScope.page - 1}"><fmt:message key="previous"/></a>--%>
-<%--            </c:if>--%>
-<%--            ${requestScope.page}--%>
-<%--            <c:if test="${requestScope.page < requestScope.total_pages}">--%>
-<%--                <a href="/orders/all?page=${requestScope.page + 1}"><fmt:message key="next"/></a>--%>
-<%--            </c:if>--%>
-<%--            <a href="/orders/all?page=${requestScope.total_pages}"><fmt:message key="last"/></a>--%>
-<%--        </c:if>--%>
-<%--    </div>--%>
+    <jsp:include page="pagination.jsp"/>
 </c:if>
 <table>
     <thead>
