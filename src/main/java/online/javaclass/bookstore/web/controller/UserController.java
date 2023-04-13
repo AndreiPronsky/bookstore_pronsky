@@ -5,12 +5,12 @@ import online.javaclass.bookstore.platform.logging.LogInvocation;
 import online.javaclass.bookstore.service.OrderService;
 import online.javaclass.bookstore.service.UserService;
 import online.javaclass.bookstore.service.dto.OrderDto;
-import online.javaclass.bookstore.service.dto.PageableDto;
 import online.javaclass.bookstore.service.dto.UserDto;
 import online.javaclass.bookstore.service.dto.UserLoginDto;
 import online.javaclass.bookstore.service.exceptions.AppException;
 import online.javaclass.bookstore.web.filter.SecurityCheck;
-import online.javaclass.bookstore.web.utils.PagingUtil;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -26,7 +25,6 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
     private final OrderService orderService;
-    private final PagingUtil pagingUtil;
 
     @LogInvocation
     @PostMapping("/add")
@@ -38,7 +36,7 @@ public class UserController {
             userInModel.setRole(UserDto.Role.USER);
             userInModel.setRating(BigDecimal.ZERO);
         }
-        UserDto created = userService.create(userInModel);
+        UserDto created = userService.save(userInModel);
         model.addAttribute("user", created);
         return "user";
     }
@@ -56,7 +54,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.ACCEPTED)
     @SecurityCheck(allowed = {UserDto.Role.ADMIN})
     public String edit(@ModelAttribute UserDto user, Model model) {
-        UserDto edited = userService.update(user);
+        UserDto edited = userService.save(user);
         model.addAttribute("user", edited);
         return "user";
     }
@@ -104,10 +102,12 @@ public class UserController {
     @LogInvocation
     @GetMapping("my_orders")
     @SecurityCheck(allowed = {UserDto.Role.USER, UserDto.Role.ADMIN})
-    public String getOrdersByUserId(@SessionAttribute UserDto user, Model model) {
+    public String getOrdersByUserId(Pageable pageable, @SessionAttribute UserDto user, Model model) {
         try {
-            List<OrderDto> orders = orderService.getOrdersByUserId(user.getId());
-            model.addAttribute("orders", orders);
+            Page<OrderDto> page = orderService.getAllByUserId(pageable, user.getId());
+            model.addAttribute("page", page.getNumber());
+            model.addAttribute("totalPages", page.getTotalPages());
+            model.addAttribute("orders", page.stream().toList());
             return "my_orders";
         } catch (AppException e) {
             return "error";
@@ -117,12 +117,11 @@ public class UserController {
     @LogInvocation
     @GetMapping("/all")
     @SecurityCheck(allowed = {UserDto.Role.ADMIN})
-    public String getAll(@RequestParam String page, @RequestParam String page_size, Model model) {
-        PageableDto pageable = pagingUtil.getPageable(page, page_size);
-        List<UserDto> users = userService.getAll(pageable);
-        model.addAttribute("page", pageable.getPage());
-        model.addAttribute("total_pages", pageable.getTotalPages());
-        model.addAttribute("users", users);
+    public String getAll(Pageable pageable, Model model) {
+        Page<UserDto> page = userService.getAll(pageable);
+        model.addAttribute("page", page.getNumber());
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("users", page.stream().toList());
         return "users";
     }
 }

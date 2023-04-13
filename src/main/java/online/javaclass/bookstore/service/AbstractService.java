@@ -1,19 +1,14 @@
 package online.javaclass.bookstore.service;
 
-import online.javaclass.bookstore.service.dto.PageableDto;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface AbstractService<K, T> {
     T getById(K id);
 
-    List<T> getAll(PageableDto pageable);
+    Page<T> getAll(Pageable pageable);
 
-    T create(T entity);
-
-    T update(T entity);
+    T save(T entity);
 
     void deleteById(K id);
-
-    Long count();
 }

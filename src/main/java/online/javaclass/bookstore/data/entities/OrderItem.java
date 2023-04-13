@@ -13,11 +13,11 @@ public class OrderItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.REFRESH)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "order_id")
     private Order order;
 
-    @OneToOne()
+    @OneToOne
     @JoinColumn(name = "book_id")
     private Book book;
 

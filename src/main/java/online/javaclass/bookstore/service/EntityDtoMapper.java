@@ -12,6 +12,8 @@ import online.javaclass.bookstore.service.dto.OrderItemDto;
 import online.javaclass.bookstore.service.dto.UserDto;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 @RequiredArgsConstructor
 public class EntityDtoMapper {
@@ -141,11 +143,10 @@ public class EntityDtoMapper {
         orderItem.setBook(this.toEntity(itemDto.getBook()));
         orderItem.setPrice(itemDto.getPrice());
         orderItem.setId(itemDto.getId());
-        Order order = null;
         if (itemDto.getOrderId() != null) {
-            order = orderRepo.findById(itemDto.getOrderId());
+            Optional<Order> order = orderRepo.findById(itemDto.getOrderId());
+            orderItem.setOrder(order.orElseThrow(RuntimeException::new));
         }
-        orderItem.setOrder(order);
         orderItem.setQuantity(itemDto.getQuantity());
         return orderItem;
     }

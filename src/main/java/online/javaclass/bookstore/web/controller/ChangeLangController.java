@@ -10,14 +10,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import javax.servlet.http.HttpSession;
 
 @Controller
-@RequestMapping("/change_lang")
 public class ChangeLangController {
 
     @LogInvocation
-    @RequestMapping("")
+    @RequestMapping("/change_lang")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public String execute(@RequestParam String lang, HttpSession session) {
+    public String execute(HttpSession session, @RequestParam String lang) {
         session.setAttribute("lang", lang);
-        return "redirect:/home";
+        return "index";
     }
 }

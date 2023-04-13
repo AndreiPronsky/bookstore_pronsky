@@ -48,7 +48,7 @@
                 <td><c:out value="${order.orderStatus}"/></td>
                 <td>
                     <c:if test="${order.orderStatus == 'OPEN'}">
-                        <a href="/orders/edit?id=${order.id}">
+                        <a href="/orders/edit/${order.id}">
                             <fmt:message key="edit_order"/></a>
                     </c:if>
                 </td>
