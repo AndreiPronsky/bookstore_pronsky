@@ -1,17 +1,26 @@
 package online.javaclass.bookstore.service.dto;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 
 public class OrderDto {
     private Long id;
+    @NotNull
     private UserDto user;
+    @NotNull
     private OrderStatus orderStatus;
+    @NotNull
     private PaymentMethod paymentMethod;
+    @NotNull
     private PaymentStatus paymentStatus;
+    @NotNull
     private DeliveryType deliveryType;
+    @NotNull
     private BigDecimal cost;
+    @NotEmpty
     private List<OrderItemDto> items;
 
     public enum OrderStatus {

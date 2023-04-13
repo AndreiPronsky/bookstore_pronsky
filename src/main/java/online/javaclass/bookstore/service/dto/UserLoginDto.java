@@ -1,7 +1,13 @@
 package online.javaclass.bookstore.service.dto;
 
+import org.hibernate.validator.constraints.Length;
+
+import javax.validation.constraints.Email;
+
 public class UserLoginDto {
+    @Email
     private String email;
+    @Length()
     private String password;
 
     public UserLoginDto() {

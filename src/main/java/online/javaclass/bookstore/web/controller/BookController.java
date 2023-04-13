@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Part;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -48,7 +49,7 @@ public class BookController {
     @PostMapping("/add")
     @ResponseStatus(HttpStatus.CREATED)
     @SecurityCheck(allowed = {UserDto.Role.MANAGER})
-    public String add(@ModelAttribute BookDto book, Model model) {
+    public String add(@ModelAttribute @Valid BookDto book, Model model) {
         BookDto created = service.save(book);
         model.addAttribute("book", created);
         return "book";
@@ -66,7 +67,7 @@ public class BookController {
     @PostMapping("/edit")
     @ResponseStatus(HttpStatus.ACCEPTED)
     @SecurityCheck(allowed = {UserDto.Role.MANAGER})
-    public String edit(@ModelAttribute BookDto book, Model model) {
+    public String edit(@ModelAttribute @Valid BookDto book, Model model) {
         BookDto updated = service.save(book);
         model.addAttribute("book", updated);
         return "book";

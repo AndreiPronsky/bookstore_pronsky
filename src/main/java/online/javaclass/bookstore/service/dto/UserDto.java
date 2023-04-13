@@ -2,6 +2,8 @@ package online.javaclass.bookstore.service.dto;
 
 import lombok.ToString;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Objects;
 
@@ -9,9 +11,11 @@ public class UserDto {
     private Long id;
     private String firstName;
     private String lastName;
+    @Email
     private String email;
     @ToString.Exclude
     private String password;
+    @NotNull
     private Role role;
     private BigDecimal rating;
     private UserPreferencesDto preferencesDto;

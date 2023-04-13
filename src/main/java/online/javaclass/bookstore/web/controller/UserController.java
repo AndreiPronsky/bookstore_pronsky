@@ -20,6 +20,7 @@ import org.springframework.web.servlet.LocaleResolver;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.util.Locale;
 
@@ -36,7 +37,7 @@ public class UserController {
     @PostMapping("/add")
     @ResponseStatus(HttpStatus.CREATED)
     @SecurityCheck(allowed = {UserDto.Role.ADMIN})
-    public String add(@ModelAttribute UserDto userInModel, HttpSession session, Model model) {
+    public String add(@ModelAttribute @Valid UserDto userInModel, HttpSession session, Model model) {
         UserDto userInSession = (UserDto) session.getAttribute("user");
         if (userInSession == null || userInSession.getRole() != UserDto.Role.ADMIN) {
             userInModel.setRole(UserDto.Role.USER);
@@ -59,7 +60,7 @@ public class UserController {
     @PostMapping("/edit")
     @ResponseStatus(HttpStatus.ACCEPTED)
     @SecurityCheck(allowed = {UserDto.Role.ADMIN})
-    public String edit(@ModelAttribute UserDto user, Model model) {
+    public String edit(@ModelAttribute @Valid UserDto user, Model model) {
         UserDto edited = userService.save(user);
         model.addAttribute("user", edited);
         return "user";
@@ -76,7 +77,8 @@ public class UserController {
 
     @LogInvocation
     @PostMapping("/login")
-    public String login(HttpServletRequest req, HttpServletResponse res, @ModelAttribute UserLoginDto user) {
+    public String login(HttpServletRequest req, HttpServletResponse res,
+                        @ModelAttribute @Valid UserLoginDto user) {
         UserDto loggedIn = userService.login(user);
         String lang = loggedIn.getPreferencesDto().getPreferredLocale().toString();
         HttpSession session = req.getSession();

@@ -1,16 +1,23 @@
 package online.javaclass.bookstore.service.dto;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.math.BigDecimal;
 import java.util.Objects;
 
 public class BookDto {
     private Long id;
+    @NotBlank
     private String title;
+    @NotBlank
     private String author;
+    @Pattern(regexp = "^(?=(?:\\D*\\d){10}(?:(?:\\D*\\d){3})?$)[\\d-]+$")
     private String isbn;
     private Genre genre;
     private Cover cover;
     private Integer pages;
+    @NotNull
     private BigDecimal price;
     private BigDecimal rating;
 

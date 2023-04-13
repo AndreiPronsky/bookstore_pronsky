@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +32,7 @@ public class OrderController {
     @PostMapping("/confirm")
     @ResponseStatus(HttpStatus.CREATED)
     @SecurityCheck(allowed = {UserDto.Role.USER})
-    public String confirmOrder(HttpSession session, @ModelAttribute OrderDto order, Model model) {
+    public String confirmOrder(HttpSession session, @ModelAttribute @Valid OrderDto order, Model model) {
         Map<BookDto, Integer> cart = (Map) session.getAttribute("cart");
         List<OrderItemDto> items = listItems(cart);
         order.setItems(items);

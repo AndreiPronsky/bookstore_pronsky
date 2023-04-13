@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import online.javaclass.bookstore.platform.logging.LogInvocation;
 import online.javaclass.bookstore.service.BookService;
 import online.javaclass.bookstore.service.dto.BookDto;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +25,7 @@ public class CartController {
 
     @LogInvocation
     @GetMapping("/add")
-    public String addToCart(HttpSession session, @RequestParam Long id, @RequestParam String page, @RequestParam String page_size) {
+    public String addToCart(HttpSession session, @RequestParam Long id, Pageable pageable, Model model) {
         Map<BookDto, Integer> cart = (Map) session.getAttribute("cart");
         if (cart == null) {
             cart = new HashMap<>();
@@ -36,7 +37,9 @@ public class CartController {
         } else {
             cart.put(book, 1);
         }
-        return "redirect:/books/all?page=" + page + "&page_size=" + page_size;
+        model.addAttribute("page", pageable.getPageNumber());
+        model.addAttribute("totalPages", pageable.getPageSize());
+        return "redirect:/books/all?";
     }
 
     @LogInvocation
