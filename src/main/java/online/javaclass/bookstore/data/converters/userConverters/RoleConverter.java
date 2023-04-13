@@ -3,7 +3,9 @@ package online.javaclass.bookstore.data.converters.userConverters;
 import online.javaclass.bookstore.data.entities.User;
 
 import javax.persistence.AttributeConverter;
+import javax.persistence.Converter;
 
+@Converter
 public class RoleConverter implements AttributeConverter<User.Role, Integer> {
     @Override
     public Integer convertToDatabaseColumn(User.Role role) {
