@@ -48,7 +48,15 @@ CREATE TABLE IF NOT EXISTS users
     email      VARCHAR(128) UNIQUE NOT NULL,
     "password" VARCHAR(128)        NOT NULL,
     role_id    SERIAL4 REFERENCES roles,
-    rating     NUMERIC(3, 2)
+    rating     NUMERIC(3, 2),
+    preferences_id SERIAL4 UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS users_preferences
+(
+    id      BIGSERIAL PRIMARY KEY,
+    user_id BIGINT REFERENCES users UNIQUE NOT NULL,
+    locale  VARCHAR(128)
 );
 
 CREATE TABLE IF NOT EXISTS orders

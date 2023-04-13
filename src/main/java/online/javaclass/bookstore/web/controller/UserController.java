@@ -15,9 +15,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.LocaleResolver;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
+import java.util.Locale;
 
 @Controller
 @RequiredArgsConstructor
@@ -25,6 +29,8 @@ import java.math.BigDecimal;
 public class UserController {
     private final UserService userService;
     private final OrderService orderService;
+
+    private final LocaleResolver localeResolver;
 
     @LogInvocation
     @PostMapping("/add")
@@ -70,10 +76,14 @@ public class UserController {
 
     @LogInvocation
     @PostMapping("/login")
-    public String login(HttpSession session, @ModelAttribute UserLoginDto user) {
+    public String login(HttpServletRequest req, HttpServletResponse res, @ModelAttribute UserLoginDto user) {
         UserDto loggedIn = userService.login(user);
+        String lang = loggedIn.getPreferencesDto().getPreferredLocale().toString();
+        HttpSession session = req.getSession();
+        session.setAttribute("lang", lang);
         session.setMaxInactiveInterval(86400);
         session.setAttribute("user", loggedIn);
+        localeResolver.setLocale(req, res, new Locale(lang));
         return "redirect:/home";
     }
 

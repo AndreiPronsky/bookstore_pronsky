@@ -30,7 +30,7 @@ public class ErrorController {
     }
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.I_AM_A_TEAPOT)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public String handle(Model model, AppException e) {
         model.addAttribute("message", e.getMessage());
         return "error";

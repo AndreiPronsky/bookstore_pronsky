@@ -1,15 +1,10 @@
 package online.javaclass.bookstore.service;
 
 import lombok.RequiredArgsConstructor;
-import online.javaclass.bookstore.data.entities.Book;
-import online.javaclass.bookstore.data.entities.Order;
-import online.javaclass.bookstore.data.entities.OrderItem;
-import online.javaclass.bookstore.data.entities.User;
+import online.javaclass.bookstore.data.entities.*;
 import online.javaclass.bookstore.data.repository.OrderRepository;
-import online.javaclass.bookstore.service.dto.BookDto;
-import online.javaclass.bookstore.service.dto.OrderDto;
-import online.javaclass.bookstore.service.dto.OrderItemDto;
-import online.javaclass.bookstore.service.dto.UserDto;
+import online.javaclass.bookstore.data.repository.UserRepository;
+import online.javaclass.bookstore.service.dto.*;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -18,6 +13,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class EntityDtoMapper {
     private final OrderRepository orderRepo;
+    private final UserRepository userRepository;
 
     public User toEntity(UserDto userDto) {
         if (userDto == null) {
@@ -31,6 +27,7 @@ public class EntityDtoMapper {
         user.setPassword(userDto.getPassword());
         user.setRole(User.Role.values()[(userDto.getRole().ordinal())]);
         user.setRating(userDto.getRating());
+        user.setPreferences(this.toEntity(userDto.getPreferencesDto()));
         return user;
     }
 
@@ -46,6 +43,7 @@ public class EntityDtoMapper {
         userDto.setPassword(user.getPassword());
         userDto.setRole(UserDto.Role.valueOf(user.getRole().toString()));
         userDto.setRating(user.getRating());
+        userDto.setPreferencesDto(this.toDto(user.getPreferences()));
         return userDto;
     }
 
@@ -149,5 +147,21 @@ public class EntityDtoMapper {
         }
         orderItem.setQuantity(itemDto.getQuantity());
         return orderItem;
+    }
+
+    public UserPreferences toEntity(UserPreferencesDto preferencesDto) {
+        UserPreferences preferences = new UserPreferences();
+        preferences.setId(preferencesDto.getId());
+        preferences.setUser(userRepository.findById(preferencesDto.getUserId()).orElseThrow(RuntimeException::new));
+        preferences.setPreferredLocale(preferencesDto.getPreferredLocale());
+        return preferences;
+    }
+
+    public UserPreferencesDto toDto(UserPreferences preferences) {
+        UserPreferencesDto preferencesDto = new UserPreferencesDto();
+        preferencesDto.setId(preferences.getId());
+        preferencesDto.setUserId(preferences.getUser().getId());
+        preferencesDto.setPreferredLocale(preferences.getPreferredLocale());
+        return preferencesDto;
     }
 }

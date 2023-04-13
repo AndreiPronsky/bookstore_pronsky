@@ -14,6 +14,7 @@ public class UserDto {
     private String password;
     private Role role;
     private BigDecimal rating;
+    private UserPreferencesDto preferencesDto;
 
     public enum Role {
         USER,
@@ -77,6 +78,14 @@ public class UserDto {
         this.rating = rating;
     }
 
+    public UserPreferencesDto getPreferencesDto() {
+        return preferencesDto;
+    }
+
+    public void setPreferencesDto(UserPreferencesDto preferencesDto) {
+        this.preferencesDto = preferencesDto;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -99,6 +108,7 @@ public class UserDto {
                 ", email='" + email + '\'' +
                 ", role=" + role +
                 ", rating=" + rating +
+                ", preferencesDto=" + preferencesDto +
                 '}';
     }
 }

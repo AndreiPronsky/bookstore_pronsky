@@ -8,11 +8,14 @@ import online.javaclass.bookstore.service.BookService;
 import online.javaclass.bookstore.service.EntityDtoMapper;
 import online.javaclass.bookstore.service.dto.BookDto;
 import online.javaclass.bookstore.service.exceptions.UnableToFindException;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Locale;
 
 @RequiredArgsConstructor
 @Service
@@ -20,6 +23,7 @@ public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepo;
     private final EntityDtoMapper mapper;
+    private final MessageSource messageSource;
 
     @LogInvocation
     @Override
@@ -31,15 +35,16 @@ public class BookServiceImpl implements BookService {
     @LogInvocation
     @Override
     public BookDto getById(Long id) {
+        Locale locale = LocaleContextHolder.getLocale();
         return mapper.toDto(bookRepo.findById(id)
-                .orElseThrow(() -> new UnableToFindException("book.unable_to_find_id" + " " + id)));
+                .orElseThrow(() -> new UnableToFindException(getFailureMessage("book.unable_to_find_id") + " " + id)));
     }
 
     @LogInvocation
     @Override
     public BookDto getByIsbn(String isbn) {
         return mapper.toDto(bookRepo.findByIsbn(isbn)
-                .orElseThrow(() -> new UnableToFindException("book.unable_to_find_isbn" + " " + isbn)));
+                .orElseThrow(() -> new UnableToFindException(getFailureMessage("book.unable_to_find_isbn") + " " + isbn)));
     }
 
     @LogInvocation
@@ -50,7 +55,7 @@ public class BookServiceImpl implements BookService {
                 .map(mapper::toDto)
                 .toList();
         if (books.isEmpty()) {
-            throw new UnableToFindException("books.unable_to_find_containing" + " " + input);
+            throw new UnableToFindException(getFailureMessage("books.unable_to_find_containing") + " " + input);
         }
         return books;
     }
@@ -60,7 +65,7 @@ public class BookServiceImpl implements BookService {
     public Page<BookDto> getByAuthor(Pageable pageable, String author) {
         Page<BookDto> books = bookRepo.findByAuthor(pageable, author).map(mapper::toDto);
         if (books.isEmpty()) {
-            throw new UnableToFindException("books.unable_to_find_author" + " " + author);
+            throw new UnableToFindException(getFailureMessage("books.unable_to_find_author") + " " + author);
         }
         return books;
     }
@@ -71,7 +76,7 @@ public class BookServiceImpl implements BookService {
         Page<BookDto> books = bookRepo.findAll(pageable)
                 .map(mapper::toDto);
         if (books.isEmpty()) {
-            throw new UnableToFindException("books.not_found");
+            throw new UnableToFindException(getFailureMessage("books.not_found"));
         }
         return books;
     }
@@ -80,5 +85,9 @@ public class BookServiceImpl implements BookService {
     @Override
     public void deleteById(Long id) {
         bookRepo.deleteById(id);
+    }
+
+    private String getFailureMessage(String key) {
+        return messageSource.getMessage(key, new Object[]{}, LocaleContextHolder.getLocale());
     }
 }

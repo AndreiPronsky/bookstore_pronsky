@@ -27,6 +27,10 @@ public class User {
     @Column(name = "rating")
     private BigDecimal rating;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @JoinColumn(name = "id")
+    private UserPreferences preferences;
+
     @Table(name = "roles")
     public enum Role {
         USER,
@@ -91,6 +95,14 @@ public class User {
 
     public void setRating(BigDecimal rating) {
         this.rating = rating;
+    }
+
+    public UserPreferences getPreferences() {
+        return preferences;
+    }
+
+    public void setPreferences(UserPreferences preferences) {
+        this.preferences = preferences;
     }
 
     @Override
