@@ -11,12 +11,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Part;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 @Controller
@@ -49,7 +53,11 @@ public class BookController {
     @PostMapping("/add")
     @ResponseStatus(HttpStatus.CREATED)
     @SecurityCheck(allowed = {UserDto.Role.MANAGER})
-    public String add(@ModelAttribute @Valid BookDto book, Model model) {
+    public String add(@ModelAttribute @Valid BookDto book, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            addMessagesToModel(result, model);
+            return "add_book";
+        }
         BookDto created = service.save(book);
         model.addAttribute("book", created);
         return "book";
@@ -67,7 +75,11 @@ public class BookController {
     @PostMapping("/edit")
     @ResponseStatus(HttpStatus.ACCEPTED)
     @SecurityCheck(allowed = {UserDto.Role.MANAGER})
-    public String edit(@ModelAttribute @Valid BookDto book, Model model) {
+    public String edit(@ModelAttribute @Valid BookDto book, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            addMessagesToModel(result, model);
+            return "edit_book";
+        }
         BookDto updated = service.save(book);
         model.addAttribute("book", updated);
         return "book";
@@ -90,5 +102,13 @@ public class BookController {
             String fileName = bookId + ".png";
             image.write(coverImageUploadDir + fileName);
         }
+    }
+
+    private static void addMessagesToModel(BindingResult result, Model model) {
+        List<String> errorDescriptions = new ArrayList<>();
+        for (ObjectError error : result.getAllErrors()) {
+            errorDescriptions.add(error.getDefaultMessage());
+        }
+        model.addAttribute("validationMessages", errorDescriptions);
     }
 }

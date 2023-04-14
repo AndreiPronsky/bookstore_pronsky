@@ -39,7 +39,7 @@ public class CartController {
         }
         model.addAttribute("page", pageable.getPageNumber());
         model.addAttribute("totalPages", pageable.getPageSize());
-        return "redirect:/books/all?";
+        return "redirect:/books/all";
     }
 
     @LogInvocation

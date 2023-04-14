@@ -27,8 +27,8 @@ public class User {
     @Column(name = "rating")
     private BigDecimal rating;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    @JoinColumn(name = "id")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "preferences_id")
     private UserPreferences preferences;
 
     @Table(name = "roles")

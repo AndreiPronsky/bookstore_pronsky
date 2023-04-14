@@ -25,7 +25,6 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepo;
     private final EntityDtoMapper mapper;
     private final DigestService digest;
-
     private final MessageSource messageSource;
 
     @LogInvocation
@@ -66,6 +65,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto save(UserDto userDto) {
+        if (userDto.getId() == null) {
+            userDto.setPassword(digest.hashPassword(userDto.getPassword()));
+        }
         User user = mapper.toEntity(userDto);
         return mapper.toDto(userRepo.save(user));
     }

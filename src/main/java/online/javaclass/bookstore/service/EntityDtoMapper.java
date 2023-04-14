@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import online.javaclass.bookstore.data.entities.*;
 import online.javaclass.bookstore.data.repository.OrderRepository;
 import online.javaclass.bookstore.data.repository.UserRepository;
+import online.javaclass.bookstore.platform.logging.LogInvocation;
 import online.javaclass.bookstore.service.dto.*;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +16,7 @@ public class EntityDtoMapper {
     private final OrderRepository orderRepo;
     private final UserRepository userRepository;
 
+    @LogInvocation
     public User toEntity(UserDto userDto) {
         if (userDto == null) {
             return null;
@@ -27,10 +29,13 @@ public class EntityDtoMapper {
         user.setPassword(userDto.getPassword());
         user.setRole(User.Role.values()[(userDto.getRole().ordinal())]);
         user.setRating(userDto.getRating());
-        user.setPreferences(this.toEntity(userDto.getPreferencesDto()));
+        if (userDto.getPreferencesDto() != null) {
+            user.setPreferences(this.toEntity(userDto.getPreferencesDto()));
+        }
         return user;
     }
 
+    @LogInvocation
     public UserDto toDto(User user) {
         if (user == null) {
             return null;
@@ -47,6 +52,7 @@ public class EntityDtoMapper {
         return userDto;
     }
 
+    @LogInvocation
     public Order toEntity(OrderDto orderDto) {
         if (orderDto == null) {
             return null;
@@ -65,6 +71,7 @@ public class EntityDtoMapper {
         return order;
     }
 
+    @LogInvocation
     public OrderDto toDto(Order order) {
         if (order == null) {
             return null;
@@ -85,7 +92,7 @@ public class EntityDtoMapper {
         return orderDto;
     }
 
-
+    @LogInvocation
     public Book toEntity(BookDto bookDto) {
         if (bookDto == null) {
             return null;
@@ -103,6 +110,7 @@ public class EntityDtoMapper {
         return book;
     }
 
+    @LogInvocation
     public BookDto toDto(Book book) {
         if (book == null) {
             return null;
@@ -120,6 +128,7 @@ public class EntityDtoMapper {
         return bookDto;
     }
 
+    @LogInvocation
     public OrderItemDto toDto(OrderItem item) {
         if (item == null) {
             return null;
@@ -133,6 +142,7 @@ public class EntityDtoMapper {
         return itemDto;
     }
 
+    @LogInvocation
     public OrderItem toEntity(OrderItemDto itemDto) {
         if (itemDto == null) {
             return null;
@@ -149,6 +159,7 @@ public class EntityDtoMapper {
         return orderItem;
     }
 
+    @LogInvocation
     public UserPreferences toEntity(UserPreferencesDto preferencesDto) {
         UserPreferences preferences = new UserPreferences();
         preferences.setId(preferencesDto.getId());
@@ -157,11 +168,16 @@ public class EntityDtoMapper {
         return preferences;
     }
 
+    @LogInvocation
     public UserPreferencesDto toDto(UserPreferences preferences) {
+        if (preferences == null) {
+            return null;
+        }
         UserPreferencesDto preferencesDto = new UserPreferencesDto();
         preferencesDto.setId(preferences.getId());
         preferencesDto.setUserId(preferences.getUser().getId());
         preferencesDto.setPreferredLocale(preferences.getPreferredLocale());
+
         return preferencesDto;
     }
 }

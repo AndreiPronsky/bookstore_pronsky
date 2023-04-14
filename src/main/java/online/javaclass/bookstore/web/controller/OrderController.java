@@ -13,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -32,7 +34,12 @@ public class OrderController {
     @PostMapping("/confirm")
     @ResponseStatus(HttpStatus.CREATED)
     @SecurityCheck(allowed = {UserDto.Role.USER})
-    public String confirmOrder(HttpSession session, @ModelAttribute @Valid OrderDto order, Model model) {
+    public String confirmOrder(HttpSession session, @ModelAttribute OrderDto order
+            , BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            addMessagesToModel(result, model);
+            return "confirm_order";
+        }
         Map<BookDto, Integer> cart = (Map) session.getAttribute("cart");
         List<OrderItemDto> items = listItems(cart);
         order.setItems(items);
@@ -62,7 +69,12 @@ public class OrderController {
     @PostMapping("/edit")
     @ResponseStatus(HttpStatus.ACCEPTED)
     @SecurityCheck(allowed = {UserDto.Role.USER, UserDto.Role.ADMIN})
-    public String editOrder(@SessionAttribute OrderDto order, Model model, @SessionAttribute UserDto user) {
+    public String editOrder(@SessionAttribute @Valid OrderDto order, BindingResult result
+            , Model model, @SessionAttribute UserDto user) {
+        if (result.hasErrors()) {
+            addMessagesToModel(result, model);
+            return "edit_order";
+        }
         OrderDto updated = orderService.save(order);
         model.addAttribute("order", updated);
         if (user.getRole() == UserDto.Role.ADMIN) {
@@ -168,6 +180,14 @@ public class OrderController {
         order.setCost(calculateCost(items));
         orderService.save(order);
         return "redirect:/orders/edit/" + order.getId();
+    }
+
+    private static void addMessagesToModel(BindingResult result, Model model) {
+        List<String> errorDescriptions = new ArrayList<>();
+        for (ObjectError error : result.getAllErrors()) {
+            errorDescriptions.add(error.getDefaultMessage());
+        }
+        model.addAttribute("validationMessages", errorDescriptions);
     }
 }
 

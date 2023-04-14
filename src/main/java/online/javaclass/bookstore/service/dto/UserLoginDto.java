@@ -1,13 +1,16 @@
 package online.javaclass.bookstore.service.dto;
 
-import org.hibernate.validator.constraints.Length;
+import lombok.ToString;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 
 public class UserLoginDto {
-    @Email
+    @Email(message = "{error.invalid_email}")
     private String email;
-    @Length()
+    @ToString.Exclude
+    @NotBlank(message = "{error.invalid_password}")
+//    @Pattern(regexp = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$")
     private String password;
 
     public UserLoginDto() {

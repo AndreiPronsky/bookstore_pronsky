@@ -8,19 +8,17 @@ import java.util.Objects;
 
 public class OrderDto {
     private Long id;
-    @NotNull
+    @NotNull(message = "{error.default_client}")
     private UserDto user;
-    @NotNull
     private OrderStatus orderStatus;
-    @NotNull
+    @NotNull(message = "{error.invalid_payment_method}")
     private PaymentMethod paymentMethod;
-    @NotNull
     private PaymentStatus paymentStatus;
-    @NotNull
+    @NotNull(message = "{error.invalid_delivery_type}")
     private DeliveryType deliveryType;
-    @NotNull
+    @NotNull(message = "{error.invalid_cost}")
     private BigDecimal cost;
-    @NotEmpty
+    @NotEmpty(message = "{error.invalid_items}")
     private List<OrderItemDto> items;
 
     public enum OrderStatus {

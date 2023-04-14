@@ -15,7 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Locale;
 
 @RequiredArgsConstructor
 @Service
@@ -35,7 +34,6 @@ public class BookServiceImpl implements BookService {
     @LogInvocation
     @Override
     public BookDto getById(Long id) {
-        Locale locale = LocaleContextHolder.getLocale();
         return mapper.toDto(bookRepo.findById(id)
                 .orElseThrow(() -> new UnableToFindException(getFailureMessage("book.unable_to_find_id") + " " + id)));
     }

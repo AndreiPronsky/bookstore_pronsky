@@ -3,7 +3,7 @@ package online.javaclass.bookstore.service.dto;
 import lombok.ToString;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 import java.util.Objects;
 
@@ -11,11 +11,12 @@ public class UserDto {
     private Long id;
     private String firstName;
     private String lastName;
-    @Email
+    @Email(message = "{error.invalid_email}")
     private String email;
     @ToString.Exclude
+    @NotBlank(message = "{error.invalid_password}")
+//    @Pattern(regexp = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$")
     private String password;
-    @NotNull
     private Role role;
     private BigDecimal rating;
     private UserPreferencesDto preferencesDto;
@@ -23,7 +24,8 @@ public class UserDto {
     public enum Role {
         USER,
         ADMIN,
-        MANAGER
+        MANAGER,
+        NONE
     }
 
     public Long getId() {

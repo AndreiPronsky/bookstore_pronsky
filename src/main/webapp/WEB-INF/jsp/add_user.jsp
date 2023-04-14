@@ -13,16 +13,23 @@
 <body>
 <jsp:include page="navbar.jsp"/>
 <h1><fmt:message key="register"/></h1>
+<table>
+    <c:forEach items="${validationMessages}" var="message">
+        <tr>
+            <td><c:out value="${message}"/></td>
+        </tr>
+    </c:forEach>
+</table>
 <form action="/users/add" method="post">
     <ul class="wrapper">
         <li class="form-row">
-            <label><fmt:message key="firstname"/><input type="text" name="firstName" minlength="1"></label>
+            <label><fmt:message key="firstname"/><input type="text" name="firstName"></label>
         </li>
         <li class="form-row">
-            <label><fmt:message key="lastname"/><input type="text" name="lastName" minlength="1"></label>
+            <label><fmt:message key="lastname"/><input type="text" name="lastName"></label>
         </li>
         <li class="form-row">
-            <label><fmt:message key="email"/><input type="text" name="email" minlength="13"></label>
+            <label><fmt:message key="email"/><input type="text" name="email"></label>
         </li>
         <li class="form-row">
             <label><fmt:message key="password"/><input type="password" name="password" minlength="8"></label>

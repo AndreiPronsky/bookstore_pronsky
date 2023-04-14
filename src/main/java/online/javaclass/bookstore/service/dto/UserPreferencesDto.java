@@ -4,7 +4,6 @@ import java.util.Locale;
 
 public class UserPreferencesDto {
     private Long id;
-
     private Long userId;
     private Locale preferredLocale;
 

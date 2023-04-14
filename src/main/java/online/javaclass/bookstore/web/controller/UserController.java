@@ -14,6 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.LocaleResolver;
 
@@ -22,6 +24,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 @Controller
@@ -30,14 +34,17 @@ import java.util.Locale;
 public class UserController {
     private final UserService userService;
     private final OrderService orderService;
-
     private final LocaleResolver localeResolver;
 
     @LogInvocation
     @PostMapping("/add")
     @ResponseStatus(HttpStatus.CREATED)
     @SecurityCheck(allowed = {UserDto.Role.ADMIN})
-    public String add(@ModelAttribute @Valid UserDto userInModel, HttpSession session, Model model) {
+    public String add(@ModelAttribute @Valid UserDto userInModel, BindingResult result, HttpSession session, Model model) {
+        if (result.hasErrors()) {
+            addMessagesToModel(result, model);
+            return "add_user";
+        }
         UserDto userInSession = (UserDto) session.getAttribute("user");
         if (userInSession == null || userInSession.getRole() != UserDto.Role.ADMIN) {
             userInModel.setRole(UserDto.Role.USER);
@@ -50,7 +57,7 @@ public class UserController {
 
     @LogInvocation
     @GetMapping("/add")
-    @SecurityCheck(allowed = {UserDto.Role.ADMIN})
+    @SecurityCheck(allowed = {UserDto.Role.ADMIN, UserDto.Role.NONE})
     public String addForm() {
         return "add_user";
     }
@@ -60,7 +67,11 @@ public class UserController {
     @PostMapping("/edit")
     @ResponseStatus(HttpStatus.ACCEPTED)
     @SecurityCheck(allowed = {UserDto.Role.ADMIN})
-    public String edit(@ModelAttribute @Valid UserDto user, Model model) {
+    public String edit(@ModelAttribute @Valid UserDto user, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            addMessagesToModel(result, model);
+            return "edit_user";
+        }
         UserDto edited = userService.save(user);
         model.addAttribute("user", edited);
         return "user";
@@ -78,7 +89,7 @@ public class UserController {
     @LogInvocation
     @PostMapping("/login")
     public String login(HttpServletRequest req, HttpServletResponse res,
-                        @ModelAttribute @Valid UserLoginDto user) {
+                        @ModelAttribute UserLoginDto user) {
         UserDto loggedIn = userService.login(user);
         String lang = loggedIn.getPreferencesDto().getPreferredLocale().toString();
         HttpSession session = req.getSession();
@@ -114,7 +125,7 @@ public class UserController {
     @LogInvocation
     @GetMapping("my_orders")
     @SecurityCheck(allowed = {UserDto.Role.USER, UserDto.Role.ADMIN})
-    public String getOrdersByUserId(Pageable pageable, @SessionAttribute UserDto user, Model model) {
+    public String getOrdersByUserId(Pageable pageable, @SessionAttribute @Valid UserDto user, Model model) {
         try {
             Page<OrderDto> page = orderService.getAllByUserId(pageable, user.getId());
             model.addAttribute("page", page.getNumber());
@@ -135,5 +146,13 @@ public class UserController {
         model.addAttribute("totalPages", page.getTotalPages());
         model.addAttribute("users", page.stream().toList());
         return "users";
+    }
+
+    private static void addMessagesToModel(BindingResult result, Model model) {
+        List<String> errorDescriptions = new ArrayList<>();
+        for (ObjectError error : result.getAllErrors()) {
+            errorDescriptions.add(error.getDefaultMessage());
+        }
+        model.addAttribute("validationMessages", errorDescriptions);
     }
 }

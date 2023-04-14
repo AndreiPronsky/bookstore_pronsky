@@ -56,7 +56,7 @@
                     <a href="edit/${book.id}"><fmt:message key="edit_book"/></a>
                 </c:if>
                 <c:if test="${sessionScope.user.role.toString() == 'USER' || sessionScope.user == null}">
-                    <a href="cart/add?id=${book.id}&page=${page}&pageSize=${size}">
+                    <a href="/cart/add?id=${book.id}">
                         <img height="30" src="/serviceImages/cart.png" alt=<fmt:message key="add_to_cart"/>></a>
                 </c:if>
             </td>

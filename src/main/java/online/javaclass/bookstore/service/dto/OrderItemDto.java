@@ -7,11 +7,11 @@ import java.util.Objects;
 public class OrderItemDto {
     private Long id;
     private Long orderId;
-    @NotNull
+    @NotNull(message = "{error.default_client}")
     private BookDto book;
-    @NotNull
+    @NotNull(message = "{error.invalid_quantity}")
     private Integer quantity;
-    @NotNull
+    @NotNull(message = "{error.invalid_price}")
     private BigDecimal price;
 
     public Long getId() {

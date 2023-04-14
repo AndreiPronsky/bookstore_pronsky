@@ -8,16 +8,16 @@ import java.util.Objects;
 
 public class BookDto {
     private Long id;
-    @NotBlank
+    @NotBlank(message = "{error.invalid_title}")
     private String title;
-    @NotBlank
+    @NotBlank(message = "{error.invalid_author}")
     private String author;
-    @Pattern(regexp = "^(?=(?:\\D*\\d){10}(?:(?:\\D*\\d){3})?$)[\\d-]+$")
+    @Pattern(regexp = "^(?=(?:\\D*\\d){10}(?:(?:\\D*\\d){3})?$)[\\d-]+$", message = "{error.invalid_isbn}")
     private String isbn;
     private Genre genre;
     private Cover cover;
     private Integer pages;
-    @NotNull
+    @NotNull(message = "{error.invalid_price}")
     private BigDecimal price;
     private BigDecimal rating;
 

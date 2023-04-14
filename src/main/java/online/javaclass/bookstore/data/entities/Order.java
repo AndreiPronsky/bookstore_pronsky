@@ -42,9 +42,7 @@ public class Order {
     @Column(name = "cost")
     private BigDecimal cost;
 
-    @OneToMany(mappedBy = "order",
-            cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<OrderItem> items;
 
     public enum OrderStatus {
