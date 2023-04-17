@@ -5,6 +5,7 @@ import online.javaclass.bookstore.platform.logging.LogInvocation;
 import online.javaclass.bookstore.service.BookService;
 import online.javaclass.bookstore.service.dto.BookDto;
 import online.javaclass.bookstore.service.dto.UserDto;
+import online.javaclass.bookstore.service.impl.StorageService;
 import online.javaclass.bookstore.web.filter.SecurityCheck;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,22 +17,18 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.Part;
 import javax.validation.Valid;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/books")
 public class BookController {
-
-    private static final String PATH_TO_PROPS = "application.properties";
     private final BookService service;
+    private final StorageService storageService;
 
     @LogInvocation
     @GetMapping("/{id}")
@@ -55,12 +52,14 @@ public class BookController {
     @PostMapping("/add")
     @ResponseStatus(HttpStatus.CREATED)
     @SecurityCheck(allowed = {UserDto.Role.MANAGER})
-    public String add(@ModelAttribute @Valid BookDto book, BindingResult result, Model model) {
+    public String add(@RequestParam("image") MultipartFile file, @ModelAttribute @Valid BookDto book, BindingResult result, Model model) {
         if (result.hasErrors()) {
             addMessagesToModel(result, model);
             return "add_book";
         }
+
         BookDto created = service.save(book);
+        storageService.store(file, created.getId());
         model.addAttribute("book", created);
         return "book";
 
@@ -114,16 +113,6 @@ public class BookController {
         BookDto deleted = service.save(book);
         model.addAttribute("book", deleted);
         return "book";
-    }
-
-    private void uploadImage(Part image, Long bookId) throws IOException {
-        Properties properties = new Properties();
-        try (InputStream input = this.getClass().getResourceAsStream(PATH_TO_PROPS)) {
-            properties.load(input);
-            String coverImageUploadDir = properties.getProperty("cover.upload.dir");
-            String fileName = bookId + ".png";
-            image.write(coverImageUploadDir + fileName);
-        }
     }
 
     private static void addMessagesToModel(BindingResult result, Model model) {

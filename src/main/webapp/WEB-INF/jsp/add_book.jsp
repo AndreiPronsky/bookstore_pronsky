@@ -14,8 +14,7 @@
 <body>
 <jsp:include page="navbar.jsp"/>
 <h1><fmt:message key="add.book"/></h1>
-<%--enctype="multipart/form-data"--%>
-<form action="/books/add" method="post">
+<form action="/books/add" enctype="multipart/form-data" method="post">
     <ul class="wrapper">
         <li class="form-row">
             <label><fmt:message key="title"/><input type="text" name="title" minlength="1"></label>
@@ -68,9 +67,9 @@
             <label><fmt:message key="rating"/><input type="number" name="rating" step="0.01" min="0.01"
                                                      max="5.0"></label>
         </li>
-<%--        <li>--%>
-<%--            <input type="file" name="image"/>--%>
-<%--        </li>--%>
+        <li>
+            <input type="file" name="image"/>
+        </li>
         <li class="form-row">
             <input type="submit" name="Create">
         </li>
