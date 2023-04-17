@@ -5,12 +5,12 @@ import online.javaclass.bookstore.data.entities.User;
 import online.javaclass.bookstore.data.repository.UserRepository;
 import online.javaclass.bookstore.platform.logging.LogInvocation;
 import online.javaclass.bookstore.service.DigestService;
-import online.javaclass.bookstore.service.EntityDtoMapper;
 import online.javaclass.bookstore.service.UserService;
 import online.javaclass.bookstore.service.dto.UserDto;
 import online.javaclass.bookstore.service.dto.UserLoginDto;
 import online.javaclass.bookstore.service.exceptions.LoginException;
 import online.javaclass.bookstore.service.exceptions.UnableToFindException;
+import online.javaclass.bookstore.service.mapper.EntityDtoMapper;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
@@ -70,12 +70,6 @@ public class UserServiceImpl implements UserService {
         }
         User user = mapper.toEntity(userDto);
         return mapper.toDto(userRepo.save(user));
-    }
-
-    @LogInvocation
-    @Override
-    public void deleteById(Long id) {
-        userRepo.deleteById(id);
     }
 
     private String getFailureMessage(String key) {

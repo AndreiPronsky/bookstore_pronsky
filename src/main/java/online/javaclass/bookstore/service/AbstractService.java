@@ -9,6 +9,4 @@ public interface AbstractService<K, T> {
     Page<T> getAll(Pageable pageable);
 
     T save(T entity);
-
-    void deleteById(K id);
 }

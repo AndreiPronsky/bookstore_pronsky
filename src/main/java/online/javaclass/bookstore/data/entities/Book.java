@@ -41,6 +41,9 @@ public class Book {
     @Column(name = "rating")
     private BigDecimal rating;
 
+    @Column(name = "available")
+    private boolean available;
+
     @Table(name = "covers")
     public enum Cover {
         SOFT,
@@ -142,6 +145,14 @@ public class Book {
         this.rating = rating;
     }
 
+    public boolean isAvailable() {
+        return available;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -167,6 +178,7 @@ public class Book {
                 ", pages=" + pages +
                 ", price=" + price +
                 ", rating=" + rating +
+                ", available=" + available +
                 '}';
     }
 }

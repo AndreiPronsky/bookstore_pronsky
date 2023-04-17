@@ -21,10 +21,7 @@
     <p><c:out value="${requestScope.book.author}"/></p>
     <h3><fmt:message key="title"/> : </h3>
     <p><c:out value="${requestScope.book.title}"/></p>
-    <c:if test="${sessionScope.user.role == null || sessionScope.user.role == 'USER'}">
-        <p><a href="/cart/add">
-            <fmt:message key="add_to_cart"/></a></p>
-    </c:if>
+    <h6><fmt:message key="available.${book.available}"/></h6>
 </article>
 <footer></footer>
 </body>

@@ -13,7 +13,7 @@
 <body>
 <jsp:include page="navbar.jsp"/>
 <h1><fmt:message key="edit_book"/></h1>
-<form action="/books/edit" method="post">
+<form method="post">
     <ul class="wrapper">
         <li class="form-row">
             <label><fmt:message key="id"/>
@@ -83,7 +83,8 @@
             </label>
         </li>
         <li class="form-row">
-            <input type="submit" name="Edit" value="<fmt:message key="edit"/>">
+            <input type="submit" name="Edit" formaction="/books/edit" value="<fmt:message key="edit"/>">
+            <input type="submit" name="Delete" formaction="/books/delete" value="<fmt:message key="delete"/>">
         </li>
     </ul>
 </form>

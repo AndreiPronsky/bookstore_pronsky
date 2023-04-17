@@ -80,7 +80,8 @@ CREATE TABLE IF NOT EXISTS books
     cover_id SERIAL4 REFERENCES covers,
     pages    INTEGER,
     price    NUMERIC(5, 2)       NOT NULL,
-    rating   NUMERIC(3, 2)
+    rating   NUMERIC(3, 2),
+    available BOOLEAN NOT NULL DEFAULT false
 );
 
 CREATE TABLE IF NOT EXISTS order_items

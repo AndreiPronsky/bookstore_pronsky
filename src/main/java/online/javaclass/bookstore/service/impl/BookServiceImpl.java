@@ -5,9 +5,9 @@ import online.javaclass.bookstore.data.entities.Book;
 import online.javaclass.bookstore.data.repository.BookRepository;
 import online.javaclass.bookstore.platform.logging.LogInvocation;
 import online.javaclass.bookstore.service.BookService;
-import online.javaclass.bookstore.service.EntityDtoMapper;
 import online.javaclass.bookstore.service.dto.BookDto;
 import online.javaclass.bookstore.service.exceptions.UnableToFindException;
+import online.javaclass.bookstore.service.mapper.EntityDtoMapper;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
@@ -77,12 +77,6 @@ public class BookServiceImpl implements BookService {
             throw new UnableToFindException(getFailureMessage("books.not_found"));
         }
         return books;
-    }
-
-    @LogInvocation
-    @Override
-    public void deleteById(Long id) {
-        bookRepo.deleteById(id);
     }
 
     private String getFailureMessage(String key) {

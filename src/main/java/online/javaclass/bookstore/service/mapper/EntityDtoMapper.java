@@ -1,4 +1,4 @@
-package online.javaclass.bookstore.service;
+package online.javaclass.bookstore.service.mapper;
 
 import lombok.RequiredArgsConstructor;
 import online.javaclass.bookstore.data.entities.*;
@@ -107,6 +107,7 @@ public class EntityDtoMapper {
         book.setPages(bookDto.getPages());
         book.setPrice(bookDto.getPrice());
         book.setRating(bookDto.getRating());
+        book.setAvailable(bookDto.isAvailable());
         return book;
     }
 
@@ -125,6 +126,7 @@ public class EntityDtoMapper {
         bookDto.setPages(book.getPages());
         bookDto.setPrice(book.getPrice());
         bookDto.setRating(book.getRating());
+        bookDto.setAvailable(book.isAvailable());
         return bookDto;
     }
 

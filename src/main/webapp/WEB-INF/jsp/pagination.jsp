@@ -6,18 +6,18 @@
 <body>
 <div class="paging">
     <c:if test="${totalPages > 0}">
-        <a href="${pageContext.request.contextPath}?page=0&page_size=5"><fmt:message key="first"/></a>
+        <a href="${pageContext.request.contextPath}?page=0&page_size=5&sort=id"><fmt:message key="first"/></a>
         <c:if test="${page <= 1} ">
             <a><fmt:message key="previous"/></a>
         </c:if>
         <c:if test="${page > 0}">
-            <a href="${pageContext.request.contextPath}?page=${page - 1}&size=${size}"><fmt:message key="previous"/></a>
+            <a href="${pageContext.request.contextPath}?page=${page - 1}&size=${size}&sort=id"><fmt:message key="previous"/></a>
         </c:if>
         ${page+1}
         <c:if test="${page < totalPages-1}">
-            <a href="${pageContext.request.contextPath}?page=${page + 1}&size=${size}"><fmt:message key="next"/></a>
+            <a href="${pageContext.request.contextPath}?page=${page + 1}&size=${size}&sort=id"><fmt:message key="next"/></a>
         </c:if>
-        <a href="${pageContext.request.contextPath}?page=${totalPages-1}&size=${size}"><fmt:message key="last"/></a>
+        <a href="${pageContext.request.contextPath}?page=${totalPages-1}&size=${size}&sort=id"><fmt:message key="last"/></a>
     </c:if>
 </div>
 </body>

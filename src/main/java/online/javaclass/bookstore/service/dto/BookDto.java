@@ -21,6 +21,8 @@ public class BookDto {
     private BigDecimal price;
     private BigDecimal rating;
 
+    private boolean available;
+
     public enum Cover {
         SOFT,
         HARD,
@@ -117,6 +119,14 @@ public class BookDto {
         this.rating = rating;
     }
 
+    public boolean isAvailable() {
+        return available;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -142,6 +152,7 @@ public class BookDto {
                 ", pages=" + pages +
                 ", price=" + price +
                 ", rating=" + rating +
+                ", available=" + available +
                 '}';
     }
 }

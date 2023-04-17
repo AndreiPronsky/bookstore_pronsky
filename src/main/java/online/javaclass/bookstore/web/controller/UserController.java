@@ -39,7 +39,7 @@ public class UserController {
     @LogInvocation
     @PostMapping("/add")
     @ResponseStatus(HttpStatus.CREATED)
-    @SecurityCheck(allowed = {UserDto.Role.ADMIN})
+    @SecurityCheck(allowed = {UserDto.Role.ADMIN, UserDto.Role.NONE})
     public String add(@ModelAttribute @Valid UserDto userInModel, BindingResult result, HttpSession session, Model model) {
         if (result.hasErrors()) {
             addMessagesToModel(result, model);
@@ -88,8 +88,9 @@ public class UserController {
 
     @LogInvocation
     @PostMapping("/login")
+    @SecurityCheck(allowed = {UserDto.Role.NONE})
     public String login(HttpServletRequest req, HttpServletResponse res,
-                        @ModelAttribute UserLoginDto user) {
+                        @ModelAttribute @Valid UserLoginDto user) {
         UserDto loggedIn = userService.login(user);
         String lang = loggedIn.getPreferencesDto().getPreferredLocale().toString();
         HttpSession session = req.getSession();

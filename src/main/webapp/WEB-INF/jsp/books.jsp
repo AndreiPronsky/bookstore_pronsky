@@ -19,7 +19,7 @@
     <h2><fmt:message key="books.not_found"/></h2>
 </c:if>
 <c:if test="${!books.isEmpty()}">
-<jsp:include page="pagination.jsp"/>
+    <jsp:include page="pagination.jsp"/>
 </c:if>
 <table>
     <caption><fmt:message key="books"/></caption>
@@ -52,14 +52,20 @@
                 <h6><c:out value="${book.genre}"/></h6>
             </td>
             <td>
-                <c:if test="${sessionScope.user.role.toString() == 'MANAGER'}">
+                <h6><fmt:message key="available.${book.available}"/></h6>
+            </td>
+
+            <c:if test="${sessionScope.user.role.toString() == 'MANAGER'}">
+                <td>
                     <a href="edit/${book.id}"><fmt:message key="edit_book"/></a>
-                </c:if>
-                <c:if test="${sessionScope.user.role.toString() == 'USER' || sessionScope.user == null}">
+                </td>
+            </c:if>
+            <c:if test="${sessionScope.user.role.toString() == 'USER' || sessionScope.user == null}">
+                <td>
                     <a href="/cart/add?id=${book.id}">
                         <img height="30" src="/serviceImages/cart.png" alt=<fmt:message key="add_to_cart"/>></a>
-                </c:if>
-            </td>
+                </td>
+            </c:if>
         </tr>
     </c:forEach>
     </tbody>

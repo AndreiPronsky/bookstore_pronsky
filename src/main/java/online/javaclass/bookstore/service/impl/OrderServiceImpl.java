@@ -4,12 +4,12 @@ import lombok.RequiredArgsConstructor;
 import online.javaclass.bookstore.data.entities.Order;
 import online.javaclass.bookstore.data.repository.OrderRepository;
 import online.javaclass.bookstore.platform.logging.LogInvocation;
-import online.javaclass.bookstore.service.EntityDtoMapper;
 import online.javaclass.bookstore.service.OrderService;
 import online.javaclass.bookstore.service.dto.OrderDto;
 import online.javaclass.bookstore.service.dto.OrderItemDto;
 import online.javaclass.bookstore.service.exceptions.UnableToFindException;
 import online.javaclass.bookstore.service.exceptions.ValidationException;
+import online.javaclass.bookstore.service.mapper.EntityDtoMapper;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
@@ -68,12 +68,6 @@ public class OrderServiceImpl implements OrderService {
             throw new UnableToFindException(getFailureMessage("orders.unable_to_find"));
         }
         return orders;
-    }
-
-    @LogInvocation
-    @Override
-    public void deleteById(Long id) {
-        orderRepo.deleteById(id);
     }
 
     @LogInvocation

@@ -8,6 +8,8 @@ import online.javaclass.bookstore.service.dto.UserDto;
 import online.javaclass.bookstore.web.filter.SecurityCheck;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -41,7 +43,7 @@ public class BookController {
 
     @LogInvocation
     @GetMapping("/all")
-    public String getAll(Pageable pageable, Model model) {
+    public String getAll(Model model, @SortDefault(sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
         Page<BookDto> page = service.getAll(pageable);
         model.addAttribute("page", page.getNumber());
         model.addAttribute("totalPages", page.getTotalPages());
@@ -92,6 +94,26 @@ public class BookController {
         BookDto book = service.getById(id);
         model.addAttribute("book", book);
         return "edit_book";
+    }
+
+    @LogInvocation
+    @GetMapping("/delete/{id}")
+    @SecurityCheck(allowed = {UserDto.Role.MANAGER})
+    public String delete(@PathVariable Long id, Model model) {
+        BookDto book = service.getById(id);
+        model.addAttribute("book", book);
+        return "edit_book";
+    }
+
+    @LogInvocation
+    @PostMapping("/delete")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    @SecurityCheck(allowed = {UserDto.Role.MANAGER})
+    public String delete(@ModelAttribute @Valid BookDto book, Model model) {
+        book.setAvailable(false);
+        BookDto deleted = service.save(book);
+        model.addAttribute("book", deleted);
+        return "book";
     }
 
     private void uploadImage(Part image, Long bookId) throws IOException {
