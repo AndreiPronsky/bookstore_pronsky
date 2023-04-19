@@ -26,16 +26,15 @@ public class User {
     private Role role;
     @Column(name = "rating")
     private BigDecimal rating;
-
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "preferences_id")
-    private UserPreferences preferences;
+    @Column(name = "preferred_locale")
+    private String preferredLocale;
 
     @Table(name = "roles")
     public enum Role {
         USER,
         ADMIN,
-        MANAGER
+        MANAGER,
+        NONE
     }
 
     public User() {
@@ -97,12 +96,12 @@ public class User {
         this.rating = rating;
     }
 
-    public UserPreferences getPreferences() {
-        return preferences;
+    public String getPreferredLocale() {
+        return preferredLocale;
     }
 
-    public void setPreferences(UserPreferences preferences) {
-        this.preferences = preferences;
+    public void setPreferredLocale(String preferredLocale) {
+        this.preferredLocale = preferredLocale;
     }
 
     @Override

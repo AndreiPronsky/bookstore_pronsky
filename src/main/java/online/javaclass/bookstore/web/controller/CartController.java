@@ -21,7 +21,7 @@ import java.util.Map;
 @RequestMapping("/cart")
 public class CartController {
 
-    private final BookService bookService;
+    private final BookService service;
 
     @LogInvocation
     @GetMapping("/add")
@@ -31,7 +31,7 @@ public class CartController {
             cart = new HashMap<>();
             session.setAttribute("cart", cart);
         }
-        BookDto book = bookService.getById(id);
+        BookDto book = service.getById(id);
         if (cart.containsKey(book)) {
             cart.put(book, cart.get(book) + 1);
         } else {

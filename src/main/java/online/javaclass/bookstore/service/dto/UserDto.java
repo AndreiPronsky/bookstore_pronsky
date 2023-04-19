@@ -19,7 +19,8 @@ public class UserDto {
     private String password;
     private Role role;
     private BigDecimal rating;
-    private UserPreferencesDto preferencesDto;
+
+    private String preferredLocale;
 
     public enum Role {
         USER,
@@ -84,12 +85,12 @@ public class UserDto {
         this.rating = rating;
     }
 
-    public UserPreferencesDto getPreferencesDto() {
-        return preferencesDto;
+    public String getPreferredLocale() {
+        return preferredLocale;
     }
 
-    public void setPreferencesDto(UserPreferencesDto preferencesDto) {
-        this.preferencesDto = preferencesDto;
+    public void setPreferredLocale(String preferredLocale) {
+        this.preferredLocale = preferredLocale;
     }
 
     @Override
@@ -114,7 +115,6 @@ public class UserDto {
                 ", email='" + email + '\'' +
                 ", role=" + role +
                 ", rating=" + rating +
-                ", preferencesDto=" + preferencesDto +
                 '}';
     }
 }

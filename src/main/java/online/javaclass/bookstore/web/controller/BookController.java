@@ -68,7 +68,8 @@ public class BookController {
     @LogInvocation
     @GetMapping("/add")
     @SecurityCheck(allowed = {UserDto.Role.MANAGER})
-    public String addForm() {
+    public String addForm(Model model) {
+        model.addAttribute("bookDto", new BookDto());
         return "add_book";
     }
 

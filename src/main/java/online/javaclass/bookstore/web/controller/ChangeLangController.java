@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.servlet.http.HttpSession;
-import java.util.Locale;
 
 @Controller
 @RequiredArgsConstructor
@@ -25,7 +24,7 @@ public class ChangeLangController {
     public String execute(HttpSession session, @RequestParam String lang) {
         UserDto userInSession = (UserDto) session.getAttribute("user");
         if (userInSession != null) {
-            userInSession.getPreferencesDto().setPreferredLocale(new Locale(lang));
+            userInSession.setPreferredLocale(lang);
             service.save(userInSession);
         }
         session.setAttribute("lang", lang);

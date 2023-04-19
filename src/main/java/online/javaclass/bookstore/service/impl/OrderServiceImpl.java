@@ -9,7 +9,7 @@ import online.javaclass.bookstore.service.dto.OrderDto;
 import online.javaclass.bookstore.service.dto.OrderItemDto;
 import online.javaclass.bookstore.service.exceptions.UnableToFindException;
 import online.javaclass.bookstore.service.exceptions.ValidationException;
-import online.javaclass.bookstore.service.mapper.EntityDtoMapper;
+import online.javaclass.bookstore.service.mapper.Mapper;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
@@ -26,7 +26,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepo;
-    private final EntityDtoMapper mapper;
+    private final Mapper mapper;
     private final MessageSource messageSource;
 
 

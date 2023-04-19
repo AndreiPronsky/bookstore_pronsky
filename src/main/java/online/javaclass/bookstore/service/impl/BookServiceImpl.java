@@ -7,21 +7,23 @@ import online.javaclass.bookstore.platform.logging.LogInvocation;
 import online.javaclass.bookstore.service.BookService;
 import online.javaclass.bookstore.service.dto.BookDto;
 import online.javaclass.bookstore.service.exceptions.UnableToFindException;
-import online.javaclass.bookstore.service.mapper.EntityDtoMapper;
+import online.javaclass.bookstore.service.mapper.Mapper;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
-@RequiredArgsConstructor
 @Service
+@Transactional
+@RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepo;
-    private final EntityDtoMapper mapper;
+    private final Mapper mapper;
     private final MessageSource messageSource;
 
     @LogInvocation

@@ -10,20 +10,22 @@ import online.javaclass.bookstore.service.dto.UserDto;
 import online.javaclass.bookstore.service.dto.UserLoginDto;
 import online.javaclass.bookstore.service.exceptions.LoginException;
 import online.javaclass.bookstore.service.exceptions.UnableToFindException;
-import online.javaclass.bookstore.service.mapper.EntityDtoMapper;
+import online.javaclass.bookstore.service.mapper.Mapper;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 
-@RequiredArgsConstructor
 @Service
+@Transactional
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepo;
-    private final EntityDtoMapper mapper;
+    private final Mapper mapper;
     private final DigestService digest;
     private final MessageSource messageSource;
 

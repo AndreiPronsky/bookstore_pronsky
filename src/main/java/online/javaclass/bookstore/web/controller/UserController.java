@@ -92,7 +92,7 @@ public class UserController {
     public String login(HttpServletRequest req, HttpServletResponse res,
                         @ModelAttribute @Valid UserLoginDto user) {
         UserDto loggedIn = userService.login(user);
-        String lang = loggedIn.getPreferencesDto().getPreferredLocale().toString();
+        String lang = loggedIn.getPreferredLocale();
         HttpSession session = req.getSession();
         session.setAttribute("lang", lang);
         session.setMaxInactiveInterval(86400);
