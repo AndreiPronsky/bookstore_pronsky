@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import javax.servlet.ServletException;
+
 @Controller
 @RequiredArgsConstructor
 @ControllerAdvice(annotations = Controller.class)
@@ -50,7 +52,7 @@ public class ErrorController {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public String handle(Model model, RuntimeException e) {
+    public String handle(Model model, RuntimeException e, ServletException ex) {
         model.addAttribute("message",
                 messageSource.getMessage("error.default_server", new Object[]{}, LocaleContextHolder.getLocale()));
         return "error";
