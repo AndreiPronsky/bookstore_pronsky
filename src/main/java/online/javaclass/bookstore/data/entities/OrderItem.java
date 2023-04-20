@@ -88,7 +88,7 @@ public class OrderItem {
         return "OrderItem{" +
                 "id=" + id +
                 ", order=" + order.getId() +
-                ", book=" + book +
+                ", bookDto=" + book +
                 ", quantity=" + quantity +
                 ", price=" + price +
                 '}';

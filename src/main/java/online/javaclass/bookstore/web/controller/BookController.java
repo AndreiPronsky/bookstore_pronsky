@@ -69,7 +69,7 @@ public class BookController {
     @GetMapping("/add")
     @SecurityCheck(allowed = {UserDto.Role.MANAGER})
     public String addForm(Model model) {
-        model.addAttribute("book", new BookDto());
+        model.addAttribute("bookDto", new BookDto());
         return "add_book";
     }
 
@@ -83,7 +83,7 @@ public class BookController {
             return "edit_book";
         }
         BookDto updated = service.save(book);
-        model.addAttribute("book", updated);
+        model.addAttribute("bookDto", updated);
         return "book";
     }
 
@@ -92,7 +92,7 @@ public class BookController {
     @SecurityCheck(allowed = {UserDto.Role.MANAGER})
     public String editForm(@PathVariable Long id, Model model) {
         BookDto book = service.getById(id);
-        model.addAttribute("book", book);
+        model.addAttribute("bookDto", book);
         return "edit_book";
     }
 

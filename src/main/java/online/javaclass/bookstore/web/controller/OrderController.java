@@ -14,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -37,7 +36,6 @@ public class OrderController {
     public String confirmOrder(HttpSession session, @ModelAttribute OrderDto order
             , BindingResult result, Model model) {
         if (result.hasErrors()) {
-            addMessagesToModel(result, model);
             return "confirm_order";
         }
         Map<BookDto, Integer> cart = (Map) session.getAttribute("cart");
@@ -57,11 +55,12 @@ public class OrderController {
 
     @LogInvocation
     @GetMapping("/confirm")
-    public String confirmOrderForm(@SessionAttribute UserDto user, Model model) {
+    public String confirmOrderForm(HttpSession session, Model model) {
+        UserDto user = (UserDto) session.getAttribute("user");
         if (user == null) {
             return "redirect:/users/login";
         }
-        model.addAttribute("order", new OrderDto());
+        model.addAttribute("orderDto", new OrderDto());
         return "confirm_order";
     }
 
@@ -69,14 +68,13 @@ public class OrderController {
     @PostMapping("/edit")
     @ResponseStatus(HttpStatus.ACCEPTED)
     @SecurityCheck(allowed = {UserDto.Role.USER, UserDto.Role.ADMIN})
-    public String editOrder(@SessionAttribute @Valid OrderDto order, BindingResult result
+    public String editOrder(@ModelAttribute @Valid OrderDto orderDto, BindingResult result
             , Model model, @SessionAttribute UserDto user) {
         if (result.hasErrors()) {
-            addMessagesToModel(result, model);
             return "edit_order";
         }
-        OrderDto updated = orderService.save(order);
-        model.addAttribute("order", updated);
+        OrderDto updated = orderService.save(orderDto);
+        model.addAttribute("orderDto", updated);
         if (user.getRole() == UserDto.Role.ADMIN) {
             return "order";
         }
@@ -85,22 +83,22 @@ public class OrderController {
 
     @LogInvocation
     @GetMapping("/edit/{id}")
-    public String editOrderForm(@PathVariable Long id, HttpSession session, @SessionAttribute UserDto user) {
-        OrderDto order = orderService.getById(id);
-        if (user == null || notMatchingUserIgnoreAdmin(user, order)) {
+    public String editOrderForm(@PathVariable Long id, Model model, @SessionAttribute UserDto user) {
+        OrderDto orderDto = orderService.getById(id);
+        if (user == null || notMatchingUserIgnoreAdmin(user, orderDto)) {
             return "redirect:index";
-        } else if (notAdminRole(user) && notOpenStatus(order)) {
+        } else if (notAdminRole(user) && notOpenStatus(orderDto)) {
             return "redirect:index";
         }
-        session.setAttribute("order", order);
+        model.addAttribute("orderDto", orderDto);
         return "edit_order";
     }
 
     @LogInvocation
     @GetMapping("/{id}")
     public String getOne(@PathVariable Long id, Model model) {
-        OrderDto order = orderService.getById(id);
-        model.addAttribute("order", order);
+        OrderDto orderDto = orderService.getById(id);
+        model.addAttribute("orderDto", orderDto);
         return "order";
     }
 
@@ -180,14 +178,6 @@ public class OrderController {
         order.setCost(calculateCost(items));
         orderService.save(order);
         return "redirect:/orders/edit/" + order.getId();
-    }
-
-    private static void addMessagesToModel(BindingResult result, Model model) {
-        List<String> errorDescriptions = new ArrayList<>();
-        for (ObjectError error : result.getAllErrors()) {
-            errorDescriptions.add(error.getDefaultMessage());
-        }
-        model.addAttribute("validationMessages", errorDescriptions);
     }
 }
 

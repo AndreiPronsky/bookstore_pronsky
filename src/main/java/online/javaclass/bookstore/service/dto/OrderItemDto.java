@@ -6,7 +6,7 @@ import java.util.Objects;
 
 public class OrderItemDto {
     private Long id;
-    private OrderDto order;
+    private Long orderId;
     @NotNull(message = "{error.default_client}")
     private BookDto book;
     @NotNull(message = "{error.invalid_quantity}")
@@ -22,12 +22,12 @@ public class OrderItemDto {
         this.id = id;
     }
 
-    public OrderDto getOrder() {
-        return order;
+    public Long getOrderId() {
+        return orderId;
     }
 
-    public void setOrder(OrderDto order) {
-        this.order = order;
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
     }
 
     public BookDto getBook() {
@@ -59,20 +59,20 @@ public class OrderItemDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         OrderItemDto itemDto = (OrderItemDto) o;
-        return Objects.equals(id, itemDto.id) && Objects.equals(order.getId(), itemDto.order.getId()) && Objects.equals(book, itemDto.book) && Objects.equals(quantity, itemDto.quantity) && Objects.equals(price, itemDto.price);
+        return Objects.equals(id, itemDto.id) && Objects.equals(orderId, itemDto.orderId) && Objects.equals(book, itemDto.book) && Objects.equals(quantity, itemDto.quantity) && Objects.equals(price, itemDto.price);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, order.getId(), book, quantity, price);
+        return Objects.hash(id, orderId, book, quantity, price);
     }
 
     @Override
     public String toString() {
         return "OrderItemDto{" +
                 "id=" + id +
-                ", orderId=" + order.getId() +
-                ", book=" + book +
+                ", orderId=" + orderId +
+                ", bookDto=" + book +
                 ", quantity=" + quantity +
                 ", price=" + price +
                 '}';

@@ -14,7 +14,8 @@
 </c:if>
 <c:if test="${sessionScope.cart != null && !sessionScope.cart.isEmpty()}">
     <h1><spring:message code="confirm_order"/></h1>
-    <form:form action="/orders/confirm" method="post" modelAttribute="order">
+    <%--@elvariable id="orderDto" type=""--%>
+    <form:form action="/orders/confirm" method="post" modelAttribute="orderDto">
         <table>
             <c:forEach items="${sessionScope.cart}" var="cartItem">
                 <c:set var="total" value="${total + cartItem.key.price * cartItem.value }"/>

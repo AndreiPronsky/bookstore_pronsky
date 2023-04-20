@@ -10,7 +10,7 @@
 <body>
 <jsp:include page="navbar.jsp"/>
 <h1><spring:message code="register"/></h1>
-<form:form action="/users/add" method="post" modelAttribute="user">
+<form:form action="/users/add" method="post" modelAttribute="userDto">
 <table>
     <tr>
         <td><spring:message code="firstname"/></td>
@@ -48,6 +48,7 @@
         <td><form:errors path="rating"/></td>
     </tr>
     </c:if>
+</table>
     <li>
         <input type="submit" name="Create">
     </li>

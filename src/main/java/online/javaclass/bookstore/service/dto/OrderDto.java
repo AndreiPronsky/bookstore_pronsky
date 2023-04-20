@@ -136,7 +136,7 @@ public class OrderDto {
                 ", paymentStatus=" + paymentStatus +
                 ", deliveryType=" + deliveryType +
                 ", cost=" + cost +
-                ", items=" + items +
+                ", items=" + items.size() +
                 '}';
     }
 }

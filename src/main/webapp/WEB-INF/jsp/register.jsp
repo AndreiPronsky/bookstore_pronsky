@@ -10,8 +10,8 @@
 <body>
 <jsp:include page="navbar.jsp"/>
 <h1><spring:message code="register"/></h1>
-<%--@elvariable id="user" type=""--%>
-<form:form action="/users/add" method="post" modelAttribute="user">
+<%--@elvariable id="userDto" type=""--%>
+<form:form action="/users/add" method="post" modelAttribute="userDto">
     <table>
         <tr>
             <td><spring:message code="firstname"/></td>

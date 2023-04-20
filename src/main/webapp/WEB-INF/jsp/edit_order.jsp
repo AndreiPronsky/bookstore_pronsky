@@ -10,13 +10,15 @@
 <body>
 <jsp:include page="navbar.jsp"/>
 <h1><spring:message code="edit_order"/></h1>
-<form:form action="/orders/edit" method="post" modelAttribute="order">
+<%--@elvariable id="orderDto" type=""--%>
+<form:form action="/orders/edit" method="post" modelAttribute="orderDto">
+    <form:input type="hidden" path="id" value="${orderDto.id}"/>
     <c:if test="${sessionScope.user.role.toString() == 'USER'}">
     </c:if>
     <table>
         <tbody>
         <c:if test="${sessionScope.user.role.toString() == 'USER'}">
-            <c:forEach items="${order.items}" var="item">
+            <c:forEach items="${orderDto.items}" var="item">
                 <c:set var="total" value="${total + item.book.price * item.quantity }"/>
                 <tr>
                     <td><c:out value="${item.book.title}"/></td>
@@ -40,8 +42,8 @@
         <tr>
             <td><spring:message code="delivery_type"/>
                 <form:select path="deliveryType" required="required">
-                    <option value="${order.deliveryType}" selected="selected">
-                        <spring:message code="delivery_type.${sessionScope.order.deliveryType}"/></option>
+                    <option value="${orderDto.deliveryType}" selected="selected">
+                        <spring:message code="delivery_type.${orderDto.deliveryType}"/></option>
                     <option value=""><spring:message code="select.delivery_type"/></option>
                     <option value="COURIER"><spring:message code="delivery_type.COURIER"/></option>
                     <option value="BIKE"><spring:message code="delivery_type.BIKE"/></option>
@@ -54,8 +56,8 @@
         <tr>
             <td><spring:message code="payment_method"/>
                 <form:select path="paymentMethod" required="required">
-                    <option value="${order.paymentMethod}" selected="selected">
-                        <spring:message code="payment_method.${sessionScope.order.paymentMethod}"/></option>
+                    <option value="${orderDto.paymentMethod}" selected="selected">
+                        <spring:message code="payment_method.${orderDto.paymentMethod}"/></option>
                     <option value=""><spring:message code="select.payment_method"/></option>
                     <option value="CASH"><spring:message code="payment_method.CASH"/></option>
                     <option value="CARD"><spring:message code="payment_method.CARD"/></option>
@@ -67,8 +69,8 @@
             <tr>
                 <td><spring:message code="order_status"/>
                     <form:select path="orderStatus" required="required">
-                        <option value="${order.orderStatus}" selected="selected">
-                            <spring:message code="order_status.${sessionScope.order.orderStatus}"/></option>
+                        <option value="${orderDto.orderStatus}" selected="selected">
+                            <spring:message code="order_status.${orderDto.orderStatus}"/></option>
                         <option value=""><spring:message code="select.order_status"/></option>
                         <option value="OPEN"><spring:message code="order_status.OPEN"/></option>
                         <option value="CONFIRMED"><spring:message code="order_status.CONFIRMED"/></option>
@@ -80,8 +82,8 @@
             <tr>
                 <td><spring:message code="payment_status"/>
                     <form:select path="paymentStatus" required="required">
-                        <option value="${order.paymentStatus}" selected="selected">
-                            <spring:message code="payment_status.${sessionScope.order.paymentStatus}"/></option>
+                        <option value="${orderDto.paymentStatus}" selected="selected">
+                            <spring:message code="payment_status.${orderDto.paymentStatus}"/></option>
                         <option value=""><spring:message code="select.payment_status"/></option>
                         <option value="UNPAID"><spring:message code="payment_status.UNPAID"/></option>
                         <option value="PAID"><spring:message code="payment_status.PAID"/></option>

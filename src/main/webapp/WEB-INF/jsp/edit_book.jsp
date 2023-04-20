@@ -10,33 +10,34 @@
 <body>
 <jsp:include page="navbar.jsp"/>
 <h1><spring:message code="edit_book"/></h1>
-<form:form action="/books/edit" method="post" modelAttribute="book">
+<form:form action="/books/edit" method="post" modelAttribute="bookDto">
+    <form:input type="hidden" path="id" value="${bookDto.id}"/>
     <table>
         <tr>
             <td><spring:message code="title"/></td>
-            <td><form:input path="title" type="text" value="${book.title}"/></td>
+            <td><form:input path="title" type="text" value="${bookDto.title}"/></td>
             <td><form:errors path="title"/></td>
         </tr>
         <tr>
             <td><spring:message code="author"/></td>
-            <td><form:input path="author" type="text" value="${book.author}"/></td>
+            <td><form:input path="author" type="text" value="${bookDto.author}"/></td>
             <td><form:errors path="author"/></td>
         </tr>
         <tr>
             <td><spring:message code="isbn"/></td>
-            <td><form:input path="isbn" type="text" value="${book.isbn}"/></td>
+            <td><form:input path="isbn" type="text" value="${bookDto.isbn}"/></td>
             <td><form:errors path="isbn"/></td>
         </tr>
         <tr>
             <td><spring:message code="price"/></td>
-            <td><form:input path="price" type="number" value="${book.price}" step="0.01"/></td>
+            <td><form:input path="price" type="number" value="${bookDto.price}" step="0.01"/></td>
             <td><form:errors path="price"/></td>
         </tr>
         <tr>
             <td><spring:message code="genre"/></td>
             <td><form:select path="genre" required="required">
-                <option value="${book.genre}" selected="selected">
-                    <spring:message code="genre.${book.genre}"/></option>
+                <option value="${bookDto.genre}" selected="selected">
+                    <spring:message code="genre.${bookDto.genre}"/></option>
                 <option value=""><spring:message code="book.select_genre"/></option>
                 <option value="FICTION"><spring:message code="genre.FICTION"/></option>
                 <option value="MYSTERY"><spring:message code="genre.MYSTERY"/></option>
@@ -58,8 +59,8 @@
         <tr>
             <td><spring:message code="cover"/></td>
             <td><form:select path="cover" required="required">
-                    <option value="${book.cover}" selected="selected">
-                        <spring:message code="cover.${book.cover}"/></option>
+                    <option value="${bookDto.cover}" selected="selected">
+<%--                        <spring:message code="cover.${bookDto.cover}"/></option>--%>
                 <option value=""><spring:message code="book.select_cover"/></option>
                 <option value="SOFT"><spring:message code="cover.SOFT"/></option>
                 <option value="HARD"><spring:message code="cover.HARD"/></option>
@@ -68,12 +69,12 @@
         </tr>
         <tr>
             <td><spring:message code="pages"/></td>
-            <td><form:input path="pages" type="number" value="${book.pages}" step="1" min="1"/></td>
+            <td><form:input path="pages" type="number" value="${bookDto.pages}" step="1" min="1"/></td>
             <td><form:errors path="pages"/></td>
         </tr>
         <tr>
             <td><spring:message code="rating"/></td>
-            <td><form:input path="rating" type="number" value="${book.rating}" step="0.01" min="0.01"/></td>
+            <td><form:input path="rating" type="number" value="${bookDto.rating}" step="0.01" min="0.01"/></td>
             <td><form:errors path="rating"/></td>
         </tr>
     </table>

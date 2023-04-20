@@ -27,16 +27,16 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach items="${users}" var="user">
+        <c:forEach items="${users}" var="userItem">
             <tr>
-                <td><c:out value="${user.id}"/></td>
-                <td><c:out value="${user.firstName}"/></td>
-                <td><c:out value="${user.lastName}"/></td>
-                <td><c:out value="${user.email}"/></td>
-                <td><c:out value="${user.role}"/></td>
+                <td><c:out value="${userItem.id}"/></td>
+                <td><c:out value="${userItem.firstName}"/></td>
+                <td><c:out value="${userItem.lastName}"/></td>
+                <td><c:out value="${userItem.email}"/></td>
+                <td><c:out value="${userItem.role}"/></td>
                 <c:if test="${sessionScope.user.role.toString() == 'ADMIN'}">
                     <td>
-                        <a href="/users/edit/${user.id}"><spring:message code="edit_user"/></a>
+                        <a href="/users/edit/${userItem.id}"><spring:message code="edit_user"/></a>
                     </td>
                 </c:if>
             </tr>
