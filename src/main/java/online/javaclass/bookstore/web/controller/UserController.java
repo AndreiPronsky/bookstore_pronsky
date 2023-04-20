@@ -58,7 +58,8 @@ public class UserController {
     @LogInvocation
     @GetMapping("/add")
     @SecurityCheck(allowed = {UserDto.Role.ADMIN, UserDto.Role.NONE})
-    public String addForm() {
+    public String addForm(Model model) {
+        model.addAttribute("user", new UserDto());
         return "add_user";
     }
 
@@ -103,7 +104,8 @@ public class UserController {
 
     @LogInvocation
     @GetMapping("/login")
-    public String loginForm() {
+    public String loginForm(Model model) {
+        model.addAttribute("loginDto", new UserLoginDto());
         return "login";
     }
 

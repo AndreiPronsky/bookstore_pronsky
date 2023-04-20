@@ -57,11 +57,11 @@ public class OrderController {
 
     @LogInvocation
     @GetMapping("/confirm")
-    public String confirmOrderForm(HttpSession session) {
-        UserDto user = (UserDto) session.getAttribute("user");
+    public String confirmOrderForm(@SessionAttribute UserDto user, Model model) {
         if (user == null) {
             return "redirect:/users/login";
         }
+        model.addAttribute("order", new OrderDto());
         return "confirm_order";
     }
 

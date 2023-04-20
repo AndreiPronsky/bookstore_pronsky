@@ -14,7 +14,7 @@
 </c:if>
 <c:if test="${sessionScope.cart != null && !sessionScope.cart.isEmpty()}">
   <h1><spring:message code="cart"/></h1>
-  <form action="/orders/confirm" method="get">
+  <form:form action="/orders/confirm" method="get">
     <table>
       <tbody>
       <c:forEach items="${sessionScope.cart}" var="cartItem">
@@ -40,7 +40,7 @@
       </tbody>
     </table>
     <input type="submit" name="proceed" value=<spring:message code="proceed.to.purchasing"/>>
-  </form>
+  </form:form>
 </c:if>
 </body>
 </html>

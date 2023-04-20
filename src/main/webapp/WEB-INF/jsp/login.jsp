@@ -10,7 +10,8 @@
 <body>
 <jsp:include page="navbar.jsp"/>
 <h1><spring:message code="login"/></h1>
-<form method="post" action="/users/login">
+<%--@elvariable id="loginDto" type=""--%>
+<form:form method="post" action="/users/login" modelAttribute="loginDto">
     <input type="hidden" value="login">
     <label for="email-input"><spring:message code="email"/> : </label>
     <input id="email-input" name="email" type="email">
@@ -19,6 +20,6 @@
     <input id="password-input" name="password" type="password" minlength="4">
     <br/>
     <input type="submit" name="Login" value="<spring:message code="login"/>">
-</form>
+</form:form>
 </body>
 </html>

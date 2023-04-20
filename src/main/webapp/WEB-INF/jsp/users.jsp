@@ -14,7 +14,7 @@
     <h2><spring:message code="users.not_found"/></h2>
 </c:if>
 <c:if test="${!users.isEmpty()}">
-<jsp:include page="pagination.jsp"/>
+    <jsp:include page="pagination.jsp"/>
     <table>
         <caption><spring:message code="users"/></caption>
         <thead>
@@ -35,7 +35,8 @@
                 <td><c:out value="${user.email}"/></td>
                 <td><c:out value="${user.role}"/></td>
                 <c:if test="${sessionScope.user.role.toString() == 'ADMIN'}">
-                    <td><a href="/users/edit/${user.id}"><spring:message code="edit_user"/></a>
+                    <td>
+                        <a href="/users/edit/${user.id}"><spring:message code="edit_user"/></a>
                     </td>
                 </c:if>
             </tr>

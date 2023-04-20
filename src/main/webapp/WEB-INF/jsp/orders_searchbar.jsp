@@ -4,9 +4,11 @@
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <html>
 <div class="search">
-    <form action="/orders/" method="post">
-        <input type="number" name="id" class="search" placeholder="<spring:message code="orders.search"/>">
+    <form:form action="/orders/" method="post">
+        <label>
+            <input type="number" name="id" class="search" placeholder="<spring:message code="orders.search"/>">
+        </label>
         <input type="submit" name="submit" class="submit" value="<spring:message code="search"/>">
-    </form>
+    </form:form>
 </div>
 </html>

@@ -10,8 +10,7 @@
 <body>
 <jsp:include page="navbar.jsp"/>
 <h1><spring:message code="add.book"/></h1>
-<%--@elvariable id="bookDto" type=""--%>
-<form:form action="/books/add" enctype="multipart/form-data" method="post" modelAttribute="bookDto">
+<form:form action="/books/add" enctype="multipart/form-data" method="post" modelAttribute="book">
 <table>
     <tr>
         <td><spring:message code="title"/></td>
@@ -30,7 +29,7 @@
     </tr>
     <tr>
         <td><spring:message code="price"/></td>
-        <td><form:input path="price" type="number"/></td>
+        <td><form:input path="price" type="number" step="0.01"/></td>
         <td><form:errors path="price"/></td>
     </tr>
     <tr>

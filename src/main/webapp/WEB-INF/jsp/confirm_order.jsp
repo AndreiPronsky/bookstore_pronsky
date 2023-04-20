@@ -14,9 +14,8 @@
 </c:if>
 <c:if test="${sessionScope.cart != null && !sessionScope.cart.isEmpty()}">
     <h1><spring:message code="confirm_order"/></h1>
-    <form action="/orders/confirm" method="post">
+    <form:form action="/orders/confirm" method="post" modelAttribute="order">
         <table>
-            <tbody>
             <c:forEach items="${sessionScope.cart}" var="cartItem">
                 <c:set var="total" value="${total + cartItem.key.price * cartItem.value }"/>
                 <tr>
@@ -36,33 +35,32 @@
             </c:forEach>
             <td>
                 <label><spring:message code="delivery_type"/>
-                    <select name="deliveryType" required="required">
+                    <form:select path="deliveryType" required="required">
                         <option value=""><spring:message code="select.delivery_type"/></option>
                         <option value="COURIER"><spring:message code="delivery_type.COURIER"/></option>
                         <option value="BIKE"><spring:message code="delivery_type.BIKE"/></option>
                         <option value="CAR"><spring:message code="delivery_type.CAR"/></option>
                         <option value="MAIL"><spring:message code="delivery_type.MAIL"/></option>
                         <option value="SELF_PICKUP"><spring:message code="delivery_type.SELF_PICKUP"/></option>
-                    </select>
+                    </form:select>
                 </label>
             </td>
             <td>
                 <label><spring:message code="payment_method"/>
-                    <select name="paymentMethod" required="required">
+                    <form:select path="paymentMethod" required="required">
                         <option value=""><spring:message code="select.payment_method"/></option>
                         <option value="CASH"><spring:message code="payment_method.CASH"/></option>
                         <option value="CARD"><spring:message code="payment_method.CARD"/></option>
                         <option value="BANK_TRANSFER"><spring:message code="payment_method.BANK_TRANSFER"/></option>
-                    </select>
+                    </form:select>
                 </label>
             </td>
             <td>
                 <label><spring:message code="cost"/> = <c:out value="${total}"/></label>
             </td>
-            </tbody>
         </table>
         <input type="submit" name="createOrder" value="Order">
-    </form>
+    </form:form>
 </c:if>
 </body>
 </html>
