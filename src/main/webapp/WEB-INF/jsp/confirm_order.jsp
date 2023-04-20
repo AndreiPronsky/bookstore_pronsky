@@ -1,22 +1,19 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<c:if test="${sessionScope.lang != null}">
-    <fmt:setLocale value="${sessionScope.lang}"/>
-</c:if>
-<fmt:setBundle basename="messages"/>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <html>
 <head>
-    <title><fmt:message key="confirm_order"/></title>
+    <title><spring:message code="confirm_order"/></title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 <jsp:include page="navbar.jsp"/>
 <c:if test="${sessionScope.cart == null || sessionScope.cart.isEmpty()}">
-    <h1><fmt:message key="your_cart_is_empty"/></h1>
+    <h1><spring:message code="your_cart_is_empty"/></h1>
 </c:if>
 <c:if test="${sessionScope.cart != null && !sessionScope.cart.isEmpty()}">
-    <h1><fmt:message key="confirm_order"/></h1>
+    <h1><spring:message code="confirm_order"/></h1>
     <form action="/orders/confirm" method="post">
         <table>
             <tbody>
@@ -26,41 +23,41 @@
                     <td><c:out value="${cartItem.key.title}"/></td>
                     <td><c:out value="${cartItem.key.price}"/></td>
                     <td>
-                        <label><fmt:message key="quantity"/>
+                        <label><spring:message code="quantity"/>
                             <a href="/cart/edit?action=dec&id=${cartItem.key.id }">-</a>
                             <input type="number" name="quantity" step="1" min="0" value="${cartItem.value}">
                         </label>
                         <a href="/cart/edit?action=inc&id=${cartItem.key.id }">+</a>
-                        <a href="/cart/edit?action=remove&id=${cartItem.key.id }"><fmt:message
-                                key="remove"/></a>
+                        <a href="/cart/edit?action=remove&id=${cartItem.key.id }"><spring:message
+                                code="remove"/></a>
                     </td>
                     <td><c:out value="${cartItem.key.price * cartItem.value }"/></td>
                 </tr>
             </c:forEach>
             <td>
-                <label><fmt:message key="delivery_type"/>
+                <label><spring:message code="delivery_type"/>
                     <select name="deliveryType" required="required">
-                        <option value=""><fmt:message key="select.delivery_type"/></option>
-                        <option value="COURIER"><fmt:message key="delivery_type.COURIER"/></option>
-                        <option value="BIKE"><fmt:message key="delivery_type.BIKE"/></option>
-                        <option value="CAR"><fmt:message key="delivery_type.CAR"/></option>
-                        <option value="MAIL"><fmt:message key="delivery_type.MAIL"/></option>
-                        <option value="SELF_PICKUP"><fmt:message key="delivery_type.SELF_PICKUP"/></option>
+                        <option value=""><spring:message code="select.delivery_type"/></option>
+                        <option value="COURIER"><spring:message code="delivery_type.COURIER"/></option>
+                        <option value="BIKE"><spring:message code="delivery_type.BIKE"/></option>
+                        <option value="CAR"><spring:message code="delivery_type.CAR"/></option>
+                        <option value="MAIL"><spring:message code="delivery_type.MAIL"/></option>
+                        <option value="SELF_PICKUP"><spring:message code="delivery_type.SELF_PICKUP"/></option>
                     </select>
                 </label>
             </td>
             <td>
-                <label><fmt:message key="payment_method"/>
+                <label><spring:message code="payment_method"/>
                     <select name="paymentMethod" required="required">
-                        <option value=""><fmt:message key="select.payment_method"/></option>
-                        <option value="CASH"><fmt:message key="payment_method.CASH"/></option>
-                        <option value="CARD"><fmt:message key="payment_method.CARD"/></option>
-                        <option value="BANK_TRANSFER"><fmt:message key="payment_method.BANK_TRANSFER"/></option>
+                        <option value=""><spring:message code="select.payment_method"/></option>
+                        <option value="CASH"><spring:message code="payment_method.CASH"/></option>
+                        <option value="CARD"><spring:message code="payment_method.CARD"/></option>
+                        <option value="BANK_TRANSFER"><spring:message code="payment_method.BANK_TRANSFER"/></option>
                     </select>
                 </label>
             </td>
             <td>
-                <label><fmt:message key="cost"/> = <c:out value="${total}"/></label>
+                <label><spring:message code="cost"/> = <c:out value="${total}"/></label>
             </td>
             </tbody>
         </table>

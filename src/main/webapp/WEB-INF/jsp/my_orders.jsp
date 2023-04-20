@@ -1,36 +1,37 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<c:if test="${sessionScope.lang != null}">
-    <fmt:setLocale value="${sessionScope.lang}"/>
-</c:if>
-<fmt:setBundle basename="messages"/>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title><fmt:message key="my_orders"/></title>
+    <title><spring:message code="my_orders"/></title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 <jsp:include page="navbar.jsp"/>
 <jsp:include page="searchbar.jsp"/>
 <header></header>
-<c:if test="${requestScope.orders.isEmpty()}">
-    <h2><fmt:message key="orders.not_found"/></h2>
+<c:if test="${orders.isEmpty()}">
+    <h2><spring:message code="orders.not_found"/></h2>
 </c:if>
-<c:if test="${!requestScope.orders.isEmpty()}">
+<c:if test="${!orders.isEmpty()}">
     <table>
         <thead>
         <tr>
-            <th><fmt:message key="order"/></th>
-            <th><fmt:message key="title"/> <fmt:message key="price"/> <fmt:message key="quantity"/></th>
-            <th><fmt:message key="cost"/></th>
-            <th><fmt:message key="order_status"/></th>
+            <th><spring:message code="order"/></th>
+            <th>
+                <spring:message code="title"/>
+                <spring:message code="price"/>
+                <spring:message code="quantity"/>
+            </th>
+            <th><spring:message code="cost"/></th>
+            <th><spring:message code="order_status"/></th>
             <th></th>
         </tr>
         </thead>
         <tbody>
-        <c:forEach items="${requestScope.orders}" var="order">
+        <c:forEach items="${orders}" var="order">
             <tr>
                 <td><c:out value="${order.id}"/></td>
                 <td>
@@ -49,7 +50,7 @@
                 <td>
                     <c:if test="${order.orderStatus == 'OPEN'}">
                         <a href="/orders/edit/${order.id}">
-                            <fmt:message key="edit_order"/></a>
+                            <spring:message code="edit_order"/></a>
                     </c:if>
                 </td>
             </tr>
