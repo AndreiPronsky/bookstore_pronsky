@@ -1,4 +1,4 @@
-package online.javaclass.bookstore.web.controller;
+package online.javaclass.bookstore.web.controller.view;
 
 import lombok.RequiredArgsConstructor;
 import online.javaclass.bookstore.platform.logging.LogInvocation;
@@ -25,21 +25,14 @@ public class CartController {
 
     @LogInvocation
     @GetMapping("/add")
-    public String addToCart(HttpSession session, @RequestParam Long id, Pageable pageable, Model model) {
+    public String addToCart(HttpSession session, @RequestParam Long id, Pageable pageable) {
         Map<BookDto, Integer> cart = (Map) session.getAttribute("cart");
         if (cart == null) {
             cart = new HashMap<>();
             session.setAttribute("cart", cart);
         }
-        BookDto book = service.getById(id);
-        if (cart.containsKey(book)) {
-            cart.put(book, cart.get(book) + 1);
-        } else {
-            cart.put(book, 1);
-        }
-        model.addAttribute("page", pageable.getPageNumber());
-        model.addAttribute("totalPages", pageable.getPageSize());
-        return "redirect:/books/all";
+        addBookToCart(id, cart);
+        return "redirect:" + generatePath(pageable);
     }
 
     @LogInvocation
@@ -76,6 +69,22 @@ public class CartController {
                     break;
                 }
             }
+        }
+    }
+
+    private String generatePath(Pageable pageable) {
+        int page = pageable.getPageNumber();
+        int pageSize = pageable.getPageSize();
+        String sort = "asc";
+        return "/books/all?page=" + page + "&size=" + pageSize + "&sort=" + sort;
+    }
+
+    private void addBookToCart(Long id, Map<BookDto, Integer> cart) {
+        BookDto book = service.getById(id);
+        if (cart.containsKey(book)) {
+            cart.put(book, cart.get(book) + 1);
+        } else {
+            cart.put(book, 1);
         }
     }
 }

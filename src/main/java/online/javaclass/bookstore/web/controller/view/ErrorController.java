@@ -1,4 +1,4 @@
-package online.javaclass.bookstore.web.controller;
+package online.javaclass.bookstore.web.controller.view;
 
 import lombok.RequiredArgsConstructor;
 import online.javaclass.bookstore.service.exceptions.AppException;
@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
-
-import javax.servlet.ServletException;
 
 @Controller
 @RequiredArgsConstructor
@@ -52,7 +50,7 @@ public class ErrorController {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public String handle(Model model, RuntimeException e, ServletException ex) {
+    public String handle(Model model, Exception e) {
         model.addAttribute("message",
                 messageSource.getMessage("error.default_server", new Object[]{}, LocaleContextHolder.getLocale()));
         return "error";

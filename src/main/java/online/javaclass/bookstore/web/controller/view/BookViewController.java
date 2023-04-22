@@ -1,4 +1,4 @@
-package online.javaclass.bookstore.web.controller;
+package online.javaclass.bookstore.web.controller.view;
 
 import lombok.RequiredArgsConstructor;
 import online.javaclass.bookstore.platform.logging.LogInvocation;
@@ -15,18 +15,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/books")
-public class BookController {
+public class BookViewController {
     private final BookService service;
     private final StorageService storageService;
 
@@ -52,9 +49,9 @@ public class BookController {
     @PostMapping("/add")
     @ResponseStatus(HttpStatus.CREATED)
     @SecurityCheck(allowed = {UserDto.Role.MANAGER})
-    public String add(@RequestParam("image") MultipartFile file, @ModelAttribute @Valid BookDto book, BindingResult result, Model model) {
+    public String add(@RequestParam("image") MultipartFile file
+            , @ModelAttribute @Valid BookDto book, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            addMessagesToModel(result, model);
             return "add_book";
         }
 
@@ -79,7 +76,6 @@ public class BookController {
     @SecurityCheck(allowed = {UserDto.Role.MANAGER})
     public String edit(@ModelAttribute @Valid BookDto book, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            addMessagesToModel(result, model);
             return "edit_book";
         }
         BookDto updated = service.save(book);
@@ -114,13 +110,5 @@ public class BookController {
         BookDto deleted = service.save(book);
         model.addAttribute("book", deleted);
         return "book";
-    }
-
-    private static void addMessagesToModel(BindingResult result, Model model) {
-        List<String> errorDescriptions = new ArrayList<>();
-        for (ObjectError error : result.getAllErrors()) {
-            errorDescriptions.add(error.getDefaultMessage());
-        }
-        model.addAttribute("validationMessages", errorDescriptions);
     }
 }

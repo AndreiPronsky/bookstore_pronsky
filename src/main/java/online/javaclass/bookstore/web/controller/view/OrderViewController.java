@@ -1,4 +1,4 @@
-package online.javaclass.bookstore.web.controller;
+package online.javaclass.bookstore.web.controller.view;
 
 import lombok.RequiredArgsConstructor;
 import online.javaclass.bookstore.platform.logging.LogInvocation;
@@ -26,10 +26,10 @@ import java.util.Map;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/orders")
-public class OrderController {
+public class OrderViewController {
     private final OrderService orderService;
 
-    @LogInvocation
+//    @LogInvocation
     @PostMapping("/confirm")
     @ResponseStatus(HttpStatus.CREATED)
     @SecurityCheck(allowed = {UserDto.Role.USER})
@@ -38,18 +38,13 @@ public class OrderController {
         if (result.hasErrors()) {
             return "confirm_order";
         }
-        Map<BookDto, Integer> cart = (Map) session.getAttribute("cart");
-        List<OrderItemDto> items = listItems(cart);
-        order.setItems(items);
-        BigDecimal cost = calculateCost(items);
-        order.setCost(cost);
+        moveItemsFromCartToOrder(session, order);
+        order.setCost(calculateCost(order.getItems()));
         UserDto user = (UserDto) session.getAttribute("user");
-        if (user.getRole() == UserDto.Role.USER) {
-            order.setUser(user);
-        }
+        order.setUser(user);
         OrderDto created = orderService.save(order);
         model.addAttribute("order", created);
-        cart.clear();
+        session.removeAttribute("cart");
         return "successful_order";
     }
 
@@ -60,7 +55,8 @@ public class OrderController {
         if (user == null) {
             return "redirect:/users/login";
         }
-        model.addAttribute("orderDto", new OrderDto());
+        OrderDto orderDto = new OrderDto();
+        model.addAttribute("orderDto", orderDto);
         return "confirm_order";
     }
 
@@ -136,16 +132,17 @@ public class OrderController {
         return !order.getOrderStatus().equals(OrderDto.OrderStatus.OPEN);
     }
 
-    private List<OrderItemDto> listItems(Map<BookDto, Integer> itemMap) {
+    private static void moveItemsFromCartToOrder(HttpSession session, OrderDto orderDto) {
+        Map<BookDto, Integer> cart = (Map) session.getAttribute("cart");
         List<OrderItemDto> items = new ArrayList<>();
-        for (Map.Entry<BookDto, Integer> entry : itemMap.entrySet()) {
-            OrderItemDto itemDto = new OrderItemDto();
-            itemDto.setQuantity(entry.getValue());
-            itemDto.setBook(entry.getKey());
-            itemDto.setPrice(entry.getKey().getPrice());
-            items.add(itemDto);
+        for (Map.Entry<BookDto, Integer> entry : cart.entrySet()) {
+            OrderItemDto item = new OrderItemDto();
+            item.setBook(entry.getKey());
+            item.setQuantity(entry.getValue());
+            item.setPrice(entry.getKey().getPrice());
+            items.add(item);
         }
-        return items;
+        orderDto.setItems(items);
     }
 
     private BigDecimal calculateCost(List<OrderItemDto> items) {

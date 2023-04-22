@@ -60,7 +60,7 @@
             <td><spring:message code="cover"/></td>
             <td><form:select path="cover" required="required">
                     <option value="${bookDto.cover}" selected="selected">
-<%--                        <spring:message code="cover.${bookDto.cover}"/></option>--%>
+                        <spring:message code="cover.${bookDto.cover}"/></option>
                 <option value=""><spring:message code="book.select_cover"/></option>
                 <option value="SOFT"><spring:message code="cover.SOFT"/></option>
                 <option value="HARD"><spring:message code="cover.HARD"/></option>

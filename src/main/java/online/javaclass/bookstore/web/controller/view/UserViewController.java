@@ -1,4 +1,4 @@
-package online.javaclass.bookstore.web.controller;
+package online.javaclass.bookstore.web.controller.view;
 
 import lombok.RequiredArgsConstructor;
 import online.javaclass.bookstore.platform.logging.LogInvocation;
@@ -28,7 +28,7 @@ import java.util.Locale;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/users")
-public class UserController {
+public class UserViewController {
     private final UserService userService;
     private final OrderService orderService;
     private final LocaleResolver localeResolver;
