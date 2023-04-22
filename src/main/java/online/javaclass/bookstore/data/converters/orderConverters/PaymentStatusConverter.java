@@ -3,7 +3,9 @@ package online.javaclass.bookstore.data.converters.orderConverters;
 import online.javaclass.bookstore.data.entities.Order;
 
 import javax.persistence.AttributeConverter;
+import javax.persistence.Converter;
 
+@Converter
 public class PaymentStatusConverter implements AttributeConverter<Order.PaymentStatus, Integer> {
     @Override
     public Integer convertToDatabaseColumn(Order.PaymentStatus paymentStatus) {

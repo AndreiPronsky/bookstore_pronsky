@@ -1,52 +1,57 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<c:if test="${sessionScope.lang != null}">
-    <fmt:setLocale value="${sessionScope.lang}"/>
-</c:if>
-<fmt:setBundle basename="messages"/>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <html>
 <head>
-    <title><fmt:message key="register"/></title>
+    <title><spring:message code="register"/></title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 <jsp:include page="navbar.jsp"/>
-<h1><fmt:message key="register"/></h1>
-<form action="/users/add" method="post">
-    <ul class="wrapper">
-        <li class="form-row">
-            <label><fmt:message key="firstname"/><input type="text" name="firstName" minlength="1"></label>
-        </li>
-        <li class="form-row">
-            <label><fmt:message key="lastname"/><input type="text" name="lastName" minlength="1"></label>
-        </li>
-        <li class="form-row">
-            <label><fmt:message key="email"/><input type="text" name="email" minlength="13"></label>
-        </li>
-        <li class="form-row">
-            <label><fmt:message key="password"/><input type="password" name="password" minlength="8"></label>
-        </li>
-        <c:if test="${sessionScope.user.role == 'ADMIN'}">
-            <li class="form-row">
-                <label><fmt:message key="role"/>
-                    <select name="role" required="required">
-                        <option value=""><fmt:message key="select.role"/></option>
-                        <option value="USER"><fmt:message key="role.USER"/></option>
-                        <option value="ADMIN"><fmt:message key="role.ADMIN"/></option>
-                        <option value="MANAGER"><fmt:message key="role.MANAGER"/></option>
-                    </select>
-                </label>
-            </li>
-            <li class="form-row">
-                <label><fmt:message key="rating"/><input type="number" name="rating" step="0.01" min="0.01"
-                                                         max="5.0"></label>
-            </li>
-        </c:if>
-        <li class="form-row">
-            <input type="submit" name="Create">
-        </li>
-    </ul>
-</form>
+<h1><spring:message code="register"/></h1>
+<form:form action="/users/add" method="post" modelAttribute="userDto">
+<table>
+    <tr>
+        <td><spring:message code="firstname"/></td>
+        <td><form:input path="firstName" type="text"/></td>
+        <td><form:errors path="firstName"/></td>
+    </tr>
+    <tr>
+        <td><spring:message code="lastname"/></td>
+        <td><form:input path="lastName" type="text"/></td>
+        <td><form:errors path="lastName"/></td>
+    </tr>
+    <tr>
+        <td><spring:message code="email"/></td>
+        <td><form:input path="email" type="email"/></td>
+        <td><form:errors path="email"/></td>
+    </tr>
+    <tr>
+        <td><spring:message code="password"/></td>
+        <td><form:input path="password" type="password" minLength="8"/></td>
+        <td><form:errors path="password"/></td>
+    </tr>
+    <c:if test="${sessionScope.user.role == 'ADMIN'}">
+    <tr>
+        <td><spring:message code="role"/></td>
+        <td><form:select path="role" required="required">
+            <option value=""><spring:message code="select.role"/></option>
+            <option value="USER"><spring:message code="role.USER"/></option>
+            <option value="ADMIN"><spring:message code="role.ADMIN"/></option>
+            <option value="MANAGER"><spring:message code="role.MANAGER"/></option>
+        </form:select></td>
+    </tr>
+    <tr>
+        <td><spring:message code="rating"/></td>
+        <td><form:input path="rating" type="number" min="0.00" step="0.01"/></td>
+        <td><form:errors path="rating"/></td>
+    </tr>
+    </c:if>
+</table>
+    <li>
+        <input type="submit" name="Create">
+    </li>
+    </form:form>
 </body>
 </html>

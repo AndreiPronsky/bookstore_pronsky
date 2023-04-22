@@ -1,4 +1,4 @@
-package online.javaclass.bookstore.web.controller;
+package online.javaclass.bookstore.web.controller.view;
 
 import lombok.RequiredArgsConstructor;
 import online.javaclass.bookstore.platform.logging.LogInvocation;
@@ -13,9 +13,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,36 +26,37 @@ import java.util.Map;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/orders")
-public class OrderController {
+public class OrderViewController {
     private final OrderService orderService;
 
-    @LogInvocation
+//    @LogInvocation
     @PostMapping("/confirm")
     @ResponseStatus(HttpStatus.CREATED)
     @SecurityCheck(allowed = {UserDto.Role.USER})
-    public String confirmOrder(HttpSession session, @ModelAttribute OrderDto order, Model model) {
-        Map<BookDto, Integer> cart = (Map) session.getAttribute("cart");
-        List<OrderItemDto> items = listItems(cart);
-        order.setItems(items);
-        BigDecimal cost = calculateCost(items);
-        order.setCost(cost);
-        UserDto user = (UserDto) session.getAttribute("user");
-        if (user.getRole() == UserDto.Role.USER) {
-            order.setUser(user);
+    public String confirmOrder(HttpSession session, @ModelAttribute OrderDto order
+            , BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            return "confirm_order";
         }
+        moveItemsFromCartToOrder(session, order);
+        order.setCost(calculateCost(order.getItems()));
+        UserDto user = (UserDto) session.getAttribute("user");
+        order.setUser(user);
         OrderDto created = orderService.save(order);
         model.addAttribute("order", created);
-        cart.clear();
+        session.removeAttribute("cart");
         return "successful_order";
     }
 
     @LogInvocation
     @GetMapping("/confirm")
-    public String confirmOrderForm(HttpSession session) {
+    public String confirmOrderForm(HttpSession session, Model model) {
         UserDto user = (UserDto) session.getAttribute("user");
         if (user == null) {
             return "redirect:/users/login";
         }
+        OrderDto orderDto = new OrderDto();
+        model.addAttribute("orderDto", orderDto);
         return "confirm_order";
     }
 
@@ -61,9 +64,13 @@ public class OrderController {
     @PostMapping("/edit")
     @ResponseStatus(HttpStatus.ACCEPTED)
     @SecurityCheck(allowed = {UserDto.Role.USER, UserDto.Role.ADMIN})
-    public String editOrder(@SessionAttribute OrderDto order, Model model, @SessionAttribute UserDto user) {
-        OrderDto updated = orderService.save(order);
-        model.addAttribute("order", updated);
+    public String editOrder(@ModelAttribute @Valid OrderDto orderDto, BindingResult result
+            , Model model, @SessionAttribute UserDto user) {
+        if (result.hasErrors()) {
+            return "edit_order";
+        }
+        OrderDto updated = orderService.save(orderDto);
+        model.addAttribute("orderDto", updated);
         if (user.getRole() == UserDto.Role.ADMIN) {
             return "order";
         }
@@ -72,22 +79,22 @@ public class OrderController {
 
     @LogInvocation
     @GetMapping("/edit/{id}")
-    public String editOrderForm(@PathVariable Long id, HttpSession session, @SessionAttribute UserDto user) {
-        OrderDto order = orderService.getById(id);
-        if (user == null || notMatchingUserIgnoreAdmin(user, order)) {
+    public String editOrderForm(@PathVariable Long id, Model model, @SessionAttribute UserDto user) {
+        OrderDto orderDto = orderService.getById(id);
+        if (user == null || notMatchingUserIgnoreAdmin(user, orderDto)) {
             return "redirect:index";
-        } else if (notAdminRole(user) && notOpenStatus(order)) {
+        } else if (notAdminRole(user) && notOpenStatus(orderDto)) {
             return "redirect:index";
         }
-        session.setAttribute("order", order);
+        model.addAttribute("orderDto", orderDto);
         return "edit_order";
     }
 
     @LogInvocation
     @GetMapping("/{id}")
     public String getOne(@PathVariable Long id, Model model) {
-        OrderDto order = orderService.getById(id);
-        model.addAttribute("order", order);
+        OrderDto orderDto = orderService.getById(id);
+        model.addAttribute("orderDto", orderDto);
         return "order";
     }
 
@@ -125,16 +132,17 @@ public class OrderController {
         return !order.getOrderStatus().equals(OrderDto.OrderStatus.OPEN);
     }
 
-    private List<OrderItemDto> listItems(Map<BookDto, Integer> itemMap) {
+    private static void moveItemsFromCartToOrder(HttpSession session, OrderDto orderDto) {
+        Map<BookDto, Integer> cart = (Map) session.getAttribute("cart");
         List<OrderItemDto> items = new ArrayList<>();
-        for (Map.Entry<BookDto, Integer> entry : itemMap.entrySet()) {
-            OrderItemDto itemDto = new OrderItemDto();
-            itemDto.setQuantity(entry.getValue());
-            itemDto.setBook(entry.getKey());
-            itemDto.setPrice(entry.getKey().getPrice());
-            items.add(itemDto);
+        for (Map.Entry<BookDto, Integer> entry : cart.entrySet()) {
+            OrderItemDto item = new OrderItemDto();
+            item.setBook(entry.getKey());
+            item.setQuantity(entry.getValue());
+            item.setPrice(entry.getKey().getPrice());
+            items.add(item);
         }
-        return items;
+        orderDto.setItems(items);
     }
 
     private BigDecimal calculateCost(List<OrderItemDto> items) {

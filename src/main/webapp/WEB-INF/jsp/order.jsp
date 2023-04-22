@@ -1,29 +1,25 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<c:if test="${sessionScope.lang != null}">
-    <fmt:setLocale value="${sessionScope.lang}"/>
-</c:if>
-<fmt:setBundle basename="messages"/>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <html>
 <head>
-    <title><fmt:message key="book"/></title>
+    <title><spring:message code="book"/></title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 <jsp:include page="navbar.jsp"/>
 <header></header>
 <article>
-    <h1><fmt:message key="order"/> : </h1>
-    <h3><fmt:message key="id"/> : <c:out value="${requestScope.order.id}"/></h3>
-    <h3><fmt:message key="user"/> :
-        <c:out value="${requestScope.order.user.firstName}"/>
-        <c:out value="${requestScope.order.user.lastName}"/></h3>
-    <h3><fmt:message key="order_status"/> : <c:out value="${requestScope.order.orderStatus}"/></h3>
-    <h3><fmt:message key="payment_method"/> : <c:out value="${requestScope.order.paymentMethod}"/></h3>
-    <h3><fmt:message key="delivery_type"/> : <c:out value="${requestScope.order.deliveryType}"/></h3>
-    <h3><fmt:message key="payment_status"/> : <c:out value="${requestScope.order.paymentStatus}"/></h3>
-    <a href="/orders/edit?id=${requestScope.order.id}"><fmt:message key="edit_order"/></a>
+    <h1><spring:message code="order"/> : </h1>
+    <h3><spring:message code="id"/> : <c:out value="${order.id}"/></h3>
+    <h3><spring:message code="user"/> :
+        <c:out value="${order.user.firstName}"/>
+        <c:out value="${order.user.lastName}"/></h3>
+    <h3><spring:message code="order_status"/> : <c:out value="${order.orderStatus}"/></h3>
+    <h3><spring:message code="payment_method"/> : <c:out value="${order.paymentMethod}"/></h3>
+    <h3><spring:message code="delivery_type"/> : <c:out value="${order.deliveryType}"/></h3>
+    <h3><spring:message code="payment_status"/> : <c:out value="${order.paymentStatus}"/></h3>
+    <a href="/orders/edit/${order.id}"><spring:message code="edit_order"/></a>
 </article>
 <footer></footer>
 </body>

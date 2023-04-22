@@ -1,4 +1,4 @@
-package online.javaclass.bookstore.web.controller;
+package online.javaclass.bookstore.web.controller.view;
 
 import lombok.RequiredArgsConstructor;
 import online.javaclass.bookstore.platform.logging.LogInvocation;
@@ -14,23 +14,33 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.LocaleResolver;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.math.BigDecimal;
+import java.util.Locale;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/users")
-public class UserController {
+public class UserViewController {
     private final UserService userService;
     private final OrderService orderService;
+    private final LocaleResolver localeResolver;
 
     @LogInvocation
     @PostMapping("/add")
     @ResponseStatus(HttpStatus.CREATED)
-    @SecurityCheck(allowed = {UserDto.Role.ADMIN})
-    public String add(@ModelAttribute UserDto userInModel, HttpSession session, Model model) {
+    @SecurityCheck(allowed = {UserDto.Role.ADMIN, UserDto.Role.NONE})
+    public String add(@ModelAttribute @Valid UserDto userInModel, BindingResult result, HttpSession session, Model model) {
+        if (result.hasErrors()) {
+            return "add_user";
+        }
         UserDto userInSession = (UserDto) session.getAttribute("user");
         if (userInSession == null || userInSession.getRole() != UserDto.Role.ADMIN) {
             userInModel.setRole(UserDto.Role.USER);
@@ -43,8 +53,9 @@ public class UserController {
 
     @LogInvocation
     @GetMapping("/add")
-    @SecurityCheck(allowed = {UserDto.Role.ADMIN})
-    public String addForm() {
+    @SecurityCheck(allowed = {UserDto.Role.ADMIN, UserDto.Role.NONE})
+    public String addForm(Model model) {
+        model.addAttribute("userDto", new UserDto());
         return "add_user";
     }
 
@@ -53,7 +64,10 @@ public class UserController {
     @PostMapping("/edit")
     @ResponseStatus(HttpStatus.ACCEPTED)
     @SecurityCheck(allowed = {UserDto.Role.ADMIN})
-    public String edit(@ModelAttribute UserDto user, Model model) {
+    public String edit(@ModelAttribute @Valid UserDto user, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            return "edit_user";
+        }
         UserDto edited = userService.save(user);
         model.addAttribute("user", edited);
         return "user";
@@ -64,22 +78,29 @@ public class UserController {
     @SecurityCheck(allowed = {UserDto.Role.ADMIN})
     public String editForm(@PathVariable Long id, Model model) {
         UserDto user = userService.getById(id);
-        model.addAttribute("user", user);
+        model.addAttribute("userDto", user);
         return "edit_user";
     }
 
     @LogInvocation
     @PostMapping("/login")
-    public String login(HttpSession session, @ModelAttribute UserLoginDto user) {
+    @SecurityCheck(allowed = {UserDto.Role.NONE})
+    public String login(HttpServletRequest req, HttpServletResponse res,
+                        @ModelAttribute @Valid UserLoginDto user) {
         UserDto loggedIn = userService.login(user);
+        String lang = loggedIn.getPreferredLocale();
+        HttpSession session = req.getSession();
+        session.setAttribute("lang", lang);
         session.setMaxInactiveInterval(86400);
         session.setAttribute("user", loggedIn);
+        localeResolver.setLocale(req, res, new Locale(lang));
         return "redirect:/home";
     }
 
     @LogInvocation
     @GetMapping("/login")
-    public String loginForm() {
+    public String loginForm(Model model) {
+        model.addAttribute("loginDto", new UserLoginDto());
         return "login";
     }
 
@@ -95,14 +116,14 @@ public class UserController {
     @SecurityCheck(allowed = {UserDto.Role.ADMIN})
     public String getOne(@PathVariable Long id, Model model) {
         UserDto user = userService.getById(id);
-        model.addAttribute("user", user);
+        model.addAttribute("userDto", user);
         return "user";
     }
 
     @LogInvocation
     @GetMapping("my_orders")
     @SecurityCheck(allowed = {UserDto.Role.USER, UserDto.Role.ADMIN})
-    public String getOrdersByUserId(Pageable pageable, @SessionAttribute UserDto user, Model model) {
+    public String getOrdersByUserId(Pageable pageable, @SessionAttribute @Valid UserDto user, Model model) {
         try {
             Page<OrderDto> page = orderService.getAllByUserId(pageable, user.getId());
             model.addAttribute("page", page.getNumber());

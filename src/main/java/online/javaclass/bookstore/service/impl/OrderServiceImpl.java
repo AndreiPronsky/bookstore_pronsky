@@ -3,14 +3,15 @@ package online.javaclass.bookstore.service.impl;
 import lombok.RequiredArgsConstructor;
 import online.javaclass.bookstore.data.entities.Order;
 import online.javaclass.bookstore.data.repository.OrderRepository;
-import online.javaclass.bookstore.platform.MessageManager;
 import online.javaclass.bookstore.platform.logging.LogInvocation;
-import online.javaclass.bookstore.service.EntityDtoMapper;
 import online.javaclass.bookstore.service.OrderService;
 import online.javaclass.bookstore.service.dto.OrderDto;
 import online.javaclass.bookstore.service.dto.OrderItemDto;
 import online.javaclass.bookstore.service.exceptions.UnableToFindException;
 import online.javaclass.bookstore.service.exceptions.ValidationException;
+import online.javaclass.bookstore.service.mapper.Mapper;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -25,8 +26,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepo;
-    private final EntityDtoMapper mapper;
-    private final MessageManager messageManager;
+    private final Mapper mapper;
+    private final MessageSource messageSource;
+
 
     @LogInvocation
     @Override
@@ -45,7 +47,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDto getById(Long id) {
         return mapper.toDto(orderRepo.findById(id)
-                .orElseThrow(() -> new UnableToFindException("order.unable_to_find_id" + " " + id)));
+                .orElseThrow(() -> new UnableToFindException(getFailureMessage("order.unable_to_find_id") + " " + id)));
     }
 
     @LogInvocation
@@ -53,7 +55,7 @@ public class OrderServiceImpl implements OrderService {
     public Page<OrderDto> getAllByUserId(Pageable pageable, Long userId) {
         Page<OrderDto> orders = orderRepo.findAllByUserId(pageable, userId).map(mapper::toDto);
         if (orders.isEmpty()) {
-            throw new UnableToFindException(messageManager.getMessage("orders.unable_to_find_user_id" + " " + userId));
+            throw new UnableToFindException(getFailureMessage("orders.unable_to_find_user_id") + " " + userId);
         }
         return orders;
     }
@@ -63,15 +65,9 @@ public class OrderServiceImpl implements OrderService {
     public Page<OrderDto> getAll(Pageable pageable) {
         Page<OrderDto> orders = orderRepo.findAll(pageable).map(mapper::toDto);
         if (orders.isEmpty()) {
-            throw new UnableToFindException(messageManager.getMessage("orders.unable_to_find"));
+            throw new UnableToFindException(getFailureMessage("orders.unable_to_find"));
         }
         return orders;
-    }
-
-    @LogInvocation
-    @Override
-    public void deleteById(Long id) {
-        orderRepo.deleteById(id);
     }
 
     @LogInvocation
@@ -84,10 +80,14 @@ public class OrderServiceImpl implements OrderService {
             totalCost = totalCost.add(item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
         }
         if (!order.getCost().equals(totalCost)) {
-            messages.add(messageManager.getMessage("error.invalid_cost"));
+            messages.add(getFailureMessage("error.invalid_cost"));
         }
         if (!messages.isEmpty()) {
             throw new ValidationException(messages);
         }
+    }
+
+    private String getFailureMessage(String key) {
+        return messageSource.getMessage(key, new Object[]{}, LocaleContextHolder.getLocale());
     }
 }

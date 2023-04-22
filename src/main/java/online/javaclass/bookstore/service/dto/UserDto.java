@@ -2,6 +2,8 @@ package online.javaclass.bookstore.service.dto;
 
 import lombok.ToString;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 import java.util.Objects;
 
@@ -9,16 +11,22 @@ public class UserDto {
     private Long id;
     private String firstName;
     private String lastName;
+    @Email(message = "{error.invalid_email}")
     private String email;
     @ToString.Exclude
+    @NotBlank(message = "{error.invalid_password}")
+//    @Pattern(regexp = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$")
     private String password;
     private Role role;
     private BigDecimal rating;
 
+    private String preferredLocale;
+
     public enum Role {
         USER,
         ADMIN,
-        MANAGER
+        MANAGER,
+        NONE
     }
 
     public Long getId() {
@@ -75,6 +83,14 @@ public class UserDto {
 
     public void setRating(BigDecimal rating) {
         this.rating = rating;
+    }
+
+    public String getPreferredLocale() {
+        return preferredLocale;
+    }
+
+    public void setPreferredLocale(String preferredLocale) {
+        this.preferredLocale = preferredLocale;
     }
 
     @Override

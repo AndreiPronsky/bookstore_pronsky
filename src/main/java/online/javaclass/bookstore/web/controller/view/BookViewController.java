@@ -1,30 +1,31 @@
-package online.javaclass.bookstore.web.controller;
+package online.javaclass.bookstore.web.controller.view;
 
 import lombok.RequiredArgsConstructor;
 import online.javaclass.bookstore.platform.logging.LogInvocation;
 import online.javaclass.bookstore.service.BookService;
 import online.javaclass.bookstore.service.dto.BookDto;
 import online.javaclass.bookstore.service.dto.UserDto;
+import online.javaclass.bookstore.service.impl.StorageService;
 import online.javaclass.bookstore.web.filter.SecurityCheck;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.Part;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
+import javax.validation.Valid;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/books")
-public class BookController {
-
-    private static final String PATH_TO_PROPS = "application.properties";
+public class BookViewController {
     private final BookService service;
+    private final StorageService storageService;
 
     @LogInvocation
     @GetMapping("/{id}")
@@ -36,7 +37,7 @@ public class BookController {
 
     @LogInvocation
     @GetMapping("/all")
-    public String getAll(Pageable pageable, Model model) {
+    public String getAll(Model model, @SortDefault(sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
         Page<BookDto> page = service.getAll(pageable);
         model.addAttribute("page", page.getNumber());
         model.addAttribute("totalPages", page.getTotalPages());
@@ -48,8 +49,14 @@ public class BookController {
     @PostMapping("/add")
     @ResponseStatus(HttpStatus.CREATED)
     @SecurityCheck(allowed = {UserDto.Role.MANAGER})
-    public String add(@ModelAttribute BookDto book, Model model) {
+    public String add(@RequestParam("image") MultipartFile file
+            , @ModelAttribute @Valid BookDto book, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            return "add_book";
+        }
+
         BookDto created = service.save(book);
+        storageService.store(file, created.getId());
         model.addAttribute("book", created);
         return "book";
 
@@ -58,7 +65,8 @@ public class BookController {
     @LogInvocation
     @GetMapping("/add")
     @SecurityCheck(allowed = {UserDto.Role.MANAGER})
-    public String addForm() {
+    public String addForm(Model model) {
+        model.addAttribute("bookDto", new BookDto());
         return "add_book";
     }
 
@@ -66,9 +74,12 @@ public class BookController {
     @PostMapping("/edit")
     @ResponseStatus(HttpStatus.ACCEPTED)
     @SecurityCheck(allowed = {UserDto.Role.MANAGER})
-    public String edit(@ModelAttribute BookDto book, Model model) {
+    public String edit(@ModelAttribute @Valid BookDto book, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            return "edit_book";
+        }
         BookDto updated = service.save(book);
-        model.addAttribute("book", updated);
+        model.addAttribute("bookDto", updated);
         return "book";
     }
 
@@ -77,17 +88,27 @@ public class BookController {
     @SecurityCheck(allowed = {UserDto.Role.MANAGER})
     public String editForm(@PathVariable Long id, Model model) {
         BookDto book = service.getById(id);
+        model.addAttribute("bookDto", book);
+        return "edit_book";
+    }
+
+    @LogInvocation
+    @GetMapping("/delete/{id}")
+    @SecurityCheck(allowed = {UserDto.Role.MANAGER})
+    public String delete(@PathVariable Long id, Model model) {
+        BookDto book = service.getById(id);
         model.addAttribute("book", book);
         return "edit_book";
     }
 
-    private void uploadImage(Part image, Long bookId) throws IOException {
-        Properties properties = new Properties();
-        try (InputStream input = this.getClass().getResourceAsStream(PATH_TO_PROPS)) {
-            properties.load(input);
-            String coverImageUploadDir = properties.getProperty("cover.upload.dir");
-            String fileName = bookId + ".png";
-            image.write(coverImageUploadDir + fileName);
-        }
+    @LogInvocation
+    @PostMapping("/delete")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    @SecurityCheck(allowed = {UserDto.Role.MANAGER})
+    public String delete(@ModelAttribute @Valid BookDto book, Model model) {
+        book.setAvailable(false);
+        BookDto deleted = service.save(book);
+        model.addAttribute("book", deleted);
+        return "book";
     }
 }

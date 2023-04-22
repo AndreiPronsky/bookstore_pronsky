@@ -17,4 +17,5 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     @Query("FROM Book b WHERE b.title LIKE %:input% OR b.author LIKE %:input%")
     List<Book> search(@Param("input") String input);
+
 }

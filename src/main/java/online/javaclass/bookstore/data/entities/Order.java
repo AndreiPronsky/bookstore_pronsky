@@ -1,5 +1,7 @@
 package online.javaclass.bookstore.data.entities;
 
+import lombok.Getter;
+import lombok.Setter;
 import online.javaclass.bookstore.data.converters.orderConverters.DeliveryTypeConverter;
 import online.javaclass.bookstore.data.converters.orderConverters.OrderStatusConverter;
 import online.javaclass.bookstore.data.converters.orderConverters.PaymentMethodConverter;
@@ -11,6 +13,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
+@Getter @Setter
 @Table(name = "orders")
 public class Order {
 
@@ -42,9 +45,7 @@ public class Order {
     @Column(name = "cost")
     private BigDecimal cost;
 
-    @OneToMany(mappedBy = "order",
-            cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<OrderItem> items;
 
     public enum OrderStatus {
@@ -76,70 +77,6 @@ public class Order {
     }
 
     public Order() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public OrderStatus getOrderStatus() {
-        return orderStatus;
-    }
-
-    public void setOrderStatus(OrderStatus orderStatus) {
-        this.orderStatus = orderStatus;
-    }
-
-    public PaymentMethod getPaymentMethod() {
-        return paymentMethod;
-    }
-
-    public void setPaymentMethod(PaymentMethod paymentMethod) {
-        this.paymentMethod = paymentMethod;
-    }
-
-    public PaymentStatus getPaymentStatus() {
-        return paymentStatus;
-    }
-
-    public void setPaymentStatus(PaymentStatus paymentStatus) {
-        this.paymentStatus = paymentStatus;
-    }
-
-    public DeliveryType getDeliveryType() {
-        return deliveryType;
-    }
-
-    public void setDeliveryType(DeliveryType deliveryType) {
-        this.deliveryType = deliveryType;
-    }
-
-    public BigDecimal getCost() {
-        return cost;
-    }
-
-    public void setCost(BigDecimal cost) {
-        this.cost = cost;
-    }
-
-    public List<OrderItem> getItems() {
-        return items;
-    }
-
-    public void setItems(List<OrderItem> items) {
-        this.items = items;
     }
 
     @Override

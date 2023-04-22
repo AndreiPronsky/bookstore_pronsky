@@ -1,4 +1,4 @@
-package online.javaclass.bookstore.web.controller;
+package online.javaclass.bookstore.web.controller.view;
 
 import lombok.RequiredArgsConstructor;
 import online.javaclass.bookstore.platform.logging.LogInvocation;
@@ -20,23 +20,18 @@ import java.util.Map;
 @RequestMapping("/cart")
 public class CartController {
 
-    private final BookService bookService;
+    private final BookService service;
 
     @LogInvocation
     @GetMapping("/add")
-    public String addToCart(HttpSession session, @RequestParam Long id, @RequestParam String page, @RequestParam String page_size) {
+    public String addToCart(HttpSession session, @RequestParam Long id) {
         Map<BookDto, Integer> cart = (Map) session.getAttribute("cart");
         if (cart == null) {
             cart = new HashMap<>();
             session.setAttribute("cart", cart);
         }
-        BookDto book = bookService.getById(id);
-        if (cart.containsKey(book)) {
-            cart.put(book, cart.get(book) + 1);
-        } else {
-            cart.put(book, 1);
-        }
-        return "redirect:/books/all?page=" + page + "&page_size=" + page_size;
+        addBookToCart(id, cart);
+        return "redirect:/books/all";
     }
 
     @LogInvocation
@@ -73,6 +68,15 @@ public class CartController {
                     break;
                 }
             }
+        }
+    }
+
+    private void addBookToCart(Long id, Map<BookDto, Integer> cart) {
+        BookDto book = service.getById(id);
+        if (cart.containsKey(book)) {
+            cart.put(book, cart.get(book) + 1);
+        } else {
+            cart.put(book, 1);
         }
     }
 }

@@ -1,18 +1,27 @@
 package online.javaclass.bookstore.service.dto;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.math.BigDecimal;
 import java.util.Objects;
 
 public class BookDto {
     private Long id;
+    @NotBlank(message = "{error.invalid_title}")
     private String title;
+    @NotBlank(message = "{error.invalid_author}")
     private String author;
+    @Pattern(regexp = "^(?=(?:\\D*\\d){10}(?:(?:\\D*\\d){3})?$)[\\d-]+$", message = "{error.invalid_isbn}")
     private String isbn;
     private Genre genre;
     private Cover cover;
     private Integer pages;
+    @NotNull(message = "{error.invalid_price}")
     private BigDecimal price;
     private BigDecimal rating;
+
+    private boolean available;
 
     public enum Cover {
         SOFT,
@@ -110,6 +119,14 @@ public class BookDto {
         this.rating = rating;
     }
 
+    public boolean isAvailable() {
+        return available;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -135,6 +152,7 @@ public class BookDto {
                 ", pages=" + pages +
                 ", price=" + price +
                 ", rating=" + rating +
+                ", available=" + available +
                 '}';
     }
 }

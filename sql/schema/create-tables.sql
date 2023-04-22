@@ -48,7 +48,8 @@ CREATE TABLE IF NOT EXISTS users
     email      VARCHAR(128) UNIQUE NOT NULL,
     "password" VARCHAR(128)        NOT NULL,
     role_id    SERIAL4 REFERENCES roles,
-    rating     NUMERIC(3, 2)
+    rating     NUMERIC(3, 2),
+    preferred_locale VARCHAR(128)
 );
 
 CREATE TABLE IF NOT EXISTS orders
@@ -72,7 +73,8 @@ CREATE TABLE IF NOT EXISTS books
     cover_id SERIAL4 REFERENCES covers,
     pages    INTEGER,
     price    NUMERIC(5, 2)       NOT NULL,
-    rating   NUMERIC(3, 2)
+    rating   NUMERIC(3, 2),
+    available BOOLEAN NOT NULL DEFAULT false
 );
 
 CREATE TABLE IF NOT EXISTS order_items

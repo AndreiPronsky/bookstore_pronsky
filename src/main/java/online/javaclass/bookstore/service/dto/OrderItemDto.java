@@ -1,13 +1,17 @@
 package online.javaclass.bookstore.service.dto;
 
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Objects;
 
 public class OrderItemDto {
     private Long id;
     private Long orderId;
+    @NotNull(message = "{error.default_client}")
     private BookDto book;
+    @NotNull(message = "{error.invalid_quantity}")
     private Integer quantity;
+    @NotNull(message = "{error.invalid_price}")
     private BigDecimal price;
 
     public Long getId() {
@@ -68,7 +72,7 @@ public class OrderItemDto {
         return "OrderItemDto{" +
                 "id=" + id +
                 ", orderId=" + orderId +
-                ", book=" + book +
+                ", bookDto=" + book +
                 ", quantity=" + quantity +
                 ", price=" + price +
                 '}';

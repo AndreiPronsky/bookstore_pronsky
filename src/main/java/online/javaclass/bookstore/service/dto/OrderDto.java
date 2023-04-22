@@ -1,17 +1,24 @@
 package online.javaclass.bookstore.service.dto;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 
 public class OrderDto {
     private Long id;
+    @NotNull(message = "{error.default_client}")
     private UserDto user;
     private OrderStatus orderStatus;
+    @NotNull(message = "{error.invalid_payment_method}")
     private PaymentMethod paymentMethod;
     private PaymentStatus paymentStatus;
+    @NotNull(message = "{error.invalid_delivery_type}")
     private DeliveryType deliveryType;
+    @NotNull(message = "{error.invalid_cost}")
     private BigDecimal cost;
+    @NotEmpty(message = "{error.invalid_items}")
     private List<OrderItemDto> items;
 
     public enum OrderStatus {
@@ -129,7 +136,7 @@ public class OrderDto {
                 ", paymentStatus=" + paymentStatus +
                 ", deliveryType=" + deliveryType +
                 ", cost=" + cost +
-                ", items=" + items +
+                ", items=" + items.size() +
                 '}';
     }
 }
