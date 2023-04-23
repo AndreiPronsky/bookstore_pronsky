@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -33,6 +34,14 @@ public class BookViewController {
         BookDto book = service.getById(id);
         model.addAttribute("book", book);
         return "book";
+    }
+
+    @LogInvocation
+    @GetMapping("/search")
+    public String search(@RequestParam String search, Model model) {
+        List<BookDto> searchResult = service.search(search);
+        model.addAttribute("books", searchResult);
+        return "books";
     }
 
     @LogInvocation

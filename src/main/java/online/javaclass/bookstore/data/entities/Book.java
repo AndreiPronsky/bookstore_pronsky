@@ -10,7 +10,8 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 @Table(name = "books")
 public class Book {
     @Id

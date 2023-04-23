@@ -32,8 +32,9 @@ public class UserServiceImpl implements UserService {
     @LogInvocation
     @Override
     public UserDto getById(Long id) {
-        return mapper.toDto(userRepo.findById(id)
-                .orElseThrow(() -> new UnableToFindException(getFailureMessage("user.unable_to_find_id"))));
+        return userRepo.findById(id)
+                .map(mapper::toDto)
+                .orElseThrow(() -> new UnableToFindException(getFailureMessage("user.unable_to_find_id")));
     }
 
     @LogInvocation
@@ -41,28 +42,23 @@ public class UserServiceImpl implements UserService {
     public UserDto login(UserLoginDto userLoginDto) {
         String email = userLoginDto.getEmail();
         String password = digest.hashPassword(userLoginDto.getPassword());
-        return mapper.toDto(userRepo.login(email, password)
-                .orElseThrow(() -> new LoginException(getFailureMessage("error.wrong_email_or_password"))));
+        return userRepo.login(email, password)
+                .map(mapper::toDto)
+                .orElseThrow(() -> new LoginException(getFailureMessage("error.wrong_email_or_password")));
     }
 
     @LogInvocation
     @Override
     public Page<UserDto> getByLastName(Pageable pageable, String lastname) {
-        Page<UserDto> users = userRepo.findByLastName(pageable, lastname).map(mapper::toDto);
-        if (users.isEmpty()) {
-            throw new UnableToFindException(getFailureMessage("users.unable_to_find_lastname") + " " + lastname);
-        }
-        return users;
+        return userRepo.findByLastName(pageable, lastname)
+                .map(mapper::toDto);
     }
 
     @LogInvocation
     @Override
     public Page<UserDto> getAll(Pageable pageable) {
-        Page<UserDto> users = userRepo.findAll(pageable).map(mapper::toDto);
-        if (users.isEmpty()) {
-            throw new UnableToFindException(getFailureMessage("users.not_found"));
-        }
-        return users;
+        return userRepo.findAll(pageable)
+                .map(mapper::toDto);
     }
 
     @Override

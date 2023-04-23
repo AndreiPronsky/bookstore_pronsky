@@ -36,49 +36,40 @@ public class BookServiceImpl implements BookService {
     @LogInvocation
     @Override
     public BookDto getById(Long id) {
-        return mapper.toDto(bookRepo.findById(id)
-                .orElseThrow(() -> new UnableToFindException(getFailureMessage("book.unable_to_find_id") + " " + id)));
+        return bookRepo.findById(id)
+                .map(mapper::toDto)
+                .orElseThrow(() -> new UnableToFindException(getFailureMessage("book.unable_to_find_id") + " " + id));
     }
 
     @LogInvocation
     @Override
     public BookDto getByIsbn(String isbn) {
-        return mapper.toDto(bookRepo.findByIsbn(isbn)
-                .orElseThrow(() -> new UnableToFindException(getFailureMessage("book.unable_to_find_isbn") + " " + isbn)));
+        return bookRepo.findByIsbn(isbn)
+                .map(mapper::toDto)
+                .orElseThrow(() -> new UnableToFindException(getFailureMessage("book.unable_to_find_isbn") + " " + isbn));
     }
 
     @LogInvocation
     @Override
     public List<BookDto> search(String input) {
-        List<BookDto> books = bookRepo.search(input)
+        return bookRepo.search(input)
                 .stream()
                 .map(mapper::toDto)
                 .toList();
-        if (books.isEmpty()) {
-            throw new UnableToFindException(getFailureMessage("books.unable_to_find_containing") + " " + input);
-        }
-        return books;
     }
 
     @LogInvocation
     @Override
     public Page<BookDto> getByAuthor(Pageable pageable, String author) {
-        Page<BookDto> books = bookRepo.findByAuthor(pageable, author).map(mapper::toDto);
-        if (books.isEmpty()) {
-            throw new UnableToFindException(getFailureMessage("books.unable_to_find_author") + " " + author);
-        }
-        return books;
+        return bookRepo.findByAuthor(pageable, author)
+                .map(mapper::toDto);
     }
 
     @LogInvocation
     @Override
     public Page<BookDto> getAll(Pageable pageable) {
-        Page<BookDto> books = bookRepo.findAll(pageable)
+        return bookRepo.findAll(pageable)
                 .map(mapper::toDto);
-        if (books.isEmpty()) {
-            throw new UnableToFindException(getFailureMessage("books.not_found"));
-        }
-        return books;
     }
 
     private String getFailureMessage(String key) {

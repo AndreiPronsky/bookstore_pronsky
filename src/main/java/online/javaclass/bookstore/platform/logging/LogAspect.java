@@ -18,12 +18,12 @@ public class LogAspect {
     @Before("@annotation(online.javaclass.bookstore.platform.logging.LogInvocation)")
     public void logMethodInvocation(JoinPoint jp) {
         Object[] args = jp.getArgs();
-        System.out.println(LocalTime.now() + " [METHOD INVOCATION] " + jp.getTarget() + " "
+        log.debug(LocalTime.now() + " [METHOD INVOCATION] " + jp.getTarget() + " "
                 + jp.getSignature().getName() + " is called with args: " + Arrays.toString(args));
     }
 
     @AfterThrowing(value = "@annotation(online.javaclass.bookstore.platform.logging.LogInvocation)", throwing = "exception")
     public void logExceptions(JoinPoint jp, Exception exception) {
-        System.out.println(LocalTime.now() + " [EXCEPTION OCCURRED] " + jp.getTarget() + " " + exception);
+        log.debug(LocalTime.now() + " [EXCEPTION OCCURRED] " + jp.getTarget() + " " + exception);
     }
 }
