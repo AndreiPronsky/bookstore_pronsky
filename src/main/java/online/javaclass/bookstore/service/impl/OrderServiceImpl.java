@@ -36,7 +36,12 @@ public class OrderServiceImpl implements OrderService {
     @LogInvocation
     @Override
     public OrderDto save(OrderDto orderDto) throws ValidationException {
-        Order saved = orderRepo.existsById(orderDto.getId()) ? update(orderDto) : create(orderDto);
+        Order saved;
+        if (orderDto.getId() == null) {
+            saved = create(orderDto);
+        } else {
+            saved = update(orderDto);
+        }
         return mapper.toDto(saved);
     }
 
@@ -63,10 +68,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private Order create(OrderDto orderDto) {
-        if (orderDto.getOrderStatus() == null || orderDto.getPaymentStatus() == null) {
-            orderDto.setOrderStatus(OPEN);
-            orderDto.setPaymentStatus(OrderDto.PaymentStatus.UNPAID);
-        }
+        orderDto.setOrderStatus(OPEN);
+        orderDto.setPaymentStatus(OrderDto.PaymentStatus.UNPAID);
         validateCost(orderDto);
         return orderRepo.save(mapper.toEntity(orderDto));
     }

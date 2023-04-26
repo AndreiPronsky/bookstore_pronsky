@@ -29,20 +29,20 @@ import java.util.Map;
 public class OrderViewController {
     private final OrderService orderService;
 
-    //    @LogInvocation
+    @LogInvocation
     @PostMapping("/confirm")
     @ResponseStatus(HttpStatus.CREATED)
     @SecurityCheck(allowed = {UserDto.Role.USER})
-    public String confirmOrder(HttpSession session, @ModelAttribute OrderDto order
+    public String confirmOrder(HttpSession session, @ModelAttribute OrderDto orderDto
             , BindingResult result, Model model) {
         if (result.hasErrors()) {
             return "confirm_order";
         }
-        moveItemsFromCartToOrder(session, order);
-        order.setCost(calculateCost(order.getItems()));
+        moveItemsFromCartToOrder(session, orderDto);
+        orderDto.setCost(calculateCost(orderDto.getItems()));
         UserDto user = (UserDto) session.getAttribute("user");
-        order.setUser(user);
-        OrderDto created = orderService.save(order);
+        orderDto.setUser(user);
+        OrderDto created = orderService.save(orderDto);
         model.addAttribute("order", created);
         session.removeAttribute("cart");
         return "successful_order";
@@ -82,7 +82,7 @@ public class OrderViewController {
     public String editOrderForm(@PathVariable Long id, Model model, @SessionAttribute UserDto user) {
         OrderDto orderDto = orderService.getById(id);
         if (user == null || notMatchingUserIgnoreAdmin(user, orderDto)) {
-            return "redirect:index";
+            return "redirect:/index";
         } else if (notAdminRole(user) && notOpenStatus(orderDto)) {
             return "redirect:index";
         }

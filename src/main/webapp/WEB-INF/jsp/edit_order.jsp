@@ -26,15 +26,19 @@
                     <td>
                         <a href="${pageContext.request.contextPath}edit_IQ?action=dec&id=${item.id}">-</a>
                         <spring:message code="quantity"/>
-                        <form:input type="number" path="quantity" step="1" min="0" value="${item.quantity}"/>
+                        <label>
+                            <input type="number" name="quantity" step="1" min="0" value="${item.quantity}"/>
+                        </label>
                         <a href="${pageContext.request.contextPath}edit_IQ?action=inc&id=${item.id}">+</a>
                         <a href="${pageContext.request.contextPath}edit_IQ?action=remove&id=${item.id}"><spring:message
                                 code="remove"/></a>
                     </td>
                     <td>
                         <spring:message code="price"/>
-                        <form:input type="number" path="price" readonly="readonly"
-                                    value="${item.book.price * item.quantity}"/>
+                        <label>
+                            <input type="number" name="price" readonly="readonly"
+                                        value="${item.book.price * item.quantity}"/>
+                        </label>
                     </td>
                 </tr>
             </c:forEach>
@@ -96,7 +100,7 @@
         <c:if test="${sessionScope.user.role.toString() == 'USER'}">
             <tr>
                 <td><spring:message code="cost"/></td>
-                <td><form:input path="cost" type="number" value="${total}" step="0.01" min="0.01"/></td>
+                <td><form:input path="cost" type="number" readonly="true" value="${total}" step="0.01" min="0.01"/></td>
                 <td><form:errors path="cost"/></td>
             </tr>
         </c:if>

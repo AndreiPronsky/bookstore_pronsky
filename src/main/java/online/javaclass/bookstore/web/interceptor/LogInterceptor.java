@@ -1,6 +1,10 @@
 package online.javaclass.bookstore.web.interceptor;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -9,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @Log4j2
 public class LogInterceptor implements HandlerInterceptor {
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         log.debug("PRE HANDLE : " + request.getRequestURI() + " " + request.getMethod());
@@ -21,7 +26,7 @@ public class LogInterceptor implements HandlerInterceptor {
     }
 
     @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception e) {
         log.debug("AFTER COMPLETION : " + response.getStatus());
     }
 }
