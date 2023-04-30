@@ -31,7 +31,7 @@ public class AuthorisationFilter {
         if (allowedRoles.contains(userRole)) {
             return joinPoint.proceed(args);
         } else {
-            throw new AuthorisationException(messageSource.getMessage("access_denied", new Object[] {}, LocaleContextHolder.getLocale()));
+            throw new AuthorisationException(messageSource.getMessage("access_denied", new Object[]{}, LocaleContextHolder.getLocale()));
         }
     }
 

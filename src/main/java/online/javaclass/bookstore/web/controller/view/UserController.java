@@ -28,7 +28,7 @@ import java.util.Locale;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/users")
-public class UserViewController {
+public class UserController {
     private final UserService userService;
     private final OrderService orderService;
     private final LocaleResolver localeResolver;

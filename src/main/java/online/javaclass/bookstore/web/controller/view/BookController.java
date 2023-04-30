@@ -24,7 +24,7 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/books")
-public class BookViewController {
+public class BookController {
     private final BookService service;
     private final StorageService storageService;
 

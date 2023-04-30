@@ -98,7 +98,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private boolean isChangeableOrderStatus(OrderDto.OrderStatus currentStatus) {
-        return (currentStatus.equals(CANCELLED) || currentStatus.equals(COMPLETED));
+        return (!(currentStatus.equals(CANCELLED) || currentStatus.equals(COMPLETED)));
     }
 
     @LogInvocation

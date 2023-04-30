@@ -1,7 +1,6 @@
 package online.javaclass.bookstore.web.controller.view;
 
 import lombok.RequiredArgsConstructor;
-import online.javaclass.bookstore.platform.logging.LogInvocation;
 import online.javaclass.bookstore.service.exceptions.AppException;
 import online.javaclass.bookstore.service.exceptions.LoginException;
 import online.javaclass.bookstore.web.exceptions.AuthorisationException;
