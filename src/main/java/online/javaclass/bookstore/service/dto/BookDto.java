@@ -1,11 +1,16 @@
 package online.javaclass.bookstore.service.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.math.BigDecimal;
 import java.util.Objects;
 
+@Getter
+@Setter
 public class BookDto {
     private Long id;
     @NotBlank(message = "{error.invalid_title}")
@@ -20,6 +25,7 @@ public class BookDto {
     @NotNull(message = "{error.invalid_price}")
     private BigDecimal price;
     private BigDecimal rating;
+    private String fileName;
 
     private boolean available;
 
@@ -45,86 +51,6 @@ public class BookDto {
         MEDICINE,
         ENGINEERING,
         ART
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
-    public String getIsbn() {
-        return isbn;
-    }
-
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
-    }
-
-    public Genre getGenre() {
-        return genre;
-    }
-
-    public void setGenre(Genre genre) {
-        this.genre = genre;
-    }
-
-    public Cover getCover() {
-        return cover;
-    }
-
-    public void setCover(Cover cover) {
-        this.cover = cover;
-    }
-
-    public Integer getPages() {
-        return pages;
-    }
-
-    public void setPages(Integer pages) {
-        this.pages = pages;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    public BigDecimal getRating() {
-        return rating;
-    }
-
-    public void setRating(BigDecimal rating) {
-        this.rating = rating;
-    }
-
-    public boolean isAvailable() {
-        return available;
-    }
-
-    public void setAvailable(boolean available) {
-        this.available = available;
     }
 
     @Override
@@ -153,6 +79,7 @@ public class BookDto {
                 ", price=" + price +
                 ", rating=" + rating +
                 ", available=" + available +
+                ", fileName=" + fileName +
                 '}';
     }
 }

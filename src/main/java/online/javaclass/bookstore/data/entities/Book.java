@@ -48,6 +48,10 @@ public class Book {
     @Column(name = "available")
     private boolean available;
 
+    @Column(name = "file_name")
+    private String fileName;
+
+
     @Table(name = "covers")
     public enum Cover {
         SOFT,

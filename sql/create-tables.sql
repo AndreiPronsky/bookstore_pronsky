@@ -42,13 +42,13 @@ CREATE TABLE IF NOT EXISTS delivery_type
 
 CREATE TABLE IF NOT EXISTS users
 (
-    id         BIGSERIAL PRIMARY KEY,
-    firstname  VARCHAR(128),
-    lastname   VARCHAR(128),
-    email      VARCHAR(128) UNIQUE NOT NULL,
-    "password" VARCHAR(128)        NOT NULL,
-    role_id    SERIAL4 REFERENCES roles,
-    rating     NUMERIC(3, 2),
+    id               BIGSERIAL PRIMARY KEY,
+    firstname        VARCHAR(128),
+    lastname         VARCHAR(128),
+    email            VARCHAR(128) UNIQUE NOT NULL,
+    "password"       VARCHAR(128)        NOT NULL,
+    role_id          SERIAL4 REFERENCES roles,
+    rating           NUMERIC(3, 2),
     preferred_locale VARCHAR(128)
 );
 
@@ -65,16 +65,17 @@ CREATE TABLE IF NOT EXISTS orders
 
 CREATE TABLE IF NOT EXISTS books
 (
-    id       BIGSERIAL PRIMARY KEY,
-    title    VARCHAR(128)        NOT NULL,
-    author   VARCHAR(128)        NOT NULL,
-    isbn     VARCHAR(128) UNIQUE NOT NULL,
-    genre_id SERIAL4 REFERENCES genres,
-    cover_id SERIAL4 REFERENCES covers,
-    pages    INTEGER,
-    price    NUMERIC(5, 2)       NOT NULL,
-    rating   NUMERIC(3, 2),
-    available BOOLEAN NOT NULL DEFAULT false
+    id        BIGSERIAL PRIMARY KEY,
+    title     VARCHAR(128)        NOT NULL,
+    author    VARCHAR(128)        NOT NULL,
+    isbn      VARCHAR(128) UNIQUE NOT NULL,
+    genre_id  SERIAL4 REFERENCES genres,
+    cover_id  SERIAL4 REFERENCES covers,
+    pages     INTEGER,
+    price     NUMERIC(5, 2)       NOT NULL,
+    rating    NUMERIC(3, 2),
+    available BOOLEAN             NOT NULL DEFAULT false,
+    file_name VARCHAR(255)
 );
 
 CREATE TABLE IF NOT EXISTS order_items

@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-<jsp:include page="navbar.jsp"/>
+<jsp:include page="../navbar.jsp"/>
 <header></header>
 <article>
     <h1><spring:message code="user"/></h1>

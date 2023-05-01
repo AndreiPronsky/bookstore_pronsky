@@ -1,9 +1,14 @@
 package online.javaclass.bookstore.service.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Objects;
 
+@Getter
+@Setter
 public class OrderItemDto {
     private Long id;
     @NotNull(message = "{error.default_client}")
@@ -12,38 +17,6 @@ public class OrderItemDto {
     private Integer quantity;
     @NotNull(message = "{error.invalid_price}")
     private BigDecimal price;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public BookDto getBook() {
-        return book;
-    }
-
-    public void setBook(BookDto book) {
-        this.book = book;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
 
     @Override
     public boolean equals(Object o) {

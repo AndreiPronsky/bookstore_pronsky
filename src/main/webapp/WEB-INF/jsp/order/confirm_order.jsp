@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-<jsp:include page="navbar.jsp"/>
+<jsp:include page="../navbar.jsp"/>
 <c:if test="${sessionScope.cart == null || sessionScope.cart.isEmpty()}">
     <h1><spring:message code="your_cart_is_empty"/></h1>
 </c:if>

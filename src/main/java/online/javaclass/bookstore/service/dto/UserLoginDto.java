@@ -1,10 +1,14 @@
 package online.javaclass.bookstore.service.dto;
 
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
+@Getter
+@Setter
 public class UserLoginDto {
     @Email(message = "{error.invalid_email}")
     private String email;
@@ -14,22 +18,6 @@ public class UserLoginDto {
     private String password;
 
     public UserLoginDto() {
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     @Override

@@ -8,14 +8,14 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-<jsp:include page="navbar.jsp"/>
+<jsp:include page="../navbar.jsp"/>
 <jsp:include page="orders_searchbar.jsp"/>
 <header></header>
 <c:if test="${orders.isEmpty()}">
     <h2><spring:message code="orders.not_found"/></h2>
 </c:if>
 <c:if test="${!orders.isEmpty()}">
-    <jsp:include page="pagination.jsp"/>
+    <jsp:include page="../pagination.jsp"/>
 </c:if>
 <table>
     <thead>

@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-<jsp:include page="navbar.jsp"/>
+<jsp:include page="../navbar.jsp"/>
 <h1><spring:message code="edit_order"/></h1>
 <form action="/orders/edit" method="post">
     <c:if test="${sessionScope.user.role.toString() == 'USER'}">
