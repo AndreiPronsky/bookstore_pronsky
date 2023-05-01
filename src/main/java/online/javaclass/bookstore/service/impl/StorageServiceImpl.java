@@ -25,19 +25,23 @@ public class StorageServiceImpl implements online.javaclass.bookstore.service.St
 
     private final BookRepository bookRepo;
     private final MessageSource messageSource;
-    private final Path rootLocation = Path.of("\\Repository\\bookstore\\bookstore_pronsky\\src\\main\\resources\\static\\coverImages");
+    private final Path rootLocation = Path.of("Repository","bookstore",
+            "bookstore_pronsky","src","main","resources","static","coverImages");
+
     @Override
     public String store(InputStream stream, Long id) throws IOException {
         Path destinationFile = rootLocation.resolve(Paths.get(id.toString() + ".png"))
-                .normalize()
                 .toAbsolutePath();
         Files.copy(stream, destinationFile);
-        Book book = bookRepo.findById(id).orElseThrow(() -> new UnableToFindException(messageSource.getMessage("book.unable_to_find_id",
+        Book book = bookRepo.findById(id)
+                .orElseThrow(() -> new UnableToFindException(messageSource.getMessage("book.unable_to_find_id",
                 new Object[]{}, LocaleContextHolder.getLocale())));
-        String fileName = destinationFile.toString();
-        book.setFileName(fileName);
+        String suffix = ".png";
+        String prefix = "/coverImages/";
+        String filePath = prefix + book.getId() + suffix;
+        book.setFilePath(filePath);
         bookRepo.save(book);
-        return fileName;
+        return filePath;
     }
 
     @Override
@@ -45,7 +49,7 @@ public class StorageServiceImpl implements online.javaclass.bookstore.service.St
         Book book = bookRepo.findById(id).orElseThrow(()
                 -> new UnableToFindException(messageSource.getMessage("book.unable_to_find_id",
                 new Object[]{}, LocaleContextHolder.getLocale())));
-        return Path.of(book.getFileName());
+        return Path.of(book.getFilePath());
     }
 
     private String generateFileName() {

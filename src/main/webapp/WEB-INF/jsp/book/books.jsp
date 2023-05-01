@@ -33,7 +33,7 @@
     <c:forEach items="${books}" var="book">
         <tr>
             <td>
-                <img height="100" src="/coverImages/${book.id}.png" alt="book-image">
+                <img height="100" src="${book.filePath}" alt="book-image">
             </td>
             <td>
                 <h5><c:out value="${book.author}"/></h5>

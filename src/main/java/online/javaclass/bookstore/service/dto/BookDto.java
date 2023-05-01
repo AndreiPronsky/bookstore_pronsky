@@ -25,8 +25,7 @@ public class BookDto {
     @NotNull(message = "{error.invalid_price}")
     private BigDecimal price;
     private BigDecimal rating;
-    private String fileName;
-
+    private String filePath;
     private boolean available;
 
     public enum Cover {
@@ -79,7 +78,7 @@ public class BookDto {
                 ", price=" + price +
                 ", rating=" + rating +
                 ", available=" + available +
-                ", fileName=" + fileName +
+                ", fileName=" + filePath +
                 '}';
     }
 }

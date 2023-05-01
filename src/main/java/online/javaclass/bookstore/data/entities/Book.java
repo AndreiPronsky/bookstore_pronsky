@@ -49,7 +49,7 @@ public class Book {
     private boolean available;
 
     @Column(name = "file_name")
-    private String fileName;
+    private String filePath;
 
 
     @Table(name = "covers")
