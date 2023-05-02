@@ -27,25 +27,11 @@ public class ErrorController {
     }
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    public String handle(LoginException e, Model model) {
-        model.addAttribute("message", e.getMessage());
-        return "error";
-    }
-
-    @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String handle(AppException e, Model model) {
         String message = messageSource.getMessage(
                 "error.default_client", new Object[]{}, LocaleContextHolder.getLocale());
         model.addAttribute("message", message);
-        return "error";
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    public String handle(AuthorisationException e, Model model) {
-        model.addAttribute("message", e.getMessage());
         return "error";
     }
 

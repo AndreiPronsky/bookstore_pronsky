@@ -41,7 +41,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto login(UserLoginDto userLoginDto) {
         String email = userLoginDto.getEmail().toLowerCase();
-        String password = digest.hashPassword(userLoginDto.getPassword());
+        String password = userLoginDto.getPassword();
+//        String password = digest.hashPassword(userLoginDto.getPassword());
         return userRepo.login(email, password)
                 .map(mapper::toDto)
                 .orElseThrow(() -> new LoginException(getFailureMessage("error.wrong_email_or_password")));

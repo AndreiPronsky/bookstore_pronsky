@@ -8,7 +8,6 @@ import online.javaclass.bookstore.service.dto.OrderDto;
 import online.javaclass.bookstore.service.dto.OrderItemDto;
 import online.javaclass.bookstore.service.dto.UserDto;
 import online.javaclass.bookstore.service.exceptions.ValidationException;
-import online.javaclass.bookstore.web.filter.SecurityCheck;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -33,7 +32,6 @@ public class OrderController {
     @LogInvocation
     @PostMapping("/confirm")
     @ResponseStatus(HttpStatus.CREATED)
-    @SecurityCheck(allowed = {UserDto.Role.USER})
     public String confirmOrder(HttpSession session, @ModelAttribute OrderDto orderDto
             , BindingResult result, Model model) {
         if (result.hasErrors()) {
@@ -64,7 +62,6 @@ public class OrderController {
     @LogInvocation
     @PostMapping("/edit")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    @SecurityCheck(allowed = {UserDto.Role.USER, UserDto.Role.ADMIN})
     public String editOrder(@SessionAttribute @Valid OrderDto orderDto, Model model, @SessionAttribute UserDto user) {
         try {
             OrderDto updated = orderService.save(orderDto);
@@ -80,7 +77,6 @@ public class OrderController {
 
     @LogInvocation
     @GetMapping("/edit/{id}")
-    @SecurityCheck(allowed = {UserDto.Role.USER, UserDto.Role.ADMIN})
     public String editOrderForm(@PathVariable Long id, HttpSession session) {
         OrderDto orderDto = orderService.getById(id);
         UserDto user = (UserDto) session.getAttribute("user");
@@ -103,7 +99,6 @@ public class OrderController {
 
     @LogInvocation
     @GetMapping("/all")
-    @SecurityCheck(allowed = {UserDto.Role.ADMIN})
     public String getAll(Pageable pageable, Model model) {
         Page<OrderDto> page = orderService.getAll(pageable);
         model.addAttribute("page", page.getNumber());
@@ -114,7 +109,6 @@ public class OrderController {
 
     @LogInvocation
     @GetMapping("/all/{id}")
-    @SecurityCheck(allowed = {UserDto.Role.USER, UserDto.Role.ADMIN})
     public String getAllByUserId(Pageable pageable, Model model, @PathVariable Long id) {
         Page<OrderDto> page = orderService.getAllByUserId(pageable, id);
         model.addAttribute("page", page.getNumber());

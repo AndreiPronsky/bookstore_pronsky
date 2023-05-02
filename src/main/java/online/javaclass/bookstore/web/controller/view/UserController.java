@@ -8,7 +8,6 @@ import online.javaclass.bookstore.service.dto.OrderDto;
 import online.javaclass.bookstore.service.dto.UserDto;
 import online.javaclass.bookstore.service.dto.UserLoginDto;
 import online.javaclass.bookstore.service.exceptions.AppException;
-import online.javaclass.bookstore.web.filter.SecurityCheck;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -35,7 +34,6 @@ public class UserController {
 
     @LogInvocation
     @GetMapping("/add")
-    @SecurityCheck(allowed = UserDto.Role.ADMIN)
     public String addForm(Model model) {
         model.addAttribute("userDto", new UserDto());
         return "users/add_user";
@@ -44,7 +42,6 @@ public class UserController {
     @LogInvocation
     @PostMapping("/add")
     @ResponseStatus(HttpStatus.CREATED)
-    @SecurityCheck(allowed = UserDto.Role.ADMIN)
     public String add(@ModelAttribute @Valid UserDto userInModel, BindingResult result, HttpSession session, Model model) {
         if (result.hasErrors()) {
             return "users/add_user";
@@ -72,7 +69,6 @@ public class UserController {
     @LogInvocation
     @PostMapping("/edit")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    @SecurityCheck(allowed = {UserDto.Role.ADMIN})
     public String edit(@ModelAttribute @Valid UserDto user, BindingResult result, Model model) {
         if (result.hasErrors()) {
             return "users/edit_user";
@@ -84,7 +80,6 @@ public class UserController {
 
     @LogInvocation
     @GetMapping("/edit/{id}")
-    @SecurityCheck(allowed = {UserDto.Role.ADMIN})
     public String editForm(@PathVariable Long id, Model model) {
         UserDto user = userService.getById(id);
         model.addAttribute("userDto", user);
@@ -121,7 +116,6 @@ public class UserController {
 
     @LogInvocation
     @GetMapping("/{id}")
-    @SecurityCheck(allowed = {UserDto.Role.ADMIN})
     public String getOne(@PathVariable Long id, Model model) {
         UserDto user = userService.getById(id);
         model.addAttribute("userDto", user);
@@ -130,7 +124,6 @@ public class UserController {
 
     @LogInvocation
     @GetMapping("my_orders")
-    @SecurityCheck(allowed = {UserDto.Role.USER, UserDto.Role.ADMIN})
     public String getOrdersByUserId(Pageable pageable, @SessionAttribute @Valid UserDto user, Model model) {
         try {
             Page<OrderDto> page = orderService.getAllByUserId(pageable, user.getId());
@@ -145,7 +138,6 @@ public class UserController {
 
     @LogInvocation
     @GetMapping("/all")
-    @SecurityCheck(allowed = {UserDto.Role.ADMIN})
     public String getAll(Pageable pageable, Model model) {
         Page<UserDto> page = userService.getAll(pageable);
         model.addAttribute("page", page.getNumber());

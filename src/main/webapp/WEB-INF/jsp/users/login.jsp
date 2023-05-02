@@ -15,7 +15,7 @@
     <input type="hidden" value="login">
     <label for="email-input"><spring:message code="email"/> : </label>
 <%--    type="email"--%>
-    <input id="email-input" name="email" >
+    <input id="email-input" name="username" >
     <br/>
     <label for="password-input"><spring:message code="password"/> : </label>
     <input id="password-input" name="password" type="password" minlength="4">

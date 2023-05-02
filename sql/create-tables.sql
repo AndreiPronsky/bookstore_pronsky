@@ -49,7 +49,8 @@ CREATE TABLE IF NOT EXISTS users
     "password"       VARCHAR(128)        NOT NULL,
     role_id          SERIAL4 REFERENCES roles,
     rating           NUMERIC(3, 2),
-    preferred_locale VARCHAR(128)
+    preferred_locale VARCHAR(128),
+    active boolean NOT NULL DEFAULT true
 );
 
 CREATE TABLE IF NOT EXISTS orders
