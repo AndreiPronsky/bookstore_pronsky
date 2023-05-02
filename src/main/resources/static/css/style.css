@@ -104,6 +104,10 @@ a {
     border-radius: 5px;
 }
 
+.catalog .paging {
+    margin: auto;
+}
+
 td {
     border: #34495e solid 1px;
     align-items: center;

@@ -38,7 +38,7 @@ public class UserController {
     @SecurityCheck(allowed = UserDto.Role.ADMIN)
     public String addForm(Model model) {
         model.addAttribute("userDto", new UserDto());
-        return "user/add_user";
+        return "users/add_user";
     }
 
     @LogInvocation
@@ -47,7 +47,7 @@ public class UserController {
     @SecurityCheck(allowed = UserDto.Role.ADMIN)
     public String add(@ModelAttribute @Valid UserDto userInModel, BindingResult result, HttpSession session, Model model) {
         if (result.hasErrors()) {
-            return "user/add_user";
+            return "users/add_user";
         }
         return validateRoleAndSaveUser(userInModel, session, model);
     }
@@ -56,7 +56,7 @@ public class UserController {
     @GetMapping("/register")
     public String register(Model model) {
         model.addAttribute("userDto", new UserDto());
-        return "user/register";
+        return "users/register";
     }
 
     @LogInvocation
@@ -64,7 +64,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     public String register(@ModelAttribute @Valid UserDto userInModel, BindingResult result, HttpSession session, Model model) {
         if (result.hasErrors()) {
-            return "user/register";
+            return "users/register";
         }
         return validateRoleAndSaveUser(userInModel, session, model);
     }
@@ -75,11 +75,11 @@ public class UserController {
     @SecurityCheck(allowed = {UserDto.Role.ADMIN})
     public String edit(@ModelAttribute @Valid UserDto user, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            return "user/edit_user";
+            return "users/edit_user";
         }
         UserDto edited = userService.save(user);
         model.addAttribute("user", edited);
-        return "user/user";
+        return "users/user";
     }
 
     @LogInvocation
@@ -88,7 +88,7 @@ public class UserController {
     public String editForm(@PathVariable Long id, Model model) {
         UserDto user = userService.getById(id);
         model.addAttribute("userDto", user);
-        return "user/edit_user";
+        return "users/edit_user";
     }
 
     @LogInvocation
@@ -109,7 +109,7 @@ public class UserController {
     @GetMapping("/login")
     public String loginForm(Model model) {
         model.addAttribute("loginDto", new UserLoginDto());
-        return "user/login";
+        return "users/login";
     }
 
     @LogInvocation
@@ -125,7 +125,7 @@ public class UserController {
     public String getOne(@PathVariable Long id, Model model) {
         UserDto user = userService.getById(id);
         model.addAttribute("userDto", user);
-        return "user/user";
+        return "users/user";
     }
 
     @LogInvocation
@@ -137,7 +137,7 @@ public class UserController {
             model.addAttribute("page", page.getNumber());
             model.addAttribute("totalPages", page.getTotalPages());
             model.addAttribute("orders", page.stream().toList());
-            return "order/my_orders";
+            return "orders/my_orders";
         } catch (AppException e) {
             return "error";
         }
@@ -151,7 +151,7 @@ public class UserController {
         model.addAttribute("page", page.getNumber());
         model.addAttribute("totalPages", page.getTotalPages());
         model.addAttribute("users", page.stream().toList());
-        return "user/users";
+        return "users/users";
     }
 
     private String validateRoleAndSaveUser(@ModelAttribute @Valid UserDto userInModel, HttpSession session, Model model) {
@@ -162,6 +162,6 @@ public class UserController {
         }
         UserDto created = userService.save(userInModel);
         model.addAttribute("user", created);
-        return "user/user";
+        return "users/user";
     }
 }

@@ -14,7 +14,8 @@
 <form:form method="post" action="/users/login" modelAttribute="loginDto">
     <input type="hidden" value="login">
     <label for="email-input"><spring:message code="email"/> : </label>
-    <input id="email-input" name="email" type="email">
+<%--    type="email"--%>
+    <input id="email-input" name="email" >
     <br/>
     <label for="password-input"><spring:message code="password"/> : </label>
     <input id="password-input" name="password" type="password" minlength="4">

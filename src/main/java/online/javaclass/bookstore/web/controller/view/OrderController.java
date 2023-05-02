@@ -37,7 +37,7 @@ public class OrderController {
     public String confirmOrder(HttpSession session, @ModelAttribute OrderDto orderDto
             , BindingResult result, Model model) {
         if (result.hasErrors()) {
-            return "order/confirm_order";
+            return "orders/confirm_order";
         }
         moveItemsFromCartToOrder(session, orderDto);
         orderDto.setCost(calculateCost(orderDto.getItems()));
@@ -46,7 +46,7 @@ public class OrderController {
         OrderDto created = orderService.save(orderDto);
         model.addAttribute("order", created);
         session.removeAttribute("cart");
-        return "order/successful_order";
+        return "orders/successful_order";
     }
 
     @LogInvocation
@@ -58,7 +58,7 @@ public class OrderController {
         }
         OrderDto orderDto = new OrderDto();
         model.addAttribute("orderDto", orderDto);
-        return "order/confirm_order";
+        return "orders/confirm_order";
     }
 
     @LogInvocation
@@ -70,16 +70,17 @@ public class OrderController {
             OrderDto updated = orderService.save(orderDto);
             model.addAttribute("orderDto", updated);
             if (user.getRole() == UserDto.Role.ADMIN) {
-                return "order/order";
+                return "orders/order";
             }
-            return "order/successful_order";
+            return "orders/successful_order";
         } catch (ValidationException e) {
-            return "order/edit_order";
+            return "orders/edit_order";
         }
     }
 
     @LogInvocation
     @GetMapping("/edit/{id}")
+    @SecurityCheck(allowed = {UserDto.Role.USER, UserDto.Role.ADMIN})
     public String editOrderForm(@PathVariable Long id, HttpSession session) {
         OrderDto orderDto = orderService.getById(id);
         UserDto user = (UserDto) session.getAttribute("user");
@@ -89,7 +90,7 @@ public class OrderController {
             return "redirect:index";
         }
         session.setAttribute("orderDto", orderDto);
-        return "order/edit_order";
+        return "orders/edit_order";
     }
 
     @LogInvocation
@@ -97,7 +98,7 @@ public class OrderController {
     public String getOne(@PathVariable Long id, Model model) {
         OrderDto orderDto = orderService.getById(id);
         model.addAttribute("orderDto", orderDto);
-        return "order/order";
+        return "orders/order";
     }
 
     @LogInvocation
@@ -108,7 +109,7 @@ public class OrderController {
         model.addAttribute("page", page.getNumber());
         model.addAttribute("totalPages", page.getTotalPages());
         model.addAttribute("orders", page.stream().toList());
-        return "order/orders";
+        return "orders/orders";
     }
 
     @LogInvocation
@@ -119,7 +120,7 @@ public class OrderController {
         model.addAttribute("page", page.getNumber());
         model.addAttribute("totalPages", page.getTotalPages());
         model.addAttribute("orders", page.stream().toList());
-        return "order/my_orders";
+        return "orders/my_orders";
     }
 
     private boolean notMatchingUserIgnoreAdmin(UserDto user, OrderDto order) {

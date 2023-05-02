@@ -34,7 +34,7 @@ public class BookController {
     public String getOne(@PathVariable Long id, Model model) {
         BookDto book = service.getById(id);
         model.addAttribute("book", book);
-        return "book/book";
+        return "books/book";
     }
 
     @LogInvocation
@@ -42,7 +42,7 @@ public class BookController {
     public String search(@RequestParam String search, Model model) {
         List<BookDto> searchResult = service.search(search);
         model.addAttribute("books", searchResult);
-        return "book/books";
+        return "books/books";
     }
 
     @LogInvocation
@@ -52,7 +52,7 @@ public class BookController {
         model.addAttribute("page", page.getNumber());
         model.addAttribute("totalPages", page.getTotalPages());
         model.addAttribute("books", page.stream().toList());
-        return "book/books";
+        return "books/books";
     }
 
     @LogInvocation
@@ -62,7 +62,7 @@ public class BookController {
     public String add(@RequestParam("image") MultipartFile file
             , @ModelAttribute @Valid BookDto book, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            return "book/add_book";
+            return "books/add_book";
         }
 
         BookDto created = service.save(book);
@@ -72,7 +72,7 @@ public class BookController {
             throw new RuntimeException(e);
         }
         model.addAttribute("book", created);
-        return "book/book";
+        return "books/book";
 
     }
 
@@ -81,7 +81,7 @@ public class BookController {
     @SecurityCheck(allowed = {UserDto.Role.MANAGER})
     public String addForm(Model model) {
         model.addAttribute("bookDto", new BookDto());
-        return "book/add_book";
+        return "books/add_book";
     }
 
     @LogInvocation
@@ -90,11 +90,11 @@ public class BookController {
     @SecurityCheck(allowed = {UserDto.Role.MANAGER})
     public String edit(@ModelAttribute @Valid BookDto book, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            return "book/edit_book";
+            return "books/edit_book";
         }
         BookDto updated = service.save(book);
         model.addAttribute("bookDto", updated);
-        return "book/book";
+        return "books/book";
     }
 
     @LogInvocation
@@ -103,7 +103,7 @@ public class BookController {
     public String editForm(@PathVariable Long id, Model model) {
         BookDto book = service.getById(id);
         model.addAttribute("bookDto", book);
-        return "book/edit_book";
+        return "books/edit_book";
     }
 
     @LogInvocation
@@ -112,7 +112,7 @@ public class BookController {
     public String delete(@PathVariable Long id, Model model) {
         BookDto book = service.getById(id);
         model.addAttribute("book", book);
-        return "book/edit_book";
+        return "books/edit_book";
     }
 
     @LogInvocation
@@ -123,6 +123,6 @@ public class BookController {
         book.setAvailable(false);
         BookDto deleted = service.save(book);
         model.addAttribute("book", deleted);
-        return "book/book";
+        return "books/book";
     }
 }

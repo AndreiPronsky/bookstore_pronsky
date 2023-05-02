@@ -17,7 +17,7 @@
 <c:if test="${!books.isEmpty()}">
     <jsp:include page="../pagination.jsp"/>
 </c:if>
-<table>
+<table class="catalog">
     <caption><spring:message code="books"/></caption>
     <thead>
     <tr>
