@@ -7,6 +7,8 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpSession;
@@ -18,6 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AuthorisationFilter {
     private final HttpSession session;
+    private final MessageSource messageSource;
 
     @Around(value = "@annotation(online.javaclass.bookstore.web.filter.SecurityCheck)")
     public Object checkAuthorisation(ProceedingJoinPoint joinPoint) throws Throwable {
@@ -28,13 +31,13 @@ public class AuthorisationFilter {
         if (allowedRoles.contains(userRole)) {
             return joinPoint.proceed(args);
         } else {
-            throw new AuthorisationException("Access denied");
+            throw new AuthorisationException(messageSource.getMessage("access_denied", new Object[]{}, LocaleContextHolder.getLocale()));
         }
     }
 
     private UserDto.Role getUserRoleFromSession() {
         UserDto userInSession = (UserDto) session.getAttribute("user");
-        UserDto.Role userRole = UserDto.Role.NONE;
+        UserDto.Role userRole = null;
         if (userInSession != null) {
             userRole = userInSession.getRole();
         }

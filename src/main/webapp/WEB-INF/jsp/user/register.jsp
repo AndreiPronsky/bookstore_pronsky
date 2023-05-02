@@ -5,13 +5,13 @@
 <html>
 <head>
     <title><spring:message code="register"/></title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-<jsp:include page="navbar.jsp"/>
+<jsp:include page="../navbar.jsp"/>
 <h1><spring:message code="register"/></h1>
 <%--@elvariable id="userDto" type=""--%>
-<form:form action="/users/add" method="post" modelAttribute="userDto">
+<form:form action="/users/register" method="post" modelAttribute="userDto">
     <table>
         <tr>
             <td><spring:message code="firstname"/></td>

@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-<jsp:include page="navbar.jsp"/>
+<jsp:include page="../navbar.jsp"/>
 <h1><spring:message code="login"/></h1>
 <%--@elvariable id="loginDto" type=""--%>
 <form:form method="post" action="/users/login" modelAttribute="loginDto">

@@ -7,6 +7,7 @@ import online.javaclass.bookstore.service.dto.BookDto;
 import online.javaclass.bookstore.service.dto.OrderDto;
 import online.javaclass.bookstore.service.dto.OrderItemDto;
 import online.javaclass.bookstore.service.dto.UserDto;
+import online.javaclass.bookstore.service.exceptions.ValidationException;
 import online.javaclass.bookstore.web.filter.SecurityCheck;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,26 +27,26 @@ import java.util.Map;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/orders")
-public class OrderViewController {
+public class OrderController {
     private final OrderService orderService;
 
-//    @LogInvocation
+    @LogInvocation
     @PostMapping("/confirm")
     @ResponseStatus(HttpStatus.CREATED)
     @SecurityCheck(allowed = {UserDto.Role.USER})
-    public String confirmOrder(HttpSession session, @ModelAttribute OrderDto order
+    public String confirmOrder(HttpSession session, @ModelAttribute OrderDto orderDto
             , BindingResult result, Model model) {
         if (result.hasErrors()) {
-            return "confirm_order";
+            return "order/confirm_order";
         }
-        moveItemsFromCartToOrder(session, order);
-        order.setCost(calculateCost(order.getItems()));
+        moveItemsFromCartToOrder(session, orderDto);
+        orderDto.setCost(calculateCost(orderDto.getItems()));
         UserDto user = (UserDto) session.getAttribute("user");
-        order.setUser(user);
-        OrderDto created = orderService.save(order);
+        orderDto.setUser(user);
+        OrderDto created = orderService.save(orderDto);
         model.addAttribute("order", created);
         session.removeAttribute("cart");
-        return "successful_order";
+        return "order/successful_order";
     }
 
     @LogInvocation
@@ -57,37 +58,38 @@ public class OrderViewController {
         }
         OrderDto orderDto = new OrderDto();
         model.addAttribute("orderDto", orderDto);
-        return "confirm_order";
+        return "order/confirm_order";
     }
 
     @LogInvocation
     @PostMapping("/edit")
     @ResponseStatus(HttpStatus.ACCEPTED)
     @SecurityCheck(allowed = {UserDto.Role.USER, UserDto.Role.ADMIN})
-    public String editOrder(@ModelAttribute @Valid OrderDto orderDto, BindingResult result
-            , Model model, @SessionAttribute UserDto user) {
-        if (result.hasErrors()) {
-            return "edit_order";
+    public String editOrder(@SessionAttribute @Valid OrderDto orderDto, Model model, @SessionAttribute UserDto user) {
+        try {
+            OrderDto updated = orderService.save(orderDto);
+            model.addAttribute("orderDto", updated);
+            if (user.getRole() == UserDto.Role.ADMIN) {
+                return "order/order";
+            }
+            return "order/successful_order";
+        } catch (ValidationException e) {
+            return "order/edit_order";
         }
-        OrderDto updated = orderService.save(orderDto);
-        model.addAttribute("orderDto", updated);
-        if (user.getRole() == UserDto.Role.ADMIN) {
-            return "order";
-        }
-        return "successful_order";
     }
 
     @LogInvocation
     @GetMapping("/edit/{id}")
-    public String editOrderForm(@PathVariable Long id, Model model, @SessionAttribute UserDto user) {
+    public String editOrderForm(@PathVariable Long id, HttpSession session) {
         OrderDto orderDto = orderService.getById(id);
+        UserDto user = (UserDto) session.getAttribute("user");
         if (user == null || notMatchingUserIgnoreAdmin(user, orderDto)) {
-            return "redirect:index";
+            return "redirect:/index";
         } else if (notAdminRole(user) && notOpenStatus(orderDto)) {
             return "redirect:index";
         }
-        model.addAttribute("orderDto", orderDto);
-        return "edit_order";
+        session.setAttribute("orderDto", orderDto);
+        return "order/edit_order";
     }
 
     @LogInvocation
@@ -95,7 +97,7 @@ public class OrderViewController {
     public String getOne(@PathVariable Long id, Model model) {
         OrderDto orderDto = orderService.getById(id);
         model.addAttribute("orderDto", orderDto);
-        return "order";
+        return "order/order";
     }
 
     @LogInvocation
@@ -106,7 +108,7 @@ public class OrderViewController {
         model.addAttribute("page", page.getNumber());
         model.addAttribute("totalPages", page.getTotalPages());
         model.addAttribute("orders", page.stream().toList());
-        return "orders";
+        return "order/orders";
     }
 
     @LogInvocation
@@ -117,7 +119,7 @@ public class OrderViewController {
         model.addAttribute("page", page.getNumber());
         model.addAttribute("totalPages", page.getTotalPages());
         model.addAttribute("orders", page.stream().toList());
-        return "my_orders";
+        return "order/my_orders";
     }
 
     private boolean notMatchingUserIgnoreAdmin(UserDto user, OrderDto order) {
@@ -156,25 +158,29 @@ public class OrderViewController {
     @LogInvocation
     @RequestMapping("/edit/edit_IQ")
     public String correctItemQuantity(HttpSession session, @RequestParam String action, @RequestParam Long id) {
-        OrderDto order = (OrderDto) session.getAttribute("order");
-        List<OrderItemDto> items = order.getItems();
+        OrderDto orderDto = (OrderDto) session.getAttribute("orderDto");
+        List<OrderItemDto> items = orderDto.getItems();
+        OrderItemDto itemToEdit = items.get(0);
         for (OrderItemDto item : items) {
             if (item.getId().equals(id)) {
-                Integer quantity = item.getQuantity();
-                if (action.equals("dec") && quantity > 1) {
-                    item.setQuantity(quantity - 1);
-                }
-                if (action.equals("inc")) {
-                    item.setQuantity(quantity + 1);
-                }
-                if (action.equals("remove")) {
-                    items.remove(item);
-                }
+                itemToEdit = item;
             }
         }
-        order.setCost(calculateCost(items));
-        orderService.save(order);
-        return "redirect:/orders/edit/" + order.getId();
+        Integer quantity = itemToEdit.getQuantity();
+        if (action.equals("dec") && quantity > 1) {
+            itemToEdit.setQuantity(quantity - 1);
+        }
+        if (action.equals("inc")) {
+            itemToEdit.setQuantity(quantity + 1);
+        }
+        if (action.equals("remove")) {
+            items.remove(itemToEdit);
+        }
+        orderDto.setItems(items);
+        orderDto.setCost(calculateCost(items));
+        orderService.save(orderDto);
+        session.setAttribute("orderDto", orderDto);
+        return "redirect:/orders/edit/" + orderDto.getId();
     }
 }
 

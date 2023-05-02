@@ -21,6 +21,9 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import static online.javaclass.bookstore.service.dto.OrderDto.OrderStatus.*;
+import static online.javaclass.bookstore.service.dto.OrderDto.PaymentStatus.*;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -33,46 +36,53 @@ public class OrderServiceImpl implements OrderService {
     @LogInvocation
     @Override
     public OrderDto save(OrderDto orderDto) throws ValidationException {
-        if (orderDto.getOrderStatus() == null || orderDto.getPaymentStatus() == null) {
-            orderDto.setOrderStatus(OrderDto.OrderStatus.OPEN);
-            orderDto.setPaymentStatus(OrderDto.PaymentStatus.UNPAID);
+        Order saved;
+        if (orderDto.getId() == null) {
+            saved = create(orderDto);
+        } else {
+            saved = update(orderDto);
         }
-        validate(orderDto);
-        Order order = mapper.toEntity(orderDto);
-        Order created = orderRepo.save(order);
-        return mapper.toDto(created);
+        return mapper.toDto(saved);
     }
 
     @LogInvocation
     @Override
     public OrderDto getById(Long id) {
-        return mapper.toDto(orderRepo.findById(id)
-                .orElseThrow(() -> new UnableToFindException(getFailureMessage("order.unable_to_find_id") + " " + id)));
+        return orderRepo.findById(id)
+                .map(mapper::toDto)
+                .orElseThrow(() -> new UnableToFindException(getFailureMessage("order.unable_to_find_id", id)));
     }
 
     @LogInvocation
     @Override
     public Page<OrderDto> getAllByUserId(Pageable pageable, Long userId) {
-        Page<OrderDto> orders = orderRepo.findAllByUserId(pageable, userId).map(mapper::toDto);
-        if (orders.isEmpty()) {
-            throw new UnableToFindException(getFailureMessage("orders.unable_to_find_user_id") + " " + userId);
-        }
-        return orders;
+        return orderRepo.findAllByUserId(pageable, userId)
+                .map(mapper::toDto);
     }
 
     @LogInvocation
     @Override
     public Page<OrderDto> getAll(Pageable pageable) {
-        Page<OrderDto> orders = orderRepo.findAll(pageable).map(mapper::toDto);
-        if (orders.isEmpty()) {
-            throw new UnableToFindException(getFailureMessage("orders.unable_to_find"));
-        }
-        return orders;
+        return orderRepo.findAll(pageable)
+                .map(mapper::toDto);
+    }
+
+    private Order create(OrderDto orderDto) {
+        orderDto.setOrderStatus(OPEN);
+        orderDto.setPaymentStatus(OrderDto.PaymentStatus.UNPAID);
+        validateCost(orderDto);
+        return orderRepo.save(mapper.toEntity(orderDto));
+    }
+
+    private Order update(OrderDto orderDto) {
+        validateCost(orderDto);
+        validateStatusChange(orderDto);
+        validatePaymentStatusChange(orderDto);
+        return orderRepo.save(mapper.toEntity(orderDto));
     }
 
     @LogInvocation
-    @Override
-    public void validate(OrderDto order) throws ValidationException {
+    private void validateCost(OrderDto order) {
         List<String> messages = new ArrayList<>();
         List<OrderItemDto> items = order.getItems();
         BigDecimal totalCost = BigDecimal.ZERO;
@@ -87,7 +97,65 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
-    private String getFailureMessage(String key) {
-        return messageSource.getMessage(key, new Object[]{}, LocaleContextHolder.getLocale());
+    private boolean isChangeableOrderStatus(OrderDto.OrderStatus currentStatus) {
+        return (!(currentStatus.equals(CANCELLED) || currentStatus.equals(COMPLETED)));
+    }
+
+    @LogInvocation
+    private void validateStatusChange(OrderDto orderToSave) {
+        boolean valid = false;
+        OrderDto.OrderStatus statusToSave = orderToSave.getOrderStatus();
+        OrderDto.OrderStatus currentStatus = orderRepo.findById(orderToSave.getId())
+                .map(mapper::toDto)
+                .get().getOrderStatus();
+        if (isChangeableOrderStatus(currentStatus)) {
+            if (currentStatus.equals(statusToSave)) {
+                valid = true;
+            }
+            if (currentStatus.equals(OPEN) && !statusToSave.equals(OPEN)) {
+                valid = true;
+            }
+            if (currentStatus.equals(CONFIRMED) && (statusToSave.equals(COMPLETED) || statusToSave.equals(CANCELLED))) {
+                valid = true;
+            }
+        }
+        if (!valid) {
+            throw new ValidationException(getFailureMessage("error.invalid_order_status"));
+        }
+    }
+
+    private boolean isChangeablePaymentStatus(OrderDto.PaymentStatus currentStatus) {
+        return (!currentStatus.equals(REFUNDED));
+    }
+
+    @LogInvocation
+    private void validatePaymentStatusChange(OrderDto orderToSave) {
+        boolean valid = false;
+        OrderDto.PaymentStatus statusToSave = orderToSave.getPaymentStatus();
+        OrderDto.PaymentStatus currentStatus = orderRepo.findById(orderToSave.getId())
+                .map(mapper::toDto)
+                .get().getPaymentStatus();
+        if (isChangeablePaymentStatus(currentStatus)) {
+            if (currentStatus.equals(statusToSave)) {
+                valid = true;
+            }
+            if (currentStatus.equals(UNPAID) && (statusToSave.equals(FAILED) || statusToSave.equals(PAID))) {
+                valid = true;
+            }
+            if (currentStatus.equals(FAILED) && statusToSave.equals(PAID)) {
+                valid = true;
+            }
+            if (currentStatus.equals(PAID) && statusToSave.equals(REFUNDED)) {
+                orderToSave.setOrderStatus(CANCELLED);
+                valid = true;
+            }
+        }
+        if (!valid) {
+            throw new ValidationException(getFailureMessage("error.invalid_payment_status"));
+        }
+    }
+
+    private String getFailureMessage(String key, Object... objects) {
+        return messageSource.getMessage(key, objects, LocaleContextHolder.getLocale());
     }
 }

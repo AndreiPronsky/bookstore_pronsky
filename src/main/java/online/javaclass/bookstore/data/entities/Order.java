@@ -13,7 +13,8 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 @Table(name = "orders")
 public class Order {
 
@@ -45,7 +46,8 @@ public class Order {
     @Column(name = "cost")
     private BigDecimal cost;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "order_id")
     private List<OrderItem> items;
 
     public enum OrderStatus {

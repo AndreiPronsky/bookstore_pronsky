@@ -8,13 +8,13 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-<jsp:include page="navbar.jsp"/>
+<jsp:include page="../navbar.jsp"/>
 <header></header>
 <c:if test="${users.isEmpty()}">
     <h2><spring:message code="users.not_found"/></h2>
 </c:if>
 <c:if test="${!users.isEmpty()}">
-    <jsp:include page="pagination.jsp"/>
+    <jsp:include page="../pagination.jsp"/>
     <table>
         <caption><spring:message code="users"/></caption>
         <thead>

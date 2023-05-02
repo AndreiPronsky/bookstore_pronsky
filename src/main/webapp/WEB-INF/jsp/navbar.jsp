@@ -14,7 +14,7 @@
         </c:if>
         <c:if test="${sessionScope.user == null}">
             <li><a href="/users/login"><spring:message code="login"/></a></li>
-            <li><a href="/users/add"><spring:message code="register"/></a></li>
+            <li><a href="/users/register"><spring:message code="register"/></a></li>
         </c:if>
         <c:if test="${sessionScope.user != null}">
             <li><a href="/users/logout"><spring:message code="logout"/></a></li>

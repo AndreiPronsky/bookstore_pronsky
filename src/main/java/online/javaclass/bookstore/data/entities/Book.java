@@ -10,7 +10,8 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 @Table(name = "books")
 public class Book {
     @Id
@@ -46,6 +47,10 @@ public class Book {
 
     @Column(name = "available")
     private boolean available;
+
+    @Column(name = "file_name")
+    private String filePath;
+
 
     @Table(name = "covers")
     public enum Cover {

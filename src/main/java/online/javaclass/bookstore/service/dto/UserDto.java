@@ -1,5 +1,7 @@
 package online.javaclass.bookstore.service.dto;
 
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 import javax.validation.constraints.Email;
@@ -7,6 +9,8 @@ import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 import java.util.Objects;
 
+@Getter
+@Setter
 public class UserDto {
     private Long id;
     private String firstName;
@@ -25,72 +29,7 @@ public class UserDto {
     public enum Role {
         USER,
         ADMIN,
-        MANAGER,
-        NONE
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public BigDecimal getRating() {
-        return rating;
-    }
-
-    public void setRating(BigDecimal rating) {
-        this.rating = rating;
-    }
-
-    public String getPreferredLocale() {
-        return preferredLocale;
-    }
-
-    public void setPreferredLocale(String preferredLocale) {
-        this.preferredLocale = preferredLocale;
+        MANAGER
     }
 
     @Override

@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-<jsp:include page="navbar.jsp"/>
+<jsp:include page="../navbar.jsp"/>
 <h1><spring:message code="add.book"/></h1>
 <%--@elvariable id="bookDto" type=""--%>
 <form:form action="/books/add" enctype="multipart/form-data" method="post" modelAttribute="bookDto">

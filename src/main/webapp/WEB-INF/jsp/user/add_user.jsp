@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-<jsp:include page="navbar.jsp"/>
+<jsp:include page="../navbar.jsp"/>
 <h1><spring:message code="register"/></h1>
 <form:form action="/users/add" method="post" modelAttribute="userDto">
 <table>

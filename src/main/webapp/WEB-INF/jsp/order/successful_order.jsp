@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-<jsp:include page="navbar.jsp"/>
-<h1><spring:message code="number_of_your_order_is"/> : <c:out value="${order.id}"/>!
+<jsp:include page="../navbar.jsp"/>
+<h1><spring:message code="number_of_your_order_is"/> : <c:out value="${orderDto.id}"/>!
     <spring:message code="our_manager_will_contact_you_soon"/></h1>
 </body>
 </html>

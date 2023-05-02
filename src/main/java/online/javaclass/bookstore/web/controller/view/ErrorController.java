@@ -28,31 +28,33 @@ public class ErrorController {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    public String handle(Model model, LoginException e) {
+    public String handle(LoginException e, Model model) {
         model.addAttribute("message", e.getMessage());
         return "error";
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String handle(Model model, AppException e) {
-        model.addAttribute("message",
-                messageSource.getMessage("error.default_client", new Object[]{}, LocaleContextHolder.getLocale()));
+    public String handle(AppException e, Model model) {
+        String message = messageSource.getMessage(
+                "error.default_client", new Object[]{}, LocaleContextHolder.getLocale());
+        model.addAttribute("message", message);
         return "error";
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    public String handle(Model model, AuthorisationException e) {
+    public String handle(AuthorisationException e, Model model) {
         model.addAttribute("message", e.getMessage());
         return "error";
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public String handle(Model model, Exception e) {
-        model.addAttribute("message",
-                messageSource.getMessage("error.default_server", new Object[]{}, LocaleContextHolder.getLocale()));
+    public String handle(Exception e, Model model) {
+        String message = messageSource.getMessage(
+                "error.default_server", new Object[]{}, LocaleContextHolder.getLocale());
+        model.addAttribute("message", message);
         return "error";
     }
 }

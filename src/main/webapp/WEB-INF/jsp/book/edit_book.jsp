@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-<jsp:include page="navbar.jsp"/>
+<jsp:include page="../navbar.jsp"/>
 <h1><spring:message code="edit_book"/></h1>
 <form:form action="/books/edit" method="post" modelAttribute="bookDto">
     <form:input type="hidden" path="id" value="${bookDto.id}"/>

@@ -5,7 +5,7 @@
 <body>
 <div class="paging">
     <c:if test="${totalPages > 0}">
-        <a href="${pageContext.request.contextPath}?page=0&page_size=5&sort=id">
+        <a href="${pageContext.request.contextPath}?page=0&size=${size}&sort=id">
             <spring:message code="first"/></a>
         <c:if test="${page <= 1} ">
             <a><spring:message code="previous"/></a>

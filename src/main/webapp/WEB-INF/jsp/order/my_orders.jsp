@@ -9,8 +9,9 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-<jsp:include page="navbar.jsp"/>
-<jsp:include page="searchbar.jsp"/>
+<jsp:include page="../navbar.jsp"/>
+<jsp:include page="../searchbar.jsp"/>
+<jsp:include page="../pagination.jsp"/>
 <header></header>
 <c:if test="${orders.isEmpty()}">
     <h2><spring:message code="orders.not_found"/></h2>
