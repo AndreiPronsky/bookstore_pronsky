@@ -38,7 +38,7 @@ public class BookServiceImpl implements BookService {
     public BookDto getById(Long id) {
         return bookRepo.findById(id)
                 .map(mapper::toDto)
-                .orElseThrow(() -> new UnableToFindException(getFailureMessage("book.unable_to_find_id") + " " + id));
+                .orElseThrow(() -> new UnableToFindException(getFailureMessage("book.unable_to_find_id", id)));
     }
 
     @LogInvocation
@@ -46,7 +46,7 @@ public class BookServiceImpl implements BookService {
     public BookDto getByIsbn(String isbn) {
         return bookRepo.findByIsbn(isbn)
                 .map(mapper::toDto)
-                .orElseThrow(() -> new UnableToFindException(getFailureMessage("book.unable_to_find_isbn") + " " + isbn));
+                .orElseThrow(() -> new UnableToFindException(getFailureMessage("book.unable_to_find_isbn", isbn)));
     }
 
     @LogInvocation
@@ -72,7 +72,7 @@ public class BookServiceImpl implements BookService {
                 .map(mapper::toDto);
     }
 
-    private String getFailureMessage(String key) {
-        return messageSource.getMessage(key, new Object[]{}, LocaleContextHolder.getLocale());
+    private String getFailureMessage(String key, Object... objects) {
+        return messageSource.getMessage(key, objects, LocaleContextHolder.getLocale());
     }
 }

@@ -34,31 +34,40 @@ public class UserController {
     private final LocaleResolver localeResolver;
 
     @LogInvocation
-    @PostMapping("/add")
-    @ResponseStatus(HttpStatus.CREATED)
-    @SecurityCheck(allowed = {UserDto.Role.ADMIN, UserDto.Role.NONE})
-    public String add(@ModelAttribute @Valid UserDto userInModel, BindingResult result, HttpSession session, Model model) {
-        if (result.hasErrors()) {
-            return "user/add_user";
-        }
-        UserDto userInSession = (UserDto) session.getAttribute("user");
-        if (userInSession == null || userInSession.getRole() != UserDto.Role.ADMIN) {
-            userInModel.setRole(UserDto.Role.USER);
-            userInModel.setRating(BigDecimal.ZERO);
-        }
-        UserDto created = userService.save(userInModel);
-        model.addAttribute("user", created);
-        return "user/user";
-    }
-
-    @LogInvocation
     @GetMapping("/add")
-    @SecurityCheck(allowed = {UserDto.Role.ADMIN, UserDto.Role.NONE})
+    @SecurityCheck(allowed = UserDto.Role.ADMIN)
     public String addForm(Model model) {
         model.addAttribute("userDto", new UserDto());
         return "user/add_user";
     }
 
+    @LogInvocation
+    @PostMapping("/add")
+    @ResponseStatus(HttpStatus.CREATED)
+    @SecurityCheck(allowed = UserDto.Role.ADMIN)
+    public String add(@ModelAttribute @Valid UserDto userInModel, BindingResult result, HttpSession session, Model model) {
+        if (result.hasErrors()) {
+            return "user/add_user";
+        }
+        return validateRoleAndSaveUser(userInModel, session, model);
+    }
+
+    @LogInvocation
+    @GetMapping("/register")
+    public String register(Model model) {
+        model.addAttribute("userDto", new UserDto());
+        return "user/register";
+    }
+
+    @LogInvocation
+    @PostMapping("/register")
+    @ResponseStatus(HttpStatus.CREATED)
+    public String register(@ModelAttribute @Valid UserDto userInModel, BindingResult result, HttpSession session, Model model) {
+        if (result.hasErrors()) {
+            return "user/register";
+        }
+        return validateRoleAndSaveUser(userInModel, session, model);
+    }
 
     @LogInvocation
     @PostMapping("/edit")
@@ -84,7 +93,6 @@ public class UserController {
 
     @LogInvocation
     @PostMapping("/login")
-    @SecurityCheck(allowed = {UserDto.Role.NONE})
     public String login(HttpServletRequest req, HttpServletResponse res,
                         @ModelAttribute @Valid UserLoginDto user) {
         UserDto loggedIn = userService.login(user);
@@ -112,7 +120,7 @@ public class UserController {
     }
 
     @LogInvocation
-    @PostMapping("/{id}")
+    @GetMapping("/{id}")
     @SecurityCheck(allowed = {UserDto.Role.ADMIN})
     public String getOne(@PathVariable Long id, Model model) {
         UserDto user = userService.getById(id);
@@ -144,5 +152,16 @@ public class UserController {
         model.addAttribute("totalPages", page.getTotalPages());
         model.addAttribute("users", page.stream().toList());
         return "user/users";
+    }
+
+    private String validateRoleAndSaveUser(@ModelAttribute @Valid UserDto userInModel, HttpSession session, Model model) {
+        UserDto userInSession = (UserDto) session.getAttribute("user");
+        if (userInSession == null || userInSession.getRole() != UserDto.Role.ADMIN) {
+            userInModel.setRole(UserDto.Role.USER);
+            userInModel.setRating(BigDecimal.ZERO);
+        }
+        UserDto created = userService.save(userInModel);
+        model.addAttribute("user", created);
+        return "user/user";
     }
 }

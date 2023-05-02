@@ -50,7 +50,7 @@ public class OrderServiceImpl implements OrderService {
     public OrderDto getById(Long id) {
         return orderRepo.findById(id)
                 .map(mapper::toDto)
-                .orElseThrow(() -> new UnableToFindException(getFailureMessage("order.unable_to_find_id") + " " + id));
+                .orElseThrow(() -> new UnableToFindException(getFailureMessage("order.unable_to_find_id", id)));
     }
 
     @LogInvocation
@@ -155,7 +155,7 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
-    private String getFailureMessage(String key) {
-        return messageSource.getMessage(key, new Object[]{}, LocaleContextHolder.getLocale());
+    private String getFailureMessage(String key, Object... objects) {
+        return messageSource.getMessage(key, objects, LocaleContextHolder.getLocale());
     }
 }

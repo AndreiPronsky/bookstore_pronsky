@@ -8,8 +8,6 @@
 </head>
 <body>
 <jsp:include page="../navbar.jsp"/>
-<header></header>
-<article>
     <h1><spring:message code="order"/> : </h1>
     <h3><spring:message code="id"/> : <c:out value="${order.id}"/></h3>
     <h3><spring:message code="user"/> :
@@ -20,7 +18,5 @@
     <h3><spring:message code="delivery_type"/> : <c:out value="${order.deliveryType}"/></h3>
     <h3><spring:message code="payment_status"/> : <c:out value="${order.paymentStatus}"/></h3>
     <a href="/orders/edit/${order.id}"><spring:message code="edit_order"/></a>
-</article>
-<footer></footer>
 </body>
 </html>

@@ -15,6 +15,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Page<User> findByLastName(Pageable pageable, String lastname);
 
-    @Query("FROM User u WHERE u.email = :email AND u.password = :password")
+    @Query("FROM User u WHERE LOWER(u.email) = LOWER(:email) AND u.password = :password")
     Optional<User> login(@Param("email") String email, @Param("password") String password);
 }

@@ -34,13 +34,13 @@ public class UserServiceImpl implements UserService {
     public UserDto getById(Long id) {
         return userRepo.findById(id)
                 .map(mapper::toDto)
-                .orElseThrow(() -> new UnableToFindException(getFailureMessage("user.unable_to_find_id")));
+                .orElseThrow(() -> new UnableToFindException(getFailureMessage("user.unable_to_find_id", id)));
     }
 
     @LogInvocation
     @Override
     public UserDto login(UserLoginDto userLoginDto) {
-        String email = userLoginDto.getEmail();
+        String email = userLoginDto.getEmail().toLowerCase();
         String password = digest.hashPassword(userLoginDto.getPassword());
         return userRepo.login(email, password)
                 .map(mapper::toDto)
@@ -66,11 +66,12 @@ public class UserServiceImpl implements UserService {
         if (userDto.getId() == null) {
             userDto.setPassword(digest.hashPassword(userDto.getPassword()));
         }
+        userDto.setEmail(userDto.getEmail().toLowerCase());
         User user = mapper.toEntity(userDto);
         return mapper.toDto(userRepo.save(user));
     }
 
-    private String getFailureMessage(String key) {
-        return messageSource.getMessage(key, new Object[]{}, LocaleContextHolder.getLocale());
+    private String getFailureMessage(String key, Object... objects) {
+        return messageSource.getMessage(key, objects, LocaleContextHolder.getLocale());
     }
 }

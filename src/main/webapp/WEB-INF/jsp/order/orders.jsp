@@ -10,7 +10,6 @@
 <body>
 <jsp:include page="../navbar.jsp"/>
 <jsp:include page="orders_searchbar.jsp"/>
-<header></header>
 <c:if test="${orders.isEmpty()}">
     <h2><spring:message code="orders.not_found"/></h2>
 </c:if>

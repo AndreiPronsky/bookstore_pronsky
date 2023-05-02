@@ -25,8 +25,8 @@ public class StorageServiceImpl implements online.javaclass.bookstore.service.St
 
     private final BookRepository bookRepo;
     private final MessageSource messageSource;
-    private final Path rootLocation = Path.of("Repository","bookstore",
-            "bookstore_pronsky","src","main","resources","static","coverImages");
+    private final Path rootLocation = Path.of("Repository", "bookstore",
+            "bookstore_pronsky", "src", "main", "resources", "static", "coverImages");
 
     @Override
     public String store(InputStream stream, Long id) throws IOException {
@@ -34,8 +34,7 @@ public class StorageServiceImpl implements online.javaclass.bookstore.service.St
                 .toAbsolutePath();
         Files.copy(stream, destinationFile);
         Book book = bookRepo.findById(id)
-                .orElseThrow(() -> new UnableToFindException(messageSource.getMessage("book.unable_to_find_id",
-                new Object[]{}, LocaleContextHolder.getLocale())));
+                .orElseThrow(() -> new UnableToFindException(getFailureMessage("book.unable_to_find_id", id)));
         String suffix = ".png";
         String prefix = "/coverImages/";
         String filePath = prefix + book.getId() + suffix;
@@ -47,14 +46,17 @@ public class StorageServiceImpl implements online.javaclass.bookstore.service.St
     @Override
     public Path get(Long id) {
         Book book = bookRepo.findById(id).orElseThrow(()
-                -> new UnableToFindException(messageSource.getMessage("book.unable_to_find_id",
-                new Object[]{}, LocaleContextHolder.getLocale())));
+                -> new UnableToFindException(getFailureMessage("book.unable_to_find_id", id)));
         return Path.of(book.getFilePath());
     }
 
     private String generateFileName() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss");
         return LocalDateTime.now().format(formatter);
+    }
+
+    private String getFailureMessage(String key, Object... objects) {
+        return messageSource.getMessage(key, objects, LocaleContextHolder.getLocale());
     }
 }
 

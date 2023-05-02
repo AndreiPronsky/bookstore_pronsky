@@ -29,8 +29,7 @@ public class UserDto {
     public enum Role {
         USER,
         ADMIN,
-        MANAGER,
-        NONE
+        MANAGER
     }
 
     @Override

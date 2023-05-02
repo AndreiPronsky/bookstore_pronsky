@@ -37,7 +37,7 @@ public class AuthorisationFilter {
 
     private UserDto.Role getUserRoleFromSession() {
         UserDto userInSession = (UserDto) session.getAttribute("user");
-        UserDto.Role userRole = UserDto.Role.NONE;
+        UserDto.Role userRole = null;
         if (userInSession != null) {
             userRole = userInSession.getRole();
         }
