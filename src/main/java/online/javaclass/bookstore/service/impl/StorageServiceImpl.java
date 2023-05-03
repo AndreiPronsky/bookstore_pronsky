@@ -25,8 +25,7 @@ public class StorageServiceImpl implements online.javaclass.bookstore.service.St
 
     private final BookRepository bookRepo;
     private final MessageSource messageSource;
-    private final Path rootLocation = Path.of("Repository", "bookstore",
-            "bookstore_pronsky", "src", "main", "resources", "static", "coverImages");
+    private final Path rootLocation = Path.of("src", "main", "resources", "static", "coverImages");
 
     @Override
     public String store(InputStream stream, Long id) throws IOException {

@@ -77,7 +77,7 @@ public class OrderDto {
                 ", paymentStatus=" + paymentStatus +
                 ", deliveryType=" + deliveryType +
                 ", cost=" + cost +
-                ", items=" + items.size() +
+//                ", items=" + items.size() +
                 '}';
     }
 }

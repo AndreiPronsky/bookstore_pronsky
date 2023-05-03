@@ -17,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.math.BigDecimal;
@@ -44,7 +45,7 @@ public class OrderController {
         UserDto user = (UserDto) session.getAttribute("user");
         orderDto.setUser(user);
         OrderDto created = orderService.save(orderDto);
-        model.addAttribute("order", created);
+        model.addAttribute("orderDto", created);
         session.removeAttribute("cart");
         return "order/successful_order";
     }
@@ -65,8 +66,12 @@ public class OrderController {
     @PostMapping("/edit")
     @ResponseStatus(HttpStatus.ACCEPTED)
     @SecurityCheck(allowed = {UserDto.Role.USER, UserDto.Role.ADMIN})
-    public String editOrder(@SessionAttribute @Valid OrderDto orderDto, Model model, @SessionAttribute UserDto user) {
+    public String editOrder(@SessionAttribute @Valid OrderDto orderDto, Model model, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        UserDto user = (UserDto) session.getAttribute("user");
         try {
+            orderDto.setDeliveryType(OrderDto.DeliveryType.valueOf(request.getParameter("deliveryType")));
+            orderDto.setPaymentMethod(OrderDto.PaymentMethod.valueOf(request.getParameter("paymentMethod")));
             OrderDto updated = orderService.save(orderDto);
             model.addAttribute("orderDto", updated);
             if (user.getRole() == UserDto.Role.ADMIN) {

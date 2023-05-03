@@ -9,6 +9,7 @@ import online.javaclass.bookstore.service.dto.UserDto;
 import online.javaclass.bookstore.service.dto.UserLoginDto;
 import online.javaclass.bookstore.service.exceptions.AppException;
 import online.javaclass.bookstore.web.filter.SecurityCheck;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -160,6 +161,7 @@ public class UserController {
             userInModel.setRole(UserDto.Role.USER);
             userInModel.setRating(BigDecimal.ZERO);
         }
+        userInModel.setPreferredLocale(LocaleContextHolder.getLocale().getLanguage());
         UserDto created = userService.save(userInModel);
         model.addAttribute("user", created);
         return "user/user";
