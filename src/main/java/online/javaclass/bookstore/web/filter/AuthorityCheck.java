@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface SecurityCheck {
+public @interface AuthorityCheck {
     UserDto.Role[] allowed();
 
 }

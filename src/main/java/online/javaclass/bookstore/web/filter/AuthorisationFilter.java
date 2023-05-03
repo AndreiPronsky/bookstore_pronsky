@@ -22,7 +22,7 @@ public class AuthorisationFilter {
     private final HttpSession session;
     private final MessageSource messageSource;
 
-    @Around(value = "@annotation(online.javaclass.bookstore.web.filter.SecurityCheck)")
+    @Around(value = "@annotation(online.javaclass.bookstore.web.filter.AuthorityCheck)")
     public Object checkAuthorisation(ProceedingJoinPoint joinPoint) throws Throwable {
         Object[] args = joinPoint.getArgs();
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
@@ -46,7 +46,7 @@ public class AuthorisationFilter {
 
     private static List<UserDto.Role> getAllowedRoles(MethodSignature signature) {
         UserDto.Role[] allowedRoles = signature.getMethod()
-                .getAnnotation(SecurityCheck.class)
+                .getAnnotation(AuthorityCheck.class)
                 .allowed();
         return Arrays.asList(allowedRoles);
     }

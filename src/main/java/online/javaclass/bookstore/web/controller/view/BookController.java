@@ -6,7 +6,7 @@ import online.javaclass.bookstore.service.BookService;
 import online.javaclass.bookstore.service.StorageService;
 import online.javaclass.bookstore.service.dto.BookDto;
 import online.javaclass.bookstore.service.dto.UserDto;
-import online.javaclass.bookstore.web.filter.SecurityCheck;
+import online.javaclass.bookstore.web.filter.AuthorityCheck;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -58,7 +58,7 @@ public class BookController {
     @LogInvocation
     @PostMapping("/add")
     @ResponseStatus(HttpStatus.CREATED)
-    @SecurityCheck(allowed = {UserDto.Role.MANAGER})
+    @AuthorityCheck(allowed = {UserDto.Role.MANAGER})
     public String add(@RequestParam("image") MultipartFile file
             , @ModelAttribute @Valid BookDto book, BindingResult result, Model model) {
         if (result.hasErrors()) {
@@ -78,7 +78,7 @@ public class BookController {
 
     @LogInvocation
     @GetMapping("/add")
-    @SecurityCheck(allowed = {UserDto.Role.MANAGER})
+    @AuthorityCheck(allowed = {UserDto.Role.MANAGER})
     public String addForm(Model model) {
         model.addAttribute("bookDto", new BookDto());
         return "book/add_book";
@@ -87,7 +87,7 @@ public class BookController {
     @LogInvocation
     @PostMapping("/edit")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    @SecurityCheck(allowed = {UserDto.Role.MANAGER})
+    @AuthorityCheck(allowed = {UserDto.Role.MANAGER})
     public String edit(@ModelAttribute @Valid BookDto book, BindingResult result, Model model) {
         if (result.hasErrors()) {
             return "book/edit_book";
@@ -99,7 +99,7 @@ public class BookController {
 
     @LogInvocation
     @GetMapping("/edit/{id}")
-    @SecurityCheck(allowed = {UserDto.Role.MANAGER})
+    @AuthorityCheck(allowed = {UserDto.Role.MANAGER})
     public String editForm(@PathVariable Long id, Model model) {
         BookDto book = service.getById(id);
         model.addAttribute("bookDto", book);
@@ -108,7 +108,7 @@ public class BookController {
 
     @LogInvocation
     @GetMapping("/delete/{id}")
-    @SecurityCheck(allowed = {UserDto.Role.MANAGER})
+    @AuthorityCheck(allowed = {UserDto.Role.MANAGER})
     public String delete(@PathVariable Long id, Model model) {
         BookDto book = service.getById(id);
         model.addAttribute("book", book);
@@ -118,7 +118,7 @@ public class BookController {
     @LogInvocation
     @PostMapping("/delete")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    @SecurityCheck(allowed = {UserDto.Role.MANAGER})
+    @AuthorityCheck(allowed = {UserDto.Role.MANAGER})
     public String delete(@ModelAttribute @Valid BookDto book, Model model) {
         book.setAvailable(false);
         BookDto deleted = service.save(book);

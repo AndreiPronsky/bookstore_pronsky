@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @Controller
 @RequiredArgsConstructor
@@ -36,6 +37,13 @@ public class ErrorController {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String handle(AppException e, Model model) {
+        model.addAttribute("message", e.getMessage());
+        return "error";
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String handle(MethodArgumentTypeMismatchException e, Model model) {
         String message = messageSource.getMessage(
                 "error.default_client", new Object[]{}, LocaleContextHolder.getLocale());
         model.addAttribute("message", message);

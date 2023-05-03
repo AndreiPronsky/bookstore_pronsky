@@ -8,7 +8,10 @@ import online.javaclass.bookstore.service.dto.OrderDto;
 import online.javaclass.bookstore.service.dto.OrderItemDto;
 import online.javaclass.bookstore.service.dto.UserDto;
 import online.javaclass.bookstore.service.exceptions.ValidationException;
-import online.javaclass.bookstore.web.filter.SecurityCheck;
+import online.javaclass.bookstore.web.exceptions.AuthorisationException;
+import online.javaclass.bookstore.web.filter.AuthorityCheck;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -30,11 +33,12 @@ import java.util.Map;
 @RequestMapping("/orders")
 public class OrderController {
     private final OrderService orderService;
+    private final MessageSource messageSource;
 
     @LogInvocation
     @PostMapping("/confirm")
     @ResponseStatus(HttpStatus.CREATED)
-    @SecurityCheck(allowed = {UserDto.Role.USER})
+    @AuthorityCheck(allowed = {UserDto.Role.USER})
     public String confirmOrder(HttpSession session, @ModelAttribute OrderDto orderDto
             , BindingResult result, Model model) {
         if (result.hasErrors()) {
@@ -65,7 +69,7 @@ public class OrderController {
     @LogInvocation
     @PostMapping("/edit")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    @SecurityCheck(allowed = {UserDto.Role.USER, UserDto.Role.ADMIN})
+    @AuthorityCheck(allowed = {UserDto.Role.USER, UserDto.Role.ADMIN})
     public String editOrder(@SessionAttribute @Valid OrderDto orderDto, Model model, HttpServletRequest request) {
         HttpSession session = request.getSession();
         UserDto user = (UserDto) session.getAttribute("user");
@@ -89,7 +93,7 @@ public class OrderController {
         OrderDto orderDto = orderService.getById(id);
         UserDto user = (UserDto) session.getAttribute("user");
         if (user == null || notMatchingUserIgnoreAdmin(user, orderDto)) {
-            return "redirect:/index";
+            throw new AuthorisationException(messageSource.getMessage("access_denied", new Object[]{}, LocaleContextHolder.getLocale()));
         } else if (notAdminRole(user) && notOpenStatus(orderDto)) {
             return "redirect:index";
         }
@@ -107,7 +111,7 @@ public class OrderController {
 
     @LogInvocation
     @GetMapping("/all")
-    @SecurityCheck(allowed = {UserDto.Role.ADMIN})
+    @AuthorityCheck(allowed = {UserDto.Role.ADMIN})
     public String getAll(Pageable pageable, Model model) {
         Page<OrderDto> page = orderService.getAll(pageable);
         model.addAttribute("page", page.getNumber());
@@ -118,7 +122,7 @@ public class OrderController {
 
     @LogInvocation
     @GetMapping("/all/{id}")
-    @SecurityCheck(allowed = {UserDto.Role.USER, UserDto.Role.ADMIN})
+    @AuthorityCheck(allowed = {UserDto.Role.USER, UserDto.Role.ADMIN})
     public String getAllByUserId(Pageable pageable, Model model, @PathVariable Long id) {
         Page<OrderDto> page = orderService.getAllByUserId(pageable, id);
         model.addAttribute("page", page.getNumber());
