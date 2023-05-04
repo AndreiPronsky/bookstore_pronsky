@@ -22,7 +22,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/books")
 public class BookController {

@@ -15,6 +15,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
@@ -67,6 +68,7 @@ public class OrderServiceImpl implements OrderService {
                 .map(mapper::toDto);
     }
 
+    @org.springframework.transaction.annotation.Transactional(propagation = Propagation.NEVER)
     private Order create(OrderDto orderDto) {
         orderDto.setOrderStatus(OPEN);
         orderDto.setPaymentStatus(OrderDto.PaymentStatus.UNPAID);
