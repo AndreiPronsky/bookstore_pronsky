@@ -64,7 +64,6 @@ public class BookController {
         if (result.hasErrors()) {
             return "book/add_book";
         }
-
         BookDto created = service.save(book);
         try {
             storageService.store(file.getInputStream(), created.getId());
@@ -93,7 +92,7 @@ public class BookController {
             return "book/edit_book";
         }
         BookDto updated = service.save(book);
-        model.addAttribute("bookDto", updated);
+        model.addAttribute("book", updated);
         return "book/book";
     }
 
