@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 import online.javaclass.bookstore.data.converters.bookConverters.CoverConverter;
 import online.javaclass.bookstore.data.converters.bookConverters.GenreConverter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -13,6 +15,8 @@ import java.util.Objects;
 @Getter
 @Setter
 @Table(name = "books")
+@SQLDelete(sql = "UPDATE books SET available = false WHERE id=?")
+@Where(clause = "deleted=false")
 public class Book {
     @Id
     @Column(name = "id")

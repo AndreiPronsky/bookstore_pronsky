@@ -19,4 +19,6 @@ public interface BookService {
 
     List<BookDto> search(String input);
 
+    void deleteById(Long id);
+
 }

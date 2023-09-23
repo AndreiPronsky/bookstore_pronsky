@@ -72,6 +72,15 @@ public class BookServiceImpl implements BookService {
                 .map(mapper::toDto);
     }
 
+    @LogInvocation
+    @Override
+    public void deleteById(Long id) {
+        if (!bookRepo.existsById(id)) {
+            throw new UnableToFindException(getFailureMessage("book.unable_to_find_id", id));
+        }
+        bookRepo.deleteById(id);
+    }
+
     private String getFailureMessage(String key, Object... objects) {
         return messageSource.getMessage(key, objects, LocaleContextHolder.getLocale());
     }

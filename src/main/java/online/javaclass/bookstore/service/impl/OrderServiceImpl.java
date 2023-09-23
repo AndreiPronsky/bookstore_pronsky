@@ -7,6 +7,7 @@ import online.javaclass.bookstore.platform.logging.LogInvocation;
 import online.javaclass.bookstore.service.OrderService;
 import online.javaclass.bookstore.service.dto.OrderDto;
 import online.javaclass.bookstore.service.dto.OrderItemDto;
+import online.javaclass.bookstore.service.exceptions.AppException;
 import online.javaclass.bookstore.service.exceptions.UnableToFindException;
 import online.javaclass.bookstore.service.exceptions.ValidationException;
 import online.javaclass.bookstore.service.mapper.Mapper;
@@ -83,17 +84,13 @@ public class OrderServiceImpl implements OrderService {
 
     @LogInvocation
     private void validateCost(OrderDto order) {
-        List<String> messages = new ArrayList<>();
         List<OrderItemDto> items = order.getItems();
         BigDecimal totalCost = BigDecimal.ZERO;
         for (OrderItemDto item : items) {
             totalCost = totalCost.add(item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
         }
         if (!order.getCost().equals(totalCost)) {
-            messages.add(getFailureMessage("error.invalid_cost"));
-        }
-        if (!messages.isEmpty()) {
-            throw new ValidationException(messages);
+            throw new ValidationException(getFailureMessage("error.invalid_cost"));
         }
     }
 
